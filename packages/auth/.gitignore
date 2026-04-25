@@ -1,0 +1,15 @@
+.dart_tool
+.flutter-plugins
+.flutter-plugins-dependencies
+pubspec.lock
+/pubspec.lock
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+build/
+.idea/
+.vscode/
+.history
+.svn/
+.atom/
+.buildlog/

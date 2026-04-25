@@ -1,0 +1,28 @@
+name: devices_weebi
+description: Comprehensive device management package for Weebi POS system with CRUD operations based on ChainRights permissions.
+version: 1.0.7
+homepage: https://weebi.com
+
+environment:
+  sdk: '>=3.6.0 <4.0.0'
+  flutter: ">=3.27.1"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  ####
+  # weebi's kitchen below
+  protos_weebi: ^1.2.6  # export fixnums and grpc
+  auth_weebi: ^1.0.7
+  boutiques_weebi: ^1.1.0
+  
+  # Core dependencies
+  provider: ^6.1.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  mockito: ^5.4.2
+  build_runner: ^2.8.0
+

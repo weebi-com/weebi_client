@@ -1,0 +1,66 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+.fvm/
+.fvmrc
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+
+# Web related
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+pubspec.lock
+android/local.properties
+linux/flutter/ephemeral/.plugin_symlinks/file_picker
+linux/flutter/ephemeral/.plugin_symlinks/path_provider_linux
+linux/flutter/ephemeral/.plugin_symlinks/rive_common
+linux/flutter/ephemeral/.plugin_symlinks/shared_preferences_linux
+
+ts/generate_go.sh
+pubspec.lock
+pubspec.lock
+s/docs/IMPLEMENTATION_STATUS.md
+/STRIPE_INTEGRATION.md
+/doc/STRIPE_INTEGRATION.md
+pubspec.lock
+/_testme.md
+/doc/currency_and_migration.md
+/packages/charts_weebi/example/windows
+grpc/agent_docs
