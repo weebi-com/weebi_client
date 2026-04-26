@@ -1,13 +1,19 @@
 # Build stage
 FROM debian:bookworm-slim AS build-env
 
-# Install dependencies for Flutter.
+# Install dependencies for Flutter, including the Linux desktop toolchain that
+# `flutter doctor` validates in Google Cloud Build.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
+        clang \
+        cmake \
         curl \
         git \
+        libgtk-3-dev \
         libglu1-mesa \
+        ninja-build \
+        pkg-config \
         unzip \
         xz-utils \
         zip \
