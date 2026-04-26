@@ -2,6 +2,8 @@ name: devices_weebi
 description: Comprehensive device management package for Weebi POS system with CRUD operations based on ChainRights permissions.
 version: 1.0.7
 homepage: https://weebi.com
+repository: https://github.com/weebi-app/weebi-client/packages/devices
+issue_tracker: https://github.com/weebi-app/weebi-client/issues
 
 environment:
   sdk: '>=3.6.0 <4.0.0'
