@@ -57,6 +57,11 @@ dev_dependencies:
 
   flutter_lints: ^3.0.0
 
+dependency_overrides:
+  # rive_native 0.1.6 references Flutter semantics APIs that are not present in
+  # the Docker image's pinned Flutter SDK.
+  rive_native: 0.1.4
+
 
 flutter:
 

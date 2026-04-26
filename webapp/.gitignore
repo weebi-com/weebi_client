@@ -46,7 +46,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-pubspec.lock
 android/local.properties
 linux/flutter/ephemeral/.plugin_symlinks/file_picker
 linux/flutter/ephemeral/.plugin_symlinks/path_provider_linux
@@ -54,12 +53,9 @@ linux/flutter/ephemeral/.plugin_symlinks/rive_common
 linux/flutter/ephemeral/.plugin_symlinks/shared_preferences_linux
 
 ts/generate_go.sh
-pubspec.lock
-pubspec.lock
 s/docs/IMPLEMENTATION_STATUS.md
 /STRIPE_INTEGRATION.md
 /doc/STRIPE_INTEGRATION.md
-pubspec.lock
 /_testme.md
 /doc/currency_and_migration.md
 /packages/charts_weebi/example/windows
