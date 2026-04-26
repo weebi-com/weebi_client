@@ -1,0 +1,31 @@
+name: boutiques_weebi
+description: "Boutique management package for Weebi with chain grouping, permissions management, and comprehensive UI components"
+version: 1.1.2
+homepage: https://weebi.com
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.1"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  ##### 
+  # weebi's kitchen below
+  fl_country_code_picker_weebi: ^0.2.3
+  protos_weebi: ^1.2.9  # BoutiquePb dual display currency; publish protos from weebi_server before dropping overrides
+  auth_weebi: ^1.0.7  # also exports collection: ^1.19.1 
+  
+  # State management
+  provider: ^6.1.4
+  
+  currency_picker: ^2.0.21 # for currency selection
+  # Utilities
+  intl: any #^0.20.2
+  
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  mockito: ^5.4.4
+  build_runner: ^2.8.0

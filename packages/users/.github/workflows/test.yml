@@ -1,0 +1,56 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.16.0'
+        channel: 'stable'
+    
+    - name: Install dependencies
+      run: flutter pub get
+    
+    - name: Run unit tests
+      run: flutter test
+    
+    - name: Run Flutter Driver tests
+      run: |
+        # Start the app in background
+        flutter drive --target=test_driver/app.dart --driver=test_driver/user_management_test.dart &
+        DRIVER_PID=$!
+        
+        # Wait for app to start
+        sleep 10
+        
+        # Run the tests
+        flutter drive --target=test_driver/app.dart --driver=test_driver/user_management_test.dart
+        
+        # Clean up
+        kill $DRIVER_PID || true
+    
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-results
+        path: |
+          test-results/
+          coverage/
+    
+    - name: Test summary
+      run: |
+        echo "✅ Unit tests completed"
+        echo "✅ Flutter Driver tests completed"
+        echo "📊 Test coverage available in artifacts" 

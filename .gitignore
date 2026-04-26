@@ -7,7 +7,22 @@
 .buildlog/
 .history
 
+/packages/boutiques/.metadata
+/packages/auth/melos_auth_weebi.iml
+/packages/boutiques/melos_boutiques_weebi.iml
+/packages/users/melos_users_weebi.iml
+/packages/charts_weebi/melos_charts_weebi.iml
+/packages/design/melos_design_weebi.iml
+/packages/devices/melos_devices_weebi.iml
+/packages/gatekeeper/melos_gatekeeper_weebi.iml
+/packages/users/melos_users_weebi.iml
+/packages/PUBLISHING_GUIDE.md
+/webapp/.metadata
+/webapp/API_URL.md
 
+.idea
+/docs/ticket_analytics_charts_plan.md
+melos_weebi_client.iml
 
 # Flutter repo-specific
 /bin/cache/

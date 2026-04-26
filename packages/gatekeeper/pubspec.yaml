@@ -1,0 +1,18 @@
+name: gatekeeper_weebi
+homepage: https://weebi.com
+version: 1.0.7
+description: Session coordination, device enrollment, and permission management for Weebi applications
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+
+dependencies:
+  ### weebi's kitchen
+  protos_weebi: ^1.2.9
+  auth_weebi: ^1.0.7
+  models_weebi: ^1.2.5
+  services_weebi: ^1.2.0 # for DeviceCloudIdentityServiceAbstract
+
+dev_dependencies:
+  lints: ^5.0.0
+  test: ^1.26.3

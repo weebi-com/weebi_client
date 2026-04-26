@@ -1,0 +1,32 @@
+name: users_weebi
+description: "User management package for Weebi with protobuf mirroring capabilities, authentication, and comprehensive UI components including beautiful user creation flow"
+version: 1.0.9
+homepage: https://weebi.com
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.1"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  ####
+  # weebi kitchen below
+  #### 
+  protos_weebi: ^1.2.6 # License / billing protos (seat status helpers)
+  auth_weebi: ^1.0.7
+  fl_country_code_picker_weebi: ^0.2.3
+
+  provider: ^6.1.4
+  flutter_secure_storage: ^9.2.4  
+  # Utilities
+  #collection: ^1.19.1 read from auth
+  intl: any #^0.20.2
+  logging: ^1.2.0
+  
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  lints: ^5.0.0

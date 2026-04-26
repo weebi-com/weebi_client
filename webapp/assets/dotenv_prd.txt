@@ -1,0 +1,2 @@
+API_URL=https://weebi-envoyproxy-prd-29758828833.europe-west1.run.app
+LOCALE=fr
