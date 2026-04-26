@@ -57,15 +57,18 @@ class _LoginScreenState extends State<LoginScreen> {
         );
 
         if (result.success) {
+          if (!mounted) return;
           if (result.accessToken != null && result.accessToken!.isNotEmpty) {
             context.read<AccessTokenProvider>().accessToken = result.accessToken!;
           }
           await context.read<UserDataProvider>().setUserDataAsync(
                 mail: _formData.mail,
+                accessToken: result.accessToken,
                 userProfileImageUrl:
                     'https://www.weebi.com/images/Weebi_Logo_Full.png',
               );
 
+          if (!mounted) return;
           _onLoginSuccess(context);
         } else {
           onError

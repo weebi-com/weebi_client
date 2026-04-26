@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:protos_weebi/grpc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_admin/environment.dart';
@@ -46,7 +47,7 @@ class AuthService {
         Credentials(
           mail: mail,
           password: password,
-          isWebApp: true,  // Enable BFF mode - store session server-side
+          isWebApp: Config.isBffMode,
         ),
       );
 
@@ -84,7 +85,7 @@ class AuthService {
         Credentials(
           mail: mail,
           password: password,
-          isWebApp: true,  // Enable BFF mode - store session server-side
+          isWebApp: Config.isBffMode,
         ),
       );
 
@@ -103,9 +104,9 @@ class AuthService {
             throw statusResponse.toString();
           }
         } on FormatException catch (e) {
-          print('createFirmServer $e');
+          debugPrint('createFirmServer $e');
         } on GrpcError catch (e) {
-          print('createFirmServer $e');
+          debugPrint('createFirmServer $e');
         }
       }
 
@@ -116,7 +117,7 @@ class AuthService {
                       Credentials(
                         mail: mail,
                         password: password,
-                        isWebApp: true,  // Enable BFF mode - store session server-side
+                        isWebApp: Config.isBffMode,
                       ),
                     );
       if (responseTokens2.accessToken.isEmpty) {
@@ -171,7 +172,7 @@ class AuthService {
 
       return response;
     } catch (e) {
-      print('Erreur lors de authenticateWithRefreshToken: $e');
+      debugPrint('Erreur lors de authenticateWithRefreshToken: $e');
       rethrow;
     }
   }

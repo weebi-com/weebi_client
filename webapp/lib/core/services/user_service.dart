@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:protos_weebi/data_dummy.dart';
 import 'package:protos_weebi/grpc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_admin/environment.dart';
+import 'package:web_admin/grpc/server.dart';
 import 'package:web_admin/token/jwt.dart';
 import 'grpc_client_service.dart';
 import '../constants/values.dart';
@@ -22,10 +25,16 @@ class UserService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString(SharePrefKeys.accessToken);
-      if (token != null && token.isNotEmpty) {
-        print(JsonWebToken.parse(token).toString());
-        print(JsonWebToken.parse(token).permissions);
-        final options = CallOptions(metadata: {'authorization': token});
+      if (Config.isBffMode || (token != null && token.isNotEmpty)) {
+        final currentUser = Config.isBffMode
+            ? (await stub.readOneUser(UserId(), options: callOptions)).user
+            : null;
+        final permissions = Config.isBffMode
+            ? currentUser!.permissions
+            : JsonWebToken.parse(token!).permissions;
+        final options = Config.isBffMode
+            ? callOptions
+            : CallOptions(metadata: {'authorization': token!});
 
         int country = int.parse(countryCode);
 
@@ -39,12 +48,10 @@ class UserService {
           ..contactRights = RightSalesperson.contact
           ..ticketRights = RightSalesperson.ticket
           ..boolRights = BoolRights()
-          ..firmId = JsonWebToken.parse(token).permissions.firmId
+          ..firmId = permissions.firmId
           ..limitedAccess = AccessLimited(
-              boutiqueIds: BoutiqueIds(
-                  ids: [JsonWebToken.parse(token).permissions.firmId]),
-              chainIds: ChainIds(
-                  ids: [JsonWebToken.parse(token).permissions.firmId]));
+              boutiqueIds: BoutiqueIds(ids: [permissions.firmId]),
+              chainIds: ChainIds(ids: [permissions.firmId]));
 
         final response = await stub.createPendingUser(
           PendingUserRequest(
@@ -63,7 +70,7 @@ class UserService {
         return PendingUserResponse.create();
       }
     } catch (e) {
-      print('Erreur lors de la création de l\'utilisateur: $e');
+      debugPrint('Erreur lors de la création de l\'utilisateur: $e');
       rethrow;
     }
   }
@@ -74,9 +81,11 @@ class UserService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString(SharePrefKeys.accessToken);
-      if (token == null || token.isEmpty) return null;
+      if (!Config.isBffMode && (token == null || token.isEmpty)) return null;
 
-      final options = CallOptions(metadata: {'authorization': token});
+      final options = Config.isBffMode
+          ? callOptions
+          : CallOptions(metadata: {'authorization': token!});
       final response = await stub.readOneUser(
         UserId()..userId = userId,
         options: options,
@@ -84,7 +93,7 @@ class UserService {
 
       return response.user;
     } catch (e) {
-      print('Erreur lors de la récupération de l\'utilisateur: $e');
+      debugPrint('Erreur lors de la récupération de l\'utilisateur: $e');
       rethrow;
     }
   }
@@ -95,7 +104,9 @@ class UserService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString(SharePrefKeys.accessToken);
-      final options = CallOptions(metadata: {'authorization': '$token'});
+      final options = Config.isBffMode
+          ? callOptions
+          : CallOptions(metadata: {'authorization': token ?? ''});
 
       final response = await stub.readAllUsers(options: options, Empty());
 
@@ -103,7 +114,7 @@ class UserService {
         users: response.users,
       );
     } catch (e) {
-      print('Erreur lors de la récupération des utilisateurs: $e');
+      debugPrint('Erreur lors de la récupération des utilisateurs: $e');
       rethrow;
     }
   }
@@ -114,14 +125,16 @@ class UserService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString(SharePrefKeys.accessToken);
-      final options = CallOptions(metadata: {'authorization': '$token'});
+      final options = Config.isBffMode
+          ? callOptions
+          : CallOptions(metadata: {'authorization': token ?? ''});
 
       final response =
           await stub.deleteOneUser(UserId(userId: userId), options: options);
 
       return response;
     } catch (e) {
-      print('Erreur lors de la suppression de l\'utilisateur: $e');
+      debugPrint('Erreur lors de la suppression de l\'utilisateur: $e');
       rethrow;
     }
   }

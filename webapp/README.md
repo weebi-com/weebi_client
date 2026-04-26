@@ -8,7 +8,12 @@ flutter run
 
 # main_dev: always dev Envoy (kApiUrlDev), regardless of kApiUrl
 flutter run -t lib/main_dev.dart
+flutter run -d web-server -t lib/main_dev.dart
 ```
+
+If `flutter run -d edge ...` fails while launching Edge, use the `web-server`
+device and open the printed local URL manually. You can pin host/port when
+needed with `--web-hostname=127.0.0.1 --web-port=50858`.
 
 ## Configuration
 

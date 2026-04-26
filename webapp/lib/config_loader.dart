@@ -21,6 +21,7 @@ Future<void> loadConfig() async {
       Config.init(
         apiUrl: (map['API_URL'] as String?) ?? '',
         locale: (map['LOCALE'] as String?) ?? 'fr',
+        isBffMode: map['IS_BFF_MODE'] == true || map['IS_BFF_MODE'] == 'true',
       );
       return;
     }

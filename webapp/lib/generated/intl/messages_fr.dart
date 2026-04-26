@@ -266,7 +266,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "helpReadFaq": MessageLookupByLibrary.simpleMessage("Lire la FAQ"),
     "helpResourcesTitle": MessageLookupByLibrary.simpleMessage("Ressources"),
     "helpScopeBody": MessageLookupByLibrary.simpleMessage(
-      "La console web permet de gérer les tickets (consultation, filtres, recherche). Les articles, contacts et opérations (ventes, achats, mouvements de stock, etc.) sont disponibles sur l\'application de caisse pour l\'instant.",
+      "La console web permet de gérer les tickets (consultation, filtres, recherche). Les articles, contacts et opérations (ventes, achats, mouvements de stock, etc.) sont uniquement disponibles sur l\'application de caisse pour l\'instant.",
     ),
     "helpScopeTitle": MessageLookupByLibrary.simpleMessage(
       "Que puis-je faire depuis la console web ?",
@@ -313,7 +313,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "menuDevices": MessageLookupByLibrary.simpleMessage("Appareils"),
     "menuFirm": MessageLookupByLibrary.simpleMessage("Mon entreprise"),
     "menuScopeDisclaimer": MessageLookupByLibrary.simpleMessage(
-      "Les articles, contacts et opérations (ventes, achats, mouvements de stock, etc.) sont disponibles sur l\'application de caisse pour l\'instant.",
+      "Les articles, contacts et opérations (ventes, achats, mouvements de stock, etc.) sont uniquement disponibles sur l\'application de caisse pour l\'instant.",
     ),
     "menuTickets": MessageLookupByLibrary.simpleMessage("Tickets"),
     "menuUsers": MessageLookupByLibrary.simpleMessage("Utilisateurs"),

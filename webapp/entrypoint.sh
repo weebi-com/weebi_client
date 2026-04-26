@@ -1,8 +1,16 @@
 #!/bin/sh
-# API_URL is set at build time (--build-arg API_URL=...) per env. We still write config.json for optional use.
-# See SECRETS.md for build-arg and CI setup.
+set -eu
 
 CONFIG_FILE="/usr/share/nginx/html/config.json"
+NGINX_TEMPLATE="/etc/nginx/templates/default.conf.template"
+NGINX_CONFIG="/etc/nginx/conf.d/default.conf"
+
+PORT="${PORT:-8080}"
+API_URL="${API_URL:-}"
 LOCALE="${LOCALE:-fr}"
-echo "{\"API_URL\":\"\",\"LOCALE\":\"${LOCALE}\"}" > "$CONFIG_FILE"
+IS_BFF_MODE="${IS_BFF_MODE:-true}"
+
+sed "s/__PORT__/${PORT}/g" "$NGINX_TEMPLATE" > "$NGINX_CONFIG"
+printf '{"API_URL":"%s","LOCALE":"%s","IS_BFF_MODE":"%s"}\n' "$API_URL" "$LOCALE" "$IS_BFF_MODE" > "$CONFIG_FILE"
+
 exec nginx -g "daemon off;"

@@ -7,7 +7,11 @@ class Config {
   static String get locale => _locale;
   static bool get isBffMode => _isBffMode;
 
-  static void init({required String apiUrl, required String locale, bool isBffMode = true}) {
+  static void init({
+    required String apiUrl,
+    required String locale,
+    bool isBffMode = true,
+  }) {
     _apiUrl = apiUrl;
     _locale = locale.isNotEmpty ? locale : 'fr';
     _isBffMode = isBffMode;

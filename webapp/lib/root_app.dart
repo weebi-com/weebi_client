@@ -12,6 +12,7 @@ import 'package:web_admin/grpc/auth_interceptor.dart';
 import 'package:web_admin/grpc/log_interceptor.dart';
 import 'package:web_admin/grpc/server.dart';
 import 'package:web_admin/providers/app_preferences_provider.dart';
+import 'package:web_admin/providers/current_user_provider.dart';
 import 'package:web_admin/providers/shared_prefs_auth_service.dart';
 import 'package:web_admin/providers/server.dart';
 import 'package:web_admin/providers/operational_license_gate.dart';
@@ -19,6 +20,7 @@ import 'package:web_admin/providers/tickets_boutique_cache.dart';
 import 'package:web_admin/providers/user_data_provider.dart';
 import 'package:web_admin/utils/app_focus_helper.dart';
 
+import 'core/constants/values.dart';
 import 'package:accesses_weebi/accesses_weebi.dart' show AccessProvider;
 import 'package:auth_weebi/auth_weebi.dart'
     show
@@ -90,7 +92,16 @@ class _RootAppState extends State<RootApp> {
               previous ?? PersistedTokenProvider(auth),
         ),
 
-        Provider<AccessTokenObject>(create: (_) => AccessTokenObject()),
+        Provider<AccessTokenObject>(
+          create: (context) {
+            final access = AccessTokenObject();
+            access.value = context
+                    .read<SharedPreferences>()
+                    .getString(SharePrefKeys.accessToken) ??
+                '';
+            return access;
+          },
+        ),
         ChangeNotifierProxyProvider<AccessTokenObject, AccessTokenProvider>(
             create: (context) =>
                 AccessTokenProvider(context.read<AccessTokenObject>()),
@@ -175,6 +186,18 @@ class _RootAppState extends State<RootApp> {
           create: (context) => PermissionProvider(
             context.read<AccessTokenProvider>(),
           ),
+        ),
+        ChangeNotifierProxyProvider<FenceServiceClientProviderV2,
+            CurrentUserProvider>(
+          create: (context) => CurrentUserProvider(
+            context.read<FenceServiceClientProviderV2>().fenceServiceClient,
+          ),
+          update: (context, fenceProvider, previous) {
+            final provider =
+                previous ?? CurrentUserProvider(fenceProvider.fenceServiceClient);
+            provider.fenceServiceClient = fenceProvider.fenceServiceClient;
+            return provider;
+          },
         ),
         ChangeNotifierProxyProvider<FenceServiceClientProviderV2,
             BoutiqueProvider>(

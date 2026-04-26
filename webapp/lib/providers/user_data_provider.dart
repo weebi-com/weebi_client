@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_admin/environment.dart';
 
 import '../core/constants/values.dart';
 
@@ -36,6 +37,8 @@ class UserDataProvider extends ChangeNotifier {
   Future<void> setUserDataAsync({
     String? userProfileImageUrl,
     String? mail,
+    String? accessToken,
+    String? refreshToken,
   }) async {
     final sharedPref = await SharedPreferences.getInstance();
     var shouldNotify = false;
@@ -58,6 +61,22 @@ class UserDataProvider extends ChangeNotifier {
       shouldNotify = true;
     }
 
+    if (accessToken != null && accessToken != _accessToken) {
+      _accessToken = accessToken;
+
+      await sharedPref.setString(SharePrefKeys.accessToken, _accessToken);
+
+      shouldNotify = true;
+    }
+
+    if (refreshToken != null && refreshToken != _refreshToken) {
+      _refreshToken = refreshToken;
+
+      await sharedPref.setString(SharePrefKeys.refreshToken, _refreshToken);
+
+      shouldNotify = true;
+    }
+
     if (shouldNotify) {
       notifyListeners();
     }
@@ -76,6 +95,7 @@ class UserDataProvider extends ChangeNotifier {
   }
 
   bool isUserLoggedIn() {
-    return _mail.isNotEmpty;
+    return _mail.isNotEmpty &&
+        (Config.isBffMode || _accessToken.isNotEmpty);
   }
 }

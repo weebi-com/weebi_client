@@ -90,12 +90,12 @@ class TicketServiceClientProvider extends ChangeNotifier {
           ],
         );
 
-  set serviceClient(String _accessToken) {
+  set serviceClient(String accessToken) {
     _ticketServiceClient = TicketServiceClient(
       clientChannel,
       options: callOptions,
       interceptors: [
-        AuthInterceptor(_accessToken, isBffMode: Config.isBffMode),
+        AuthInterceptor(accessToken, isBffMode: Config.isBffMode),
         OperationalLicenseGrpcInterceptor(),
         RequestLogInterceptor(),
       ],

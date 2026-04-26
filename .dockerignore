@@ -1,0 +1,17 @@
+.dart_tool/
+.idea/
+.vscode/
+build/
+coverage/
+.git/
+.gitignore
+
+**/.dart_tool/
+**/build/
+**/coverage/
+**/.packages
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+
+*.log
+*.tmp

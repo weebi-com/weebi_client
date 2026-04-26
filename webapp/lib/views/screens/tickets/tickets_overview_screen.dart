@@ -3,27 +3,21 @@ import 'dart:math';
 import 'package:auth_weebi/auth_weebi.dart' show AccessTokenProvider;
 import 'package:boutiques_weebi/boutiques_weebi.dart' show BoutiqueProvider;
 import 'package:design_weebi/design_weebi.dart';
-import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:models_weebi/models.dart' show TicketType;
 import 'package:provider/provider.dart';
 import 'package:protos_weebi/protos_weebi_io.dart'
     show
-        ArticleUncountableOnTicketPb,
-        Counterfoil,
-        ItemCartPb,
         ReadAllTicketsRequest,
-        TaxPb,
         TicketPb,
-        TicketPb_PaymentTypePb,
         Empty;
-import 'package:protos_weebi/src/generated/ticket/ticket_type.pb.dart'
-    show TicketTypePb;
 import 'package:web_admin/app_router.dart';
 import 'package:web_admin/generated/l10n.dart';
-import 'package:web_admin/environment.dart' show Config;
 import 'package:web_admin/billing/seat_capability.dart';
+import 'package:web_admin/environment.dart' show Config;
+import 'package:web_admin/providers/current_user_provider.dart';
 import 'package:web_admin/providers/server.dart';
 import 'package:web_admin/core/money/money_formatting.dart';
 import 'package:web_admin/providers/tickets_boutique_cache.dart';
@@ -67,6 +61,17 @@ class _TicketsOverviewScreenState extends State<TicketsOverviewScreen> {
   bool get _ticketBoutiqueViewsUnlocked =>
       !_seatCheckResolved || _hasSeatForBoutiqueViews;
 
+  Future<CurrentUserProvider?> _loadCurrentUserIfNeeded() async {
+    final currentUser = context.read<CurrentUserProvider>();
+    await currentUser.load();
+    return currentUser;
+  }
+
+  void _debugTickets(String message, [Object? error]) {
+    if (!kDebugMode) return;
+    debugPrint(error == null ? 'Tickets: $message' : 'Tickets: $message $error');
+  }
+
   @override
   void initState() {
     super.initState();
@@ -90,11 +95,23 @@ class _TicketsOverviewScreenState extends State<TicketsOverviewScreen> {
 
   Future<void> _loadLicenseGate() async {
     try {
+      final currentUser =
+          Config.isBffMode ? await _loadCurrentUserIfNeeded() : null;
+      if (!mounted) return;
+      if (!Config.isBffMode) {
+        final accessProvider = context.read<AccessTokenProvider>();
+        if (accessProvider.accessToken.isNotEmpty) {
+          context.read<BillingServiceClientProvider>().serviceClient =
+              accessProvider.accessToken;
+        }
+      }
       final billing =
           context.read<BillingServiceClientProvider>().billingServiceClient;
       final res = await billing.readLicenses(Empty());
       if (!mounted) return;
-      final userId = context.read<AccessTokenProvider>().permissions.userId;
+      final userId = Config.isBffMode
+          ? currentUser?.userId ?? ''
+          : context.read<AccessTokenProvider>().permissions.userId;
       final hasSeat = SeatCapability.ticketsBoutiqueViewsUnlocked(
         userId,
         res.licenses,
@@ -106,7 +123,8 @@ class _TicketsOverviewScreenState extends State<TicketsOverviewScreen> {
           _filter = _withoutBoutiqueViewFilters(_filter);
         }
       });
-    } catch (_) {
+    } catch (error) {
+      _debugTickets('license gate failed', error);
       if (!mounted) return;
       setState(() {
         _seatCheckResolved = true;
@@ -133,18 +151,33 @@ class _TicketsOverviewScreenState extends State<TicketsOverviewScreen> {
   }
 
   /// Uses firmId as chainId (single-chain setup: first chainId == firmId).
-  String? _getChainId() {
-    try {
-      return context.read<AccessTokenProvider>().permissions.firmId;
-    } catch (_) {
-      return null;
+  Future<String?> _getChainId() async {
+    if (Config.isBffMode) {
+      final currentUser = await _loadCurrentUserIfNeeded();
+      final firmId = currentUser?.firmId ?? '';
+      return firmId.isNotEmpty ? firmId : null;
     }
+
+    final firmId = context.read<AccessTokenProvider>().permissions.firmId;
+    if (firmId.isNotEmpty) return firmId;
+    return null;
   }
 
   Future<void> _loadTickets() async {
-    final chainId = _getChainId();
-    if (chainId == null || chainId.isEmpty) {
+    String? chainId;
+    try {
+      chainId = await _getChainId();
+    } catch (e) {
+      _debugTickets('current user load failed', e);
       if (!mounted) return;
+      setState(() {
+        _errorMessage = e.toString();
+        _isLoading = false;
+      });
+      return;
+    }
+    if (!mounted) return;
+    if (chainId == null || chainId.isEmpty) {
       setState(() {
         _errorMessage = Lang.of(context).ticketsChainUnavailable;
         _isLoading = false;
@@ -158,6 +191,14 @@ class _TicketsOverviewScreenState extends State<TicketsOverviewScreen> {
     });
 
     try {
+      if (!mounted) return;
+      if (!Config.isBffMode) {
+        final accessProvider = context.read<AccessTokenProvider>();
+        if (accessProvider.accessToken.isNotEmpty) {
+          context.read<TicketServiceClientProvider>().serviceClient =
+              accessProvider.accessToken;
+        }
+      }
       final stub =
           context.read<TicketServiceClientProvider>().ticketServiceClient;
 
@@ -190,6 +231,7 @@ class _TicketsOverviewScreenState extends State<TicketsOverviewScreen> {
         _isLoading = false;
       });
     } catch (e) {
+      _debugTickets('readAll failed', e);
       setState(() {
         _errorMessage = e.toString();
         _isLoading = false;
