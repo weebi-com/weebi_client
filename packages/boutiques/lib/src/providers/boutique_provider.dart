@@ -60,6 +60,16 @@ class BoutiqueProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Clears user-scoped boutique state when the app session ends.
+  void clearSession() {
+    _chains = [];
+    _selectedChain = null;
+    _selectedBoutique = null;
+    _isLoading = false;
+    _error = null;
+    notifyListeners();
+  }
+
   /// Loads all chains with their boutiques
   Future<void> loadChains() async {
     _isLoading = true;
@@ -355,4 +365,4 @@ class BoutiqueProvider extends ChangeNotifier {
       chain.name.toLowerCase().contains(lowercaseQuery)
     ).toList();
   }
-} 
+}

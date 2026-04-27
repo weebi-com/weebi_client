@@ -11,11 +11,13 @@ import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/grpc/auth_interceptor.dart';
 import 'package:web_admin/grpc/log_interceptor.dart';
 import 'package:web_admin/grpc/server.dart';
+import 'package:web_admin/grpc/unauthenticated_interceptor.dart';
 import 'package:web_admin/providers/app_preferences_provider.dart';
 import 'package:web_admin/providers/current_user_provider.dart';
 import 'package:web_admin/providers/shared_prefs_auth_service.dart';
 import 'package:web_admin/providers/server.dart';
 import 'package:web_admin/providers/operational_license_gate.dart';
+import 'package:web_admin/providers/session_recovery.dart';
 import 'package:web_admin/providers/tickets_boutique_cache.dart';
 import 'package:web_admin/providers/user_data_provider.dart';
 import 'package:web_admin/utils/app_focus_helper.dart';
@@ -143,6 +145,7 @@ class _RootAppState extends State<RootApp> {
                   options: callOptions,
                   interceptors: [
                     AuthInterceptor(token, isBffMode: Config.isBffMode),
+                    UnauthenticatedInterceptor(),
                     RequestLogInterceptor(),
                   ],
                 );
@@ -193,8 +196,8 @@ class _RootAppState extends State<RootApp> {
             context.read<FenceServiceClientProviderV2>().fenceServiceClient,
           ),
           update: (context, fenceProvider, previous) {
-            final provider =
-                previous ?? CurrentUserProvider(fenceProvider.fenceServiceClient);
+            final provider = previous ??
+                CurrentUserProvider(fenceProvider.fenceServiceClient);
             provider.fenceServiceClient = fenceProvider.fenceServiceClient;
             return provider;
           },
@@ -256,6 +259,18 @@ class _RootAppState extends State<RootApp> {
       ],
       child: Builder(
         builder: (context) {
+          SessionRecoveryBinding.instance.attach(
+            SessionRecoveryCoordinator(
+              userDataProvider: context.read<UserDataProvider>(),
+              accessTokenProvider: context.read<AccessTokenProvider>(),
+              persistedTokenProvider:
+                  context.read<PersistedTokenProvider<AuthServiceAbstract>>(),
+              currentUserProvider: context.read<CurrentUserProvider>(),
+              boutiqueProvider: context.read<BoutiqueProvider>(),
+              ticketsBoutiqueCache: context.read<TicketsBoutiqueCache>(),
+            ),
+          );
+
           return GestureDetector(
             onTap: () {
               // Tap anywhere to dismiss soft keyboard.

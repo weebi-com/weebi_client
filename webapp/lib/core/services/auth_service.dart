@@ -152,10 +152,6 @@ class AuthService {
   }
 
   Future<Tokens> authenticateWithRefreshToken() async {
-    if (Config.isBffMode) {
-      // In BFF mode, we don't manually refresh. Envoy handles it or we re-login.
-      return Tokens();
-    }
     final stub = FenceServiceClient(_grpcClientService.channel);
 
     try {
@@ -163,7 +159,11 @@ class AuthService {
       final accessToken = prefs.getString(SharePrefKeys.accessToken);
       final refreshToken = prefs.getString(SharePrefKeys.refreshToken);
 
-      final options = CallOptions(metadata: {'authorization': '$accessToken'});
+      final options = Config.isBffMode || accessToken == null
+          ? callOptions
+          : callOptions.mergedWith(
+              CallOptions(metadata: {'authorization': accessToken}),
+            );
 
       final response = await stub.authenticateWithRefreshToken(
         RefreshToken(refreshToken: refreshToken),

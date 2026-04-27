@@ -94,8 +94,27 @@ class UserDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> clearSessionDataAsync() async {
+    final sharedPref = await SharedPreferences.getInstance();
+
+    await sharedPref.remove(SharePrefKeys.firstname);
+    await sharedPref.remove(SharePrefKeys.lastname);
+    await sharedPref.remove(SharePrefKeys.mail);
+    await sharedPref.remove(SharePrefKeys.userProfileImageUrl);
+    await sharedPref.remove(SharePrefKeys.accessToken);
+    await sharedPref.remove(SharePrefKeys.refreshToken);
+
+    _firstname = '';
+    _lastname = '';
+    _mail = '';
+    _userProfileImageUrl = '';
+    _accessToken = '';
+    _refreshToken = '';
+
+    notifyListeners();
+  }
+
   bool isUserLoggedIn() {
-    return _mail.isNotEmpty &&
-        (Config.isBffMode || _accessToken.isNotEmpty);
+    return _mail.isNotEmpty && (Config.isBffMode || _accessToken.isNotEmpty);
   }
 }
