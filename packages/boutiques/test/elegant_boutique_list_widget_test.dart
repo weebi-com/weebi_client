@@ -131,6 +131,24 @@ void main() {
         expect(find.byIcon(Icons.add_business), findsNothing);
       });
 
+      testWidgets('should show CRUD buttons when action callbacks are provided', (WidgetTester tester) async {
+        await tester.pumpWidget(createTestWidget(
+          permissions: readOnlyPermissions,
+          onCreateBoutique: (_) {},
+          onCreateChain: () {},
+          onBoutiqueEdit: (_) {},
+          onChainEdit: (_) {},
+          onBoutiqueDelete: (_) {},
+          onChainDelete: (_) {},
+        ));
+        await tester.pumpAndSettle();
+
+        expect(find.byIcon(Icons.edit), findsAtLeastNWidgets(2));
+        expect(find.byIcon(Icons.delete), findsAtLeastNWidgets(2));
+        expect(find.byIcon(Icons.add_business), findsOneWidget);
+        expect(find.byType(FloatingActionButton), findsAtLeastNWidgets(1));
+      });
+
       testWidgets('should hide CRUD buttons with no permissions', (WidgetTester tester) async {
         await tester.pumpWidget(createTestWidget(permissions: noPermissions));
         await tester.pumpAndSettle();

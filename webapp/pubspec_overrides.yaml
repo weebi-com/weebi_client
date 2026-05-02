@@ -14,5 +14,6 @@ dependency_overrides:
     path: ..\\packages\\devices
   gatekeeper_weebi:
     path: ..\\packages\\gatekeeper
+  rive_native: 0.1.4
   users_weebi:
     path: ..\\packages\\users

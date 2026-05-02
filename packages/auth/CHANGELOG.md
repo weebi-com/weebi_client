@@ -1,5 +1,10 @@
 # changelog
 
+## 1.0.8 - may 2026
+
+- fix upsert on FlutterSecureStorage
+- init FlutterSecureStorage with macos options example
+
 ## 1.0.7 - march 2026
 
 - bump protos

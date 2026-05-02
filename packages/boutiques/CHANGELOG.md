@@ -1,9 +1,12 @@
 # changelog
 
+## 1.1.3 - may 2026
+
+- provide negativeStockGuard option
+
 ## 1.1.2 - april 2026
 
 - on boutique creation, if firm/chain has currency, prefill the field
-
 
 ## 1.1.1+1 - march 2026
 
