@@ -8,6 +8,7 @@ import 'package:web_admin/grpc/auth_interceptor.dart';
 import 'package:web_admin/grpc/log_interceptor.dart';
 import 'package:web_admin/grpc/operational_license_grpc_interceptor.dart';
 import 'package:web_admin/grpc/server.dart';
+import 'package:web_admin/grpc/unauthenticated_interceptor.dart';
 
 class ArticleServiceClientProvider extends ChangeNotifier {
   final String accessToken;
@@ -18,6 +19,7 @@ class ArticleServiceClientProvider extends ChangeNotifier {
           options: callOptions,
           interceptors: [
             AuthInterceptor(accessToken, isBffMode: Config.isBffMode),
+            UnauthenticatedInterceptor(),
             OperationalLicenseGrpcInterceptor(),
             RequestLogInterceptor(),
           ],
@@ -31,6 +33,7 @@ class ArticleServiceClientProvider extends ChangeNotifier {
       options: callOptions,
       interceptors: [
         AuthInterceptor(value, isBffMode: Config.isBffMode),
+        UnauthenticatedInterceptor(),
         OperationalLicenseGrpcInterceptor(),
         RequestLogInterceptor(),
       ],
@@ -54,6 +57,7 @@ class ContactServiceClientProvider extends ChangeNotifier {
           options: callOptions,
           interceptors: [
             AuthInterceptor(_accessToken, isBffMode: Config.isBffMode),
+            UnauthenticatedInterceptor(),
             OperationalLicenseGrpcInterceptor(),
             RequestLogInterceptor(),
           ],
@@ -65,6 +69,7 @@ class ContactServiceClientProvider extends ChangeNotifier {
       options: callOptions,
       interceptors: [
         AuthInterceptor(value, isBffMode: Config.isBffMode),
+        UnauthenticatedInterceptor(),
         OperationalLicenseGrpcInterceptor(),
         RequestLogInterceptor(),
       ],
@@ -85,6 +90,7 @@ class TicketServiceClientProvider extends ChangeNotifier {
           options: callOptions,
           interceptors: [
             AuthInterceptor(_accessToken, isBffMode: Config.isBffMode),
+            UnauthenticatedInterceptor(),
             OperationalLicenseGrpcInterceptor(),
             RequestLogInterceptor(),
           ],
@@ -96,6 +102,7 @@ class TicketServiceClientProvider extends ChangeNotifier {
       options: callOptions,
       interceptors: [
         AuthInterceptor(accessToken, isBffMode: Config.isBffMode),
+        UnauthenticatedInterceptor(),
         OperationalLicenseGrpcInterceptor(),
         RequestLogInterceptor(),
       ],
@@ -118,6 +125,7 @@ class BillingServiceClientProvider extends ChangeNotifier {
           options: callOptions,
           interceptors: [
             AuthInterceptor(_accessToken, isBffMode: Config.isBffMode),
+            UnauthenticatedInterceptor(),
             RequestLogInterceptor(),
           ],
         );
@@ -128,6 +136,7 @@ class BillingServiceClientProvider extends ChangeNotifier {
       options: callOptions,
       interceptors: [
         AuthInterceptor(value, isBffMode: Config.isBffMode),
+        UnauthenticatedInterceptor(),
         RequestLogInterceptor(),
       ],
     );

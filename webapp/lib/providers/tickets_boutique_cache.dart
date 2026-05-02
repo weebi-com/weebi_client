@@ -56,6 +56,13 @@ class TicketsBoutiqueCache extends ChangeNotifier {
   /// All boutique ids in the cache.
   Iterable<String> get allIds => _cache?.keys ?? const [];
 
+  void clear() {
+    _cache = null;
+    _loading = false;
+    _error = null;
+    notifyListeners();
+  }
+
   /// Dirty-dev-only helper to inject a boutique currency for UI demos.
   /// This avoids having to create real backend data just to "dazzle" in the webapp.
   void upsertDemoBoutique({
@@ -123,7 +130,8 @@ class TicketsBoutiqueCache extends ChangeNotifier {
       final name = _getName(b);
       final logo = _getLogo(b);
       final ext = _getLogoExtension(b);
-      final hasLogo = logo != null && logo.isNotEmpty && (ext?.isNotEmpty ?? false);
+      final hasLogo =
+          logo != null && logo.isNotEmpty && (ext?.isNotEmpty ?? false);
       final currency = _getCurrency(b);
       final info = _cache![id];
       final newName = (info?.name.isEmpty ?? true) && name.isNotEmpty

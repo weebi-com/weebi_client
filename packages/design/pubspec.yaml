@@ -2,8 +2,8 @@ name: design_weebi
 description: "Weebi design system - icons, colors, text styles, and theme for Flutter apps"
 version: 0.1.3
 homepage: https://weebi.com
-repository: https://github.com/weebi-com/weebi
-documentation: https://github.com/weebi-com/weebi/tree/main/packages/design
+repository: https://github.com/weebi-app/weebi-client/packages/design
+issue_tracker: https://github.com/weebi-app/weebi-client/issues
 
 environment:
   sdk: ">=3.6.0 <4.0.0"

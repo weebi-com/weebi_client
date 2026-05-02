@@ -32,8 +32,7 @@ abstract final class BoutiqueUiStrings {
   static String deleteChainWithBoutiquesWarning(int count) =>
       'Cette chaîne de magasins regroupe $count boutique(s). '
       'La supprimer supprimera aussi toutes ces boutiques.';
-  static const String actionCannotUndo =
-      'Cette action est irréversible.';
+  static const String actionCannotUndo = 'Cette action est irréversible.';
   static const String deleteChainAndBoutiques =
       'Supprimer la chaîne de magasins et ses boutiques';
   static const String deleteBoutiqueTitle = 'Supprimer la boutique';
@@ -80,10 +79,8 @@ abstract final class BoutiqueUiStrings {
       : 'Saisir le nom de la boutique';
   static String nameLabelForType(bool isChain) =>
       isChain ? 'Nom de la chaîne *' : 'Nom de la boutique *';
-  static const String hintChainNameExample =
-      'Ex. : Réseau centre-ville';
-  static const String hintBoutiqueNameExample =
-      'Ex. : Magasin rue principale';
+  static const String hintChainNameExample = 'Ex. : Réseau centre-ville';
+  static const String hintBoutiqueNameExample = 'Ex. : Magasin rue principale';
   static String pleaseEnterName(bool isChain) => isChain
       ? 'Veuillez saisir le nom de la chaîne'
       : 'Veuillez saisir le nom de la boutique';
@@ -103,8 +100,19 @@ abstract final class BoutiqueUiStrings {
   static const String dualCurrencySwitchSubtitle =
       'Souvent pour afficher aussi les montants en dollars US.';
   static const String currencySectionTitle = 'Devise(s)';
-  static const String chainAssignment =
-      'Rattachement à une chaîne de magasins';
+  static const String businessRulesSectionTitle = 'Règles métier';
+  static const String negativeStockGuardTitle = 'Bloquer le stock négatif';
+  static const String negativeStockGuardSubtitle =
+      'Empêche les ventes et sorties qui rendraient le stock négatif.';
+  static const String recentTicketEditTitle =
+      'Autoriser la correction des tickets récents';
+  static const String recentTicketEditSubtitle =
+      'Permet de corriger rapidement une erreur juste après encaissement.';
+  static const String recentTicketEditWindowMinutesLabel =
+      'Délai de correction (minutes)';
+  static const String recentTicketEditWindowInvalid =
+      'Veuillez saisir un délai supérieur à 0 minute';
+  static const String chainAssignment = 'Rattachement à une chaîne de magasins';
   static const String noChainsCreateFirst =
       'Aucune chaîne de magasins. Créez d’abord une chaîne pour y rattacher des boutiques.';
   static const String selectChainLabel = 'Chaîne de magasins';

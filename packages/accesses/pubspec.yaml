@@ -2,6 +2,8 @@ name: accesses_weebi
 description: "User access management package for Weebi - allows admins to manage user permissions and access to boutiques/chains"
 version: 1.0.7
 homepage: https://weebi.com
+repository: https://github.com/weebi-app/weebi-client/packages/accesses
+issue_tracker: https://github.com/weebi-app/weebi-client/issues
 
 environment:
   sdk: ">=3.6.0 <4.0.0"

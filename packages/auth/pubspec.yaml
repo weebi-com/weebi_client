@@ -1,7 +1,9 @@
 name: auth_weebi
 description: "Shared authentication package for Weebi with JWT token management, persistence, and permissions"
-version: 1.0.7
+version: 1.0.8
 homepage: https://weebi.com
+repository: https://github.com/weebi-app/weebi-client/packages/auth
+issue_tracker: https://github.com/weebi-app/weebi-client/issues
 
 environment:
   sdk: ">=3.6.0 <4.0.0"
@@ -11,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter  # flutter is needed for provider, no need to fantasize about pure Dart
 
-  protos_weebi: ^1.2.6  # Protobuf and gRPC
+  protos_weebi: ^1.3.2  # Protobuf and gRPC
   
   provider: ^6.1.4   # State management
   flutter_secure_storage: ^9.2.4 # Secure storage for access token when available

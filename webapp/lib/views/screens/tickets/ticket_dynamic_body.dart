@@ -1,10 +1,10 @@
 import 'package:design_weebi/design_weebi.dart';
 import 'package:flutter/material.dart';
 import 'package:models_weebi/models.dart' show TicketType;
-import 'package:protobuf/protobuf.dart' show ProtobufEnum;
 import 'package:protos_weebi/protos_weebi_io.dart'
     show
         GeneratedMessage,
+         ProtobufEnum,
         PbList,
         Timestamp,
         Counterfoil,

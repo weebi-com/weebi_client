@@ -63,6 +63,7 @@ class BoutiqueListWidget extends StatelessWidget {
 
   /// Check if user can create boutiques
   bool get canCreateBoutique {
+    if (onCreateBoutique != null) return true;
     if (userPermissions == null) return false;
     return userPermissions!.hasBoutiqueRights() &&
         userPermissions!.boutiqueRights.rights.contains(Right.create);
@@ -70,6 +71,7 @@ class BoutiqueListWidget extends StatelessWidget {
 
   /// Check if user can edit boutiques
   bool get canEditBoutique {
+    if (onBoutiqueEdit != null) return true;
     if (userPermissions == null) return false;
     return userPermissions!.hasBoutiqueRights() &&
         userPermissions!.boutiqueRights.rights.contains(Right.update);
@@ -77,6 +79,7 @@ class BoutiqueListWidget extends StatelessWidget {
 
   /// Check if user can delete boutiques
   bool get canDeleteBoutique {
+    if (onBoutiqueDelete != null) return true;
     if (userPermissions == null) return false;
     return userPermissions!.hasBoutiqueRights() &&
         userPermissions!.boutiqueRights.rights.contains(Right.delete);
@@ -84,6 +87,7 @@ class BoutiqueListWidget extends StatelessWidget {
 
   /// Check if user can create chains
   bool get canCreateChain {
+    if (onCreateChain != null) return true;
     if (userPermissions == null) return false;
     return userPermissions!.hasChainRights() &&
         userPermissions!.chainRights.rights.contains(Right.create);
@@ -91,6 +95,7 @@ class BoutiqueListWidget extends StatelessWidget {
 
   /// Check if user can edit chains
   bool get canEditChain {
+    if (onChainEdit != null) return true;
     if (userPermissions == null) return false;
     return userPermissions!.hasChainRights() &&
         userPermissions!.chainRights.rights.contains(Right.update);
@@ -98,6 +103,7 @@ class BoutiqueListWidget extends StatelessWidget {
 
   /// Check if user can delete chains
   bool get canDeleteChain {
+    if (onChainDelete != null) return true;
     if (userPermissions == null) return false;
     return userPermissions!.hasChainRights() &&
         userPermissions!.chainRights.rights.contains(Right.delete);

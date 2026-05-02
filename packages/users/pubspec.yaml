@@ -2,6 +2,8 @@ name: users_weebi
 description: "User management package for Weebi with protobuf mirroring capabilities, authentication, and comprehensive UI components including beautiful user creation flow"
 version: 1.0.9
 homepage: https://weebi.com
+repository: https://github.com/weebi-app/weebi-client/packages/users
+issue_tracker: https://github.com/weebi-app/weebi-client/issues
 
 environment:
   sdk: ">=3.6.0 <4.0.0"

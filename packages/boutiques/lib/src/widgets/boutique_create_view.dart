@@ -82,9 +82,12 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
   String? _selectedChainId;
   final _billingCurrencyController = TextEditingController();
   final _secondaryDisplayCurrencyController = TextEditingController();
+  final _recentTicketEditWindowMinutesController = TextEditingController();
 
   /// Dual / secondary display currency (RDC / CDF context only).
   bool _dualCurrencyEnabled = false;
+  bool _negativeStockGuardEnabled = false;
+  bool _recentTicketEditEnabled = false;
 
   // Phone input helpers
   String _selectedPhoneCountryCode = '+1'; // Default to US
@@ -121,6 +124,7 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
           _secondaryDisplayCurrencyController.text =
               kDefaultSecondaryDisplayCurrencyUsd;
         }
+        _applyBusinessRulesFromChain(chain);
       } else if (widget.boutique != null) {
         // Editing boutique
         final boutique = widget.boutique!;
@@ -179,6 +183,10 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
           _secondaryDisplayCurrencyController.text =
               kDefaultSecondaryDisplayCurrencyUsd;
         }
+
+        if (boutique.boutique.hasBusinessRules()) {
+          _applyBusinessRules(boutique.boutique.businessRules);
+        }
       }
     } else {
       // Creating new
@@ -190,11 +198,13 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
         if (!mounted) return;
         final provider = context.read<BoutiqueProvider>();
         final parentChain = _parentChainForBoutique(provider);
-        if (parentChain != null &&
-            parentChain.hasCurrency() &&
-            parentChain.currency.trim().isNotEmpty) {
-          _billingCurrencyController.text =
-              parentChain.currency.trim().toUpperCase();
+        if (parentChain != null) {
+          if (parentChain.hasCurrency() &&
+              parentChain.currency.trim().isNotEmpty) {
+            _billingCurrencyController.text =
+                parentChain.currency.trim().toUpperCase();
+          }
+          setState(() => _applyBusinessRulesFromChain(parentChain));
         }
       });
     }
@@ -217,6 +227,7 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
     _billingCurrencyController.removeListener(_onBillingCurrencyChanged);
     _billingCurrencyController.dispose();
     _secondaryDisplayCurrencyController.dispose();
+    _recentTicketEditWindowMinutesController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -255,6 +266,8 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
                 const SizedBox(height: 16),
                 _buildChainSelectionSection(),
               ],
+              const SizedBox(height: 16),
+              _buildBusinessRulesSection(),
               const SizedBox(height: 32),
               _buildActionButtons(),
             ],
@@ -347,6 +360,46 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
       secondaryTrimmedUpper:
           _secondaryDisplayCurrencyController.text.trim().toUpperCase(),
     );
+  }
+
+  void _applyBusinessRulesFromChain(Chain chain) {
+    if (chain.hasBusinessRules()) {
+      _applyBusinessRules(chain.businessRules);
+    } else {
+      _negativeStockGuardEnabled = false;
+      _recentTicketEditEnabled = false;
+      _recentTicketEditWindowMinutesController.clear();
+    }
+  }
+
+  void _applyBusinessRules(BusinessRules rules) {
+    _negativeStockGuardEnabled = rules.isNegativeStockGuardEnabled;
+    _recentTicketEditEnabled = rules.isRecentTicketEditEnabled;
+    final minutes = rules.recentTicketEditWindowMinutes;
+    _recentTicketEditWindowMinutesController.text =
+        minutes > 0 ? minutes.toString() : '';
+    if (_recentTicketEditEnabled &&
+        _recentTicketEditWindowMinutesController.text.isEmpty) {
+      _recentTicketEditWindowMinutesController.text = '5';
+    }
+  }
+
+  BusinessRules _buildBusinessRules() {
+    final minutes =
+        int.tryParse(_recentTicketEditWindowMinutesController.text.trim()) ?? 0;
+    return BusinessRules()
+      ..isNegativeStockGuardEnabled = _negativeStockGuardEnabled
+      ..isRecentTicketEditEnabled = _recentTicketEditEnabled
+      ..recentTicketEditWindowMinutes = minutes;
+  }
+
+  void _setRecentTicketEditEnabled(bool value) {
+    setState(() {
+      _recentTicketEditEnabled = value;
+      if (value && _recentTicketEditWindowMinutesController.text.isEmpty) {
+        _recentTicketEditWindowMinutesController.text = '5';
+      }
+    });
   }
 
   Widget _addressCountryPrefixIcon() {
@@ -745,6 +798,7 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
                           _billingCurrencyController.text =
                               chain.currency.trim().toUpperCase();
                         }
+                        _applyBusinessRulesFromChain(chain);
                       }
                     });
                   },
@@ -757,6 +811,66 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
                 );
               },
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBusinessRulesSection() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              BoutiqueUiStrings.businessRulesSectionTitle,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 8),
+            SwitchListTile(
+              key: const ValueKey('negative-stock-guard-switch'),
+              contentPadding: EdgeInsets.zero,
+              title: const Text(BoutiqueUiStrings.negativeStockGuardTitle),
+              subtitle:
+                  const Text(BoutiqueUiStrings.negativeStockGuardSubtitle),
+              value: _negativeStockGuardEnabled,
+              onChanged: (value) =>
+                  setState(() => _negativeStockGuardEnabled = value),
+            ),
+            // const Divider(height: 16),
+           /*  SwitchListTile(
+              key: const ValueKey('recent-ticket-edit-switch'),
+              contentPadding: EdgeInsets.zero,
+              title: const Text(BoutiqueUiStrings.recentTicketEditTitle),
+              subtitle: const Text(BoutiqueUiStrings.recentTicketEditSubtitle),
+              value: _recentTicketEditEnabled,
+              onChanged: _setRecentTicketEditEnabled,
+            ), */
+            if (_recentTicketEditEnabled) ...[
+              const SizedBox(height: 8),
+              TextFormField(
+                key: const ValueKey('recent-ticket-edit-window-field'),
+                controller: _recentTicketEditWindowMinutesController,
+                decoration: const InputDecoration(
+                  labelText:
+                      BoutiqueUiStrings.recentTicketEditWindowMinutesLabel,
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.schedule),
+                ),
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                validator: (value) {
+                  if (!_recentTicketEditEnabled) return null;
+                  final minutes = int.tryParse((value ?? '').trim());
+                  if (minutes == null || minutes <= 0) {
+                    return BoutiqueUiStrings.recentTicketEditWindowInvalid;
+                  }
+                  return null;
+                },
+              ),
+            ],
           ],
         ),
       ),
@@ -926,6 +1040,7 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
       chain.clearCurrency();
     }
     _applyDualToChain(chain);
+    chain.businessRules = _buildBusinessRules();
 
     if (widget.isEditing && widget.chain != null) {
       final request = ChainRequest()
@@ -937,6 +1052,7 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
         request.clearCurrency();
       }
       _applyDualToChainRequest(request);
+      request.businessRules = _buildBusinessRules();
       return await provider.updateChain(request);
     }
     return await provider.createChain(chain);
@@ -995,6 +1111,7 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
     }
 
     _applyDualToBoutiquePb(boutique, provider);
+    boutique.businessRules = _buildBusinessRules();
 
     if (!widget.isEditing) {
       boutique.creationDate = DateTime.now().toIso8601String();

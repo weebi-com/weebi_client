@@ -43,7 +43,10 @@ class _BoutiqueFormWidgetState extends State<BoutiqueFormWidget> {
   late TextEditingController _phoneController;
   final _billingCurrencyController = TextEditingController();
   final _secondaryDisplayCurrencyController = TextEditingController();
+  final _recentTicketEditWindowMinutesController = TextEditingController();
   bool _dualCurrencyEnabled = false;
+  bool _negativeStockGuardEnabled = false;
+  bool _recentTicketEditEnabled = false;
   bool _isSaving = false;
   String? _error;
 
@@ -90,6 +93,9 @@ class _BoutiqueFormWidgetState extends State<BoutiqueFormWidget> {
       } else if (_dualCurrencyEnabled) {
         _secondaryDisplayCurrencyController.text =
             kDefaultSecondaryDisplayCurrencyUsd;
+      }
+      if (chain.hasBusinessRules()) {
+        _applyBusinessRules(chain.businessRules);
       }
     } else {
       final boutique = widget.boutique!;
@@ -142,6 +148,9 @@ class _BoutiqueFormWidgetState extends State<BoutiqueFormWidget> {
         _secondaryDisplayCurrencyController.text =
             kDefaultSecondaryDisplayCurrencyUsd;
       }
+      if (boutique.boutique.hasBusinessRules()) {
+        _applyBusinessRules(boutique.boutique.businessRules);
+      }
     }
   }
 
@@ -161,7 +170,38 @@ class _BoutiqueFormWidgetState extends State<BoutiqueFormWidget> {
     _billingCurrencyController.removeListener(_onBillingCurrencyChanged);
     _billingCurrencyController.dispose();
     _secondaryDisplayCurrencyController.dispose();
+    _recentTicketEditWindowMinutesController.dispose();
     super.dispose();
+  }
+
+  void _applyBusinessRules(BusinessRules rules) {
+    _negativeStockGuardEnabled = rules.isNegativeStockGuardEnabled;
+    _recentTicketEditEnabled = rules.isRecentTicketEditEnabled;
+    final minutes = rules.recentTicketEditWindowMinutes;
+    _recentTicketEditWindowMinutesController.text =
+        minutes > 0 ? minutes.toString() : '';
+    if (_recentTicketEditEnabled &&
+        _recentTicketEditWindowMinutesController.text.isEmpty) {
+      _recentTicketEditWindowMinutesController.text = '5';
+    }
+  }
+
+  BusinessRules _buildBusinessRules() {
+    final minutes =
+        int.tryParse(_recentTicketEditWindowMinutesController.text.trim()) ?? 0;
+    return BusinessRules()
+      ..isNegativeStockGuardEnabled = _negativeStockGuardEnabled
+      ..isRecentTicketEditEnabled = _recentTicketEditEnabled
+      ..recentTicketEditWindowMinutes = minutes;
+  }
+
+  void _setRecentTicketEditEnabled(bool value) {
+    setState(() {
+      _recentTicketEditEnabled = value;
+      if (value && _recentTicketEditWindowMinutesController.text.isEmpty) {
+        _recentTicketEditWindowMinutesController.text = '5';
+      }
+    });
   }
 
   Widget _addressCountryPrefixIcon() {
@@ -256,6 +296,8 @@ class _BoutiqueFormWidgetState extends State<BoutiqueFormWidget> {
                         setState(() => _dualCurrencyEnabled = v),
                     secondaryController: _secondaryDisplayCurrencyController,
                   ),
+                  const SizedBox(height: 16),
+                  _buildBusinessRulesSection(),
                 ] else ...[
                   // Boutique-specific fields (aligned with BoutiqueCreateView)
                   TextFormField(
@@ -448,6 +490,8 @@ class _BoutiqueFormWidgetState extends State<BoutiqueFormWidget> {
                       );
                     },
                   ),
+                  const SizedBox(height: 16),
+                  _buildBusinessRulesSection(),
                 ],
               ],
             ),
@@ -502,6 +546,7 @@ class _BoutiqueFormWidgetState extends State<BoutiqueFormWidget> {
           secondaryTrimmedUpper:
               _secondaryDisplayCurrencyController.text.trim().toUpperCase(),
         );
+        request.businessRules = _buildBusinessRules();
         success = await provider.updateChain(request);
       } else {
         // Update boutique
@@ -569,6 +614,7 @@ class _BoutiqueFormWidgetState extends State<BoutiqueFormWidget> {
           secondaryTrimmedUpper:
               _secondaryDisplayCurrencyController.text.trim().toUpperCase(),
         );
+        updatedBoutique.businessRules = _buildBusinessRules();
 
         success = await provider.updateBoutique(
             boutique.chainId, boutique.boutiqueId, updatedBoutique);
@@ -601,5 +647,65 @@ class _BoutiqueFormWidgetState extends State<BoutiqueFormWidget> {
         });
       }
     }
+  }
+
+  Widget _buildBusinessRulesSection() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              BoutiqueUiStrings.businessRulesSectionTitle,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 8),
+            SwitchListTile(
+              key: const ValueKey('negative-stock-guard-switch'),
+              contentPadding: EdgeInsets.zero,
+              title: const Text(BoutiqueUiStrings.negativeStockGuardTitle),
+              subtitle:
+                  const Text(BoutiqueUiStrings.negativeStockGuardSubtitle),
+              value: _negativeStockGuardEnabled,
+              onChanged: (value) =>
+                  setState(() => _negativeStockGuardEnabled = value),
+            ),
+       /*      const Divider(height: 16),
+            SwitchListTile(
+              key: const ValueKey('recent-ticket-edit-switch'),
+              contentPadding: EdgeInsets.zero,
+              title: const Text(BoutiqueUiStrings.recentTicketEditTitle),
+              subtitle: const Text(BoutiqueUiStrings.recentTicketEditSubtitle),
+              value: _recentTicketEditEnabled,
+              onChanged: _setRecentTicketEditEnabled,
+            ), */
+            if (_recentTicketEditEnabled) ...[
+              const SizedBox(height: 8),
+              TextFormField(
+                key: const ValueKey('recent-ticket-edit-window-field'),
+                controller: _recentTicketEditWindowMinutesController,
+                decoration: const InputDecoration(
+                  labelText:
+                      BoutiqueUiStrings.recentTicketEditWindowMinutesLabel,
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.schedule),
+                ),
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                validator: (value) {
+                  if (!_recentTicketEditEnabled) return null;
+                  final minutes = int.tryParse((value ?? '').trim());
+                  if (minutes == null || minutes <= 0) {
+                    return BoutiqueUiStrings.recentTicketEditWindowInvalid;
+                  }
+                  return null;
+                },
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
   }
 }

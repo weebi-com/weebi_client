@@ -1,7 +1,9 @@
 name: boutiques_weebi
 description: "Boutique management package for Weebi with chain grouping, permissions management, and comprehensive UI components"
-version: 1.1.2
+version: 1.1.3
 homepage: https://weebi.com
+repository: https://github.com/weebi-app/weebi-client/packages/boutiques
+issue_tracker: https://github.com/weebi-app/weebi-client/issues
 
 environment:
   sdk: ">=3.6.0 <4.0.0"
@@ -13,8 +15,8 @@ dependencies:
   ##### 
   # weebi's kitchen below
   fl_country_code_picker_weebi: ^0.2.3
-  protos_weebi: ^1.2.9  # BoutiquePb dual display currency; publish protos from weebi_server before dropping overrides
-  auth_weebi: ^1.0.7  # also exports collection: ^1.19.1 
+  protos_weebi: ^1.3.2  # BusinessRules on Chain/BoutiquePb and ChainRequest
+  auth_weebi: ^1.0.8  # also exports collection: ^1.19.1 
   
   # State management
   provider: ^6.1.4

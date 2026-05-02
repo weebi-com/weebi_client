@@ -7,7 +7,8 @@ import 'package:users_weebi/src/providers/user_provider.dart';
 
 /// Callback that creates a [FenceServiceClient] with the given access token.
 /// The host app provides this so it can use its own channel (e.g. GrpcWebClientChannel for web).
-typedef FenceServiceClientFactory = FenceServiceClient Function(String accessToken);
+typedef FenceServiceClientFactory = FenceServiceClient Function(
+    String accessToken);
 
 /// Provides a [FenceServiceClient] that is recreated when the access token changes.
 /// Uses a factory so the host app can supply its own channel (grpc or grpc_web).
@@ -38,14 +39,26 @@ MultiProvider initCrossRoutesTestV2(
   required FenceServiceClientFactory createFenceClient,
   required String initialAccessToken,
 }) {
+  final storage = const FlutterSecureStorage(
+    aOptions: AndroidOptions(
+      encryptedSharedPreferences: true,
+    ),
+    iOptions: IOSOptions(
+      accessibility: KeychainAccessibility.first_unlock,
+    ),
+    mOptions: MacOsOptions(
+      accessibility: KeychainAccessibility.first_unlock_this_device,
+      useDataProtectionKeyChain: true,
+    ),
+  );
   return MultiProvider(
     providers: [
       Provider<AuthService>(
         create: (_) => AuthService(
-          UpsertRefreshTokenRpc(const FlutterSecureStorage()),
-          ReadRefreshTokenRpc(const FlutterSecureStorage()),
-          UpsertAccessTokenRpc(const FlutterSecureStorage()),
-          ReadAccessTokenRpc(const FlutterSecureStorage()),
+          UpsertRefreshTokenRpc(storage),
+          ReadRefreshTokenRpc(storage),
+          UpsertAccessTokenRpc(storage),
+          ReadAccessTokenRpc(storage),
         ),
       ),
       ProxyProvider<AuthService, PersistedTokenProvider>(

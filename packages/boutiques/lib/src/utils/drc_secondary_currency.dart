@@ -10,10 +10,6 @@ const String kCongoleseFrancIso4217 = 'CDF';
 /// Default secondary display currency for the DRC use case.
 const String kDefaultSecondaryDisplayCurrencyUsd = 'USD';
 
-/// Keys aligned with proto JSON names for firm/chain, stored on [BoutiquePb.additionalAttributes].
-const String kAttrDualCurrencyEnabled = 'dualCurrencyEnabled';
-const String kAttrSecondaryDisplayCurrency = 'secondaryDisplayCurrency';
-
 /// Web/admin default: allow secondary display currency for all boutiques.
 bool shouldShowSecondaryCurrencyForBoutique({
   required CountryCode? addressCountry,
@@ -112,8 +108,6 @@ void applyDualCurrencyToBoutiquePb(
   required bool dualEnabled,
   required String secondaryTrimmedUpper,
 }) {
-  boutique.additionalAttributes.remove(kAttrDualCurrencyEnabled);
-  boutique.additionalAttributes.remove(kAttrSecondaryDisplayCurrency);
   if (!eligible || !dualEnabled) {
     boutique.isDualCurrencyEnabled = false;
     boutique.clearSecondaryDisplayCurrency();
@@ -125,23 +119,18 @@ void applyDualCurrencyToBoutiquePb(
       : kDefaultSecondaryDisplayCurrencyUsd;
 }
 
-/// Reads dual display settings from [BoutiquePb], preferring first-class fields with legacy [BoutiquePb.additionalAttributes] fallback.
+/// Reads dual display settings from [BoutiquePb].
 ({bool dualEnabled, String secondaryUpper}) readDualCurrencyFromBoutiquePb(
   BoutiquePb boutique,
 ) {
   final fromProtoDual =
       boutique.hasIsDualCurrencyEnabled() && boutique.isDualCurrencyEnabled;
-  final attrs = boutique.additionalAttributes;
-  final fromAttrDual = attrs[kAttrDualCurrencyEnabled] == 'true';
-  final dualEnabled = fromProtoDual || fromAttrDual;
 
   var sec = '';
   if (boutique.hasSecondaryDisplayCurrency() &&
       boutique.secondaryDisplayCurrency.trim().isNotEmpty) {
     sec = boutique.secondaryDisplayCurrency.trim().toUpperCase();
-  } else {
-    sec = (attrs[kAttrSecondaryDisplayCurrency] ?? '').trim().toUpperCase();
   }
 
-  return (dualEnabled: dualEnabled, secondaryUpper: sec);
+  return (dualEnabled: fromProtoDual, secondaryUpper: sec);
 }

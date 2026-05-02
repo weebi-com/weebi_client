@@ -1,6 +1,9 @@
 // Package imports:
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+// Project imports:
+import '../storage/secure_storage_upsert.dart';
+
 /// Base interface for RPC endpoints
 abstract class EndpointBase<T, R> {
   Future<T> request(R data);
@@ -22,7 +25,11 @@ class UpsertRefreshTokenRpc extends UpsertRefreshTokenAbstractRpc {
 
   @override
   Future<String> request(String data) async {
-    await storage.write(key: 'refresh', value: data);
+    await writeSecureStorageValue(
+      storage: storage,
+      key: 'refresh',
+      value: data,
+    );
     return data;
   }
 }
@@ -79,7 +86,11 @@ class UpsertAccessTokenRpc extends UpsertAccessTokenAbstractRpc {
 
   @override
   Future<String> request(String data) async {
-    await storage.write(key: 'access', value: data);
+    await writeSecureStorageValue(
+      storage: storage,
+      key: 'access',
+      value: data,
+    );
     return data;
   }
 }
