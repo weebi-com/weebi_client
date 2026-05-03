@@ -70,7 +70,7 @@
   "dashboardCardUsersValue": "Utilisateurs",
   "dateStringErrorText": "Ce champ nécessite une chaîne de date valide.",
   "dialogs": "{count, plural, one{Dialogue} other{Dialogues}}",
-  "dontHaveAnAccount": "Vous n'avez pas de compte?",
+  "dontHaveAnAccount": "Vous n'avez pas de compte ?",
   "email": "E-mail",
   "emailErrorText": "Ce champ nécessite une adresse e-mail valide.",
   "enterpriseNameFieldHint": "Nom de l'entreprise",

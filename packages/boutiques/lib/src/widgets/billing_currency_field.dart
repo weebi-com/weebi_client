@@ -1,4 +1,4 @@
-import 'package:currency_picker/currency_picker.dart';
+import 'package:boutiques_weebi/currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 
 import '../l10n/boutique_ui_strings.dart';
