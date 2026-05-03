@@ -220,7 +220,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "dialogs": m3,
     "dontHaveAnAccount": MessageLookupByLibrary.simpleMessage(
-      "Vous n\'avez pas de compte?",
+      "Vous n\'avez pas de compte ?",
     ),
     "email": MessageLookupByLibrary.simpleMessage("E-mail"),
     "emailErrorText": MessageLookupByLibrary.simpleMessage(

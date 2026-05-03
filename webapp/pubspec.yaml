@@ -49,7 +49,6 @@ dependencies:
 
   flutter_markdown: ^0.7.7+1
   aptabase_flutter: ^0.4.1
-  currency_picker: ^2.0.21
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +71,7 @@ flutter:
     - assets/images/app_logo.png
     - lib/cgv_en.md
     - lib/cgv_fr.md
+    - ../packages/boutiques/lib/currency_picker/src/res/
 
   # fonts:
   #   - family: Schyler

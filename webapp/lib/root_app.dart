@@ -185,11 +185,6 @@ class _RootAppState extends State<RootApp> {
           ) =>
               provider2!..serviceClient = accessTokenProvider.accessToken,
         ),
-        ChangeNotifierProvider<PermissionProvider>(
-          create: (context) => PermissionProvider(
-            context.read<AccessTokenProvider>(),
-          ),
-        ),
         ChangeNotifierProxyProvider<FenceServiceClientProviderV2,
             CurrentUserProvider>(
           create: (context) => CurrentUserProvider(
@@ -200,6 +195,17 @@ class _RootAppState extends State<RootApp> {
                 CurrentUserProvider(fenceProvider.fenceServiceClient);
             provider.fenceServiceClient = fenceProvider.fenceServiceClient;
             return provider;
+          },
+        ),
+        ChangeNotifierProxyProvider2<AccessTokenProvider,
+            CurrentUserProvider, PermissionProvider>(
+          create: (context) => PermissionProvider(
+            context.read<AccessTokenProvider>(),
+          ),
+          update: (context, accessToken, currentUser, permissionProvider) {
+            // Force PermissionProvider to notify listeners when CurrentUserProvider changes
+            // This ensures permissions are updated even in BFF mode
+            return permissionProvider!;
           },
         ),
         ChangeNotifierProxyProvider<FenceServiceClientProviderV2,
@@ -286,12 +292,18 @@ class _RootAppState extends State<RootApp> {
                 if (snapshot.hasData && snapshot.data!) {
                   // Sync token from SharedPreferences (UserDataProvider) to AccessTokenProvider
                   // so the boutiques/users packages use it for gRPC calls.
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) async {
                     if (context.mounted) {
                       final token =
                           context.read<UserDataProvider>().accessToken;
                       if (token.isNotEmpty) {
                         context.read<AccessTokenProvider>().accessToken = token;
+                      }
+                      // In BFF mode, load current user to get permissions from session
+                      if (Config.isBffMode) {
+                        final currentUserProvider = context.read<CurrentUserProvider>();
+                        await currentUserProvider.load();
+                        // CurrentUserProvider will notify listeners when load completes
                       }
                     }
                   });

@@ -1,8 +1,6 @@
-import 'package:auth_weebi/auth_weebi.dart' show PermissionProvider;
 import 'package:design_weebi/design_weebi.dart' show IconsWeebi;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:web_admin/app_router.dart';
 import 'package:web_admin/core/constants/dimens.dart';
 import 'package:web_admin/core/theme/theme_extensions/app_color_scheme.dart';
@@ -141,26 +139,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         width: summaryCardWidth,
                       ),
                     ),
-                    Selector<PermissionProvider, bool>(
-                      selector: (_, p) => p.canReadBilling,
-                      builder: (context, canReadBilling, _) {
-                        if (!canReadBilling) {
-                          return const SizedBox.shrink();
-                        }
-                        return _HoverableTile(
-                          onTap: () =>
-                              GoRouter.of(context).go(RouteUri.billing),
-                          child: SummaryCard(
-                            title: lang.menuBilling,
-                            value: lang.menuBilling,
-                            icon: Icons.credit_card_rounded,
-                            backgroundColor: Colors.indigo,
-                            textColor: themeData.colorScheme.onPrimary,
-                            iconColor: Colors.black12,
-                            width: summaryCardWidth,
-                          ),
-                        );
-                      },
+                    _HoverableTile(
+                      onTap: () =>
+                          GoRouter.of(context).go(RouteUri.billing),
+                      child: SummaryCard(
+                        title: lang.menuBilling,
+                        value: lang.menuBilling,
+                        icon: Icons.credit_card_rounded,
+                        backgroundColor: Colors.indigo,
+                        textColor: themeData.colorScheme.onPrimary,
+                        iconColor: Colors.black12,
+                        width: summaryCardWidth,
+                      ),
                     ),
 
                     // NOT READY YET
