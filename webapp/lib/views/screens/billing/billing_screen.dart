@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart' hide ConnectionState;
 import 'package:provider/provider.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
+import 'package:auth_weebi/src/extensions/user_permissions_extensions.dart';
 import 'package:web_admin/app_router.dart';
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/providers/server.dart';
@@ -14,6 +15,8 @@ import 'package:web_admin/views/widgets/card_elements.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
 import 'package:web_admin/core/services/user_service.dart';
 import 'package:web_admin/legal/enterprise_terms_version.dart';
+import 'package:web_admin/environment.dart';
+import 'package:web_admin/providers/current_user_provider.dart';
 
 import '../../../core/constants/dimens.dart';
 import '../../../core/theme/theme_extensions/app_color_scheme.dart';
@@ -48,12 +51,62 @@ class _BillingScreenState extends State<BillingScreen> {
   bool _subscriptionConfirmedLogged = false;
   bool _checkoutCanceledLogged = false;
 
+  /// Check if user has billing read permission from either JWT or session (BFF mode)
+  bool _hasReadBillingPermission(BuildContext context) {
+    // Check JWT-based permissions first
+    if (context.read<PermissionProvider>().canReadBilling) {
+      return true;
+    }
+    
+    // In BFF mode, also check CurrentUserProvider (session-based permissions)
+    if (Config.isBffMode) {
+      final currentUser = context.read<CurrentUserProvider>();
+      if (currentUser.user != null) {
+        return currentUser.permissions.canReadBilling;
+      }
+    }
+    
+    return false;
+  }
+
+  /// Check if user has billing create permission from either JWT or session (BFF mode)
+  bool _hasCreateBillingPermission(BuildContext context) {
+    if (context.read<PermissionProvider>().canCreateBilling) {
+      return true;
+    }
+    
+    if (Config.isBffMode) {
+      final currentUser = context.read<CurrentUserProvider>();
+      if (currentUser.user != null) {
+        return currentUser.permissions.canCreateBilling;
+      }
+    }
+    
+    return false;
+  }
+
+  /// Check if user has billing update permission from either JWT or session (BFF mode)
+  bool _hasUpdateBillingPermission(BuildContext context) {
+    if (context.read<PermissionProvider>().canUpdateBilling) {
+      return true;
+    }
+    
+    if (Config.isBffMode) {
+      final currentUser = context.read<CurrentUserProvider>();
+      if (currentUser.user != null) {
+        return currentUser.permissions.canUpdateBilling;
+      }
+    }
+    
+    return false;
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      if (!context.read<PermissionProvider>().canReadBilling) return;
+      if (!_hasReadBillingPermission(context)) return;
 
       Aptabase.instance.trackEvent('billing_screen_opened', {});
       _loadData();
@@ -104,7 +157,7 @@ class _BillingScreenState extends State<BillingScreen> {
 
   Future<void> _loadData() async {
     if (!mounted) return;
-    if (!context.read<PermissionProvider>().canReadBilling) return;
+    if (!_hasReadBillingPermission(context)) return;
     final provider = context.read<BillingServiceClientProvider>();
     setState(() {
       _loading = true;
@@ -227,7 +280,7 @@ class _BillingScreenState extends State<BillingScreen> {
 
   Future<void> _purchaseProduct(BillingProduct product) async {
     if (!mounted) return;
-    if (!context.read<PermissionProvider>().canCreateBilling) {
+    if (!_hasCreateBillingPermission(context)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(Lang.of(context).billingActionNotPermitted)),
       );
@@ -303,7 +356,7 @@ class _BillingScreenState extends State<BillingScreen> {
   }
 
   void _showAssignSeatDialog(BuildContext context, License license) {
-    if (!context.read<PermissionProvider>().canUpdateBilling) {
+    if (!_hasUpdateBillingPermission(context)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(Lang.of(context).billingActionNotPermitted)),
       );
@@ -337,7 +390,7 @@ class _BillingScreenState extends State<BillingScreen> {
     License license,
     String previousUserId,
   ) {
-    if (!context.read<PermissionProvider>().canUpdateBilling) {
+    if (!_hasUpdateBillingPermission(context)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(Lang.of(context).billingActionNotPermitted)),
       );
@@ -369,8 +422,11 @@ class _BillingScreenState extends State<BillingScreen> {
     final themeData = Theme.of(context);
     final appColorScheme = themeData.extension<AppColorScheme>()!;
     final lang = Lang.of(context);
-    final perms = context.watch<PermissionProvider>();
-    if (!perms.canReadBilling) {
+    
+    // Check permissions from both JWT and session (BFF mode)
+    final hasPermission = _hasReadBillingPermission(context);
+    
+    if (!hasPermission) {
       return PortalMasterLayout(
         body: Center(
           child: ConstrainedBox(
@@ -387,8 +443,8 @@ class _BillingScreenState extends State<BillingScreen> {
         ),
       );
     }
-    final canPurchase = perms.canCreateBilling;
-    final canManageSeats = perms.canUpdateBilling;
+    final canPurchase = _hasCreateBillingPermission(context);
+    final canManageSeats = _hasUpdateBillingPermission(context);
     final totalSeats = _licenses.fold<int>(0, (sum, l) => sum + l.maxUsers);
     final returnedFromSuccess =
         _billingQueryParams()['success'] == 'true' && !_loading;
