@@ -637,7 +637,7 @@ class _OperationalLicenseNotice extends StatelessWidget {
   }
 
   Future<void> _openBillingPortal(BuildContext context) async {
-    final uri = Uri.parse(LicenseUiStrings.cloudBillingPortalUrl);
+    final uri = Uri.parse(LicenseUiStrings.cloudLicensesPortalUrl);
     try {
       final launched = await launchUrl(
         uri,
@@ -647,7 +647,7 @@ class _OperationalLicenseNotice extends StatelessWidget {
         ScaffoldMessenger.maybeOf(context)?.showSnackBar(
           SnackBar(
             content: SelectableText(
-              LicenseUiStrings.cloudBillingPortalUrl,
+              LicenseUiStrings.cloudLicensesPortalUrl,
               style: const TextStyle(color: Colors.white),
             ),
           ),
@@ -658,7 +658,7 @@ class _OperationalLicenseNotice extends StatelessWidget {
         ScaffoldMessenger.maybeOf(context)?.showSnackBar(
           SnackBar(
             content: SelectableText(
-              LicenseUiStrings.cloudBillingPortalUrl,
+              LicenseUiStrings.cloudLicensesPortalUrl,
               style: const TextStyle(color: Colors.white),
             ),
           ),

@@ -33,11 +33,6 @@ The webapp calls the **Envoy proxy** (gRPC-Web), which forwards to weebi_server.
 
 At runtime the app reads **`Lang`** from **`lib/generated/`**; the `.arb` files are not loaded by the app.
 
-## issues
-
-FORK OF flutter-web-admin
-open issues in weebi_server : https://github.com/weebi-com/weebi_server/issues
-With the tag [WEB]
 
 ## web packages to consider
 
