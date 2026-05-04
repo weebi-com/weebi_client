@@ -22,7 +22,6 @@ dependencies:
   pdf: ^3.11.1
   printing: ^5.13.4
   provider: ^6.1.4
-  gatekeeper_weebi: any
   intl: any
 
 

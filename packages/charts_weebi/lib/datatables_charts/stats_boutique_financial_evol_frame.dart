@@ -3,7 +3,7 @@ import 'package:charts_weebi/datatables_charts/charts/boutique/financials/boutiq
 import 'package:charts_weebi/datatables_charts/reports/boutique_financial_pluto_table.dart';
 import 'package:design_weebi/design_weebi.dart';
 import 'package:flutter/material.dart';
-import 'package:gatekeeper_weebi/gatekeeper_weebi.dart';
+// import 'package:gatekeeper_weebi/gatekeeper_weebi.dart';
 
 // Package imports:
 import 'package:intl/intl.dart' show DateFormat;
@@ -120,18 +120,14 @@ class _BoutiqueFinancialTableFrameViewState
 
   @override
   Widget build(BuildContext context) {
-    final gatekeeper = context.read<Gatekeeper>();
+    // TODO check with server for this
+    // final gatekeeper = context.read<Gatekeeper>();
     return Scaffold(
       appBar: AppBar(
         title: Text('suiviDesFinances'),
         backgroundColor: ColorsWeebi.tealSell,
       ),
-      body: gatekeeper.isLinked &&
-              gatekeeper.userPermissions.boolRights.canSeeStats == false
-          ? Center(
-              child: Text('permissionRequise'),
-            )
-          : Stack(
+      body: Stack(
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),

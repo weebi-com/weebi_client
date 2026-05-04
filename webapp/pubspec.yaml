@@ -25,7 +25,6 @@ dependencies:
     # path: ../weebi/packages/users
   accesses_weebi: ^1.0.7
   devices_weebi: ^1.0.7
-  gatekeeper_weebi: ^1.0.7
   design_weebi: ^0.1.3
   charts_weebi:
     path: ../packages/charts_weebi

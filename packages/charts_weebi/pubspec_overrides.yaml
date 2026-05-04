@@ -4,5 +4,3 @@ dependency_overrides:
     path: ..\\auth
   design_weebi:
     path: ..\\design
-  gatekeeper_weebi:
-    path: ..\\gatekeeper

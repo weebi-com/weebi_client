@@ -1,4 +1,4 @@
-# melos_managed_dependency_overrides: charts_weebi,accesses_weebi,auth_weebi,boutiques_weebi,design_weebi,devices_weebi,gatekeeper_weebi,users_weebi
+# melos_managed_dependency_overrides: charts_weebi,accesses_weebi,auth_weebi,boutiques_weebi,design_weebi,devices_weebi,users_weebi
 dependency_overrides:
   accesses_weebi:
     path: ..\\packages\\accesses
@@ -12,8 +12,6 @@ dependency_overrides:
     path: ..\\packages\\design
   devices_weebi:
     path: ..\\packages\\devices
-  gatekeeper_weebi:
-    path: ..\\packages\\gatekeeper
   rive_native: 0.1.4
   users_weebi:
     path: ..\\packages\\users
