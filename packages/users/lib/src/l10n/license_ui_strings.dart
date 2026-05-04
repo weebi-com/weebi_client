@@ -1,7 +1,7 @@
 /// French UI copy for licence and seat messaging.
 ///
 /// Defaults are in French (primary audience). General copy avoids assuming a
-/// billing UI; admin surfaces may still link to [cloudBillingPortalUrl] when relevant.
+/// licenses or credits UI; admin surfaces may still link to [cloudLicensesPortalUrl] when relevant.
 ///
 /// For full [intl] / ARB later, host apps can fork strings or inject overrides
 /// at the widget level when you add parameters.
@@ -80,11 +80,11 @@ abstract final class LicenseUiStrings {
       'licence attribuée. Pour les usages étendus, les autres utilisateurs et les '
       'fonctions liées à l’abonnement, attribuez un siège actif.';
 
-  /// Portail facturation / licences (Weebi Cloud).
-  static const String cloudBillingPortalUrl = 'https://cloud.weebi.com/#/billing';
+  /// Portail licences et crédits (Weebi Cloud).
+  static const String cloudLicensesPortalUrl = 'https://cloud.weebi.com/#/licenses';
 
   static const String accessOperationalLicenseOpenBilling =
-      'Licences Weebi';
+      'Licences et crédits Weebi';
 
   /// Compact list-row label when the user has an active seat.
   static const String userListSeatBadgeActive = 'Siège actif';

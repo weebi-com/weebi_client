@@ -189,7 +189,8 @@ class _BillingScreenState extends State<BillingScreen> {
       if (mounted) {
         setState(() {
           _licenses = licenses;
-          _products = products;
+          // Filter out 'pro' product (counterintuitive naming; kept for other subscriptions at 10+ seats)
+          _products = products.where((p) => p.productId.toLowerCase() != 'pro').toList();
           _usersById = usersById;
           _loading = false;
           _errorMessage = null;
@@ -426,7 +427,21 @@ class _BillingScreenState extends State<BillingScreen> {
     // Check permissions from both JWT and session (BFF mode)
     final hasPermission = _hasReadBillingPermission(context);
     
+    // In BFF mode, if user is loaded but has no permission, show error.
+    // If user is still loading, show spinner to avoid false "no access" message.
     if (!hasPermission) {
+      if (Config.isBffMode) {
+        final currentUser = context.read<CurrentUserProvider>();
+        if (currentUser.user == null) {
+          // User data still loading; show spinner instead of "no access"
+          return PortalMasterLayout(
+            body: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      }
+      
       return PortalMasterLayout(
         body: Center(
           child: ConstrainedBox(
