@@ -1,6 +1,6 @@
 name: devices_weebi
 description: Comprehensive device management package for Weebi POS system with CRUD operations based on ChainRights permissions.
-version: 1.0.7
+version: 1.0.8
 homepage: https://weebi.com
 repository: https://github.com/weebi-app/weebi-client/packages/devices
 issue_tracker: https://github.com/weebi-app/weebi-client/issues
@@ -14,9 +14,9 @@ dependencies:
     sdk: flutter
   ####
   # weebi's kitchen below
-  protos_weebi: ^1.2.6  # export fixnums and grpc
-  auth_weebi: ^1.0.7
-  boutiques_weebi: ^1.1.0
+  protos_weebi: ^1.3.2  # export fixnums and grpc
+  auth_weebi: ^1.0.8
+  boutiques_weebi: ^1.1.4
   
   # Core dependencies
   provider: ^6.1.4

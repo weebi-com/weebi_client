@@ -1,5 +1,10 @@
 # changelog 
 
+## 1.0.8 - may 2026
+
+- french first 
+- Device Pairing Code Generated - remove the QR code icon - counterintuitive
+
 ## 1.0.7 - march 2026
 - bump protos, auth, boutiques
 

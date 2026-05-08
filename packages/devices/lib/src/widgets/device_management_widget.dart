@@ -91,12 +91,12 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
       ),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Device Management'),
+          title: const Text('Gestion des appareils'),
           bottom: TabBar(
             controller: _tabController,
             tabs: const [
-              Tab(icon: Icon(Icons.devices), text: 'Manage Devices'),
-              Tab(icon: Icon(Icons.add_link), text: 'Chain New Device'),
+              Tab(icon: Icon(Icons.devices), text: 'Gérer les appareils'),
+              Tab(icon: Icon(Icons.add_link), text: 'Associer un appareil'),
             ],
           ),
         ),
@@ -160,13 +160,13 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
               runSpacing: 2,
               children: [
                 _buildCompactPermissionChip(
-                    'Create', deviceProvider.canCreateDevice),
+                    'Créer', deviceProvider.canCreateDevice),
                 _buildCompactPermissionChip(
-                    'Read', deviceProvider.canReadDevices),
+                    'Lire', deviceProvider.canReadDevices),
                 _buildCompactPermissionChip(
-                    'Update', deviceProvider.canUpdateDevice),
+                    'Modifier', deviceProvider.canUpdateDevice),
                 _buildCompactPermissionChip(
-                    'Delete', deviceProvider.canDeleteDevice),
+                    'Supprimer', deviceProvider.canDeleteDevice),
               ],
             ),
           ),
@@ -219,7 +219,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
             Icon(Icons.account_tree, color: Colors.blue[700], size: 20),
             const SizedBox(width: 8),
             Text(
-              'Chain: ${chain.name.isEmpty ? 'Unnamed Chain' : chain.name}',
+              'Chaîne : ${chain.name.isEmpty ? 'Chaîne sans nom' : chain.name}',
               style: TextStyle(
                 color: Colors.blue[800],
                 fontWeight: FontWeight.w500,
@@ -237,7 +237,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: DropdownButtonFormField<String>(
         decoration: const InputDecoration(
-          labelText: 'Select Chain',
+          labelText: 'Sélectionner une chaîne',
           border: OutlineInputBorder(),
           prefixIcon: Icon(Icons.account_tree),
         ),
@@ -245,7 +245,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
         items: boutiqueProvider.chains.map((chain) {
           return DropdownMenuItem(
             value: chain.chainId,
-            child: Text(chain.name.isEmpty ? 'Unnamed Chain' : chain.name),
+            child: Text(chain.name.isEmpty ? 'Chaîne sans nom' : chain.name),
           );
         }).toList(),
         onChanged: deviceProvider.canReadDevices
@@ -267,7 +267,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
       child: TextField(
         decoration: const InputDecoration(
-          hintText: 'Search devices...',
+          hintText: 'Rechercher des appareils...',
           prefixIcon: Icon(Icons.search),
           border: OutlineInputBorder(),
         ),
@@ -295,7 +295,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
     }
 
     if (!deviceProvider.canReadDevices) {
-      return _buildNoPermissionView('ChainRight.read required to view devices');
+      return _buildNoPermissionView('ChainRight.read requis pour voir les appareils');
     }
 
     final devices = deviceProvider.searchDevices(_searchQuery);
@@ -311,7 +311,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
           (b) => b.boutiqueId == device.boutiqueId,
           orElse: () => BoutiqueMongo());
       final boutiqueName = boutique.displayName.isEmpty
-          ? 'Unknown Boutique'
+          ? 'Boutique inconnue'
           : boutique.displayName;
       devicesByBoutique.putIfAbsent(boutiqueName, () => []).add(device);
     }
@@ -352,7 +352,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
                     ),
                     const Spacer(),
                     Chip(
-                      label: Text('${boutiqueDevices.length} devices'),
+                      label: Text('${boutiqueDevices.length} appareils'),
                       backgroundColor:
                           Theme.of(context).primaryColor.withValues(alpha: 0.2),
                     ),
@@ -380,7 +380,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
       ),
       title: Text(
         device.hardwareInfo.name.isEmpty
-            ? 'Device ${device.deviceId.substring(0, 8)}...'
+            ? 'Appareil ${device.deviceId.substring(0, 8)}...'
             : device.hardwareInfo.name,
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
@@ -401,7 +401,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
               ),
               const SizedBox(width: 4),
               Text(
-                device.status ? 'Active' : 'Inactive',
+                device.status ? 'Actif' : 'Inactif',
                 style: TextStyle(
                   color: device.status ? Colors.green[700] : Colors.red[700],
                   fontWeight: FontWeight.w500,
@@ -420,7 +420,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
               value: 'update_password',
               child: ListTile(
                 leading: Icon(Icons.lock_reset),
-                title: Text('Update Password'),
+                title: Text('Modifier le mot de passe'),
                 dense: true,
               ),
             ),
@@ -428,7 +428,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
               value: 'move_boutique',
               child: ListTile(
                 leading: Icon(Icons.swap_horiz),
-                title: Text('Move to Another Boutique'),
+                title: Text('Déplacer vers une autre boutique'),
                 dense: true,
               ),
             ),
@@ -437,7 +437,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
               child: ListTile(
                 leading:
                     Icon(device.status ? Icons.toggle_off : Icons.toggle_on),
-                title: Text(device.status ? 'Disable Device' : 'Enable Device'),
+                title: Text(device.status ? 'Désactiver l\'appareil' : 'Activer l\'appareil'),
                 dense: true,
               ),
             ),
@@ -448,7 +448,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
               child: ListTile(
                 leading: Icon(Icons.delete, color: Colors.red),
                 title:
-                    Text('Delete Device', style: TextStyle(color: Colors.red)),
+                    Text('Supprimer l\'appareil', style: TextStyle(color: Colors.red)),
                 dense: true,
               ),
             ),
@@ -464,7 +464,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
         children: [
           Icon(Icons.error, size: 64, color: Colors.red[300]),
           const SizedBox(height: 16),
-          const Text('Error loading devices'),
+          const Text('Erreur lors du chargement des appareils'),
           const SizedBox(height: 8),
           Text(
             error,
@@ -474,7 +474,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: onRetry,
-            child: const Text('Retry'),
+            child: const Text('Réessayer'),
           ),
         ],
       ),
@@ -489,7 +489,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
           Icon(Icons.lock, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           const Text(
-            'Insufficient Permissions',
+            'Permissions insuffisantes',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
@@ -511,14 +511,14 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
           Icon(Icons.devices, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           const Text(
-            'No Devices Found',
+            'Aucun appareil trouvé',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
             _searchQuery.isEmpty
-                ? 'No devices are registered for this chain.\nUse the "Chain New Device" tab to add one.'
-                : 'No devices match your search criteria.',
+                ? 'Aucun appareil n\'est enregistré pour cette chaîne.\nUtilisez l\'onglet "Associer un appareil" pour en ajouter un.'
+                : 'Aucun appareil ne correspond à vos critères de recherche.',
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.grey[600]),
           ),
@@ -527,7 +527,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
             ElevatedButton.icon(
               onPressed: () => _tabController.animateTo(1),
               icon: const Icon(Icons.add_link),
-              label: const Text('Chain New Device'),
+              label: const Text('Associer un appareil'),
             ),
           ],
         ],
@@ -560,17 +560,17 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Update Device Password'),
+        title: const Text('Modifier le mot de passe de l\'appareil'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-                'Update password for device: ${device.hardwareInfo.name.isEmpty ? device.deviceId.substring(0, 8) : device.hardwareInfo.name}'),
+                'Modifier le mot de passe pour l\'appareil : ${device.hardwareInfo.name.isEmpty ? device.deviceId.substring(0, 8) : device.hardwareInfo.name}'),
             const SizedBox(height: 16),
             TextField(
               controller: controller,
               decoration: const InputDecoration(
-                labelText: 'New Password',
+                labelText: 'Nouveau mot de passe',
                 border: OutlineInputBorder(),
               ),
               obscureText: true,
@@ -580,7 +580,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: const Text('Annuler'),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -597,15 +597,15 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
                   scaffoldMessenger.showSnackBar(
                     SnackBar(
                       content: Text(success
-                          ? 'Password updated successfully'
-                          : 'Failed to update password'),
+                          ? 'Mot de passe mis à jour avec succès'
+                          : 'Échec de la mise à jour du mot de passe'),
                       backgroundColor: success ? Colors.green : Colors.red,
                     ),
                   );
                 }
               }
             },
-            child: const Text('Update'),
+            child: const Text('Modifier'),
           ),
         ],
       ),
@@ -616,19 +616,19 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Move Device'),
+        title: const Text('Déplacer l\'appareil'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.info, color: Colors.blue[600], size: 48),
             const SizedBox(height: 16),
             const Text(
-              'Moving devices between boutiques is not yet available.',
+              'Le déplacement d\'appareils entre boutiques n\'est pas encore disponible.',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             const Text(
-              'Please contact support for assistance with device transfers.',
+              'Veuillez contacter le support pour obtenir de l\'aide sur les transferts d\'appareils.',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 12, color: Colors.grey),
             ),
@@ -649,19 +649,19 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('${enable ? 'Enable' : 'Disable'} Device'),
+        title: Text('${enable ? 'Activer' : 'Désactiver'} l\'appareil'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.info, color: Colors.blue[600], size: 48),
             const SizedBox(height: 16),
             const Text(
-              'Device enable/disable functionality is not yet available.',
+              'La fonctionnalité d\'activation/désactivation d\'appareil n\'est pas encore disponible.',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             const Text(
-              'Please contact support for assistance with device status changes.',
+              'Veuillez contacter le support pour obtenir de l\'aide sur les changements de statut d\'appareil.',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 12, color: Colors.grey),
             ),
@@ -682,21 +682,21 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Device'),
+        title: const Text('Supprimer l\'appareil'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.warning, color: Colors.red[600], size: 48),
             const SizedBox(height: 16),
             Text(
-              'Are you sure you want to permanently delete this device?',
+              'Êtes-vous sûr de vouloir supprimer définitivement cet appareil ?',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
             Text(
               device.hardwareInfo.name.isEmpty
-                  ? 'Device ID: ${device.deviceId}'
+                  ? 'ID de l\'appareil : ${device.deviceId}'
                   : device.hardwareInfo.name,
               textAlign: TextAlign.center,
               style: const TextStyle(fontWeight: FontWeight.bold),
@@ -710,7 +710,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
                 border: Border.all(color: Colors.red[200]!),
               ),
               child: const Text(
-                'This action cannot be undone. The device will be permanently removed from the system.',
+                'Cette action est irréversible. L\'appareil sera définitivement retiré du système.',
                 style: TextStyle(fontSize: 12, color: Colors.red),
                 textAlign: TextAlign.center,
               ),
@@ -720,7 +720,7 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: const Text('Annuler'),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -735,15 +735,15 @@ class _DeviceManagementWidgetState extends State<DeviceManagementWidget>
                 scaffoldMessenger.showSnackBar(
                   SnackBar(
                     content: Text(success
-                        ? 'Device deleted successfully'
-                        : 'Failed to delete device'),
+                        ? 'Appareil supprimé avec succès'
+                        : 'Échec de la suppression de l\'appareil'),
                     backgroundColor: success ? Colors.green : Colors.red,
                   ),
                 );
               }
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Delete', style: TextStyle(color: Colors.white)),
+            child: const Text('Supprimer', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),

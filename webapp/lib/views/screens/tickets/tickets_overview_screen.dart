@@ -6,13 +6,8 @@ import 'package:design_weebi/design_weebi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:models_weebi/models.dart' show TicketType;
+import 'package:protos_weebi/protos_weebi_io.dart';
 import 'package:provider/provider.dart';
-import 'package:protos_weebi/protos_weebi_io.dart'
-    show
-        ReadAllTicketsRequest,
-        TicketPb,
-        Empty;
 import 'package:web_admin/app_router.dart';
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/billing/seat_capability.dart';
@@ -22,8 +17,8 @@ import 'package:web_admin/providers/server.dart';
 import 'package:web_admin/core/money/money_formatting.dart';
 import 'package:web_admin/providers/tickets_boutique_cache.dart';
 import 'package:web_admin/views/screens/tickets/ticket_glimpse_widget.dart';
-import 'package:web_admin/views/screens/tickets/ticket_pb_to_weebi.dart';
 import 'package:web_admin/views/screens/tickets/tickets_filter_bar.dart';
+import 'package:web_admin/views/screens/tickets/ticket_type_ui_ext.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
 
 import '../../../core/constants/dimens.dart';
@@ -651,11 +646,8 @@ class _TicketsTableSource extends DataTableSource {
     required this.locale,
   });
 
-  TicketType _toTicketType(dynamic pbType) =>
-      TicketType.tryParse(pbType?.name ?? '');
-
-  String _typeLabel(TicketType type) {
-    final name = type.toString();
+  String _typeLabel(TicketTypePb type) {
+    final name = type.name;
     if (name.isEmpty) return lang.ticketTypeDefault;
     return name[0].toUpperCase() + name.substring(1).replaceAll('_', ' ');
   }
@@ -664,7 +656,7 @@ class _TicketsTableSource extends DataTableSource {
     if (meta.isSoftDeleted || !meta.ticket.status) {
       return lang.ticketsPaymentUnknown;
     }
-    final type = _toTicketType(meta.ticket.ticketType);
+    final type = meta.ticket.ticketType;
     final iso = cache.getBillingCurrency(meta.ticket.counterfoil.boutiqueId);
     if (meta.ticket.received > 0) {
       return MoneyFormatting.formatTicketAmountLine(
@@ -677,9 +669,8 @@ class _TicketsTableSource extends DataTableSource {
     // For deferred (sellDeferred, spendDeferred) received is 0; use total from items
     if (type.isFinancial && meta.ticket.items.isNotEmpty) {
       try {
-        final ticketW = ticketPbToWeebi(meta.ticket);
         return MoneyFormatting.formatTicketAmountLine(
-          localAmount: ticketW.total.toDouble(),
+          localAmount: meta.ticket.totalComputed,
           boutiqueIso4217: iso,
           ticket: meta.ticket,
           locale: locale,
@@ -761,7 +752,7 @@ class _TicketsTableSource extends DataTableSource {
     if (index >= tickets.length) return null;
     final meta = tickets[index];
     final isActive = meta.ticket.status && !meta.isSoftDeleted;
-    final type = _toTicketType(meta.ticket.ticketType);
+    final type = meta.ticket.ticketType;
     final iconColor = isActive ? type.iconColor : ColorsWeebi.greyTicket;
     final textColor = isActive ? null : Colors.grey.shade600;
 

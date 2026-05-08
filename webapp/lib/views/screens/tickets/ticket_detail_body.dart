@@ -1,11 +1,10 @@
 import 'package:design_weebi/design_weebi.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show DateFormat, NumberFormat;
-import 'package:models_weebi/models.dart';
-import 'package:protos_weebi/protos_weebi_io.dart' show TicketPb;
+import 'package:protos_weebi/protos_weebi_io.dart';
 import 'package:web_admin/core/money/money_formatting.dart';
 import 'package:web_admin/providers/tickets_boutique_cache.dart';
-import 'package:web_admin/views/screens/tickets/ticket_pb_to_weebi.dart';
+import 'package:web_admin/views/screens/tickets/ticket_type_ui_ext.dart';
 
 const _rowPadding = SizedBox(width: 28);
 
@@ -30,7 +29,6 @@ class TicketDetailBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ticketW = ticketPbToWeebi(ticket);
     final locale = Localizations.localeOf(context);
     final billingIso =
         boutiqueCache?.getBillingCurrency(ticket.counterfoil.boutiqueId);
@@ -71,7 +69,7 @@ class TicketDetailBody extends StatelessWidget {
         // Date & time
         _InfoRow(
           icon: Icons.schedule,
-          iconColor: ticketW.ticketType.iconColor,
+          iconColor: ticket.ticketType.iconColor,
           child: Text(
             _formatDateTime(ticket.date, ticket.creationDate, dateFormat, timeFormat),
           ),
@@ -79,7 +77,7 @@ class TicketDetailBody extends StatelessWidget {
         if (ticket.date != ticket.creationDate && ticket.creationDate.isNotEmpty)
           _InfoRow(
             icon: Icons.event,
-            iconColor: ticketW.ticketType.iconColor,
+            iconColor: ticket.ticketType.iconColor,
             child: Text(
               '${dateFormat.format(DateTime.tryParse(ticket.creationDate) ?? DateTime.now())} '
               '${timeFormat.format(DateTime.tryParse(ticket.creationDate) ?? DateTime.now())} (création)',
@@ -88,74 +86,75 @@ class TicketDetailBody extends StatelessWidget {
         // Ticket ID
         _InfoRow(
           icon: IconsWeebi.ticketsIconData,
-          iconColor: ticketW.ticketType.iconColor,
+          iconColor: ticket.ticketType.iconColor,
           child: Text('#${ticket.nonUniqueId}'),
         ),
         // Ticket type
         _InfoRow(
-          icon: ticketW.ticketType.iconData,
-          iconColor: ticketW.ticketType.iconColor,
-          child: Text(_ticketTypeLabel(ticketW.ticketType)),
+          leadingWidget: ticket.ticketType.icon,
+          icon: ticket.ticketType.iconData,
+          iconColor: ticket.ticketType.iconColor,
+          child: Text(_ticketTypeLabel(ticket.ticketType)),
         ),
         // Payment type (financial only)
-        if (ticketW.ticketType.isFinancial)
+        if (ticket.ticketType.isFinancial)
           _InfoRow(
-            icon: _paymentIcon(ticketW.paymentType),
-            iconColor: ticketW.ticketType.iconColor,
-            child: Text('Paiement : ${_paymentLabel(ticketW.paymentType.toString())}'),
+            icon: _paymentIcon(ticket.paymentType),
+            iconColor: ticket.ticketType.iconColor,
+            child: Text('Paiement : ${_paymentLabel(ticket.paymentType.name)}'),
           ),
         const Divider(),
         // Items
-        for (final item in ticketW.items)
+        for (final item in ticket.items)
           _ItemRow(
-            ticketType: ticketW.ticketType,
+            ticketType: ticket.ticketType,
             item: item,
             numFormat: numFormat,
             locale: locale,
           ),
         // Totals (non-stock types)
-        if (!TicketType.stockTypes.contains(ticketW.ticketType)) ...[
+        if (!TicketTypePbLogic.stockTypes.contains(ticket.ticketType)) ...[
           _TotalRow(
             icon: Icons.title,
-            iconColor: ticketW.ticketType.iconColor,
+            iconColor: ticket.ticketType.iconColor,
             label: 'Total articles',
-            value: _getTotalItemsFormatted(ticketW, numFormat),
+            value: _getTotalItemsFormatted(ticket, numFormat),
           ),
-          if (ticketW.promo != 0)
+          if (ticket.promo != 0)
             _TotalRow(
               icon: Icons.redeem,
-              iconColor: ticketW.ticketType.iconColor,
-              label: 'Promo : ${numFormat.format(ticketW.promo)}%',
-              value: _getPromoFormatted(ticketW, numFormat),
+              iconColor: ticket.ticketType.iconColor,
+              label: 'Promo : ${numFormat.format(ticket.promo)}%',
+              value: _getPromoFormatted(ticket, numFormat),
             ),
-          if (ticketW.discountAmount != 0)
+          if (ticket.discountAmount != 0)
             _TotalRow(
               icon: Icons.redeem,
-              iconColor: ticketW.ticketType.iconColor,
+              iconColor: ticket.ticketType.iconColor,
               label: 'Réduction',
-              value: '- ${numFormat.format(ticketW.discountAmount)}',
+              value: '- ${numFormat.format(ticket.discountAmount)}',
             ),
-          if (ticketW.taxe.percentage != 0.0 &&
-              (ticketW.promo != 0 || ticketW.discountAmount != 0))
+          if (ticket.taxe.percentage != 0.0 &&
+              (ticket.promo != 0 || ticket.discountAmount != 0))
             _TotalRow(
               icon: Icons.calculate,
-              iconColor: ticketW.ticketType.iconColor,
+              iconColor: ticket.ticketType.iconColor,
               label: 'Total HT',
-              value: _getTaxExcludedFormatted(ticketW, numFormat),
+              value: _getTaxExcludedFormatted(ticket, numFormat),
             ),
-          if (ticketW.taxe.name != 'HT 0%' && ticketW.taxe.name.isNotEmpty)
+          if (ticket.taxe.name != 'HT 0%' && ticket.taxe.name.isNotEmpty)
             _TotalRow(
               icon: Icons.percent,
-              iconColor: ticketW.ticketType.iconColor,
+              iconColor: ticket.ticketType.iconColor,
               label: 'Taxes',
-              value: _getTaxesFormatted(ticketW, numFormat),
+              value: _getTaxesFormatted(ticket, numFormat),
             ),
           _TotalRow(
             icon: Icons.text_fields,
-            iconColor: ticketW.ticketType.iconColor,
+            iconColor: ticket.ticketType.iconColor,
             label: 'Total TTC',
             value: MoneyFormatting.formatTicketAmountLine(
-              localAmount: ticketW.total.toDouble(),
+              localAmount: ticket.totalComputed,
               boutiqueIso4217: effectiveIso,
               ticket: ticket,
               locale: locale,
@@ -165,21 +164,21 @@ class TicketDetailBody extends StatelessWidget {
           if (fxRateCaption != null)
             _InfoRow(
               icon: Icons.currency_exchange,
-              iconColor: ticketW.ticketType.iconColor,
+              iconColor: ticket.ticketType.iconColor,
               child: Text(
                 "À l'émission du ticket : $fxRateCaption",
               ),
             ),
           const Divider(),
-          if (ticketW.ticketType.isFinancial) ...[
+          if (ticket.ticketType.isFinancial) ...[
             _TotalRow(
               icon: Icons.arrow_downward,
-              iconColor: ticketW.ticketType.iconColor,
-              label: ticketW.ticketType.isPrice
+              iconColor: ticket.ticketType.iconColor,
+              label: ticket.ticketType.isPrice
                   ? 'Montant donné par le client'
                   : 'Donné au fournisseur',
               value: MoneyFormatting.formatTicketAmountLine(
-                localAmount: ticketW.received.toDouble(),
+                localAmount: ticket.received,
                 boutiqueIso4217: effectiveIso,
                 ticket: ticket,
                 locale: locale,
@@ -188,20 +187,21 @@ class TicketDetailBody extends StatelessWidget {
             ),
             _TotalRow(
               icon: Icons.arrow_upward,
-              iconColor: ticketW.ticketType.iconColor,
+              iconColor: ticket.ticketType.iconColor,
               label: 'Monnaie rendue',
-              value: _getChangeFormatted(ticketW, numFormat),
+              value: _getChangeFormatted(ticket, numFormat),
             ),
           ],
         ],
         // Contact
-        if (ticketW.contactId != 0 ||
+        if (ticket.contactId != 0 ||
             ticket.contactFirstName.isNotEmpty ||
             ticket.contactLastName.isNotEmpty) ...[
           const Divider(),
           _InfoRow(
+            leadingWidget: ticket.ticketType.getTicketContactIcon,
             icon: Icons.person,
-            iconColor: ticketW.ticketType.iconColor,
+            iconColor: ticket.ticketType.iconColor,
             child: Text(
               '${ticket.contactFirstName} ${ticket.contactLastName}'.trim(),
               style: const TextStyle(fontWeight: FontWeight.bold),
@@ -271,8 +271,8 @@ class TicketDetailBody extends StatelessWidget {
     return '${dateFormat.format(dt)} ${timeFormat.format(dt)}';
   }
 
-  String _ticketTypeLabel(TicketType t) {
-    final name = t.toString();
+  String _ticketTypeLabel(TicketTypePb t) {
+    final name = t.name;
     if (name.isEmpty) return 'Ticket';
     return name[0].toUpperCase() + name.substring(1).replaceAll('_', ' ');
   }
@@ -300,54 +300,36 @@ class TicketDetailBody extends StatelessWidget {
     return map[s] ?? s;
   }
 
-  String _getTotalItemsFormatted(TicketWeebi t, NumberFormat nf) {
+  String _getTotalItemsFormatted(TicketPb t, NumberFormat nf) {
     if (t.ticketType.isPrice) {
-      return nf.format(t.totalPriceItemsOnly);
+      return nf.format(t.itemsTotalComputed);
     }
     if (t.ticketType.isCost) {
-      return nf.format(t.totalCostItemsOnly);
+      return nf.format(t.itemsTotalCostComputed);
     }
     return '0';
   }
 
-  String _getPromoFormatted(TicketWeebi t, NumberFormat nf) {
+  String _getPromoFormatted(TicketPb t, NumberFormat nf) {
     if (t.ticketType.isPrice) {
-      return '- ${nf.format(t.totalPricePromoVal)}';
+      return '- ${nf.format(t.itemsTotalComputed * t.promo / 100)}';
     }
     if (t.ticketType.isCost) {
-      return '- ${nf.format(t.totalCostPromoVal)}';
+      return '- ${nf.format(t.itemsTotalCostComputed * t.promo / 100)}';
     }
     return '0';
   }
 
-  String _getTaxExcludedFormatted(TicketWeebi t, NumberFormat nf) {
-    if (t.ticketType.isPrice) {
-      return nf.format(t.totalPriceTaxExcludedMarkdownsIncluded);
-    }
-    if (t.ticketType.isCost) {
-      return nf.format(t.totalCostTaxExcludedIncludingMarkdowns);
-    }
-    return '0';
+  String _getTaxExcludedFormatted(TicketPb t, NumberFormat nf) {
+    return nf.format(t.totalTaxExcludedComputed);
   }
 
-  String _getTaxesFormatted(TicketWeebi t, NumberFormat nf) {
-    if (t.ticketType.isPrice) {
-      return '+ ${nf.format(t.totalPriceTaxesVal)}';
-    }
-    if (t.ticketType.isCost) {
-      return '+ ${nf.format(t.totalCostTaxesVal)}';
-    }
-    return '0';
+  String _getTaxesFormatted(TicketPb t, NumberFormat nf) {
+    return '+ ${nf.format(t.totalTaxesComputed)}';
   }
 
-  String _getChangeFormatted(TicketWeebi t, NumberFormat nf) {
-    if (t.ticketType.isPrice) {
-      return nf.format(t.received - t.totalPriceTaxAndMarkdownsIncluded);
-    }
-    if (t.ticketType.isCost) {
-      return nf.format(t.received - t.totalCostTaxAndMarkdownsIncluded);
-    }
-    return '0';
+  String _getChangeFormatted(TicketPb t, NumberFormat nf) {
+    return nf.format(t.changeComputed);
   }
 }
 
@@ -433,8 +415,8 @@ class _TotalRow extends StatelessWidget {
 }
 
 class _ItemRow extends StatelessWidget {
-  final TicketType ticketType;
-  final ItemCartWeebi item;
+  final TicketTypePb ticketType;
+  final ItemCartPb item;
   final NumberFormat numFormat;
   final Locale locale;
 
@@ -448,9 +430,13 @@ class _ItemRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isUncountable = item.isUncountable;
-    final designation = item.article.designation;
+    final designation = item.hasArticleRetail()
+        ? item.articleRetail.designation
+        : (item.hasArticleUncountable()
+            ? item.articleUncountable.designation
+            : (item.hasArticleBasket() ? item.articleBasket.designation : ''));
     final isPrice = ticketType.isPrice;
-    final isStock = TicketType.stockTypes.contains(ticketType);
+    final isStock = TicketTypePbLogic.stockTypes.contains(ticketType);
     final qtyStr = _formatLineQuantity(item.quantity, locale);
 
     return Row(
@@ -508,13 +494,13 @@ class _ItemRow extends StatelessWidget {
                       style: const TextStyle(color: Colors.black),
                       children: [
                         TextSpan(text: '× $qtyStr'),
-                        if (ticketType == TicketType.inventory &&
-                            item.inventoryAbsoluteQt != null)
+                        if (ticketType == TicketTypePb.inventory &&
+                            item.inventoryAbsoluteQt != 0)
                           TextSpan(
                             text:
-                                ' = ${_formatLineQuantity(item.inventoryAbsoluteQt!, locale)}  ',
+                                ' = ${_formatLineQuantity(item.inventoryAbsoluteQt, locale)}  ',
                           ),
-                        if (ticketType == TicketType.inventory)
+                        if (ticketType == TicketTypePb.inventory)
                           TextSpan(
                             text: item.quantity >= 0
                                 ? '(+${_formatLineQuantity(item.quantity, locale)})'
@@ -534,8 +520,8 @@ class _ItemRow extends StatelessWidget {
             fit: FlexFit.loose,
             child: Text(
               isPrice
-                  ? numFormat.format(item.totalPrice)
-                  : numFormat.format(item.totalCost),
+                  ? numFormat.format(item.totalPriceComputed)
+                  : numFormat.format(item.totalCostComputed),
               textAlign: TextAlign.end,
             ),
           ),

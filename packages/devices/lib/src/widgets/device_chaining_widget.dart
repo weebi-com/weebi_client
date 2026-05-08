@@ -84,19 +84,19 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
         });
       } else {
         setState(() {
-          _error = 'No valid authentication token found';
+          _error = 'Aucun jeton d\'authentification valide trouvé';
         });
       }
     } on GrpcError catch (e) {
       if (mounted) {
         setState(() {
-          _error = 'Failed to load user data: ${e.code} ${e.message}';
+          _error = 'Échec du chargement des données utilisateur : ${e.code} ${e.message}';
         });
       }
     } catch (e) {
       if (mounted) {
         setState(() {
-          _error = 'Failed to load user data: $e';
+          _error = 'Échec du chargement des données utilisateur : $e';
         });
       }
     }
@@ -157,8 +157,8 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
               children: [
                 Text(
                   _canGenerateCode
-                      ? 'Device Chaining Available'
-                      : 'Limited Device Chaining Access',
+                      ? 'Association d\'appareils disponible'
+                      : 'Accès limité à l\'association d\'appareils',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: _canGenerateCode
@@ -169,8 +169,8 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
                 const SizedBox(height: 4),
                 Text(
                   _canGenerateCode
-                      ? 'You can generate pairing codes for device chaining'
-                      : 'ChainRight with Update permission required to chain devices',
+                      ? 'Vous pouvez générer des codes d\'appairage pour l\'association d\'appareils'
+                      : 'Permission de mise à jour ChainRight requise pour associer des appareils',
                   style: TextStyle(
                     fontSize: 12,
                     color: _canGenerateCode
@@ -193,7 +193,7 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
         children: [
           Icon(Icons.error, size: 64, color: Colors.red[300]),
           const SizedBox(height: 16),
-          Text('Error loading data'),
+          Text('Erreur lors du chargement des données'),
           const SizedBox(height: 8),
           Text(
             error,
@@ -203,7 +203,7 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => _loadUserData(),
-            child: const Text('Retry'),
+            child: const Text('Réessayer'),
           ),
         ],
       ),
@@ -218,13 +218,13 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
           Icon(Icons.lock, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           const Text(
-            'No Accessible Boutiques',
+            'Aucune boutique accessible',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
-            'You don\'t have access to any active boutiques.\n'
-            'Contact your administrator to get access.',
+            'Vous n\'avez accès à aucune boutique active.\n'
+            'Contactez votre administrateur pour obtenir l\'accès.',
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.grey[600]),
           ),
@@ -238,7 +238,7 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: TextField(
         decoration: const InputDecoration(
-          hintText: 'Search boutiques...',
+          hintText: 'Rechercher des boutiques...',
           prefixIcon: Icon(Icons.search),
           border: OutlineInputBorder(),
         ),
@@ -266,7 +266,7 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
 
     if (filteredBoutiques.isEmpty) {
       return const Center(
-        child: Text('No boutiques found'),
+        child: Text('Aucune boutique trouvée'),
       );
     }
 
@@ -281,7 +281,7 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
           .name;
       boutiquesByChain
           .putIfAbsent(
-              chainName.isEmpty ? 'Unknown Chain' : chainName, () => [])
+              chainName.isEmpty ? 'Chaîne inconnue' : chainName, () => [])
           .add(boutique);
     }
 
@@ -404,7 +404,7 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
                       Padding(
                         padding: const EdgeInsets.only(top: 4),
                         child: Chip(
-                          label: Text('${boutique.devices.length} devices'),
+                          label: Text('${boutique.devices.length} appareils'),
                           backgroundColor: Colors.blue[100],
                         ),
                       ),
@@ -435,10 +435,8 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
       ),
       child: Column(
         children: [
-          Icon(Icons.qr_code, size: 48, color: Colors.green[700]),
-          const SizedBox(height: 8),
           Text(
-            'Device Pairing Code Generated',
+            'Code d\'appairage de l\'appareil généré',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
@@ -473,7 +471,7 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
                     Icon(Icons.info_outline, color: Colors.blue[700], size: 20),
                     const SizedBox(width: 8),
                     Text(
-                      'Next Steps:',
+                      'Étapes suivantes :',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.blue[800],
@@ -483,10 +481,10 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '1. Copy this code using the button below\n'
-                  '2. Go to the POS device that needs to be linked\n'
-                  '3. After login, find the "Link this device" section\n'
-                  '4. Enter this 6-digit code to complete the pairing',
+                  '1. Copiez ce code en utilisant le bouton ci-dessous\n'
+                  '2. Allez sur l\'appareil de vente à lier\n'
+                  '3. Après connexion, trouvez la section "Lier cet appareil"\n'
+                  '4. Entrez ce code à 6 chiffres pour terminer l\'appairage',
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.blue[700],
@@ -508,10 +506,10 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: const Text(
-                        'Code copied to clipboard! Ready to use on POS device.'),
+                        'Code copié dans le presse-papiers ! Prêt à être utilisé sur l\'appareil de vente.'),
                     backgroundColor: Colors.green[600],
                     action: SnackBarAction(
-                      label: 'Close',
+                      label: 'Fermer',
                       textColor: Colors.white,
                       onPressed: () {
                         // Automatically call the callback to indicate we're done
@@ -523,7 +521,7 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
                 );
               },
               icon: const Icon(Icons.copy),
-              label: const Text('Copy Code'),
+              label: const Text('Copier le code'),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 textStyle: const TextStyle(fontSize: 16),
@@ -551,7 +549,7 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Device Chaining',
+                      'Association d\'appareils',
                       style: TextStyle(color: Theme.of(context).primaryColor),
                     ),
                   ),
@@ -602,8 +600,8 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
                               : const Icon(Icons.confirmation_number_sharp),
                           label: Text(
                             _isGeneratingCode
-                                ? 'Generating Code...'
-                                : 'Generate Pairing Code',
+                                ? 'Génération du code...'
+                                : 'Générer un code d\'appairage',
                           ),
                         ),
                       ),
@@ -611,7 +609,7 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
                         Padding(
                           padding: const EdgeInsets.only(top: 8),
                           child: Text(
-                            'Note: ChainRight with Update permission is required',
+                            'Note : La permission de mise à jour ChainRight est requise',
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.orange[700],
@@ -638,7 +636,7 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
                     Navigator.of(dialogContext).pop();
                     _selectBoutique(null); // Clear selection
                   },
-                  child: const Text('Close'),
+                  child: const Text('Fermer'),
                 ),
               ],
             );
@@ -689,16 +687,16 @@ class _DeviceChainingWidgetState extends State<DeviceChainingWidget> {
         });
       } else {
         setState(() {
-          _error = deviceProvider.error ?? 'Failed to generate pairing code';
+          _error = deviceProvider.error ?? 'Échec de la génération du code d\'appairage';
         });
       }
     } on GrpcError catch (e) {
       setState(() {
-        _error = 'Failed to generate pairing code: ${e.code} ${e.message}';
+        _error = 'Échec de la génération du code d\'appairage : ${e.code} ${e.message}';
       });
     } catch (e) {
       setState(() {
-        _error = 'Failed to generate pairing code: $e';
+        _error = 'Échec de la génération du code d\'appairage : $e';
       });
     } finally {
       setState(() {
