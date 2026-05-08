@@ -1,5 +1,9 @@
 # changelog
 
+## 1.0.8
+
+- bump boutiques & protos
+
 ## 1.0.7
 
 - warn about licenses

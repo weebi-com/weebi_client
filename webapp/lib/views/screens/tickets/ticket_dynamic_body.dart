@@ -1,6 +1,4 @@
-import 'package:design_weebi/design_weebi.dart';
 import 'package:flutter/material.dart';
-import 'package:models_weebi/models.dart' show TicketType;
 import 'package:protos_weebi/protos_weebi_io.dart'
     show
         GeneratedMessage,
@@ -9,7 +7,9 @@ import 'package:protos_weebi/protos_weebi_io.dart'
         Timestamp,
         Counterfoil,
         TaxPb,
-        ItemCartPb;
+        ItemCartPb,
+        TicketTypePb;
+import 'package:web_admin/views/screens/tickets/ticket_type_ui_ext.dart';
 
 /// Dynamic display for Ticket protobuf and related types.
 /// Extends the pattern used in boutiques/users dynamic_body.
@@ -229,12 +229,18 @@ Widget _buildTicketField(String fieldName, dynamic fieldValue) {
 
     default:
       if (fieldValue is ProtobufEnum) {
-        final ticketType = TicketType.tryParse(fieldValue.name);
+        if (fieldValue is TicketTypePb) {
+          return ListTile(
+            leading: Icon(
+              fieldValue.iconData,
+              color: fieldValue.iconColor,
+            ),
+            title: Text(_formatFieldName(fieldName)),
+            subtitle: Text(fieldValue.name),
+          );
+        }
         return ListTile(
-          leading: Icon(
-            ticketType.iconData,
-            color: ticketType.iconColor,
-          ),
+          leading: const Icon(Icons.info_outline),
           title: Text(_formatFieldName(fieldName)),
           subtitle: Text(fieldValue.name),
         );

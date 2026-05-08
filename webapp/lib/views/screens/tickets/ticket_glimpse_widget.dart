@@ -1,10 +1,9 @@
 import 'package:design_weebi/design_weebi.dart';
 import 'package:flutter/material.dart';
-import 'package:models_weebi/models.dart' show TicketType;
-import 'package:protos_weebi/protos_weebi_io.dart' show TicketPb;
+import 'package:protos_weebi/protos_weebi_io.dart';
 import 'package:web_admin/core/money/money_formatting.dart';
 import 'package:web_admin/providers/tickets_boutique_cache.dart';
-import 'package:web_admin/views/screens/tickets/ticket_pb_to_weebi.dart';
+import 'package:web_admin/views/screens/tickets/ticket_type_ui_ext.dart';
 
 /// Short abridged display of a ticket for list overview.
 /// Uses TicketType extension from design_weebi for icons/colors.
@@ -22,15 +21,12 @@ class TicketGlimpseWidget extends StatelessWidget {
     this.boutiqueCache,
   });
 
-  TicketType _toTicketType(dynamic pbType) =>
-      TicketType.tryParse(pbType?.name ?? '');
-
   String _getTicketSummary(BuildContext context) {
     if (isSoftDeleted) return 'Supprimé';
     if (!ticket.status) return 'Annulé';
 
-    final typeLabel = _formatTicketType(_toTicketType(ticket.ticketType));
-    final type = _toTicketType(ticket.ticketType);
+    final typeLabel = _formatTicketType(ticket.ticketType);
+    final type = ticket.ticketType;
     final locale = Localizations.localeOf(context);
     final iso = boutiqueCache
         ?.getBillingCurrency(ticket.counterfoil.boutiqueId);
@@ -46,7 +42,7 @@ class TicketGlimpseWidget extends StatelessWidget {
     } else if (type.isFinancial &&
         ticket.items.isNotEmpty) {
       try {
-        final total = ticketPbToWeebi(ticket).total.toDouble();
+        final total = ticket.totalComputed;
         amount = MoneyFormatting.formatTicketAmountLine(
           localAmount: total,
           boutiqueIso4217: iso,
@@ -63,8 +59,8 @@ class TicketGlimpseWidget extends StatelessWidget {
     return '$typeLabel : $amount';
   }
 
-  String _formatTicketType(TicketType type) {
-    final name = type.toString();
+  String _formatTicketType(TicketTypePb type) {
+    final name = type.name;
     if (name.isEmpty) return 'Ticket';
     return name[0].toUpperCase() + name.substring(1).replaceAll('_', ' ');
   }
@@ -129,9 +125,9 @@ class TicketGlimpseWidget extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         vertical: 2, horizontal: 8),
                     child: Icon(
-                      _toTicketType(ticket.ticketType).iconData,
+                      ticket.ticketType.iconData,
                       color: isActive
-                          ? _toTicketType(ticket.ticketType).iconColor
+                          ? ticket.ticketType.iconColor
                           : ColorsWeebi.greyTicket,
                     ),
                   ),
@@ -173,7 +169,7 @@ class TicketGlimpseWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-                  if (!TicketType.stockTypes.contains(_toTicketType(ticket.ticketType)))
+                  if (!TicketTypePbLogic.stockTypes.contains(ticket.ticketType))
                     if (_getContactName().isNotEmpty)
                       Text(
                         _getContactName(),

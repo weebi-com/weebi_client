@@ -98,3 +98,6 @@ Ce document explique comment utiliser Docker pour construire et exécuter une ap
 3. Exécutez la deuxième commande pour démarrer le conteneur (API_URL from env/secret):
    - `docker run -d -p 8080:8080 -e API_URL=$ENVOY_URL --name weebi-web-dev weebi-web-dev`
 4. Accédez à votre application en ouvrant votre navigateur et en vous rendant sur http://localhost:8080.
+
+## debug 
+proto tip check https://github.com/RexSkz/proto-message-helper
