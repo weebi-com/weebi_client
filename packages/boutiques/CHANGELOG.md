@@ -1,10 +1,8 @@
 # changelog
 
-## 1.1.5 - may 2026
+## 1.1.4 - may 2026
 
 - merge flutter_currency_picker into boutiques package as local module (MIT licensed, credit: Daniel-Ioannou)
-
-## 1.1.4 - may 2026
 
 - include GNF currency
 

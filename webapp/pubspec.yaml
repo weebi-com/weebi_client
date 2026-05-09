@@ -33,7 +33,6 @@ dependencies:
   pointer_interceptor: ^0.10.1
   flutter_form_builder: any #^10.3.0+2
   form_builder_validators: ^11.1.2
-  awesome_dialog: ^3.2.0
   file_picker: ^8.0.0
 
   http: ^1.2.0
@@ -55,7 +54,7 @@ dev_dependencies:
 dependency_overrides:
   # rive_native 0.1.6 references Flutter semantics APIs that are not present in
   # the Docker image's pinned Flutter SDK.
-  rive_native: 0.1.4
+
 
 
 flutter:

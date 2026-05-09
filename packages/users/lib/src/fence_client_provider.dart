@@ -41,7 +41,7 @@ MultiProvider initCrossRoutesTestV2(
 }) {
   final storage = const FlutterSecureStorage(
     aOptions: AndroidOptions(
-      encryptedSharedPreferences: true,
+      encryptedSharedPreferences: false,
     ),
     iOptions: IOSOptions(
       accessibility: KeychainAccessibility.first_unlock,

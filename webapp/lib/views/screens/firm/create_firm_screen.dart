@@ -1,11 +1,11 @@
 import 'package:boutiques_weebi/currency_picker/currency_picker.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:web_admin/app_router.dart';
 import 'package:web_admin/generated/l10n.dart';
+import 'package:web_admin/utils/app_dialogs.dart';
 import 'package:web_admin/utils/app_focus_helper.dart';
 import 'package:web_admin/views/widgets/card_elements.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
@@ -47,28 +47,28 @@ class _CreateFirmScreenState extends State<CreateFirmScreen> {
         setState(() {
           _isLoading = false;
         });
-        AwesomeDialog(
+        AppDialog.show(
           context: context,
-          dialogType: DialogType.success,
+          dialogType: AppDialogType.success,
           title: lang.createEnterpriseSuccessTitle(response.firm.name),
           width: kDialogWidth,
           btnOkText: 'OK',
           btnOkOnPress: () => (GoRouter.of(context).go(RouteUri.firmDetail)),
-        ).show();
+        );
       } catch (e) {
         if (!context.mounted) return;
         final lang = Lang.of(context);
         setState(() {
           _isLoading = false;
         });
-        AwesomeDialog(
+        AppDialog.show(
           context: context,
-          dialogType: DialogType.error,
+          dialogType: AppDialogType.error,
           title: lang.createEnterprisePageTitle,
           desc: '${lang.createEnterpriseErrorPrefix}${e.toString()}',
           btnOkText: 'OK',
           btnOkOnPress: () {},
-        ).show();
+        );
       }
     }
   }

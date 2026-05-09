@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auth_weebi/auth_weebi.dart';
 import 'package:provider/provider.dart';
-import 'package:users_weebi/fence_client_provider.dart';
+import 'package:users_weebi/src/fence_client_provider.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
 import '../l10n/user_ui_strings.dart';
 import '../providers/user_provider.dart';

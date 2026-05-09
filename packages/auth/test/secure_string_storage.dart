@@ -1,23 +1,21 @@
-// Package imports:
+/* // Package imports:
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // Project imports:
 import 'secure_storage_upsert.dart';
 import 'token_storage.dart';
 
-/// Secure storage-backed access token storage
-class SecureTokenStorage implements TokenStorage {
-  static const String _key = 'access';
+/// Generic secure string storage for a specific key
+class SecureStringStorage implements TokenStorage {
   final FlutterSecureStorage _storage;
+  final String _key;
 
-  const SecureTokenStorage(this._storage);
+  const SecureStringStorage(this._storage, this._key);
 
-  /// Some environments expose the API but fail at runtime
-  /// We check if secure storage actually works before using it
   /// Probe availability by read/write/delete round trip
   static Future<bool> isAvailable(FlutterSecureStorage storage) async {
     try {
-      const String probeKey = '__probe_access__';
+      const String probeKey = '__probe_generic__';
       await writeSecureStorageValue(
         storage: storage,
         key: probeKey,
@@ -50,3 +48,4 @@ class SecureTokenStorage implements TokenStorage {
     );
   }
 }
+ */

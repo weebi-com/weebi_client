@@ -393,14 +393,14 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
       ..recentTicketEditWindowMinutes = minutes;
   }
 
-  void _setRecentTicketEditEnabled(bool value) {
+/*   void _setRecentTicketEditEnabled(bool value) {
     setState(() {
       _recentTicketEditEnabled = value;
       if (value && _recentTicketEditWindowMinutesController.text.isEmpty) {
         _recentTicketEditWindowMinutesController.text = '5';
       }
     });
-  }
+  } */
 
   Widget _addressCountryPrefixIcon() {
     if (_selectedAddressCountry != null) {

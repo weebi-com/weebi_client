@@ -27,7 +27,7 @@ export 'src/widgets/user_create_view.dart';
 export 'src/routes/user_routes.dart';
 
 // Fence client providers
-export 'fence_client_provider.dart';
+export 'src/fence_client_provider.dart';
 export 'src/dynamic_permissions_analyzer.dart';
 export 'dynamic_body.dart';
 

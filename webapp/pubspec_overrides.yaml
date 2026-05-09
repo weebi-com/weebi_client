@@ -1,6 +1,5 @@
 # melos_managed_dependency_overrides: charts_weebi,accesses_weebi,auth_weebi,boutiques_weebi,design_weebi,devices_weebi,users_weebi
 dependency_overrides:
-  rive_native: 0.1.4
   accesses_weebi:
     path: ..\\packages\\accesses
   auth_weebi:

@@ -195,14 +195,14 @@ class _BoutiqueFormWidgetState extends State<BoutiqueFormWidget> {
       ..recentTicketEditWindowMinutes = minutes;
   }
 
-  void _setRecentTicketEditEnabled(bool value) {
+/*   void _setRecentTicketEditEnabled(bool value) {
     setState(() {
       _recentTicketEditEnabled = value;
       if (value && _recentTicketEditWindowMinutesController.text.isEmpty) {
         _recentTicketEditWindowMinutesController.text = '5';
       }
     });
-  }
+  } */
 
   Widget _addressCountryPrefixIcon() {
     if (_selectedAddressCountry != null) {

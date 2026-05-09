@@ -1,5 +1,10 @@
 # changelog
 
+## 1.1.0
+
+- android secure storage false
+- bump users
+
 ## 1.0.8
 
 - bump boutiques & protos
