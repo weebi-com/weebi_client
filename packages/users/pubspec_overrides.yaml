@@ -2,3 +2,5 @@
 dependency_overrides:
   auth_weebi:
     path: ..\\auth
+  entitlements_weebi:
+    path: ../entitlements

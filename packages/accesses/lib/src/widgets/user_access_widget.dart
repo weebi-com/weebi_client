@@ -2,9 +2,8 @@ import 'package:accesses_weebi/accesses_weebi.dart' show AccessProvider;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:protos_weebi/grpc.dart';
-import 'package:users_weebi/weebi_users.dart'
-    show AccessTokenProvider, LicenseSeatStatusCard, LicenseUiStrings,
-        userHasActiveLicensedSeat;
+import 'package:entitlements_weebi/entitlements_weebi.dart';
+import 'package:users_weebi/weebi_users.dart' show AccessTokenProvider;
 import 'package:protos_weebi/protos_weebi_io.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../l10n/access_ui_strings.dart';
@@ -637,7 +636,7 @@ class _OperationalLicenseNotice extends StatelessWidget {
   }
 
   Future<void> _openBillingPortal(BuildContext context) async {
-    final uri = Uri.parse(LicenseUiStrings.cloudLicensesPortalUrl);
+    final uri = Uri.parse(EntitlementUiStrings.cloudLicensesPortalUrl);
     try {
       final launched = await launchUrl(
         uri,
@@ -647,7 +646,7 @@ class _OperationalLicenseNotice extends StatelessWidget {
         ScaffoldMessenger.maybeOf(context)?.showSnackBar(
           SnackBar(
             content: SelectableText(
-              LicenseUiStrings.cloudLicensesPortalUrl,
+              EntitlementUiStrings.cloudLicensesPortalUrl,
               style: const TextStyle(color: Colors.white),
             ),
           ),
@@ -658,7 +657,7 @@ class _OperationalLicenseNotice extends StatelessWidget {
         ScaffoldMessenger.maybeOf(context)?.showSnackBar(
           SnackBar(
             content: SelectableText(
-              LicenseUiStrings.cloudLicensesPortalUrl,
+              EntitlementUiStrings.cloudLicensesPortalUrl,
               style: const TextStyle(color: Colors.white),
             ),
           ),
@@ -679,7 +678,7 @@ class _OperationalLicenseNotice extends StatelessWidget {
 
     switch (kind) {
       case _OperationalLicenseNoticeKind.unknown:
-        body = LicenseUiStrings.accessOperationalLicenseNotice;
+        body = EntitlementUiStrings.accessOperationalLicenseNotice;
         bg = Colors.blue[50]!;
         border = Colors.blue[200]!;
         icon = Icons.info_outline;
@@ -687,7 +686,7 @@ class _OperationalLicenseNotice extends StatelessWidget {
         accent = Colors.blue[900]!;
         break;
       case _OperationalLicenseNoticeKind.hasSeat:
-        body = LicenseUiStrings.accessOperationalLicenseNoticeHasSeat;
+        body = EntitlementUiStrings.accessOperationalLicenseNoticeHasSeat;
         bg = Colors.green[50]!;
         border = Colors.green[200]!;
         icon = Icons.verified_user_outlined;
@@ -695,7 +694,7 @@ class _OperationalLicenseNotice extends StatelessWidget {
         accent = Colors.green[900]!;
         break;
       case _OperationalLicenseNoticeKind.firmCreatorJokerNoSeat:
-        body = LicenseUiStrings.accessOperationalLicenseNoticeFirmCreatorJoker;
+        body = EntitlementUiStrings.accessOperationalLicenseNoticeFirmCreatorJoker;
         bg = Colors.blue[50]!;
         border = Colors.blue[200]!;
         icon = Icons.business_center_outlined;
@@ -703,7 +702,7 @@ class _OperationalLicenseNotice extends StatelessWidget {
         accent = Colors.blue[900]!;
         break;
       case _OperationalLicenseNoticeKind.noSeat:
-        body = LicenseUiStrings.accessOperationalLicenseNoticeNoSeat;
+        body = EntitlementUiStrings.accessOperationalLicenseNoticeNoSeat;
         bg = Colors.orange[50]!;
         border = Colors.orange[200]!;
         icon = Icons.warning_amber_rounded;
@@ -751,7 +750,7 @@ class _OperationalLicenseNotice extends StatelessWidget {
                     ),
                     onPressed: () => _openBillingPortal(context),
                     child: Text(
-                      LicenseUiStrings.accessOperationalLicenseOpenBilling,
+                      EntitlementUiStrings.accessOperationalLicenseOpenBilling,
                       style: textStyle.copyWith(
                         fontWeight: FontWeight.w600,
                         decoration: TextDecoration.underline,

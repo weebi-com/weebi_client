@@ -237,7 +237,7 @@ class _AccessListWidgetState extends State<AccessListWidget> {
         alignment: Alignment.centerLeft,
         child: Chip(
           label: Text(
-            LicenseUiStrings.userListSeatBadgeActive,
+            EntitlementUiStrings.userListSeatBadgeActive,
             style: const TextStyle(fontSize: 11),
           ),
           visualDensity: VisualDensity.compact,
@@ -254,7 +254,7 @@ class _AccessListWidgetState extends State<AccessListWidget> {
         alignment: Alignment.centerLeft,
         child: Chip(
           label: Text(
-            LicenseUiStrings.userListSeatBadgeCreator,
+            EntitlementUiStrings.userListSeatBadgeCreator,
             style: const TextStyle(fontSize: 11),
           ),
           visualDensity: VisualDensity.compact,
@@ -269,7 +269,7 @@ class _AccessListWidgetState extends State<AccessListWidget> {
       alignment: Alignment.centerLeft,
       child: Chip(
         label: Text(
-          LicenseUiStrings.userListSeatBadgeNone,
+          EntitlementUiStrings.userListSeatBadgeNone,
           style: const TextStyle(fontSize: 11),
         ),
         visualDensity: VisualDensity.compact,

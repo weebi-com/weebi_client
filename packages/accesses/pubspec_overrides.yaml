@@ -1,8 +1,10 @@
-# melos_managed_dependency_overrides: auth_weebi,boutiques_weebi,users_weebi
+# melos_managed_dependency_overrides: auth_weebi,boutiques_weebi,users_weebi,entitlements_weebi
 dependency_overrides:
   auth_weebi:
     path: ..\\auth
   boutiques_weebi:
     path: ..\\boutiques
+  entitlements_weebi:
+    path: ..\\entitlements
   users_weebi:
     path: ..\\users

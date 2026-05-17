@@ -14,7 +14,8 @@ dependencies:
     sdk: flutter
   ###
   # weebi's kitchen below
-  protos_weebi: ^1.3.2 # License types; align with users_weebi
+  protos_weebi: ^1.3.2
+  entitlements_weebi: ^1.0.0
   users_weebi: ^1.1.0
   boutiques_weebi: ^1.1.4
   

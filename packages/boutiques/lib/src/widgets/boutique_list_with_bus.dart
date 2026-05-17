@@ -9,6 +9,8 @@ class BoutiqueListWithBus extends StatefulWidget {
   final bool showChainHeaders;
   final bool allowSelection;
   final UserPermissions? userPermissions;
+  final BoutiqueFormExtensionsFactory? formExtensionsFactory;
+  final BoutiqueDetailExtrasFactory? detailExtrasFactory;
   final Function(BoutiqueMongo)? onBoutiqueSelected;
   final Function(Chain)? onChainSelected;
   final Function(BoutiqueMongo)? onBoutiqueEdit;
@@ -24,6 +26,8 @@ class BoutiqueListWithBus extends StatefulWidget {
     this.showChainHeaders = true,
     this.allowSelection = true,
     this.userPermissions,
+    this.formExtensionsFactory,
+    this.detailExtrasFactory,
     this.onBoutiqueSelected,
     this.onChainSelected,
     this.onBoutiqueEdit,
@@ -86,6 +90,8 @@ class _BoutiqueListWithBusState extends State<BoutiqueListWithBus> {
       showChainHeaders: widget.showChainHeaders,
       allowSelection: widget.allowSelection,
       userPermissions: widget.userPermissions,
+      formExtensionsFactory: widget.formExtensionsFactory,
+      detailExtrasFactory: widget.detailExtrasFactory,
       onBoutiqueSelected: widget.onBoutiqueSelected,
       onChainSelected: widget.onChainSelected,
       onBoutiqueEdit: widget.onBoutiqueEdit,

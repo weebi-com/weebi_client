@@ -15,8 +15,9 @@ dependencies:
   ####
   # weebi kitchen below
   #### 
-  protos_weebi: ^1.3.2 # License / billing protos (seat status helpers)
+  protos_weebi: ^1.3.2
   auth_weebi: ^1.0.8
+  entitlements_weebi: ^1.0.0
   fl_country_code_picker_weebi: ^0.2.3
 
   provider: ^6.1.4

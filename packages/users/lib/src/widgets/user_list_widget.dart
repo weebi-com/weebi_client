@@ -38,7 +38,7 @@ class _UserListWidgetState extends State<UserListWidget> {
     if (userHasActiveLicensedSeat(user.userId, licenses)) {
       return Chip(
         label: Text(
-          LicenseUiStrings.userListSeatBadgeActive,
+          EntitlementUiStrings.userListSeatBadgeActive,
           style: const TextStyle(fontSize: 11),
         ),
         visualDensity: VisualDensity.compact,
@@ -52,7 +52,7 @@ class _UserListWidgetState extends State<UserListWidget> {
         firmCreatorOperationalJoker(user.permissions)) {
       return Chip(
         label: Text(
-          LicenseUiStrings.userListSeatBadgeCreator,
+          EntitlementUiStrings.userListSeatBadgeCreator,
           style: const TextStyle(fontSize: 11),
         ),
         visualDensity: VisualDensity.compact,
@@ -64,7 +64,7 @@ class _UserListWidgetState extends State<UserListWidget> {
     }
     return Chip(
       label: Text(
-        LicenseUiStrings.userListSeatBadgeNone,
+        EntitlementUiStrings.userListSeatBadgeNone,
         style: const TextStyle(fontSize: 11),
       ),
       visualDensity: VisualDensity.compact,

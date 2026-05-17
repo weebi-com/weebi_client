@@ -1,6 +1,7 @@
 import 'package:boutiques_weebi/boutiques_weebi.dart';
 import 'package:flutter/material.dart';
-import 'package:protos_weebi/protos_weebi_io.dart' show UserPermissions, BoutiqueMongo, Chain;
+import 'package:protos_weebi/protos_weebi_io.dart'
+    show UserPermissions, BoutiqueMongo, Chain;
 
 /// Route factory for boutique management
 /// Provides clean route builders that client apps can integrate
@@ -87,31 +88,61 @@ class BoutiqueRoutes {
 
   // New detail view builders (for full-screen detail views)
   static Widget buildBoutiqueDetailView(
-    BuildContext context, 
+    BuildContext context,
     BoutiqueMongo boutique, {
-    VoidCallback? onEdit, 
-    VoidCallback? onDelete
-  }) => BoutiqueDetailView(boutique: boutique, onEdit: onEdit, onDelete: onDelete);
-  
+    VoidCallback? onEdit,
+    VoidCallback? onDelete,
+    BoutiqueDetailExtrasFactory? detailExtrasFactory,
+  }) =>
+      BoutiqueDetailView(
+        boutique: boutique,
+        onEdit: onEdit,
+        onDelete: onDelete,
+        extraSections: detailExtrasFactory?.call(boutique: boutique) ??
+            const [],
+      );
+
   static Widget buildChainDetailView(
-    BuildContext context, 
+    BuildContext context,
     Chain chain, {
-    VoidCallback? onEdit, 
-    VoidCallback? onDelete
-  }) => BoutiqueDetailView(chain: chain, onEdit: onEdit, onDelete: onDelete);
+    VoidCallback? onEdit,
+    VoidCallback? onDelete,
+    BoutiqueDetailExtrasFactory? detailExtrasFactory,
+  }) =>
+      BoutiqueDetailView(
+        chain: chain,
+        onEdit: onEdit,
+        onDelete: onDelete,
+        extraSections:
+            detailExtrasFactory?.call(chain: chain) ?? const [],
+      );
 
   // Form widget builders (for edit dialogs)
   static Widget buildBoutiqueForm(
     BuildContext context, {
-    BoutiqueMongo? boutique, 
-    VoidCallback? onSaved
-  }) => BoutiqueFormWidget(boutique: boutique, onSaved: onSaved);
-  
+    BoutiqueMongo? boutique,
+    VoidCallback? onSaved,
+    BoutiqueFormExtensionsFactory? formExtensionsFactory,
+  }) =>
+      BoutiqueFormWidget(
+        boutique: boutique,
+        onSaved: onSaved,
+        formExtensions: formExtensionsFactory?.call(
+          editingBoutique: boutique,
+        ),
+      );
+
   static Widget buildChainForm(
     BuildContext context, {
-    Chain? chain, 
-    VoidCallback? onSaved
-  }) => BoutiqueFormWidget(chain: chain, onSaved: onSaved);
+    Chain? chain,
+    VoidCallback? onSaved,
+    BoutiqueFormExtensionsFactory? formExtensionsFactory,
+  }) =>
+      BoutiqueFormWidget(
+        chain: chain,
+        onSaved: onSaved,
+        formExtensions: formExtensionsFactory?.call(editingChain: chain),
+      );
 
   /// Custom scaffold builders where client provides the scaffold structure
   static Widget buildBoutiqueListWithCustomScaffold({
@@ -121,6 +152,8 @@ class BoutiqueRoutes {
     Widget? floatingActionButton,
     UserPermissions? userPermissions, // NEW: Optional permissions for CRUD
     void Function(BoutiqueEvent)? onBoutiqueChanged, // NEW: Callback for boutique changes
+    BoutiqueFormExtensionsFactory? formExtensionsFactory,
+    BoutiqueDetailExtrasFactory? detailExtrasFactory,
   }) {
     return Scaffold(
       appBar: appBar,
@@ -130,19 +163,37 @@ class BoutiqueRoutes {
       body: Builder(
         builder: (context) => BoutiqueListWithBus(
           userPermissions: userPermissions, // Pass permissions for CRUD
+          formExtensionsFactory: formExtensionsFactory,
+          detailExtrasFactory: detailExtrasFactory,
           allowSelection: true,
           // Default demo callbacks when permissions are provided
-          onBoutiqueSelected: userPermissions != null 
-              ? (boutique) => navigateToBoutiqueDetailView(context, boutique)
+          onBoutiqueSelected: userPermissions != null
+              ? (boutique) => navigateToBoutiqueDetailView(
+                    context,
+                    boutique,
+                    detailExtrasFactory: detailExtrasFactory,
+                  )
               : null,
           onChainSelected: userPermissions != null
-              ? (chain) => navigateToChainDetailView(context, chain)
+              ? (chain) => navigateToChainDetailView(
+                    context,
+                    chain,
+                    detailExtrasFactory: detailExtrasFactory,
+                  )
               : null,
           onBoutiqueEdit: userPermissions != null
-              ? (boutique) => showBoutiqueEditDialog(context, boutique: boutique)
+              ? (boutique) => showBoutiqueEditDialog(
+                    context,
+                    boutique: boutique,
+                    formExtensionsFactory: formExtensionsFactory,
+                  )
               : null,
           onChainEdit: userPermissions != null
-              ? (chain) => showChainEditDialog(context, chain: chain)
+              ? (chain) => showChainEditDialog(
+                    context,
+                    chain: chain,
+                    formExtensionsFactory: formExtensionsFactory,
+                  )
               : null,
           onCreateBoutique: userPermissions != null
               ? (chainId) {
@@ -150,7 +201,10 @@ class BoutiqueRoutes {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => BoutiqueCreateView.createBoutique(chainId: chainId),
+                        builder: (context) => BoutiqueCreateView.createBoutique(
+                          chainId: chainId,
+                          formExtensions: formExtensionsFactory?.call(),
+                        ),
                       ),
                     );
                   }
@@ -158,11 +212,13 @@ class BoutiqueRoutes {
               : null,
           onCreateChain: userPermissions != null
               ? () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const BoutiqueCreateView.createChain(),
-                  ),
-                )
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BoutiqueCreateView.createChain(
+                        formExtensions: formExtensionsFactory?.call(),
+                      ),
+                    ),
+                  )
               : null,
           // NEW: Handle boutique changes via bus (from client app)
           onBoutiqueChanged: onBoutiqueChanged,
@@ -240,11 +296,18 @@ class BoutiqueRoutes {
     BoutiqueMongo boutique, {
     VoidCallback? onEdit,
     VoidCallback? onDelete,
+    BoutiqueDetailExtrasFactory? detailExtrasFactory,
   }) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => buildBoutiqueDetailView(context, boutique, onEdit: onEdit, onDelete: onDelete),
+        builder: (context) => buildBoutiqueDetailView(
+          context,
+          boutique,
+          onEdit: onEdit,
+          onDelete: onDelete,
+          detailExtrasFactory: detailExtrasFactory,
+        ),
       ),
     );
   }
@@ -254,11 +317,18 @@ class BoutiqueRoutes {
     Chain chain, {
     VoidCallback? onEdit,
     VoidCallback? onDelete,
+    BoutiqueDetailExtrasFactory? detailExtrasFactory,
   }) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => buildChainDetailView(context, chain, onEdit: onEdit, onDelete: onDelete),
+        builder: (context) => buildChainDetailView(
+          context,
+          chain,
+          onEdit: onEdit,
+          onDelete: onDelete,
+          detailExtrasFactory: detailExtrasFactory,
+        ),
       ),
     );
   }
@@ -268,10 +338,16 @@ class BoutiqueRoutes {
     BuildContext context, {
     BoutiqueMongo? boutique,
     VoidCallback? onSaved,
+    BoutiqueFormExtensionsFactory? formExtensionsFactory,
   }) {
     return showDialog(
       context: context,
-      builder: (context) => buildBoutiqueForm(context, boutique: boutique, onSaved: onSaved),
+      builder: (context) => buildBoutiqueForm(
+        context,
+        boutique: boutique,
+        onSaved: onSaved,
+        formExtensionsFactory: formExtensionsFactory,
+      ),
     );
   }
 
@@ -279,10 +355,16 @@ class BoutiqueRoutes {
     BuildContext context, {
     Chain? chain,
     VoidCallback? onSaved,
+    BoutiqueFormExtensionsFactory? formExtensionsFactory,
   }) {
     return showDialog(
       context: context,
-      builder: (context) => buildChainForm(context, chain: chain, onSaved: onSaved),
+      builder: (context) => buildChainForm(
+        context,
+        chain: chain,
+        onSaved: onSaved,
+        formExtensionsFactory: formExtensionsFactory,
+      ),
     );
   }
 

@@ -1,10 +1,14 @@
 import 'package:protos_weebi/protos_weebi_io.dart';
 
-/// Low-level seat validity (mirrors server [LicenseSeatEntitlement]).
+/// Low-level licence attribution validity (mirrors server [LicenseSeatEntitlement]).
 ///
-/// For subscription-backed portal features, prefer `SeatCapability`.
+/// Licences are **lifetime** purchases, not subscriptions; [License.validUntil] and
+/// [LicenseSeat.validUntil] are for clean shutdown (abuse, etc.), not plan expiry.
+/// See `docs/commercial-model.md`. For portal features, prefer [SeatCapability].
 class LicenseSeatClient {
-  static DateTime _toDateTime(Timestamp t) {
+  LicenseSeatClient._();
+
+  static DateTime timestampToUtc(Timestamp t) {
     final s = t.seconds.toInt();
     final n = t.nanos;
     final ms = s * 1000 + (n / 1000000).floor();
@@ -14,22 +18,22 @@ class LicenseSeatClient {
   static bool isLicenseCurrentlyValid(License license, {DateTime? now}) {
     final at = now ?? DateTime.now().toUtc();
     if (!license.hasValidFrom()) return false;
-    final from = _toDateTime(license.validFrom);
+    final from = timestampToUtc(license.validFrom);
     if (from.isAfter(at)) return false;
     if (license.hasValidUntil()) {
-      final until = _toDateTime(license.validUntil);
+      final until = timestampToUtc(license.validUntil);
       if (until.isBefore(at)) return false;
     }
     return true;
   }
 
-  static bool _isSeatTimeWindowActive(LicenseSeat seat, DateTime at) {
+  static bool isSeatTimeWindowActive(LicenseSeat seat, DateTime at) {
     if (seat.hasValidFrom()) {
-      final from = _toDateTime(seat.validFrom);
+      final from = timestampToUtc(seat.validFrom);
       if (from.isAfter(at)) return false;
     }
     if (seat.hasValidUntil()) {
-      final until = _toDateTime(seat.validUntil);
+      final until = timestampToUtc(seat.validUntil);
       if (until.isBefore(at)) return false;
     }
     return true;
@@ -47,7 +51,7 @@ class LicenseSeatClient {
       if (!isLicenseCurrentlyValid(license, now: at)) continue;
       for (final seat in license.seats) {
         if (seat.userId.trim() != uid) continue;
-        if (!_isSeatTimeWindowActive(seat, at)) continue;
+        if (!isSeatTimeWindowActive(seat, at)) continue;
         return true;
       }
     }

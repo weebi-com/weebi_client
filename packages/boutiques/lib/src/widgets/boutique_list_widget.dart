@@ -6,6 +6,7 @@ import 'package:protos_weebi/protos_weebi_io.dart';
 import '../../boutique.dart';
 import '../l10n/boutique_ui_strings.dart';
 import '../providers/boutique_provider.dart';
+import '../boutique_form_extensions.dart';
 import 'boutique_form_widget.dart';
 
 /// Wrap builder to report errors
@@ -36,6 +37,8 @@ class BoutiqueListWidget extends StatelessWidget {
   final bool autoLoad; // whether to auto-load chains on first build
   final UserPermissions?
       userPermissions; // NEW: User permissions to determine CRUD capabilities
+  final BoutiqueFormExtensionsFactory? formExtensionsFactory;
+  final BoutiqueDetailExtrasFactory? detailExtrasFactory;
   final Function(BoutiqueMongo)? onBoutiqueSelected;
   final Function(Chain)? onChainSelected;
   final Function(BoutiqueMongo)? onBoutiqueEdit;
@@ -51,6 +54,8 @@ class BoutiqueListWidget extends StatelessWidget {
     this.allowSelection = true,
     this.autoLoad = true,
     this.userPermissions, // NEW: Optional user permissions
+    this.formExtensionsFactory,
+    this.detailExtrasFactory,
     this.onBoutiqueSelected,
     this.onChainSelected,
     this.onBoutiqueEdit,
@@ -132,6 +137,8 @@ class BoutiqueListWidget extends StatelessWidget {
       canCreateChain: canCreateChain,
       canEditChain: canEditChain,
       canDeleteChain: canDeleteChain,
+      formExtensionsFactory: formExtensionsFactory,
+      detailExtrasFactory: detailExtrasFactory,
       onBoutiqueSelected: onBoutiqueSelected,
       onChainSelected: onChainSelected,
       onBoutiqueEdit: onBoutiqueEdit,
@@ -156,6 +163,8 @@ class _BoutiqueListContent extends StatefulWidget {
   final bool canCreateChain;
   final bool canEditChain;
   final bool canDeleteChain;
+  final BoutiqueFormExtensionsFactory? formExtensionsFactory;
+  final BoutiqueDetailExtrasFactory? detailExtrasFactory;
   final Function(BoutiqueMongo)? onBoutiqueSelected;
   final Function(Chain)? onChainSelected;
   final Function(BoutiqueMongo)? onBoutiqueEdit;
@@ -175,6 +184,8 @@ class _BoutiqueListContent extends StatefulWidget {
     required this.canCreateChain,
     required this.canEditChain,
     required this.canDeleteChain,
+    this.formExtensionsFactory,
+    this.detailExtrasFactory,
     this.onBoutiqueSelected,
     this.onChainSelected,
     this.onBoutiqueEdit,
@@ -865,6 +876,9 @@ class _BoutiqueListContentState extends State<_BoutiqueListContent> {
       context: context,
       builder: (context) => BoutiqueFormWidget(
         chain: chain,
+        formExtensions: widget.formExtensionsFactory?.call(
+          editingChain: chain,
+        ),
         onSaved: () {
           // Show success message
           ScaffoldMessenger.of(context).showSnackBar(
@@ -890,6 +904,9 @@ class _BoutiqueListContentState extends State<_BoutiqueListContent> {
       barrierDismissible: true,
       builder: (context) => BoutiqueFormWidget(
         boutique: boutique,
+        formExtensions: widget.formExtensionsFactory?.call(
+          editingBoutique: boutique,
+        ),
         onSaved: () {
           // Show success message using captured reference
           scaffoldMessenger.showSnackBar(

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
 import '../../boutique.dart'; // For extensions
 import '../../dynamic_body.dart';
-
 /// Widget to display boutique or chain details, similar to UserDetailWidget
 class BoutiqueDetailView extends StatelessWidget {
   final BoutiqueMongo? boutique;
   final Chain? chain;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
+  final List<Widget> extraSections;
 
   const BoutiqueDetailView({
     super.key,
@@ -16,6 +16,7 @@ class BoutiqueDetailView extends StatelessWidget {
     this.chain,
     this.onEdit,
     this.onDelete,
+    this.extraSections = const [],
   })  : assert(boutique != null || chain != null,
             'Either boutique or chain must be provided'),
         assert(boutique == null || chain == null,
@@ -159,6 +160,13 @@ class BoutiqueDetailView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
+            ],
+
+            if (extraSections.isNotEmpty) ...[
+              for (final section in extraSections) ...[
+                section,
+                const SizedBox(height: 16),
+              ],
             ],
 
             // Detailed Information Card

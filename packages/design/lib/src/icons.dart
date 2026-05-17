@@ -13,7 +13,7 @@ abstract class IconsWeebi {
   static const articlePhotos =
       Icon(Icons.image, color: ColorsWeebi.orangeArticle);
   static const storefront =
-      Icon(Icons.store, color: ColorsWeebi.boutique);
+      Icon(Icons.storefront, color: ColorsWeebi.boutique);
   static const boutiqueIconData = Icons.storefront;
   static const contacts = Icon(Icons.contacts, color: ColorsWeebi.blueContact);
   static const contactsIconData = Icons.contacts;

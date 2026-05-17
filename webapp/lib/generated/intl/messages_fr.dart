@@ -428,7 +428,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "ticketsPaymentUnknown": MessageLookupByLibrary.simpleMessage("—"),
     "ticketsSeatEntitlementSubtitle": MessageLookupByLibrary.simpleMessage(
-      "Siège de licence actif requis",
+      "Licence active requise",
     ),
     "ticketsSeatGatedBoutiqueViewsDetail": MessageLookupByLibrary.simpleMessage(
       "Le filtre et le groupement par boutique exigent une licence.",

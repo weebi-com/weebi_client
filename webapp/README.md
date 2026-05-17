@@ -1,5 +1,7 @@
 # weebi webapp
 
+Billing and licences: lifetime licence purchase (no subscriptions) + pay-as-you-go credits — see [../docs/commercial-model.md](../docs/commercial-model.md).
+
 ``` shell
 # main / main_local: use lib/config/api_url.dart (kApiUrl)
 flutter run -t lib/main_local.dart

@@ -1,4 +1,7 @@
 # weebi_client
+
+Product and billing model (lifetime licences, no subscriptions, pay-as-you-go credits): **[docs/commercial-model.md](docs/commercial-model.md)**.
+
 ## License
 
 The webadmin console application is licensed under the BSD 3-Clause License

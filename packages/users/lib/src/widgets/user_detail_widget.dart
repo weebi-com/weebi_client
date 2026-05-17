@@ -7,7 +7,7 @@ import '../l10n/user_ui_strings.dart';
 import '../providers/user_provider.dart';
 import 'elegant_permissions_widget.dart';
 import 'detail_view_components.dart';
-import 'license_seat_status_card.dart';
+import 'package:entitlements_weebi/entitlements_weebi.dart';
 import 'user_permissions_persist.dart';
 
 bool _coerceTruthyBool(dynamic v) {

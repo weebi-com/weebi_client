@@ -138,3 +138,5 @@ webapp/pubspec.lock
 /packages/users/doc/routes_integration.md
 /webapp/pubspec_overrides.yaml
 /webapp/RUNME.md
+/packages/entitlements/melos_entitlements_weebi.iml
+/docs/commercial-model.md

@@ -48,7 +48,7 @@ class _BillingScreenState extends State<BillingScreen> {
   String? _errorMessage;
   String? _checkoutProductId;
   bool _acceptedEnterpriseTerms = false;
-  bool _subscriptionConfirmedLogged = false;
+  bool _licensePurchaseConfirmedLogged = false;
   bool _checkoutCanceledLogged = false;
 
   /// Check if user has billing read permission from either JWT or session (BFF mode)
@@ -134,7 +134,7 @@ class _BillingScreenState extends State<BillingScreen> {
       } else if (params['canceled'] == 'true') {
         if (!_checkoutCanceledLogged) {
           _checkoutCanceledLogged = true;
-          Aptabase.instance.trackEvent('billing_subscription_process_failed', {
+          Aptabase.instance.trackEvent('billing_license_checkout_failed', {
             'reason': 'checkout_canceled',
           });
         }
@@ -145,12 +145,12 @@ class _BillingScreenState extends State<BillingScreen> {
     });
   }
 
-  void _maybeTrackSubscriptionConfirmed(List<License> licenses) {
-    if (_subscriptionConfirmedLogged) return;
+  void _maybeTrackLicensePurchaseConfirmed(List<License> licenses) {
+    if (_licensePurchaseConfirmedLogged) return;
     if (_billingQueryParams()['success'] != 'true') return;
     if (licenses.isEmpty) return;
-    _subscriptionConfirmedLogged = true;
-    Aptabase.instance.trackEvent('billing_subscription_confirmed', {
+    _licensePurchaseConfirmedLogged = true;
+    Aptabase.instance.trackEvent('billing_license_purchase_confirmed', {
       'license_count': licenses.length,
     });
   }
@@ -189,13 +189,13 @@ class _BillingScreenState extends State<BillingScreen> {
       if (mounted) {
         setState(() {
           _licenses = licenses;
-          // Filter out 'pro' product (counterintuitive naming; kept for other subscriptions at 10+ seats)
+          // Filter out 'pro' product (legacy SKU naming; not sold in this portal)
           _products = products.where((p) => p.productId.toLowerCase() != 'pro').toList();
           _usersById = usersById;
           _loading = false;
           _errorMessage = null;
         });
-        _maybeTrackSubscriptionConfirmed(licenses);
+        _maybeTrackLicensePurchaseConfirmed(licenses);
       }
     } on GrpcError catch (e) {
       if (mounted) {
@@ -317,7 +317,7 @@ class _BillingScreenState extends State<BillingScreen> {
 
       if (!mounted) return;
       if (response.checkoutUrl.isEmpty) {
-        Aptabase.instance.trackEvent('billing_subscription_process_failed', {
+        Aptabase.instance.trackEvent('billing_license_checkout_failed', {
           'reason': 'empty_checkout_url',
           'product_id': product.productId,
         });
@@ -329,7 +329,7 @@ class _BillingScreenState extends State<BillingScreen> {
       }
       html.window.location.href = response.checkoutUrl;
     } on GrpcError catch (e) {
-      Aptabase.instance.trackEvent('billing_subscription_process_failed', {
+      Aptabase.instance.trackEvent('billing_license_checkout_failed', {
         'reason': 'checkout_session_grpc',
         'product_id': product.productId,
         'code': e.code,
@@ -342,7 +342,7 @@ class _BillingScreenState extends State<BillingScreen> {
         });
       }
     } catch (e) {
-      Aptabase.instance.trackEvent('billing_subscription_process_failed', {
+      Aptabase.instance.trackEvent('billing_license_checkout_failed', {
         'reason': 'checkout_session_error',
         'product_id': product.productId,
         'detail': e.toString(),

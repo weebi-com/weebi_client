@@ -14,6 +14,9 @@ export 'src/events/boutique_listener.dart';
 export 'src/events/lazy_boutique_listener.dart';
 export 'src/events/boutique_sync_integration.dart';
 
+// Host extension hooks (business rules etc. live in app shell, not here)
+export 'src/boutique_form_extensions.dart';
+
 // Widgets
 export 'src/widgets/boutique_list_widget.dart';
 export 'src/widgets/boutique_list_with_bus.dart';
