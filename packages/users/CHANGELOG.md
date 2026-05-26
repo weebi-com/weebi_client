@@ -1,5 +1,9 @@
 # changelog 
 
+## 1.1.0
+
+- keep android false
+
 ## 1.0.9
 
 - isolate permission in user detail

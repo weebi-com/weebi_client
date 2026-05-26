@@ -12,8 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:users_weebi/weebi_users.dart' show AccessTokenProvider;
 
 // Project imports:
-import '../firm_license_seat_utils.dart';
-import '../l10n/license_ui_strings.dart';
+import 'package:entitlements_weebi/entitlements_weebi.dart';
 import '../l10n/user_ui_strings.dart';
 import '../providers/user_provider.dart';
 import 'elegant_permissions_widget.dart';
@@ -266,7 +265,7 @@ class _UserCreateViewState extends State<UserCreateView> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    LicenseUiStrings.createUserLicenseBannerBody,
+                    EntitlementUiStrings.createUserLicenseBannerBody,
                     style: TextStyle(
                       color: Colors.blue[900],
                       height: 1.35,
@@ -279,11 +278,11 @@ class _UserCreateViewState extends State<UserCreateView> {
               const SizedBox(height: 12),
               Text(
                 summary.totalCapacity > 0
-                    ? LicenseUiStrings.createUserSeatsSummary(
+                    ? EntitlementUiStrings.createUserSeatsSummary(
                         summary.activeAssignedSeats,
                         summary.totalCapacity,
                       )
-                    : LicenseUiStrings.createUserNoValidLicenseSummary,
+                    : EntitlementUiStrings.createUserNoValidLicenseSummary,
                 style: TextStyle(
                   fontSize: 13,
                   color: Colors.grey[800],
@@ -339,7 +338,7 @@ class _UserCreateViewState extends State<UserCreateView> {
               Icon(Icons.check_circle, color: Colors.green[600], size: 32),
               const SizedBox(width: 12),
               const Expanded(
-                child: Text(LicenseUiStrings.userCreatedSuccessTitle),
+                child: Text(EntitlementUiStrings.userCreatedSuccessTitle),
               ),
             ],
           ),
@@ -368,7 +367,7 @@ class _UserCreateViewState extends State<UserCreateView> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        LicenseUiStrings.createUserPostCreateLicenseWarning,
+                        EntitlementUiStrings.createUserPostCreateLicenseWarning,
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.orange[900],
@@ -381,7 +380,7 @@ class _UserCreateViewState extends State<UserCreateView> {
               ),
               const SizedBox(height: 12),
               Text(
-                LicenseUiStrings.userCreatedSetUpAccessPrompt,
+                EntitlementUiStrings.userCreatedSetUpAccessPrompt,
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey[700],
@@ -398,7 +397,7 @@ class _UserCreateViewState extends State<UserCreateView> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: const Text(
-                      LicenseUiStrings.userCreatedLaterSnackbar,
+                      EntitlementUiStrings.userCreatedLaterSnackbar,
                     ),
                     backgroundColor: Colors.orange[700],
                     behavior: SnackBarBehavior.floating,
@@ -406,7 +405,7 @@ class _UserCreateViewState extends State<UserCreateView> {
                   ),
                 );
               },
-              child: const Text(LicenseUiStrings.userCreatedLater),
+              child: const Text(EntitlementUiStrings.userCreatedLater),
             ),
             ElevatedButton.icon(
               onPressed: () {
@@ -420,7 +419,7 @@ class _UserCreateViewState extends State<UserCreateView> {
                 });
               },
               icon: const Icon(Icons.arrow_forward),
-              label: const Text(LicenseUiStrings.userCreatedSetUpNow),
+              label: const Text(EntitlementUiStrings.userCreatedSetUpNow),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green[600],
                 foregroundColor: Colors.white,

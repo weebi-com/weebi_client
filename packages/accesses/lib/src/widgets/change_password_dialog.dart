@@ -3,9 +3,8 @@ import 'package:protos_weebi/grpc.dart' show GrpcError, StatusCode;
 import 'package:protos_weebi/protos_weebi_io.dart'
     show PasswordUpdateRequest, StatusResponse_Type, FenceServiceClient;
 import 'package:provider/provider.dart';
-import 'package:users_weebi/weebi_users.dart' show UserProvider;
-import 'package:users_weebi/fence_client_provider.dart'
-    show FenceServiceClientProviderV2;
+import 'package:users_weebi/weebi_users.dart' show FenceServiceClientProviderV2, UserProvider;
+
 
 import '../l10n/access_ui_strings.dart';
 

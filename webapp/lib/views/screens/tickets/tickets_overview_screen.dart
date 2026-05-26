@@ -10,7 +10,7 @@ import 'package:protos_weebi/protos_weebi_io.dart';
 import 'package:provider/provider.dart';
 import 'package:web_admin/app_router.dart';
 import 'package:web_admin/generated/l10n.dart';
-import 'package:web_admin/billing/seat_capability.dart';
+import 'package:entitlements_weebi/entitlements_weebi.dart';
 import 'package:web_admin/environment.dart' show Config;
 import 'package:web_admin/providers/current_user_provider.dart';
 import 'package:web_admin/providers/server.dart';
@@ -49,7 +49,7 @@ class _TicketsOverviewScreenState extends State<TicketsOverviewScreen> {
   final _tableScrollController = ScrollController();
   bool _seatCheckResolved = false;
 
-  /// Active license seat for subscription-backed ticket views (no firm-creator joker).
+  /// Active lifetime licence for portal ticket views (no firm-creator joker).
   bool _hasSeatForBoutiqueViews = false;
 
   /// Until billing responds, allow controls (optimistic). Then require a seat for store filter/group.

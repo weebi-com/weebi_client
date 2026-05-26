@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:auth_weebi/auth_weebi.dart' show PermissionProvider;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +12,7 @@ import 'package:users_weebi/users_weebi.dart' show DynamicBody;
 import 'package:web_admin/core/services/user_service.dart';
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/providers/user_data_provider.dart';
+import 'package:web_admin/utils/app_dialogs.dart';
 import 'package:web_admin/utils/app_focus_helper.dart';
 import 'package:web_admin/utils/profile_image_provider.dart';
 import 'package:web_admin/views/widgets/card_elements.dart';
@@ -54,16 +54,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
       final lang = Lang.of(context);
 
-      final dialog = AwesomeDialog(
+      AppDialog.show(
         context: context,
-        dialogType: DialogType.success,
+        dialogType: AppDialogType.success,
         title: lang.recordSavedSuccessfully,
         width: kDialogWidth,
         btnOkText: 'OK',
         btnOkOnPress: () {},
       );
-
-      dialog.show();
     }
   }
 

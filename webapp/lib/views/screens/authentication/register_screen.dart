@@ -1,10 +1,10 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:web_admin/app_router.dart';
 import 'package:web_admin/generated/l10n.dart';
+import 'package:web_admin/utils/app_dialogs.dart';
 import 'package:web_admin/utils/app_focus_helper.dart';
 import 'package:web_admin/views/widgets/public_master_layout/public_master_layout.dart';
 
@@ -71,29 +71,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _onRegisterSuccess(BuildContext context, String message) {
-    final dialog = AwesomeDialog(
+    AppDialog.show(
       context: context,
-      dialogType: DialogType.success,
+      dialogType: AppDialogType.success,
       desc: message,
       width: kDialogWidth,
       btnOkText: Lang.of(context).loginNow,
       btnOkOnPress: () => GoRouter.of(context).go(RouteUri.login),
     );
-
-    dialog.show();
   }
 
   void _onRegisterError(BuildContext context, String message) {
-    final dialog = AwesomeDialog(
+    AppDialog.show(
       context: context,
-      dialogType: DialogType.error,
+      dialogType: AppDialogType.error,
       desc: message,
       width: kDialogWidth,
       btnOkText: 'OK',
       btnOkOnPress: () {},
     );
-
-    dialog.show();
   }
 
   @override

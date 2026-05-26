@@ -100,18 +100,6 @@ abstract final class BoutiqueUiStrings {
   static const String dualCurrencySwitchSubtitle =
       'Souvent pour afficher aussi les montants en dollars US.';
   static const String currencySectionTitle = 'Devise(s)';
-  static const String businessRulesSectionTitle = 'Règles métier';
-  static const String negativeStockGuardTitle = 'Bloquer le stock négatif';
-  static const String negativeStockGuardSubtitle =
-      'Empêche les ventes et sorties qui rendraient le stock négatif.';
-  static const String recentTicketEditTitle =
-      'Autoriser la correction des tickets récents';
-  static const String recentTicketEditSubtitle =
-      'Permet de corriger rapidement une erreur juste après encaissement.';
-  static const String recentTicketEditWindowMinutesLabel =
-      'Délai de correction (minutes)';
-  static const String recentTicketEditWindowInvalid =
-      'Veuillez saisir un délai supérieur à 0 minute';
   static const String chainAssignment = 'Rattachement à une chaîne de magasins';
   static const String noChainsCreateFirst =
       'Aucune chaîne de magasins. Créez d’abord une chaîne pour y rattacher des boutiques.';

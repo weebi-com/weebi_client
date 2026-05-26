@@ -1,3 +1,4 @@
+// ignore: unnecessary_library_name
 library currency_picker;
 
 import 'package:flutter/material.dart';

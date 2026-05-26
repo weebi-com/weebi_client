@@ -339,6 +339,36 @@ class Lang {
     );
   }
 
+  /// `Weebi Entreprise`
+  String get billingPlanEntreprise {
+    return Intl.message(
+      'Weebi Entreprise',
+      name: 'billingPlanEntreprise',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Weebi Premium`
+  String get billingPlanPremium {
+    return Intl.message(
+      'Weebi Premium',
+      name: 'billingPlanPremium',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `per user`
+  String get billingPerUser {
+    return Intl.message(
+      'per user',
+      name: 'billingPerUser',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `You don't have permission to manage licenses. Ask your enterprise administrator to grant you billing access.`
   String get billingNoAccess {
     return Intl.message(

@@ -1,4 +1,4 @@
-import 'package:collection/collection.dart';
+import 'package:auth_weebi/collection.dart';
 
 import 'currencies.dart';
 import 'currency.dart';

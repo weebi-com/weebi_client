@@ -154,6 +154,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingViewFullTerms": MessageLookupByLibrary.simpleMessage(
       "Terms and Conditions of Sale",
     ),
+    "billingPlanEntreprise": MessageLookupByLibrary.simpleMessage(
+      "Weebi Entreprise",
+    ),
+    "billingPlanPremium": MessageLookupByLibrary.simpleMessage(
+      "Weebi Premium",
+    ),
+    "billingPerUser": MessageLookupByLibrary.simpleMessage("per user"),
     "buttonEmphasis": MessageLookupByLibrary.simpleMessage("Button Emphasis"),
     "buttons": m0,
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),

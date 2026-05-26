@@ -157,6 +157,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingViewFullTerms": MessageLookupByLibrary.simpleMessage(
       "Conditions Générales de Vente",
     ),
+    "billingPlanEntreprise": MessageLookupByLibrary.simpleMessage(
+      "Weebi Entreprise",
+    ),
+    "billingPlanPremium": MessageLookupByLibrary.simpleMessage(
+      "Weebi Premium",
+    ),
+    "billingPerUser": MessageLookupByLibrary.simpleMessage("par utilisateur"),
     "buttonEmphasis": MessageLookupByLibrary.simpleMessage(
       "Accentuation du Bouton",
     ),
@@ -428,7 +435,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "ticketsPaymentUnknown": MessageLookupByLibrary.simpleMessage("—"),
     "ticketsSeatEntitlementSubtitle": MessageLookupByLibrary.simpleMessage(
-      "Siège de licence actif requis",
+      "Licence active requise",
     ),
     "ticketsSeatGatedBoutiqueViewsDetail": MessageLookupByLibrary.simpleMessage(
       "Le filtre et le groupement par boutique exigent une licence.",

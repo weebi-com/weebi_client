@@ -20,6 +20,8 @@ import 'package:web_admin/providers/current_user_provider.dart';
 
 import '../../../core/constants/dimens.dart';
 import '../../../core/theme/theme_extensions/app_color_scheme.dart';
+import 'billing_plan_label.dart';
+import 'billing_plan_theme.dart';
 
 /// Query params from current URL. With hash routing, params may be in the fragment (#/billing?success=...).
 Map<String, String> _billingQueryParams() {
@@ -48,7 +50,7 @@ class _BillingScreenState extends State<BillingScreen> {
   String? _errorMessage;
   String? _checkoutProductId;
   bool _acceptedEnterpriseTerms = false;
-  bool _subscriptionConfirmedLogged = false;
+  bool _licensePurchaseConfirmedLogged = false;
   bool _checkoutCanceledLogged = false;
 
   /// Check if user has billing read permission from either JWT or session (BFF mode)
@@ -134,7 +136,7 @@ class _BillingScreenState extends State<BillingScreen> {
       } else if (params['canceled'] == 'true') {
         if (!_checkoutCanceledLogged) {
           _checkoutCanceledLogged = true;
-          Aptabase.instance.trackEvent('billing_subscription_process_failed', {
+          Aptabase.instance.trackEvent('billing_license_checkout_failed', {
             'reason': 'checkout_canceled',
           });
         }
@@ -145,12 +147,12 @@ class _BillingScreenState extends State<BillingScreen> {
     });
   }
 
-  void _maybeTrackSubscriptionConfirmed(List<License> licenses) {
-    if (_subscriptionConfirmedLogged) return;
+  void _maybeTrackLicensePurchaseConfirmed(List<License> licenses) {
+    if (_licensePurchaseConfirmedLogged) return;
     if (_billingQueryParams()['success'] != 'true') return;
     if (licenses.isEmpty) return;
-    _subscriptionConfirmedLogged = true;
-    Aptabase.instance.trackEvent('billing_subscription_confirmed', {
+    _licensePurchaseConfirmedLogged = true;
+    Aptabase.instance.trackEvent('billing_license_purchase_confirmed', {
       'license_count': licenses.length,
     });
   }
@@ -188,14 +190,15 @@ class _BillingScreenState extends State<BillingScreen> {
 
       if (mounted) {
         setState(() {
-          _licenses = licenses;
-          // Filter out 'pro' product (counterintuitive naming; kept for other subscriptions at 10+ seats)
-          _products = products.where((p) => p.productId.toLowerCase() != 'pro').toList();
+          _licenses =
+              licenses.where(isBillingCatalogLicense).toList();
+          _products =
+              products.where((p) => isBillingCatalogProduct(p.productId)).toList();
           _usersById = usersById;
           _loading = false;
           _errorMessage = null;
         });
-        _maybeTrackSubscriptionConfirmed(licenses);
+        _maybeTrackLicensePurchaseConfirmed(licenses);
       }
     } on GrpcError catch (e) {
       if (mounted) {
@@ -317,7 +320,7 @@ class _BillingScreenState extends State<BillingScreen> {
 
       if (!mounted) return;
       if (response.checkoutUrl.isEmpty) {
-        Aptabase.instance.trackEvent('billing_subscription_process_failed', {
+        Aptabase.instance.trackEvent('billing_license_checkout_failed', {
           'reason': 'empty_checkout_url',
           'product_id': product.productId,
         });
@@ -329,7 +332,7 @@ class _BillingScreenState extends State<BillingScreen> {
       }
       html.window.location.href = response.checkoutUrl;
     } on GrpcError catch (e) {
-      Aptabase.instance.trackEvent('billing_subscription_process_failed', {
+      Aptabase.instance.trackEvent('billing_license_checkout_failed', {
         'reason': 'checkout_session_grpc',
         'product_id': product.productId,
         'code': e.code,
@@ -342,7 +345,7 @@ class _BillingScreenState extends State<BillingScreen> {
         });
       }
     } catch (e) {
-      Aptabase.instance.trackEvent('billing_subscription_process_failed', {
+      Aptabase.instance.trackEvent('billing_license_checkout_failed', {
         'reason': 'checkout_session_error',
         'product_id': product.productId,
         'detail': e.toString(),
@@ -692,17 +695,24 @@ class _ProductOfferCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final lang = Lang.of(context);
     final priceStr = (product.amountCents / 100).toStringAsFixed(2);
     final currency =
         product.currency.isNotEmpty ? product.currency.toUpperCase() : 'EUR';
-    final planName = _planDisplayName(product.productId);
+    final planName = billingPlanLabel(lang, productId: product.productId);
+    final style = BillingPlanVisual.fromProductId(product.productId);
 
     return SizedBox(
-      width: 220,
+      width: 240,
       child: Card(
-        elevation: 2,
+        elevation: style.elevation,
+        color: style.background,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Padding(
-          padding: const EdgeInsets.all(kDefaultPadding),
+          padding: const EdgeInsets.all(kDefaultPadding * 1.25),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -711,34 +721,50 @@ class _ProductOfferCard extends StatelessWidget {
                 planName,
                 style: themeData.textTheme.titleLarge!.copyWith(
                   fontWeight: FontWeight.bold,
+                  color: style.onBackground,
+                  letterSpacing: product.productId.toLowerCase() == 'premium'
+                      ? 0.4
+                      : 0,
                 ),
               ),
-              const SizedBox(height: 4),
-              Text(
-                '${product.maxUsers} ${Lang.of(context).billingLicenses}',
-                style: themeData.textTheme.titleSmall,
-              ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               Text(
                 '$priceStr $currency',
                 style: themeData.textTheme.headlineSmall!.copyWith(
-                  color: themeData.colorScheme.primary,
+                  color: style.priceColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: kDefaultPadding),
+              Text(
+                lang.billingPerUser,
+                style: themeData.textTheme.titleSmall?.copyWith(
+                  color: style.mutedOnBackground,
+                ),
+              ),
+              const SizedBox(height: kDefaultPadding * 1.25),
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: style.buttonBackground,
+                    foregroundColor: style.buttonForeground,
+                    disabledBackgroundColor:
+                        style.buttonBackground.withValues(alpha: 0.45),
+                    disabledForegroundColor:
+                        style.buttonForeground.withValues(alpha: 0.6),
+                  ),
                   onPressed:
                       (isLoading || !purchaseEnabled) ? null : onPurchase,
                   child: isLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           height: 20,
                           width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: style.buttonForeground,
+                          ),
                         )
-                      : Text(Lang.of(context).billingPurchase),
+                      : Text(lang.billingPurchase),
                 ),
               ),
             ],
@@ -746,19 +772,6 @@ class _ProductOfferCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _planDisplayName(String productId) {
-    switch (productId.toLowerCase()) {
-      case 'solo':
-        return 'Solo';
-      case 'trio':
-        return 'Trio';
-      case 'pro':
-        return 'Pro';
-      default:
-        return productId;
-    }
   }
 }
 
@@ -785,7 +798,8 @@ class _LicenseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final lang = Lang.of(context);
-    final planName = _planDisplayName(license.licensePlan);
+    final planName = billingPlanLabel(lang, licensePlan: license.licensePlan);
+    final style = BillingPlanVisual.fromLicensePlan(license.licensePlan);
     final validUntil = license.hasValidUntil()
         ? _formatTimestamp(license.validUntil)
         : lang.billingLifetime;
@@ -797,28 +811,54 @@ class _LicenseCard extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.only(bottom: kDefaultPadding),
-      child: Padding(
-        padding: const EdgeInsets.all(kDefaultPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: kDefaultPadding,
+              vertical: kDefaultPadding * 0.85,
+            ),
+            color: style.background,
+            child: Row(
               children: [
-                Text(
-                  planName,
-                  style: themeData.textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    planName,
+                    style: themeData.textTheme.titleMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: style.onBackground,
+                      letterSpacing:
+                          license.licensePlan == LicensePlan.PREMIUM ? 0.35 : 0,
+                    ),
                   ),
                 ),
-                const Spacer(),
                 Chip(
+                  backgroundColor:
+                      style.onBackground.withValues(alpha: 0.18),
+                  side: BorderSide(
+                    color: style.onBackground.withValues(alpha: 0.35),
+                  ),
                   label: Text(
                     '${license.maxUsers} ${lang.billingLicenses}',
-                    style: themeData.textTheme.bodyMedium,
+                    style: themeData.textTheme.bodyMedium!.copyWith(
+                      color: style.onBackground,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ],
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(kDefaultPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
             // Attribution status: plain text for state; primary button is the only CTA
             Padding(
               padding: const EdgeInsets.only(top: 8),
@@ -921,23 +961,12 @@ class _LicenseCard extends StatelessWidget {
                 style: themeData.textTheme.bodySmall,
               ),
             ),
-          ],
-        ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
-  }
-
-  String _planDisplayName(LicensePlan plan) {
-    switch (plan) {
-      case LicensePlan.SOLO:
-        return 'Solo';
-      case LicensePlan.TRIO:
-        return 'Trio';
-      case LicensePlan.PRO:
-        return 'Pro';
-      default:
-        return plan.name;
-    }
   }
 
   String _formatTimestamp(Timestamp ts) {

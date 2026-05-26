@@ -1,13 +1,14 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:protos_weebi/grpc.dart';
+import 'package:protos_weebi/utils.dart' show RegExpWeebi;
 import 'package:auth_weebi/auth_weebi.dart' show AccessTokenProvider;
 import 'package:provider/provider.dart';
 import 'package:web_admin/app_router.dart';
 import 'package:web_admin/generated/l10n.dart';
+import 'package:web_admin/utils/app_dialogs.dart';
 import 'package:web_admin/utils/app_focus_helper.dart';
 import 'package:web_admin/views/widgets/public_master_layout/public_master_layout.dart';
 
@@ -89,16 +90,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onLoginError(BuildContext context, String message) {
-    final dialog = AwesomeDialog(
+    AppDialog.show(
       context: context,
-      dialogType: DialogType.error,
+      dialogType: AppDialogType.error,
+      title: 'Error',
       desc: message,
       width: kDialogWidth,
       btnOkText: 'OK',
       btnOkOnPress: () {},
     );
-
-    dialog.show();
   }
 
   void _showForgotPasswordDialog(BuildContext context) {
@@ -125,15 +125,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onForgotPasswordSuccess(BuildContext context) {
-    final dialog = AwesomeDialog(
+    AppDialog.show(
       context: context,
-      dialogType: DialogType.success,
-      desc: 'Password reset email sent.', 
+      dialogType: AppDialogType.success,
+      title: 'Success',
+      desc: 'Password reset email sent.',
       width: kDialogWidth,
       btnOkText: 'OK',
       btnOkOnPress: () {},
     );
-    dialog.show();
   }
 
   @override
@@ -163,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: kDefaultPadding),
                       child: Image.asset(
-                        'assets/images/app_logo.png', // TODO remove
+                        'assets/images/app_logo.png',
                         width: 150.0,
                         height: 60.0,
                       ),
@@ -187,7 +187,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               keyboardType: TextInputType.emailAddress,
                               textInputAction: TextInputAction.next,
-                              validator: FormBuilderValidators.required(),
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(),
+                                (value) {
+                                  if (value != null && value.isNotEmpty) {
+                                    if (!RegExpWeebi.mailFormat.hasMatch(value)) {
+                                      return lang.emailErrorText;
+                                    }
+                                  }
+                                  return null;
+                                },
+                              ]),
                               onSaved: (value) =>
                                   (_formData.mail = value ?? ''),
                             ),
@@ -217,7 +227,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               enableSuggestions: false,
                               obscureText: _obscurePassword,
                               textInputAction: TextInputAction.done,
-                              validator: FormBuilderValidators.required(),
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(),
+                                FormBuilderValidators.minLength(3),
+                              ]),
                               onSaved: (value) =>
                                   (_formData.password = value ?? ''),
                               onSubmitted: (_) => _submitForm(),
@@ -372,7 +385,14 @@ class _ForgotPasswordDialogState extends State<_ForgotPasswordDialog> {
               textInputAction: TextInputAction.done,
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(),
-                FormBuilderValidators.email(),
+                (value) {
+                  if (value != null && value.isNotEmpty) {
+                    if (!RegExpWeebi.mailFormat.hasMatch(value)) {
+                      return widget.lang.emailErrorText;
+                    }
+                  }
+                  return null;
+                },
               ]),
               onSubmitted: (_) => _submit(),
             ),

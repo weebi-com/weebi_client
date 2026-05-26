@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
 
-import '../firm_license_seat_utils.dart';
-import '../l10n/license_ui_strings.dart';
+import '../firm_license_seat_summary.dart';
+import '../l10n/entitlement_ui_strings.dart';
 
-/// Shows whether [userId] has an active license seat on [licenses].
+/// Shows whether [userId] has an active attributed licence on [licenses].
 ///
-/// When [subjectIsFirmCreator] is true and there is no seat, copy reflects the
-/// firm-creator operational joker (narrow server path), not a subscription seat.
+/// When [subjectIsFirmCreator] is true and there is no licence, copy reflects the
+/// firm-creator preview path — not a lifetime licence. See `docs/commercial-model.md`.
 ///
-/// Default copy is French ([LicenseUiStrings]); sign-in is allowed without a seat.
+/// Default copy is French ([EntitlementUiStrings]); sign-in is allowed without a seat.
 class LicenseSeatStatusCard extends StatelessWidget {
   final String userId;
   final Iterable<License> licenses;
@@ -48,16 +48,16 @@ class LicenseSeatStatusCard extends StatelessWidget {
         leading: Icon(icon, color: iconColor),
         title: Text(
           hasSeat
-              ? LicenseUiStrings.seatCardTitleActive
-              : LicenseUiStrings.seatCardTitleNone,
+              ? EntitlementUiStrings.seatCardTitleActive
+              : EntitlementUiStrings.seatCardTitleNone,
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
         subtitle: Text(
           hasSeat
-              ? LicenseUiStrings.seatCardSubtitleActive
+              ? EntitlementUiStrings.seatCardSubtitleActive
               : creatorNoSeat
-                  ? LicenseUiStrings.seatCardSubtitleNoneFirmCreator
-                  : LicenseUiStrings.seatCardSubtitleNone,
+                  ? EntitlementUiStrings.seatCardSubtitleNoneFirmCreator
+                  : EntitlementUiStrings.seatCardSubtitleNone,
         ),
       ),
     );

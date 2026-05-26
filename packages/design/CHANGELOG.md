@@ -1,6 +1,10 @@
 # changelog
 
-## 0.1.3
+## 0.1.5
+
+- harmonize boutique icon data and accounting and charts
+
+## 0.1.4
 
 - bump models
 

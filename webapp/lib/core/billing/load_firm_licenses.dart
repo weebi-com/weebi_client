@@ -4,12 +4,14 @@ import 'package:protos_weebi/protos_weebi_io.dart';
 import 'package:provider/provider.dart';
 import 'package:web_admin/providers/server.dart';
 
-/// Loads firm licenses for seat indicators (user list, detail, accesses, create-user).
+/// Loads firm licences for attribution indicators (user list, detail, accesses, create-user).
+///
+/// Licences are lifetime purchases, not subscriptions — see `docs/commercial-model.md`.
+/// Credits / consumption billing are separate (billing screen, cloud portal).
 ///
 /// Does **not** require [PermissionProvider.canReadBilling]. Admins who manage users
-/// often have no billing tab, but still need to see who has a seat; the billing RPC
-/// enforces authorization server-side. On failure (network, permission denied), returns
-/// `null` and widgets omit seat-specific UI.
+/// often have no billing tab, but still need licence status; the billing RPC enforces
+/// authorization server-side. On failure, returns `null` and widgets omit licence UI.
 Future<Iterable<License>?> loadFirmLicensesIfPermitted(BuildContext context) async {
   final perm = context.read<PermissionProvider>();
   if (!perm.hasToken) return null;
