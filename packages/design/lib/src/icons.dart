@@ -12,7 +12,9 @@ abstract class IconsWeebi {
       Icon(Icons.format_list_bulleted, color: ColorsWeebi.orangeArticle);
   static const articlePhotos =
       Icon(Icons.image, color: ColorsWeebi.orangeArticle);
-  static const storefront =
+  static const accounting = FontAwesomeIcons.calculator;
+  static const chartsFinancial = FontAwesomeIcons.chartPie;
+  static const boutique =
       Icon(Icons.storefront, color: ColorsWeebi.boutique);
   static const boutiqueIconData = Icons.storefront;
   static const contacts = Icon(Icons.contacts, color: ColorsWeebi.blueContact);

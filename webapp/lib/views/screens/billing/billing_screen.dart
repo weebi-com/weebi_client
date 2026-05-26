@@ -21,6 +21,28 @@ import 'package:web_admin/providers/current_user_provider.dart';
 import '../../../core/constants/dimens.dart';
 import '../../../core/theme/theme_extensions/app_color_scheme.dart';
 
+/// Display name for catalog / license plan.
+String _billingPlanLabel(
+  Lang lang, {
+  String? productId,
+  LicensePlan? licensePlan,
+}) {
+  final pid = productId?.toLowerCase();
+  if (pid == 'entreprise' ||
+      pid == 'solo' ||
+      licensePlan == LicensePlan.ENTERPRISE) {
+    return lang.billingPlanEntreprise;
+  }
+  if (pid == 'premium' ||
+      pid == 'trio' ||
+      licensePlan == LicensePlan.PREMIUM) {
+    return lang.billingPlanPremium;
+  }
+  if (licensePlan == LicensePlan.PRO) return 'Pro';
+  if (productId != null && productId.isNotEmpty) return productId;
+  return licensePlan?.name ?? '';
+}
+
 /// Query params from current URL. With hash routing, params may be in the fragment (#/billing?success=...).
 Map<String, String> _billingQueryParams() {
   final base = Uri.base;
@@ -189,8 +211,10 @@ class _BillingScreenState extends State<BillingScreen> {
       if (mounted) {
         setState(() {
           _licenses = licenses;
-          // Filter out 'pro' product (legacy SKU naming; not sold in this portal)
-          _products = products.where((p) => p.productId.toLowerCase() != 'pro').toList();
+          // Entreprise and Premium only; hide legacy Pro pack.
+          _products = products
+              .where((p) => p.productId.toLowerCase() != 'pro')
+              .toList();
           _usersById = usersById;
           _loading = false;
           _errorMessage = null;
@@ -692,10 +716,11 @@ class _ProductOfferCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final lang = Lang.of(context);
     final priceStr = (product.amountCents / 100).toStringAsFixed(2);
     final currency =
         product.currency.isNotEmpty ? product.currency.toUpperCase() : 'EUR';
-    final planName = _planDisplayName(product.productId);
+    final planName = _billingPlanLabel(lang, productId: product.productId);
 
     return SizedBox(
       width: 220,
@@ -713,17 +738,18 @@ class _ProductOfferCard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 4),
-              Text(
-                '${product.maxUsers} ${Lang.of(context).billingLicenses}',
-                style: themeData.textTheme.titleSmall,
-              ),
               const SizedBox(height: 8),
               Text(
                 '$priceStr $currency',
                 style: themeData.textTheme.headlineSmall!.copyWith(
                   color: themeData.colorScheme.primary,
                   fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                lang.billingPerUser,
+                style: themeData.textTheme.titleSmall?.copyWith(
+                  color: themeData.colorScheme.onSurfaceVariant,
                 ),
               ),
               const SizedBox(height: kDefaultPadding),
@@ -738,7 +764,7 @@ class _ProductOfferCard extends StatelessWidget {
                           width: 20,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : Text(Lang.of(context).billingPurchase),
+                      : Text(lang.billingPurchase),
                 ),
               ),
             ],
@@ -746,19 +772,6 @@ class _ProductOfferCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _planDisplayName(String productId) {
-    switch (productId.toLowerCase()) {
-      case 'solo':
-        return 'Solo';
-      case 'trio':
-        return 'Trio';
-      case 'pro':
-        return 'Pro';
-      default:
-        return productId;
-    }
   }
 }
 
@@ -785,7 +798,7 @@ class _LicenseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final lang = Lang.of(context);
-    final planName = _planDisplayName(license.licensePlan);
+    final planName = _billingPlanLabel(lang, licensePlan: license.licensePlan);
     final validUntil = license.hasValidUntil()
         ? _formatTimestamp(license.validUntil)
         : lang.billingLifetime;
@@ -925,19 +938,6 @@ class _LicenseCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _planDisplayName(LicensePlan plan) {
-    switch (plan) {
-      case LicensePlan.SOLO:
-        return 'Solo';
-      case LicensePlan.TRIO:
-        return 'Trio';
-      case LicensePlan.PRO:
-        return 'Pro';
-      default:
-        return plan.name;
-    }
   }
 
   String _formatTimestamp(Timestamp ts) {
