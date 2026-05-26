@@ -20,28 +20,8 @@ import 'package:web_admin/providers/current_user_provider.dart';
 
 import '../../../core/constants/dimens.dart';
 import '../../../core/theme/theme_extensions/app_color_scheme.dart';
-
-/// Display name for catalog / license plan.
-String _billingPlanLabel(
-  Lang lang, {
-  String? productId,
-  LicensePlan? licensePlan,
-}) {
-  final pid = productId?.toLowerCase();
-  if (pid == 'entreprise' ||
-      pid == 'solo' ||
-      licensePlan == LicensePlan.ENTERPRISE) {
-    return lang.billingPlanEntreprise;
-  }
-  if (pid == 'premium' ||
-      pid == 'trio' ||
-      licensePlan == LicensePlan.PREMIUM) {
-    return lang.billingPlanPremium;
-  }
-  if (licensePlan == LicensePlan.PRO) return 'Pro';
-  if (productId != null && productId.isNotEmpty) return productId;
-  return licensePlan?.name ?? '';
-}
+import 'billing_plan_label.dart';
+import 'billing_plan_theme.dart';
 
 /// Query params from current URL. With hash routing, params may be in the fragment (#/billing?success=...).
 Map<String, String> _billingQueryParams() {
@@ -210,11 +190,10 @@ class _BillingScreenState extends State<BillingScreen> {
 
       if (mounted) {
         setState(() {
-          _licenses = licenses;
-          // Entreprise and Premium only; hide legacy Pro pack.
-          _products = products
-              .where((p) => p.productId.toLowerCase() != 'pro')
-              .toList();
+          _licenses =
+              licenses.where(isBillingCatalogLicense).toList();
+          _products =
+              products.where((p) => isBillingCatalogProduct(p.productId)).toList();
           _usersById = usersById;
           _loading = false;
           _errorMessage = null;
@@ -720,14 +699,20 @@ class _ProductOfferCard extends StatelessWidget {
     final priceStr = (product.amountCents / 100).toStringAsFixed(2);
     final currency =
         product.currency.isNotEmpty ? product.currency.toUpperCase() : 'EUR';
-    final planName = _billingPlanLabel(lang, productId: product.productId);
+    final planName = billingPlanLabel(lang, productId: product.productId);
+    final style = BillingPlanVisual.fromProductId(product.productId);
 
     return SizedBox(
-      width: 220,
+      width: 240,
       child: Card(
-        elevation: 2,
+        elevation: style.elevation,
+        color: style.background,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Padding(
-          padding: const EdgeInsets.all(kDefaultPadding),
+          padding: const EdgeInsets.all(kDefaultPadding * 1.25),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -736,33 +721,48 @@ class _ProductOfferCard extends StatelessWidget {
                 planName,
                 style: themeData.textTheme.titleLarge!.copyWith(
                   fontWeight: FontWeight.bold,
+                  color: style.onBackground,
+                  letterSpacing: product.productId.toLowerCase() == 'premium'
+                      ? 0.4
+                      : 0,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               Text(
                 '$priceStr $currency',
                 style: themeData.textTheme.headlineSmall!.copyWith(
-                  color: themeData.colorScheme.primary,
+                  color: style.priceColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
                 lang.billingPerUser,
                 style: themeData.textTheme.titleSmall?.copyWith(
-                  color: themeData.colorScheme.onSurfaceVariant,
+                  color: style.mutedOnBackground,
                 ),
               ),
-              const SizedBox(height: kDefaultPadding),
+              const SizedBox(height: kDefaultPadding * 1.25),
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: style.buttonBackground,
+                    foregroundColor: style.buttonForeground,
+                    disabledBackgroundColor:
+                        style.buttonBackground.withValues(alpha: 0.45),
+                    disabledForegroundColor:
+                        style.buttonForeground.withValues(alpha: 0.6),
+                  ),
                   onPressed:
                       (isLoading || !purchaseEnabled) ? null : onPurchase,
                   child: isLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           height: 20,
                           width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: style.buttonForeground,
+                          ),
                         )
                       : Text(lang.billingPurchase),
                 ),
@@ -798,7 +798,8 @@ class _LicenseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final lang = Lang.of(context);
-    final planName = _billingPlanLabel(lang, licensePlan: license.licensePlan);
+    final planName = billingPlanLabel(lang, licensePlan: license.licensePlan);
+    final style = BillingPlanVisual.fromLicensePlan(license.licensePlan);
     final validUntil = license.hasValidUntil()
         ? _formatTimestamp(license.validUntil)
         : lang.billingLifetime;
@@ -810,28 +811,54 @@ class _LicenseCard extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.only(bottom: kDefaultPadding),
-      child: Padding(
-        padding: const EdgeInsets.all(kDefaultPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: kDefaultPadding,
+              vertical: kDefaultPadding * 0.85,
+            ),
+            color: style.background,
+            child: Row(
               children: [
-                Text(
-                  planName,
-                  style: themeData.textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    planName,
+                    style: themeData.textTheme.titleMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: style.onBackground,
+                      letterSpacing:
+                          license.licensePlan == LicensePlan.PREMIUM ? 0.35 : 0,
+                    ),
                   ),
                 ),
-                const Spacer(),
                 Chip(
+                  backgroundColor:
+                      style.onBackground.withValues(alpha: 0.18),
+                  side: BorderSide(
+                    color: style.onBackground.withValues(alpha: 0.35),
+                  ),
                   label: Text(
                     '${license.maxUsers} ${lang.billingLicenses}',
-                    style: themeData.textTheme.bodyMedium,
+                    style: themeData.textTheme.bodyMedium!.copyWith(
+                      color: style.onBackground,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ],
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(kDefaultPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
             // Attribution status: plain text for state; primary button is the only CTA
             Padding(
               padding: const EdgeInsets.only(top: 8),
@@ -934,8 +961,10 @@ class _LicenseCard extends StatelessWidget {
                 style: themeData.textTheme.bodySmall,
               ),
             ),
-          ],
-        ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
