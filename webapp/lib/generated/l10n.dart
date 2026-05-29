@@ -827,6 +827,16 @@ class Lang {
     );
   }
 
+  /// `Password reset email sent.`
+  String get passwordResetEmailSent {
+    return Intl.message(
+      'Password reset email sent.',
+      name: 'passwordResetEmailSent',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `{count, plural, one{Form} other{Forms}}`
   String forms(num count) {
     return Intl.plural(
