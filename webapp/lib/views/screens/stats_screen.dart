@@ -40,6 +40,11 @@ class _StatsScreenState extends State<StatsScreen> {
         context.read<StatsServiceClientProvider>().statsServiceClient;
     final userPerms = context.read<PermissionProvider>().userPermissions;
 
+    final now = DateTime.now();
+    final start = now.subtract(const Duration(days: 30));
+    // Use end of day to ensure we don't miss very recent tickets
+    final end = DateTime(now.year, now.month, now.day, 23, 59, 59);
+
     final request = pb.FinancialChartRequest()
       ..firmId = userPerms.firmId
       ..boutiqueIds.addAll(_selectedBoutiqueIds.isNotEmpty
@@ -47,9 +52,8 @@ class _StatsScreenState extends State<StatsScreen> {
           : (userPerms.fullAccess.hasFullAccess
               ? []
               : userPerms.limitedAccess.boutiqueIds.ids))
-      ..start = pb.Timestamp.fromDateTime(
-          DateTime.now().subtract(const Duration(days: 30)))
-      ..end = pb.Timestamp.fromDateTime(DateTime.now())
+      ..start = pb.Timestamp.fromDateTime(start)
+      ..end = pb.Timestamp.fromDateTime(end)
       ..timePeriod = _selectedPeriod
       ..metric = _selectedMetric
       ..stackedByBoutique = _isStacked;
