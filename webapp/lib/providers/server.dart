@@ -143,3 +143,37 @@ class BillingServiceClientProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+class StatsServiceClientProvider extends ChangeNotifier {
+  final String _accessToken;
+  final GrpcWebClientChannel clientChannel;
+  StatsServiceClient _statsServiceClient;
+
+  StatsServiceClient get statsServiceClient => _statsServiceClient;
+
+  StatsServiceClientProvider(this.clientChannel, this._accessToken)
+      : _statsServiceClient = StatsServiceClient(
+          clientChannel,
+          options: callOptions,
+          interceptors: [
+            AuthInterceptor(_accessToken, isBffMode: Config.isBffMode),
+            UnauthenticatedInterceptor(),
+            OperationalLicenseGrpcInterceptor(),
+            RequestLogInterceptor(),
+          ],
+        );
+
+  set serviceClient(String value) {
+    _statsServiceClient = StatsServiceClient(
+      clientChannel,
+      options: callOptions,
+      interceptors: [
+        AuthInterceptor(value, isBffMode: Config.isBffMode),
+        UnauthenticatedInterceptor(),
+        OperationalLicenseGrpcInterceptor(),
+        RequestLogInterceptor(),
+      ],
+    );
+    notifyListeners();
+  }
+}

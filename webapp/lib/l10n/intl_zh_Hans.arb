@@ -111,6 +111,7 @@
   "menuDevices": "设备",
   "menuFirm": "我的企业",
   "menuScopeDisclaimer": "文章、联系人和操作（销售、采购、库存移动等）目前仅在移动应用中可用。",
+  "menuStats": "统计数据",
   "menuTickets": "票据",
   "menuUsers": "用户",
   "minErrorText": "此字段必须大于或等于{min}",

@@ -31,6 +31,7 @@ import 'package:web_admin/views/screens/help/help_screen.dart';
 import 'package:web_admin/views/screens/support/support_screen.dart';
 import 'package:web_admin/views/screens/about/about_screen.dart';
 import 'package:web_admin/views/screens/billing/billing_screen.dart';
+import 'package:web_admin/views/screens/stats_screen.dart';
 import 'package:web_admin/views/screens/legal/legal_document_screen.dart';
 
 class RouteUri {
@@ -72,6 +73,7 @@ class RouteUri {
   static const String about = '/about';
 
   static const String billing = '/billing';
+  static const String stats = '/stats';
 
   /// Stable URL for English Enterprise license terms (shareable, citeable).
   static const String legalTermsEn = '/legal/terms';
@@ -375,6 +377,15 @@ GoRouter appRouter(
           return NoTransitionPage<void>(
             key: state.pageKey,
             child: const BillingScreen(),
+          );
+        },
+      ),
+      GoRoute(
+        path: RouteUri.stats,
+        pageBuilder: (context, state) {
+          return NoTransitionPage<void>(
+            key: state.pageKey,
+            child: const StatsScreen(),
           );
         },
       ),

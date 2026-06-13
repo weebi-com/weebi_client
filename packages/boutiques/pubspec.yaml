@@ -15,7 +15,7 @@ dependencies:
   ##### 
   # weebi's kitchen below
   fl_country_code_picker_weebi: ^0.2.3
-  protos_weebi: ^1.3.2  # BusinessRules on Chain/BoutiquePb and ChainRequest
+  protos_weebi: ^1.3.5  # BusinessRules on Chain/BoutiquePb and ChainRequest
   auth_weebi: ^1.0.8  # also exports collection: ^1.19.1
   
   # State management

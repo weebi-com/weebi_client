@@ -129,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
       context: context,
       dialogType: AppDialogType.success,
       title: 'Success',
-      desc: lang.passwordResetEmailSent,
+      desc: Lang.of(context).passwordResetEmailSent,
       width: kDialogWidth,
       btnOkText: 'OK',
       btnOkOnPress: () {},

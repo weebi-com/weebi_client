@@ -14,7 +14,7 @@ dependencies:
     sdk: flutter
   ####
   # weebi's kitchen below
-  protos_weebi: ^1.3.2  # export fixnums and grpc
+  protos_weebi: ^1.3.5  # export fixnums and grpc
   auth_weebi: ^1.0.8
   boutiques_weebi: ^1.1.4
   

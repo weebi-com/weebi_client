@@ -1099,6 +1099,11 @@ class Lang {
     return Intl.message('Tickets', name: 'menuTickets', desc: '', args: []);
   }
 
+  /// `Statistics`
+  String get menuStats {
+    return Intl.message('Statistics', name: 'menuStats', desc: '', args: []);
+  }
+
   /// `Users`
   String get menuUsers {
     return Intl.message('Users', name: 'menuUsers', desc: '', args: []);

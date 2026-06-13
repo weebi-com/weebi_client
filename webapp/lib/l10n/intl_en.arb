@@ -125,6 +125,7 @@
   "menuDevices": "Devices",
   "menuFirm": "My enterprise",
   "menuScopeDisclaimer": "Articles, contacts and operations (sales, purchases, stock movements, etc.) are available in the mobile app for now.",
+  "menuStats": "Statistics",
   "menuTickets": "Tickets",
   "menuUsers": "Users",
   "minErrorText": "Value must be greater than or equal to {min}.",

@@ -16,7 +16,7 @@ dependencies:
   intl: any #^0.19.0
 
   grpc: ^4.0.1 # grpc_web not exported from protos_weebi
-  protos_weebi: ^1.3.4
+  protos_weebi: ^1.3.5
   auth_weebi: ^1.0.8
   entitlements_weebi: ^1.0.0
   boutiques_weebi: ^1.1.4
@@ -37,6 +37,7 @@ dependencies:
   file_picker: ^8.0.0
 
   http: ^1.2.0
+  flutter_svg: ^2.0.10+1
 
   package_info_plus: ^8.3.1
 
@@ -53,6 +54,8 @@ dev_dependencies:
   flutter_lints: ^3.0.0
 
 dependency_overrides:
+  protos_weebi:
+    path: ../../weebi_server/packages/protos/protos_weebi
   # rive_native 0.1.6 references Flutter semantics APIs that are not present in
   # the Docker image's pinned Flutter SDK.
 

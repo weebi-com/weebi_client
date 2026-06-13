@@ -48,7 +48,7 @@ class RootApp extends StatefulWidget {
 void _setDeviceProviderPermissions(
     BuildContext context, DeviceProvider deviceProvider) {
   try {
-    final permissions = context.read<AccessTokenProvider>().permissions;
+    final permissions = context.read<PermissionProvider>().userPermissions;
     deviceProvider.setUserPermissions(permissions);
   } catch (_) {
     // Token empty or invalid - permissions will stay unset
@@ -185,6 +185,18 @@ class _RootAppState extends State<RootApp> {
           ) =>
               provider2!..serviceClient = accessTokenProvider.accessToken,
         ),
+        ChangeNotifierProxyProvider<AccessTokenProvider,
+            StatsServiceClientProvider>(
+          create: (BuildContext context) => StatsServiceClientProvider(
+              GrpcWebClientChannelWeebi().clientChannel,
+              context.read<AccessTokenProvider>().accessToken),
+          update: (
+            BuildContext context,
+            AccessTokenProvider accessTokenProvider,
+            StatsServiceClientProvider? provider2,
+          ) =>
+              provider2!..serviceClient = accessTokenProvider.accessToken,
+        ),
         ChangeNotifierProxyProvider<FenceServiceClientProviderV2,
             CurrentUserProvider>(
           create: (context) => CurrentUserProvider(
@@ -203,9 +215,8 @@ class _RootAppState extends State<RootApp> {
             context.read<AccessTokenProvider>(),
           ),
           update: (context, accessToken, currentUser, permissionProvider) {
-            // Force PermissionProvider to notify listeners when CurrentUserProvider changes
-            // This ensures permissions are updated even in BFF mode
-            return permissionProvider!;
+            permissionProvider!.updateBffPermissions(currentUser.permissions);
+            return permissionProvider;
           },
         ),
         ChangeNotifierProxyProvider<FenceServiceClientProviderV2,
