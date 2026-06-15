@@ -16,12 +16,13 @@ class StatsScreen extends StatefulWidget {
 }
 
 class _StatsScreenState extends State<StatsScreen> {
-  late Future<pb.FinancialChartResponse> _chartFuture;
+  Future<pb.FinancialChartResponse>? _chartFuture;
   pb.FinancialChartMetric _selectedMetric =
       pb.FinancialChartMetric.CASHFLOW_INCOME;
   pb.ChartTimePeriod _selectedPeriod = pb.ChartTimePeriod.DAY;
   List<String> _selectedBoutiqueIds = [];
   bool _isStacked = false;
+  String _lastFirmId = '';
 
   @override
   void initState() {
@@ -40,9 +41,12 @@ class _StatsScreenState extends State<StatsScreen> {
         context.read<StatsServiceClientProvider>().statsServiceClient;
     final userPerms = context.read<PermissionProvider>().userPermissions;
 
+    if (userPerms.firmId.isEmpty) return;
+
     final now = DateTime.now();
-    final start = now.subtract(const Duration(days: 30));
-    // Use end of day to ensure we don't miss very recent tickets
+    // Use beginning of day for start and end of day for end
+    final start = DateTime(now.year, now.month, now.day)
+        .subtract(const Duration(days: 30));
     final end = DateTime(now.year, now.month, now.day, 23, 59, 59);
 
     final request = pb.FinancialChartRequest()
@@ -66,6 +70,18 @@ class _StatsScreenState extends State<StatsScreen> {
   @override
   Widget build(BuildContext context) {
     final boutiques = context.watch<BoutiqueProvider>().allBoutiques;
+    final userPerms = context.watch<PermissionProvider>().userPermissions;
+
+    if (userPerms.firmId.isNotEmpty && _lastFirmId != userPerms.firmId) {
+      _lastFirmId = userPerms.firmId;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _fetchChart());
+    }
+
+    if (userPerms.firmId.isEmpty) {
+      return const PortalMasterLayout(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
 
     return PortalMasterLayout(
       body: ListView(
@@ -125,6 +141,11 @@ class _StatsScreenState extends State<StatsScreen> {
                           _fetchChart();
                         },
                       ),
+                      IconButton(
+                        icon: const Icon(Icons.refresh),
+                        onPressed: _fetchChart,
+                        tooltip: 'Refresh Chart',
+                      ),
                     ],
                   ),
                   const SizedBox(height: kDefaultPadding),
@@ -168,7 +189,8 @@ class _StatsScreenState extends State<StatsScreen> {
                   FutureBuilder<pb.FinancialChartResponse>(
                     future: _chartFuture,
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
+                      if (_chartFuture == null ||
+                          snapshot.connectionState == ConnectionState.waiting) {
                         return const SizedBox(
                           height: 400,
                           child: Center(child: CircularProgressIndicator()),
