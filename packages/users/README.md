@@ -45,7 +45,7 @@ MaterialApp(
   routes: {
     '/': (context) => const MainScreen(),
     ...UserRoutes.getProviderRoutes(
-      getUserId: (context) => context.read<Gatekeeper>().userId, // Lazy evaluation!
+      getUserId: (context) => context.read<PermissionProvider>().userId, // Lazy evaluation!
     ),
   },
 )
@@ -109,7 +109,7 @@ UserListWidget(
 
 // Option B: Provider usage (with lazy evaluation)
 UserRoutes.buildProviderUserList(
-  getUserId: (context) => context.read<Gatekeeper>().userId,
+  getUserId: (context) => context.read<PermissionProvider>().userId,
 )
 ```
 

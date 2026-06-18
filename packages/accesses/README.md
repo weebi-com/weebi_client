@@ -60,7 +60,7 @@ import 'package:accesses_weebi/accesses_weebi.dart';
 MaterialApp(
   routes: {
     ...AccessRoutes.getProviderRoutes(
-      getCurrentUserId: (context) => context.read<Gatekeeper>().userId,
+      getCurrentUserId: (context) => context.read<PermissionProvider>().userId,
     ),
   },
 )

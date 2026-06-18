@@ -259,7 +259,7 @@ class UserRoutes {
   ///   routes: {
   ///     '/': (context) => const MainScreen(),
   ///     ...UserRoutes.getProviderRoutes(
-  ///       getUserId: (context) => context.read<Gatekeeper>().userId,
+  ///       getUserId: (context) => context.read<PermissionProvider>().userId,
   ///       onUserCreated: (context, user) => Navigator.push(context, MaterialPageRoute(
   ///         builder: (_) => UserAccessWidget(user: user),
   ///       )),
@@ -302,7 +302,7 @@ class UserRoutes {
   /// Usage:
   /// ```dart
   /// body: UserRoutes.buildProviderUserList(
-  ///   getUserId: (context) => context.read<Gatekeeper>().userId,
+  ///   getUserId: (context) => context.read<PermissionProvider>().userId,
   /// ),
   /// ```
   static Widget buildProviderUserList({

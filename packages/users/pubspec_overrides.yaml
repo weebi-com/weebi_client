@@ -1,4 +1,4 @@
-# melos_managed_dependency_overrides: auth_weebi, models_weebi, services_weebi, gatekeeper_weebi
+# melos_managed_dependency_overrides: auth_weebi, models_weebi, services_weebi
 dependency_overrides:
   auth_weebi:
     path: ..\\auth

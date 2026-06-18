@@ -27,7 +27,7 @@ class BoutiqueRoutes {
   /// ```dart
   /// routes: {
   ///   ...BoutiqueRoutes.getProviderRoutes(
-  ///     getUserPermissions: (context) => context.read<Gatekeeper>().userPermissions,
+  ///     getUserPermissions: (context) => context.read<PermissionProvider>().userPermissions,
   ///   ),
   /// }
   /// ```
@@ -391,7 +391,7 @@ class BoutiqueRoutes {
   /// Usage:
   /// ```dart
   /// body: BoutiqueRoutes.buildProviderBoutiqueList(
-  ///   getUserPermissions: (context) => context.read<Gatekeeper>().userPermissions,
+  ///   getUserPermissions: (context) => context.read<PermissionProvider>().userPermissions,
   /// ),
   /// ```
   static Widget buildProviderBoutiqueList({
