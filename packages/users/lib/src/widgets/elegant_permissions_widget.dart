@@ -41,7 +41,8 @@ class _ElegantPermissionsWidgetState extends State<ElegantPermissionsWidget> {
   void initState() {
     super.initState();
     _currentPermissions = UserPermissions.create()
-      ..mergeFromMessage(widget.permissions);
+      ..mergeFromMessage(widget.permissions)
+      ..ensureBoolRights();
   }
 
   @override
@@ -1007,37 +1008,39 @@ class _ElegantPermissionsWidgetState extends State<ElegantPermissionsWidget> {
       // Dynamically set the field value based on the field name
       switch (rightName) {
         case 'canSeeStats':
-          _currentPermissions.boolRights.canSeeStats = value;
+          _currentPermissions.ensureBoolRights().canSeeStats = value;
           break;
         case 'canExportData':
-          _currentPermissions.boolRights.canExportData = value;
+          _currentPermissions.ensureBoolRights().canExportData = value;
           break;
         case 'canGiveDiscount':
-          _currentPermissions.boolRights.canGiveDiscount = value;
+          _currentPermissions.ensureBoolRights().canGiveDiscount = value;
           break;
         case 'canSetPromo':
-          _currentPermissions.boolRights.canSetPromo = value;
+          _currentPermissions.ensureBoolRights().canSetPromo = value;
           break;
         case 'canStockMovement':
-          _currentPermissions.boolRights.canStockMovement = value;
+          _currentPermissions.ensureBoolRights().canStockMovement = value;
           break;
         case 'canStockInventory':
-          _currentPermissions.boolRights.canStockInventory = value;
+          _currentPermissions.ensureBoolRights().canStockInventory = value;
           break;
         case 'canSpendOutOfCatalog':
-          _currentPermissions.boolRights.canSpendOutOfCatalog = value;
+          _currentPermissions.ensureBoolRights().canSpendOutOfCatalog = value;
           break;
         case 'canPurchase':
-          _currentPermissions.boolRights.canPurchase = value;
+          _currentPermissions.ensureBoolRights().canPurchase = value;
           break;
         case 'canImportTickets':
-          _currentPermissions.boolRights.canImportTickets = value;
+          _currentPermissions.ensureBoolRights().canImportTickets = value;
           break;
         case 'canSellOutOfCatalog':
-          _currentPermissions.boolRights.canSellOutOfCatalog = value;
+          _currentPermissions.ensureBoolRights().canSellOutOfCatalog = value;
           break;
         case 'canUpdateContactBalanceOffline':
-          _currentPermissions.boolRights.canUpdateContactBalanceOffline = value;
+          _currentPermissions
+              .ensureBoolRights()
+              .canUpdateContactBalanceOffline = value;
           break;
       }
     });
