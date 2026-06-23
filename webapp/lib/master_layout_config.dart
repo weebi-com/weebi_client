@@ -49,7 +49,6 @@ final sidebarMenuConfigs = [
     uri: RouteUri.stats,
     icon: Icons.ssid_chart_rounded,
     title: (context) => Lang.of(context).menuStats,
-    isVisible: (context) => context.read<PermissionProvider>().canSeeStats,
   ),
   SidebarMenuConfig(
     uri: RouteUri.billing,

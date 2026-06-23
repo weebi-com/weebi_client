@@ -23,6 +23,7 @@ class _StatsScreenState extends State<StatsScreen> {
   List<String> _selectedBoutiqueIds = [];
   bool _isStacked = false;
   String _lastFirmId = '';
+  int _lastBoutiquesCount = 0;
 
   @override
   void initState() {
@@ -40,8 +41,11 @@ class _StatsScreenState extends State<StatsScreen> {
     final statsClient =
         context.read<StatsServiceClientProvider>().statsServiceClient;
     final userPerms = context.read<PermissionProvider>().userPermissions;
+    final boutiqueProvider = context.read<BoutiqueProvider>();
 
     if (userPerms.firmId.isEmpty) return;
+
+    _lastFirmId = userPerms.firmId;
 
     final now = DateTime.now();
     // Use beginning of day for start and end of day for end
@@ -49,13 +53,24 @@ class _StatsScreenState extends State<StatsScreen> {
         .subtract(const Duration(days: 30));
     final end = DateTime(now.year, now.month, now.day, 23, 59, 59);
 
+    final List<String> boutiqueIds;
+    if (_selectedBoutiqueIds.isNotEmpty) {
+      boutiqueIds = _selectedBoutiqueIds;
+    } else {
+      final allBoutiqueIds =
+          boutiqueProvider.allBoutiques.map((b) => b.boutiqueId).toList();
+      if (allBoutiqueIds.isNotEmpty) {
+        boutiqueIds = allBoutiqueIds;
+      } else {
+        boutiqueIds = userPerms.fullAccess.hasFullAccess
+            ? []
+            : userPerms.limitedAccess.boutiqueIds.ids;
+      }
+    }
+
     final request = pb.FinancialChartRequest()
       ..firmId = userPerms.firmId
-      ..boutiqueIds.addAll(_selectedBoutiqueIds.isNotEmpty
-          ? _selectedBoutiqueIds
-          : (userPerms.fullAccess.hasFullAccess
-              ? []
-              : userPerms.limitedAccess.boutiqueIds.ids))
+      ..boutiqueIds.addAll(boutiqueIds)
       ..start = pb.Timestamp.fromDateTime(start)
       ..end = pb.Timestamp.fromDateTime(end)
       ..timePeriod = _selectedPeriod
@@ -72,7 +87,15 @@ class _StatsScreenState extends State<StatsScreen> {
     final boutiques = context.watch<BoutiqueProvider>().allBoutiques;
     final userPerms = context.watch<PermissionProvider>().userPermissions;
 
-    if (userPerms.firmId.isNotEmpty && _lastFirmId != userPerms.firmId) {
+    final boutiquesChanged = boutiques.length != _lastBoutiquesCount;
+    if (boutiquesChanged) {
+      _lastBoutiquesCount = boutiques.length;
+    }
+
+    if (userPerms.firmId.isNotEmpty &&
+        (_lastFirmId != userPerms.firmId ||
+            _chartFuture == null ||
+            (boutiquesChanged && _selectedBoutiqueIds.isEmpty))) {
       _lastFirmId = userPerms.firmId;
       WidgetsBinding.instance.addPostFrameCallback((_) => _fetchChart());
     }

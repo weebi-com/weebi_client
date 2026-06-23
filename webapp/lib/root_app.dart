@@ -22,7 +22,6 @@ import 'package:web_admin/providers/tickets_boutique_cache.dart';
 import 'package:web_admin/providers/user_data_provider.dart';
 import 'package:web_admin/utils/app_focus_helper.dart';
 
-import 'core/constants/values.dart';
 import 'package:accesses_weebi/accesses_weebi.dart' show AccessProvider;
 import 'package:auth_weebi/auth_weebi.dart'
     show
@@ -94,21 +93,15 @@ class _RootAppState extends State<RootApp> {
               previous ?? PersistedTokenProvider(auth),
         ),
 
-        Provider<AccessTokenObject>(
-          create: (context) {
-            final access = AccessTokenObject();
-            access.value = context
-                    .read<SharedPreferences>()
-                    .getString(SharePrefKeys.accessToken) ??
-                '';
-            return access;
+        ChangeNotifierProxyProvider<UserDataProvider, AccessTokenProvider>(
+          create: (context) => AccessTokenProvider(AccessTokenObject()),
+          update: (context, userData, accessProvider) {
+            if (userData.accessToken != accessProvider!.accessToken) {
+              accessProvider.accessToken = userData.accessToken;
+            }
+            return accessProvider;
           },
         ),
-        ChangeNotifierProxyProvider<AccessTokenObject, AccessTokenProvider>(
-            create: (context) =>
-                AccessTokenProvider(context.read<AccessTokenObject>()),
-            update: (context, access, accessProvider) =>
-                accessProvider!..accessToken = access.value),
 
         //
         ChangeNotifierProxyProvider<AccessTokenProvider,
@@ -205,7 +198,15 @@ class _RootAppState extends State<RootApp> {
           update: (context, fenceProvider, previous) {
             final provider = previous ??
                 CurrentUserProvider(fenceProvider.fenceServiceClient);
-            provider.fenceServiceClient = fenceProvider.fenceServiceClient;
+            if (provider.fenceServiceClient !=
+                fenceProvider.fenceServiceClient) {
+              provider.fenceServiceClient = fenceProvider.fenceServiceClient;
+              if (context.read<AccessTokenProvider>().accessToken.isNotEmpty) {
+                // Trigger load when client changes (e.g. after login)
+                // Use microtask to avoid notifying during build
+                Future.microtask(() => provider.load());
+              }
+            }
             return provider;
           },
         ),
@@ -215,8 +216,11 @@ class _RootAppState extends State<RootApp> {
             context.read<AccessTokenProvider>(),
           ),
           update: (context, accessToken, currentUser, permissionProvider) {
-            permissionProvider!.updateBffPermissions(currentUser.permissions);
-            return permissionProvider;
+            final provider = permissionProvider!;
+            if (currentUser.user != null) {
+              provider.updateBffPermissions(currentUser.permissions);
+            }
+            return provider;
           },
         ),
         ChangeNotifierProxyProvider<FenceServiceClientProviderV2,
@@ -224,23 +228,51 @@ class _RootAppState extends State<RootApp> {
           create: (context) => BoutiqueProvider(
             context.read<FenceServiceClientProviderV2>().fenceServiceClient,
           ),
-          update: (context, fenceProvider, previous) =>
-              BoutiqueProvider(fenceProvider.fenceServiceClient),
+          update: (context, fenceProvider, previous) {
+            if (previous != null &&
+                previous.fenceServiceClient ==
+                    fenceProvider.fenceServiceClient) {
+              return previous;
+            }
+            final provider = BoutiqueProvider(fenceProvider.fenceServiceClient);
+            if (context.read<AccessTokenProvider>().accessToken.isNotEmpty) {
+              Future.microtask(() => provider.loadChains());
+            }
+            return provider;
+          },
         ),
         ChangeNotifierProxyProvider<FenceServiceClientProviderV2,
             TicketsBoutiqueCache>(
           create: (context) => TicketsBoutiqueCache(
             context.read<FenceServiceClientProviderV2>().fenceServiceClient,
           ),
-          update: (context, fenceProvider, previous) =>
-              TicketsBoutiqueCache(fenceProvider.fenceServiceClient),
+          update: (context, fenceProvider, previous) {
+            if (previous != null &&
+                previous.isLoaded &&
+                // ignore: invalid_use_of_protected_member
+                previous.allIds.isNotEmpty) {
+              // If already loaded, we might want to keep it or refresh
+              // For now, let's just reuse if client is same
+            }
+            final cache = TicketsBoutiqueCache(fenceProvider.fenceServiceClient);
+            if (context.read<AccessTokenProvider>().accessToken.isNotEmpty) {
+              Future.microtask(() => cache.loadIfNeeded());
+            }
+            return cache;
+          },
         ),
         ChangeNotifierProxyProvider<FenceServiceClientProviderV2, UserProvider>(
           create: (context) => UserProvider(
             context.read<FenceServiceClientProviderV2>().fenceServiceClient,
           ),
-          update: (context, fenceProvider, previous) =>
-              UserProvider(fenceProvider.fenceServiceClient),
+          update: (context, fenceProvider, previous) {
+            if (previous != null) return previous;
+            final provider = UserProvider(fenceProvider.fenceServiceClient);
+            if (context.read<AccessTokenProvider>().accessToken.isNotEmpty) {
+              Future.microtask(() => provider.loadUsers());
+            }
+            return provider;
+          },
         ),
         ChangeNotifierProxyProvider2<UserProvider, BoutiqueProvider,
             AccessProvider>(
@@ -248,11 +280,14 @@ class _RootAppState extends State<RootApp> {
             userProvider: context.read<UserProvider>(),
             boutiqueProvider: context.read<BoutiqueProvider>(),
           ),
-          update: (context, userProvider, boutiqueProvider, previous) =>
-              AccessProvider(
-            userProvider: userProvider,
-            boutiqueProvider: boutiqueProvider,
-          ),
+          update: (context, userProvider, boutiqueProvider, previous) {
+            if (previous != null) return previous;
+            final provider = AccessProvider(
+              userProvider: userProvider,
+              boutiqueProvider: boutiqueProvider,
+            );
+            return provider;
+          },
         ),
         ChangeNotifierProxyProvider<FenceServiceClientProviderV2,
             DeviceProvider>(
@@ -265,6 +300,10 @@ class _RootAppState extends State<RootApp> {
             return dp;
           },
           update: (context, fenceProvider, previous) {
+            if (previous != null) {
+              _setDeviceProviderPermissions(context, previous);
+              return previous;
+            }
             final dp = DeviceProvider(
               fenceProvider.fenceServiceClient,
               useServerPermissions: Config.isBffMode,
@@ -301,23 +340,6 @@ class _RootAppState extends State<RootApp> {
                   context.read<SharedPreferences>())),
               builder: (context, snapshot) {
                 if (snapshot.hasData && snapshot.data!) {
-                  // Sync token from SharedPreferences (UserDataProvider) to AccessTokenProvider
-                  // so the boutiques/users packages use it for gRPC calls.
-                  WidgetsBinding.instance.addPostFrameCallback((_) async {
-                    if (context.mounted) {
-                      final token =
-                          context.read<UserDataProvider>().accessToken;
-                      if (token.isNotEmpty) {
-                        context.read<AccessTokenProvider>().accessToken = token;
-                      }
-                      // In BFF mode, load current user to get permissions from session
-                      if (Config.isBffMode) {
-                        final currentUserProvider = context.read<CurrentUserProvider>();
-                        await currentUserProvider.load();
-                        // CurrentUserProvider will notify listeners when load completes
-                      }
-                    }
-                  });
                   return Consumer<AppPreferencesProvider>(
                     builder: (context, provider, child) {
                       _appRouter ??= appRouter(context.read<UserDataProvider>(),

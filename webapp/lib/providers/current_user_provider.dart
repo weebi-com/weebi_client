@@ -15,6 +15,7 @@ class CurrentUserProvider extends ChangeNotifier {
       _user?.permissions ?? UserPermissions.create();
   String get userId => _user?.userId ?? permissions.userId;
   String get firmId => permissions.firmId;
+  FenceServiceClient get fenceServiceClient => _fenceServiceClient;
 
   set fenceServiceClient(FenceServiceClient value) {
     _fenceServiceClient = value;
