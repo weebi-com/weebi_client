@@ -21,11 +21,11 @@ dependencies:
   entitlements_weebi: ^1.0.0
   boutiques_weebi: ^1.1.4
     #path: ../weebi/packages/boutiques
-  users_weebi: ^1.0.9
+  users_weebi: ^1.1.1
     # path: ../weebi/packages/users
   accesses_weebi: ^1.0.8
   devices_weebi: ^1.0.8
-  design_weebi: ^0.1.3
+  design_weebi: ^0.1.5
 
   shared_preferences: ^2.2.2
   provider: ^6.1.2

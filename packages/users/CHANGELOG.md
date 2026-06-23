@@ -1,5 +1,9 @@
 # changelog 
 
+## 1.1.1
+
+- fix boolRights update
+
 ## 1.1.0
 
 - keep android false
