@@ -253,8 +253,14 @@ class _StatsScreenState extends State<StatsScreen> {
                           child: Center(child: Text(lang.statsNoDataAvailable)),
                         );
                       }
+                      String svg = snapshot.data!.svgContent;
+                      for (final b in boutiques) {
+                        if (b.boutiqueId.isNotEmpty && b.name.isNotEmpty) {
+                          svg = svg.replaceAll(b.boutiqueId, b.name);
+                        }
+                      }
                       return SvgPicture.string(
-                        snapshot.data!.svgContent,
+                        svg,
                         width: double.infinity,
                         height: 400,
                       );
