@@ -15,7 +15,6 @@
 /packages/charts_weebi/melos_charts_weebi.iml
 /packages/design/melos_design_weebi.iml
 /packages/devices/melos_devices_weebi.iml
-/packages/gatekeeper/melos_gatekeeper_weebi.iml
 /packages/users/melos_users_weebi.iml
 /packages/PUBLISHING_GUIDE.md
 /webapp/.metadata
@@ -140,3 +139,6 @@ webapp/pubspec.lock
 /webapp/RUNME.md
 /packages/entitlements/melos_entitlements_weebi.iml
 /docs/commercial-model.md
+webapp/WIDGET_TESTS_README.md
+/webapp/agent/API_URL.md
+webapp/agent/WIDGET_TESTS_README.md

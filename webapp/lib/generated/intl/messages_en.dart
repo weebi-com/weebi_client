@@ -131,6 +131,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingPaymentSuccess": MessageLookupByLibrary.simpleMessage(
       "Payment accepted. One or more licenses were purchased successfully: you can assign seats to the relevant users.",
     ),
+    "billingPerUser": MessageLookupByLibrary.simpleMessage("per user"),
+    "billingPlanEntreprise": MessageLookupByLibrary.simpleMessage(
+      "Weebi Entreprise",
+    ),
+    "billingPlanPremium": MessageLookupByLibrary.simpleMessage("Weebi Premium"),
     "billingPurchase": MessageLookupByLibrary.simpleMessage("Purchase"),
     "billingPurchaseLicense": MessageLookupByLibrary.simpleMessage(
       "Purchase a license",
@@ -154,13 +159,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingViewFullTerms": MessageLookupByLibrary.simpleMessage(
       "Terms and Conditions of Sale",
     ),
-    "billingPlanEntreprise": MessageLookupByLibrary.simpleMessage(
-      "Weebi Entreprise",
-    ),
-    "billingPlanPremium": MessageLookupByLibrary.simpleMessage(
-      "Weebi Premium",
-    ),
-    "billingPerUser": MessageLookupByLibrary.simpleMessage("per user"),
     "buttonEmphasis": MessageLookupByLibrary.simpleMessage("Button Emphasis"),
     "buttons": m0,
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
@@ -309,6 +307,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "menuScopeDisclaimer": MessageLookupByLibrary.simpleMessage(
       "Articles, contacts and operations (sales, purchases, stock movements, etc.) are available in the mobile app for now.",
     ),
+    "menuStats": MessageLookupByLibrary.simpleMessage("Statistics"),
     "menuTickets": MessageLookupByLibrary.simpleMessage("Tickets"),
     "menuUsers": MessageLookupByLibrary.simpleMessage("Users"),
     "minErrorText": m9,
@@ -338,6 +337,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "passwordNotMatch": MessageLookupByLibrary.simpleMessage(
       "Password not match.",
     ),
+    "passwordResetEmailSent": MessageLookupByLibrary.simpleMessage(
+      "Password reset email sent.",
+    ),
     "pendingIssues": m15,
     "recentOrders": m16,
     "recordDeletedSuccessfully": MessageLookupByLibrary.simpleMessage(
@@ -361,6 +363,29 @@ class MessageLookup extends MessageLookupByLibrary {
     "retypePassword": MessageLookupByLibrary.simpleMessage("Retype Password"),
     "save": MessageLookupByLibrary.simpleMessage("Save"),
     "search": MessageLookupByLibrary.simpleMessage("Search"),
+    "statsAll": MessageLookupByLibrary.simpleMessage("All"),
+    "statsMetricAllIncome": MessageLookupByLibrary.simpleMessage("All Income"),
+    "statsMetricAllSpending": MessageLookupByLibrary.simpleMessage(
+      "All Spending",
+    ),
+    "statsMetricCashflowIncome": MessageLookupByLibrary.simpleMessage(
+      "Cashflow Income",
+    ),
+    "statsMetricCashflowSpending": MessageLookupByLibrary.simpleMessage(
+      "Cashflow Spending",
+    ),
+    "statsNoDataAvailable": MessageLookupByLibrary.simpleMessage(
+      "No data available",
+    ),
+    "statsPeriodDay": MessageLookupByLibrary.simpleMessage("Day"),
+    "statsPeriodMonth": MessageLookupByLibrary.simpleMessage("Month"),
+    "statsPeriodWeek": MessageLookupByLibrary.simpleMessage("Week"),
+    "statsSelectBoutiques": MessageLookupByLibrary.simpleMessage(
+      "Select Boutiques:",
+    ),
+    "statsStackedByBoutique": MessageLookupByLibrary.simpleMessage(
+      "Stacked by Boutique",
+    ),
     "submit": MessageLookupByLibrary.simpleMessage("Submit"),
     "support": MessageLookupByLibrary.simpleMessage("Support"),
     "supportChatWhatsApp": MessageLookupByLibrary.simpleMessage(

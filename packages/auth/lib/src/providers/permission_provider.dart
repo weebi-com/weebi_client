@@ -19,6 +19,7 @@ import '../utils/permissions_helper.dart';
 class PermissionProvider extends ChangeNotifier {
   final AccessTokenProvider _accessTokenProvider;
   final UserPermissions _defaultPermissions;
+  UserPermissions? _bffPermissions;
 
   PermissionProvider(
     this._accessTokenProvider, {
@@ -32,16 +33,22 @@ class PermissionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Update permissions for BFF mode (where permissions come from server session)
+  void updateBffPermissions(UserPermissions permissions) {
+    _bffPermissions = permissions;
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     _accessTokenProvider.removeListener(_onTokenChanged);
     super.dispose();
   }
 
-  /// Get user permissions from token (works offline!)
+  /// Get user permissions from token or BFF override
   /// Falls back to default permissions when no token exists
   UserPermissions get userPermissions => 
-      hasToken ? _accessTokenProvider.permissions : _defaultPermissions;
+      _bffPermissions ?? (hasToken ? _accessTokenProvider.permissions : _defaultPermissions);
 
   /// Check if user has any token at all
   bool get hasToken => _accessTokenProvider.accessToken.isNotEmpty;
@@ -150,4 +157,3 @@ class PermissionProvider extends ChangeNotifier {
     };
   }
 }
-

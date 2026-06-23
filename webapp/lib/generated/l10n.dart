@@ -361,12 +361,7 @@ class Lang {
 
   /// `per user`
   String get billingPerUser {
-    return Intl.message(
-      'per user',
-      name: 'billingPerUser',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('per user', name: 'billingPerUser', desc: '', args: []);
   }
 
   /// `You don't have permission to manage licenses. Ask your enterprise administrator to grant you billing access.`
@@ -827,6 +822,16 @@ class Lang {
     );
   }
 
+  /// `Password reset email sent.`
+  String get passwordResetEmailSent {
+    return Intl.message(
+      'Password reset email sent.',
+      name: 'passwordResetEmailSent',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `{count, plural, one{Form} other{Forms}}`
   String forms(num count) {
     return Intl.plural(
@@ -1082,6 +1087,11 @@ class Lang {
       desc: '',
       args: [],
     );
+  }
+
+  /// `Statistics`
+  String get menuStats {
+    return Intl.message('Statistics', name: 'menuStats', desc: '', args: []);
   }
 
   /// `Tickets`
@@ -1382,6 +1392,96 @@ class Lang {
       desc: '',
       args: [],
     );
+  }
+
+  /// `Stacked by Boutique`
+  String get statsStackedByBoutique {
+    return Intl.message(
+      'Stacked by Boutique',
+      name: 'statsStackedByBoutique',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Boutiques:`
+  String get statsSelectBoutiques {
+    return Intl.message(
+      'Select Boutiques:',
+      name: 'statsSelectBoutiques',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All`
+  String get statsAll {
+    return Intl.message('All', name: 'statsAll', desc: '', args: []);
+  }
+
+  /// `No data available`
+  String get statsNoDataAvailable {
+    return Intl.message(
+      'No data available',
+      name: 'statsNoDataAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cashflow Income`
+  String get statsMetricCashflowIncome {
+    return Intl.message(
+      'Cashflow Income',
+      name: 'statsMetricCashflowIncome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cashflow Spending`
+  String get statsMetricCashflowSpending {
+    return Intl.message(
+      'Cashflow Spending',
+      name: 'statsMetricCashflowSpending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All Income`
+  String get statsMetricAllIncome {
+    return Intl.message(
+      'All Income',
+      name: 'statsMetricAllIncome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All Spending`
+  String get statsMetricAllSpending {
+    return Intl.message(
+      'All Spending',
+      name: 'statsMetricAllSpending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Day`
+  String get statsPeriodDay {
+    return Intl.message('Day', name: 'statsPeriodDay', desc: '', args: []);
+  }
+
+  /// `Week`
+  String get statsPeriodWeek {
+    return Intl.message('Week', name: 'statsPeriodWeek', desc: '', args: []);
+  }
+
+  /// `Month`
+  String get statsPeriodMonth {
+    return Intl.message('Month', name: 'statsPeriodMonth', desc: '', args: []);
   }
 
   /// `Text`

@@ -152,6 +152,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         width: summaryCardWidth,
                       ),
                     ),
+                    _HoverableTile(
+                      onTap: () => GoRouter.of(context).go(RouteUri.stats),
+                      child: SummaryCard(
+                        title: lang.todaySales,
+                        value: 'Stats',
+                        icon: Icons.ssid_chart_rounded,
+                        backgroundColor: appColorScheme.success,
+                        textColor: themeData.colorScheme.onPrimary,
+                        iconColor: Colors.black12,
+                        width: summaryCardWidth,
+                      ),
+                    ),
 
                     // NOT READY YET
 /*                     InkWell(

@@ -1,9 +1,9 @@
+import 'package:auth_weebi/auth_weebi.dart' show PermissionProvider;
 import 'package:accesses_weebi/accesses_weebi.dart' show AccessProvider;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:protos_weebi/grpc.dart';
 import 'package:entitlements_weebi/entitlements_weebi.dart';
-import 'package:users_weebi/weebi_users.dart' show AccessTokenProvider;
 import 'package:protos_weebi/protos_weebi_io.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../l10n/access_ui_strings.dart';
@@ -196,7 +196,7 @@ class _UserAccessWidgetState extends State<UserAccessWidget> {
 
   bool _canCurrentUserUpdatePasswords(BuildContext context) {
     try {
-      final permissions = context.read<AccessTokenProvider>().permissions;
+      final permissions = context.read<PermissionProvider>().userPermissions;
       final map = permissions.toProto3Json() as Map<String, dynamic>;
       final um = map['userManagementRights'] as Map<String, dynamic>?;
       final dynamic raw = um?['canUpdateUserPassword'];

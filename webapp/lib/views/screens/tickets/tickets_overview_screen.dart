@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:auth_weebi/auth_weebi.dart' show AccessTokenProvider;
+import 'package:auth_weebi/auth_weebi.dart' show AccessTokenProvider, PermissionProvider;
 import 'package:boutiques_weebi/boutiques_weebi.dart' show BoutiqueProvider;
 import 'package:design_weebi/design_weebi.dart';
 import 'package:flutter/foundation.dart';
@@ -106,7 +106,7 @@ class _TicketsOverviewScreenState extends State<TicketsOverviewScreen> {
       if (!mounted) return;
       final userId = Config.isBffMode
           ? currentUser?.userId ?? ''
-          : context.read<AccessTokenProvider>().permissions.userId;
+          : context.read<PermissionProvider>().userPermissions.userId;
       final hasSeat = SeatCapability.ticketsBoutiqueViewsUnlocked(
         userId,
         res.licenses,
@@ -153,7 +153,7 @@ class _TicketsOverviewScreenState extends State<TicketsOverviewScreen> {
       return firmId.isNotEmpty ? firmId : null;
     }
 
-    final firmId = context.read<AccessTokenProvider>().permissions.firmId;
+    final firmId = context.read<PermissionProvider>().userPermissions.firmId;
     if (firmId.isNotEmpty) return firmId;
     return null;
   }

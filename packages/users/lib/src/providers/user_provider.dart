@@ -31,9 +31,11 @@ class UserProvider extends ChangeNotifier {
   /// Generates a secure random password for new users
   /// Password will be encrypted by server and user must change on first login
   String _generateSecureRandomPassword() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#&*';
+    const chars =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#&*';
     final random = DateTime.now().millisecondsSinceEpoch;
-    return List.generate(6, (index) => chars[(random + index) % chars.length]).join();
+    return List.generate(6, (index) => chars[(random + index) % chars.length])
+        .join();
   }
 
   /// Loads all users
@@ -91,7 +93,7 @@ class UserProvider extends ChangeNotifier {
         ..permissions = user.permissions
         ..phone = user.phone
         ..password = _generateSecureRandomPassword();
-      
+
       final response = await _fenceServiceClient.createPendingUser(pendingUser);
 
       // Get the complete user from the server response (includes userId)
@@ -103,7 +105,7 @@ class UserProvider extends ChangeNotifier {
 
       // Refresh the full list to ensure backend sync
       await loadUsers();
-      
+
       return createdUser; // Return the user with userId
     } on GrpcError catch (e) {
       _error = '${e.code} ${e.message}';
@@ -314,7 +316,9 @@ class UserProvider extends ChangeNotifier {
         // Check if user has permissions field
         if (user.hasPermissions()) {
           print('UserProvider: User has permissions - loading them');
-          return user.permissions;
+          return UserPermissions.create()
+            ..mergeFromMessage(user.permissions)
+            ..ensureBoolRights();
         } else {
           print('UserProvider: User has no permissions field - using fallback');
           return null;
