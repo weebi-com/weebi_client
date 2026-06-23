@@ -132,6 +132,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingPaymentSuccess": MessageLookupByLibrary.simpleMessage(
       "Paiement accepté. Une ou plusieurs licences ont bien été achetées : vous pouvez les attribuer aux utilisateurs concernés.",
     ),
+    "billingPerUser": MessageLookupByLibrary.simpleMessage("par utilisateur"),
+    "billingPlanEntreprise": MessageLookupByLibrary.simpleMessage(
+      "Weebi Entreprise",
+    ),
+    "billingPlanPremium": MessageLookupByLibrary.simpleMessage("Weebi Premium"),
     "billingPurchase": MessageLookupByLibrary.simpleMessage("Acheter"),
     "billingPurchaseLicense": MessageLookupByLibrary.simpleMessage(
       "Acheter une licence",
@@ -157,13 +162,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingViewFullTerms": MessageLookupByLibrary.simpleMessage(
       "Conditions Générales de Vente",
     ),
-    "billingPlanEntreprise": MessageLookupByLibrary.simpleMessage(
-      "Weebi Entreprise",
-    ),
-    "billingPlanPremium": MessageLookupByLibrary.simpleMessage(
-      "Weebi Premium",
-    ),
-    "billingPerUser": MessageLookupByLibrary.simpleMessage("par utilisateur"),
     "buttonEmphasis": MessageLookupByLibrary.simpleMessage(
       "Accentuation du Bouton",
     ),
@@ -322,6 +320,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "menuScopeDisclaimer": MessageLookupByLibrary.simpleMessage(
       "Les articles, contacts et opérations (ventes, achats, mouvements de stock, etc.) sont uniquement disponibles sur l\'application de caisse pour l\'instant.",
     ),
+    "menuStats": MessageLookupByLibrary.simpleMessage("Statistiques"),
     "menuTickets": MessageLookupByLibrary.simpleMessage("Tickets"),
     "menuUsers": MessageLookupByLibrary.simpleMessage("Utilisateurs"),
     "minErrorText": m9,
@@ -353,6 +352,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "passwordNotMatch": MessageLookupByLibrary.simpleMessage(
       "Les mots de passe ne correspondent pas.",
     ),
+    "passwordResetEmailSent": MessageLookupByLibrary.simpleMessage(
+      "L\'e-mail de réinitialisation du mot de passe a été envoyé.",
+    ),
     "pendingIssues": m15,
     "recentOrders": m16,
     "recordDeletedSuccessfully": MessageLookupByLibrary.simpleMessage(
@@ -378,6 +380,31 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "save": MessageLookupByLibrary.simpleMessage("Sauvegarder"),
     "search": MessageLookupByLibrary.simpleMessage("Rechercher"),
+    "statsAll": MessageLookupByLibrary.simpleMessage("Toutes"),
+    "statsMetricAllIncome": MessageLookupByLibrary.simpleMessage(
+      "Recettes (toutes)",
+    ),
+    "statsMetricAllSpending": MessageLookupByLibrary.simpleMessage(
+      "Dépenses (toutes)",
+    ),
+    "statsMetricCashflowIncome": MessageLookupByLibrary.simpleMessage(
+      "Encaissements",
+    ),
+    "statsMetricCashflowSpending": MessageLookupByLibrary.simpleMessage(
+      "Décaissements",
+    ),
+    "statsNoDataAvailable": MessageLookupByLibrary.simpleMessage(
+      "Aucune donnée disponible",
+    ),
+    "statsPeriodDay": MessageLookupByLibrary.simpleMessage("Jour"),
+    "statsPeriodMonth": MessageLookupByLibrary.simpleMessage("Mois"),
+    "statsPeriodWeek": MessageLookupByLibrary.simpleMessage("Semaine"),
+    "statsSelectBoutiques": MessageLookupByLibrary.simpleMessage(
+      "Sélectionner les Boutiques :",
+    ),
+    "statsStackedByBoutique": MessageLookupByLibrary.simpleMessage(
+      "Empilé par Boutique",
+    ),
     "submit": MessageLookupByLibrary.simpleMessage("Soumettre"),
     "support": MessageLookupByLibrary.simpleMessage("Support"),
     "supportChatWhatsApp": MessageLookupByLibrary.simpleMessage(

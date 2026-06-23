@@ -1,7 +1,5 @@
-import 'package:auth_weebi/auth_weebi.dart' show PermissionProvider;
 import 'package:design_weebi/design_weebi.dart' show IconsWeebi;
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:web_admin/app_router.dart';
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';

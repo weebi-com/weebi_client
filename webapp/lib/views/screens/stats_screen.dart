@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:protos_weebi/protos_weebi_io.dart' as pb;
+import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/providers/server.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
 import 'package:web_admin/core/constants/dimens.dart';
@@ -86,6 +87,7 @@ class _StatsScreenState extends State<StatsScreen> {
   Widget build(BuildContext context) {
     final boutiques = context.watch<BoutiqueProvider>().allBoutiques;
     final userPerms = context.watch<PermissionProvider>().userPermissions;
+    final lang = Lang.of(context);
 
     final boutiquesChanged = boutiques.length != _lastBoutiquesCount;
     if (boutiquesChanged) {
@@ -111,7 +113,7 @@ class _StatsScreenState extends State<StatsScreen> {
         padding: const EdgeInsets.all(kDefaultPadding),
         children: [
           Text(
-            'Statistics',
+            lang.menuStats,
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: kDefaultPadding),
@@ -135,9 +137,20 @@ class _StatsScreenState extends State<StatsScreen> {
                           }
                         },
                         items: pb.FinancialChartMetric.values.map((m) {
+                          final label = switch (m) {
+                            pb.FinancialChartMetric.CASHFLOW_INCOME =>
+                              lang.statsMetricCashflowIncome,
+                            pb.FinancialChartMetric.CASHFLOW_SPENDING =>
+                              lang.statsMetricCashflowSpending,
+                            pb.FinancialChartMetric.ALL_INCOME =>
+                              lang.statsMetricAllIncome,
+                            pb.FinancialChartMetric.ALL_SPENDING =>
+                              lang.statsMetricAllSpending,
+                            _ => m.name,
+                          };
                           return DropdownMenuItem(
                             value: m,
-                            child: Text(m.name),
+                            child: Text(label),
                           );
                         }).toList(),
                       ),
@@ -150,14 +163,20 @@ class _StatsScreenState extends State<StatsScreen> {
                           }
                         },
                         items: pb.ChartTimePeriod.values.map((p) {
+                          final label = switch (p) {
+                            pb.ChartTimePeriod.DAY => lang.statsPeriodDay,
+                            pb.ChartTimePeriod.WEEK => lang.statsPeriodWeek,
+                            pb.ChartTimePeriod.MONTH => lang.statsPeriodMonth,
+                            _ => p.name,
+                          };
                           return DropdownMenuItem(
                             value: p,
-                            child: Text(p.name),
+                            child: Text(label),
                           );
                         }).toList(),
                       ),
                       FilterChip(
-                        label: const Text('Stacked by Boutique'),
+                        label: Text(lang.statsStackedByBoutique),
                         selected: _isStacked,
                         onSelected: (value) {
                           setState(() => _isStacked = value);
@@ -167,20 +186,20 @@ class _StatsScreenState extends State<StatsScreen> {
                       IconButton(
                         icon: const Icon(Icons.refresh),
                         onPressed: _fetchChart,
-                        tooltip: 'Refresh Chart',
+                        tooltip: lang.refreshAction,
                       ),
                     ],
                   ),
                   const SizedBox(height: kDefaultPadding),
-                  const Text('Select Boutiques:',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(lang.statsSelectBoutiques,
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
                     children: [
                       FilterChip(
-                        label: const Text('All'),
+                        label: Text(lang.statsAll),
                         selected: _selectedBoutiqueIds.isEmpty,
                         onSelected: (selected) {
                           if (selected) {
@@ -222,14 +241,16 @@ class _StatsScreenState extends State<StatsScreen> {
                       if (snapshot.hasError) {
                         return SizedBox(
                           height: 400,
-                          child: Center(child: Text('Error: ${snapshot.error}')),
+                          child: Center(
+                              child: Text(
+                                  '${lang.firmErrorUnexpected}: ${snapshot.error}')),
                         );
                       }
                       if (!snapshot.hasData ||
                           snapshot.data!.svgContent.isEmpty) {
-                        return const SizedBox(
+                        return SizedBox(
                           height: 400,
-                          child: Center(child: Text('No data available')),
+                          child: Center(child: Text(lang.statsNoDataAvailable)),
                         );
                       }
                       return SvgPicture.string(

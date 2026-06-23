@@ -1,8 +1,6 @@
 import 'package:design_weebi/design_weebi.dart' show IconsWeebi;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:auth_weebi/auth_weebi.dart' show PermissionProvider;
 import 'package:web_admin/app_router.dart';
 import 'package:web_admin/core/constants/dimens.dart';
 import 'package:web_admin/core/theme/theme_extensions/app_color_scheme.dart';

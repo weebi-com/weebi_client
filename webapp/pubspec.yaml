@@ -1,7 +1,7 @@
 name: web_admin
 description: Weebi Web Admin
 publish_to: 'none'
-version: 1.0.5
+version: 1.0.6
 
 environment:
   sdk: '>=3.3.3 <4.0.0'
@@ -50,7 +50,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
+  intl_utils: ^2.8.7
   flutter_lints: ^3.0.0
 
 dependency_overrides:
