@@ -54,8 +54,8 @@ dev_dependencies:
   flutter_lints: ^3.0.0
 
 dependency_overrides:
-  protos_weebi:
-    path: ../../weebi_server/packages/protos/protos_weebi
+  #protos_weebi:
+  #  path: ../../weebi_server/packages/protos/protos_weebi
   # rive_native 0.1.6 references Flutter semantics APIs that are not present in
   # the Docker image's pinned Flutter SDK.
 
