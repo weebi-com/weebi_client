@@ -25,8 +25,16 @@ class SessionRecoveryBinding {
   }
 
   void noteIfUnauthenticated(Object error) {
-    if (error is! grpc.GrpcError ||
-        error.code != grpc.StatusCode.unauthenticated) {
+    if (error is! grpc.GrpcError) {
+      return;
+    }
+
+    final isUnauthenticated = error.code == grpc.StatusCode.unauthenticated ||
+        (error.code == grpc.StatusCode.internal &&
+            error.message != null &&
+            error.message!.contains('UNAUTHENTICATED'));
+
+    if (!isUnauthenticated) {
       return;
     }
 
