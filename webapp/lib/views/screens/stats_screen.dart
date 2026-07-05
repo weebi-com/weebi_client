@@ -7,6 +7,7 @@ import 'package:web_admin/providers/server.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
 import 'package:web_admin/core/constants/dimens.dart';
 import 'package:auth_weebi/auth_weebi.dart';
+import 'package:web_admin/providers/current_user_provider.dart';
 import 'package:boutiques_weebi/boutiques_weebi.dart' show BoutiqueProvider;
 
 class StatsScreen extends StatefulWidget {
@@ -85,6 +86,7 @@ class _StatsScreenState extends State<StatsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = context.watch<CurrentUserProvider>();
     final boutiques = context.watch<BoutiqueProvider>().allBoutiques;
     final userPerms = context.watch<PermissionProvider>().userPermissions;
     final lang = Lang.of(context);
@@ -103,8 +105,30 @@ class _StatsScreenState extends State<StatsScreen> {
     }
 
     if (userPerms.firmId.isEmpty) {
-      return const PortalMasterLayout(
-        body: Center(child: CircularProgressIndicator()),
+      if (currentUser.isLoading) {
+        return const PortalMasterLayout(
+          body: Center(child: CircularProgressIndicator()),
+        );
+      }
+      return PortalMasterLayout(
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(kDefaultPadding),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(currentUser.error != null
+                    ? '${lang.firmErrorUnexpected}: ${currentUser.error}'
+                    : lang.billingNoAccess),
+                const SizedBox(height: kDefaultPadding),
+                ElevatedButton(
+                  onPressed: () => currentUser.load(force: true),
+                  child: Text(lang.billingRetry),
+                ),
+              ],
+            ),
+          ),
+        ),
       );
     }
 
