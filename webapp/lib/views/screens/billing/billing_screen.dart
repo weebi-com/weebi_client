@@ -435,11 +435,30 @@ class _BillingScreenState extends State<BillingScreen> {
     if (!hasPermission) {
       if (Config.isBffMode) {
         final currentUser = context.read<CurrentUserProvider>();
-        if (currentUser.user == null) {
+        if (currentUser.isLoading ||
+            (currentUser.user == null && currentUser.error == null)) {
           // User data still loading; show spinner instead of "no access"
           return PortalMasterLayout(
             body: const Center(
               child: CircularProgressIndicator(),
+            ),
+          );
+        }
+
+        if (currentUser.error != null) {
+          return PortalMasterLayout(
+            body: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('${lang.firmErrorUnexpected}: ${currentUser.error}'),
+                  const SizedBox(height: kDefaultPadding),
+                  ElevatedButton(
+                    onPressed: () => currentUser.load(force: true),
+                    child: Text(lang.billingRetry),
+                  ),
+                ],
+              ),
             ),
           );
         }
