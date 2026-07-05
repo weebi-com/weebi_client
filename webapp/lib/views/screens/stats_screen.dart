@@ -89,6 +89,7 @@ class _StatsScreenState extends State<StatsScreen> {
     final currentUser = context.watch<CurrentUserProvider>();
     final boutiques = context.watch<BoutiqueProvider>().allBoutiques;
     final userPerms = context.watch<PermissionProvider>().userPermissions;
+    final statsProvider = context.watch<StatsServiceClientProvider>();
     final lang = Lang.of(context);
 
     final boutiquesChanged = boutiques.length != _lastBoutiquesCount;
@@ -119,11 +120,11 @@ class _StatsScreenState extends State<StatsScreen> {
               children: [
                 Text(currentUser.error != null
                     ? '${lang.firmErrorUnexpected}: ${currentUser.error}'
-                    : lang.billingNoAccess),
+                    : lang.statsNoAccess),
                 const SizedBox(height: kDefaultPadding),
                 ElevatedButton(
                   onPressed: () => currentUser.load(force: true),
-                  child: Text(lang.billingRetry),
+                  child: Text(lang.refreshAction),
                 ),
               ],
             ),

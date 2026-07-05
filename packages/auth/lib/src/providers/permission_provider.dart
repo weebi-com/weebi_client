@@ -53,6 +53,9 @@ class PermissionProvider extends ChangeNotifier {
   /// Check if user has any token at all
   bool get hasToken => _accessTokenProvider.accessToken.isNotEmpty;
 
+  /// Check if user is considered authenticated (either via JWT token or BFF session)
+  bool get isAuthenticated => hasToken || _bffPermissions != null;
+
   /// Context properties from token
   String get firmId => userPermissions.firmId;
   String get userId => userPermissions.userId;
@@ -60,14 +63,84 @@ class PermissionProvider extends ChangeNotifier {
   // === Generic Permission Check ===
   
   /// Check if user has a specific permission
-  /// Uses PermissionsHelper for string-based checks
   /// Example: hasPermission('article_create')
   bool hasPermission(String permission) {
-    if (!hasToken) return false;
-    return PermissionsHelper.hasPermission(
-      _accessTokenProvider.accessToken,
-      permission,
-    );
+    if (!isAuthenticated) return false;
+    
+    final permissions = userPermissions;
+    
+    // Check boolean rights
+    if (permissions.hasBoolRights()) {
+      final boolRights = permissions.boolRights;
+      switch (permission) {
+        case 'canSeeStats':
+          return boolRights.canSeeStats;
+        case 'canExportData':
+          return boolRights.canExportData;
+        case 'canGiveDiscount':
+          return boolRights.canGiveDiscount;
+        case 'canSetPromo':
+          return boolRights.canSetPromo;
+        case 'canStockMovement':
+          return boolRights.canStockMovement;
+        case 'canStockInventory':
+          return boolRights.canStockInventory;
+        case 'canSpendOutOfCatalog':
+          return boolRights.canSpendOutOfCatalog;
+        case 'canPurchase':
+          return boolRights.canPurchase;
+        case 'canImportTickets':
+          return boolRights.canImportTickets;
+        case 'canSellOutOfCatalog':
+          return boolRights.canSellOutOfCatalog;
+        case 'canUpdateContactBalanceOffline':
+          return boolRights.canUpdateContactBalanceOffline;
+      }
+    }
+
+    // Check CRUD rights for different resources
+    if (permission.startsWith('article_')) {
+      return _hasResourceRight(permissions.articleRights.rights, permission.substring(8));
+    }
+    if (permission.startsWith('boutique_')) {
+      return _hasResourceRight(permissions.boutiqueRights.rights, permission.substring(9));
+    }
+    if (permission.startsWith('ticket_')) {
+      return _hasResourceRight(permissions.ticketRights.rights, permission.substring(7));
+    }
+    if (permission.startsWith('chain_')) {
+      return _hasResourceRight(permissions.chainRights.rights, permission.substring(6));
+    }
+    if (permission.startsWith('firm_')) {
+      return _hasResourceRight(permissions.firmRights.rights, permission.substring(5));
+    }
+    if (permission.startsWith('contact_')) {
+      return _hasResourceRight(permissions.contactRights.rights, permission.substring(8));
+    }
+    if (permission.startsWith('userManagement_')) {
+      return _hasResourceRight(permissions.userManagementRights.rights, permission.substring(15));
+    }
+    if (permission.startsWith('billing_')) {
+      return _hasResourceRight(permissions.billingRights.rights, permission.substring(8));
+    }
+
+    return false;
+  }
+
+  /// Helper method to check if user has a specific right for a resource
+  bool _hasResourceRight(List<Right> rights, String operation) {
+    switch (operation) {
+      case 'create':
+        return rights.contains(Right.create);
+      case 'read':
+        return rights.contains(Right.read);
+      case 'update':
+        return rights.contains(Right.update);
+      case 'delete':
+        return rights.contains(Right.delete);
+      default:
+        return false;
+    }
   }
 
   // === Article Rights (using extension) ===

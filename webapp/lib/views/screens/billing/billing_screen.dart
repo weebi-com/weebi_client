@@ -52,6 +52,7 @@ class _BillingScreenState extends State<BillingScreen> {
   bool _acceptedEnterpriseTerms = false;
   bool _licensePurchaseConfirmedLogged = false;
   bool _checkoutCanceledLogged = false;
+  bool _dataLoaded = false;
 
   /// Check if user has billing read permission from either JWT or session (BFF mode)
   bool _hasReadBillingPermission(BuildContext context) {
@@ -164,6 +165,7 @@ class _BillingScreenState extends State<BillingScreen> {
     setState(() {
       _loading = true;
       _errorMessage = null;
+      _dataLoaded = true;
     });
 
     try {
@@ -205,6 +207,7 @@ class _BillingScreenState extends State<BillingScreen> {
         setState(() {
           _loading = false;
           _errorMessage = e.message ?? 'An error occurred';
+          _dataLoaded = false;
         });
       }
     } catch (e) {
@@ -212,6 +215,7 @@ class _BillingScreenState extends State<BillingScreen> {
         setState(() {
           _loading = false;
           _errorMessage = e.toString();
+          _dataLoaded = false;
         });
       }
     }
@@ -426,15 +430,22 @@ class _BillingScreenState extends State<BillingScreen> {
     final themeData = Theme.of(context);
     final appColorScheme = themeData.extension<AppColorScheme>()!;
     final lang = Lang.of(context);
-    
+
+    final permissionProvider = context.watch<PermissionProvider>();
+    final currentUser = context.watch<CurrentUserProvider>();
+    final billingProvider = context.watch<BillingServiceClientProvider>();
+
     // Check permissions from both JWT and session (BFF mode)
     final hasPermission = _hasReadBillingPermission(context);
-    
+
+    if (hasPermission && !_dataLoaded && !_loading) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _loadData());
+    }
+
     // In BFF mode, if user is loaded but has no permission, show error.
     // If user is still loading, show spinner to avoid false "no access" message.
     if (!hasPermission) {
       if (Config.isBffMode) {
-        final currentUser = context.read<CurrentUserProvider>();
         if (currentUser.isLoading ||
             (currentUser.user == null && currentUser.error == null)) {
           // User data still loading; show spinner instead of "no access"

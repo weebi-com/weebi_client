@@ -374,6 +374,16 @@ class Lang {
     );
   }
 
+  /// `You don't have permission to view statistics. Ask your enterprise administrator to grant you access.`
+  String get statsNoAccess {
+    return Intl.message(
+      'You don\'t have permission to view statistics. Ask your enterprise administrator to grant you access.',
+      name: 'statsNoAccess',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `You don't have permission for this action.`
   String get billingActionNotPermitted {
     return Intl.message(

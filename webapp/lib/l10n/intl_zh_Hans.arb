@@ -35,6 +35,7 @@
   "billingPlanPremium": "Weebi 高级版",
   "billingPerUser": "每位用户",
   "billingNoAccess": "您没有管理许可证的权限。请联系企业管理员为您开通账单相关权限。",
+  "statsNoAccess": "您没有查看统计数据的权限。请联系企业管理员为您开通权限。",
   "billingActionNotPermitted": "您没有执行此操作的权限。",
   "buttonEmphasis": "按钮强调",
   "buttons": "{count, plural, one{按钮} other{按钮}}",
