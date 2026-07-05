@@ -201,8 +201,8 @@ class _RootAppState extends State<RootApp> {
             if (provider.fenceServiceClient !=
                 fenceProvider.fenceServiceClient) {
               provider.fenceServiceClient = fenceProvider.fenceServiceClient;
-              if (context.read<AccessTokenProvider>().accessToken.isNotEmpty) {
-                // Trigger load when client changes (e.g. after login)
+              if (context.read<UserDataProvider>().isUserLoggedIn()) {
+                // Trigger load when client changes (e.g. after login or on startup in BFF mode)
                 // Use microtask to avoid notifying during build
                 Future.microtask(() => provider.load());
               }
