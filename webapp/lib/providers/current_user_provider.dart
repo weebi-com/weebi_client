@@ -34,15 +34,14 @@ class CurrentUserProvider extends ChangeNotifier {
         .then((response) {
       _user = response.user;
       _error = null;
-      notifyListeners();
       return _user;
     }).catchError((Object e) {
       _error = e;
       _user = null;
-      notifyListeners();
       throw e;
     }).whenComplete(() {
       _loading = null;
+      notifyListeners();
     });
 
     return _loading!;

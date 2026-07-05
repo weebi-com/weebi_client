@@ -190,12 +190,12 @@ class _RootAppState extends State<RootApp> {
           ) =>
               provider2!..serviceClient = accessTokenProvider.accessToken,
         ),
-        ChangeNotifierProxyProvider<FenceServiceClientProviderV2,
+        ChangeNotifierProxyProvider2<FenceServiceClientProviderV2, UserDataProvider,
             CurrentUserProvider>(
           create: (context) => CurrentUserProvider(
             context.read<FenceServiceClientProviderV2>().fenceServiceClient,
           ),
-          update: (context, fenceProvider, previous) {
+          update: (context, fenceProvider, userData, previous) {
             final provider = previous ??
                 CurrentUserProvider(fenceProvider.fenceServiceClient);
 
@@ -206,11 +206,18 @@ class _RootAppState extends State<RootApp> {
               provider.fenceServiceClient = fenceProvider.fenceServiceClient;
             }
 
-            // Trigger load on initial creation OR when client changes, if logged in
-            if ((previous == null || clientChanged) &&
-                context.read<UserDataProvider>().isUserLoggedIn()) {
-              // Use microtask to avoid notifying during build
-              Future.microtask(() => provider.load());
+            // Trigger load on initial creation OR when client changes OR when user data changes, if logged in
+            if (userData.isUserLoggedIn()) {
+              final shouldLoad = previous == null ||
+                  clientChanged ||
+                  (provider.user == null &&
+                      !provider.isLoading &&
+                      provider.error == null);
+
+              if (shouldLoad) {
+                // Use microtask to avoid notifying during build
+                Future.microtask(() => provider.load(force: clientChanged));
+              }
             }
 
             return provider;
@@ -229,52 +236,51 @@ class _RootAppState extends State<RootApp> {
             return provider;
           },
         ),
-        ChangeNotifierProxyProvider<FenceServiceClientProviderV2,
+        ChangeNotifierProxyProvider2<FenceServiceClientProviderV2, UserDataProvider,
             BoutiqueProvider>(
           create: (context) => BoutiqueProvider(
             context.read<FenceServiceClientProviderV2>().fenceServiceClient,
           ),
-          update: (context, fenceProvider, previous) {
-            if (previous != null &&
-                previous.fenceServiceClient ==
-                    fenceProvider.fenceServiceClient) {
-              return previous;
-            }
-            final provider = BoutiqueProvider(fenceProvider.fenceServiceClient);
-            if (context.read<AccessTokenProvider>().accessToken.isNotEmpty) {
+          update: (context, fenceProvider, userData, previous) {
+            final provider = (previous != null &&
+                    previous.fenceServiceClient ==
+                        fenceProvider.fenceServiceClient)
+                ? previous
+                : BoutiqueProvider(fenceProvider.fenceServiceClient);
+
+            if (userData.isUserLoggedIn() && provider.allBoutiques.isEmpty) {
               Future.microtask(() => provider.loadChains());
             }
             return provider;
           },
         ),
-        ChangeNotifierProxyProvider<FenceServiceClientProviderV2,
-            TicketsBoutiqueCache>(
+        ChangeNotifierProxyProvider2<FenceServiceClientProviderV2,
+            UserDataProvider, TicketsBoutiqueCache>(
           create: (context) => TicketsBoutiqueCache(
             context.read<FenceServiceClientProviderV2>().fenceServiceClient,
           ),
-          update: (context, fenceProvider, previous) {
-            if (previous != null &&
-                previous.isLoaded &&
-                // ignore: invalid_use_of_protected_member
-                previous.allIds.isNotEmpty) {
-              // If already loaded, we might want to keep it or refresh
-              // For now, let's just reuse if client is same
-            }
-            final cache = TicketsBoutiqueCache(fenceProvider.fenceServiceClient);
-            if (context.read<AccessTokenProvider>().accessToken.isNotEmpty) {
+          update: (context, fenceProvider, userData, previous) {
+            final cache = (previous != null &&
+                    // ignore: invalid_use_of_protected_member
+                    previous.allIds.isNotEmpty)
+                ? previous
+                : TicketsBoutiqueCache(fenceProvider.fenceServiceClient);
+
+            if (userData.isUserLoggedIn()) {
               Future.microtask(() => cache.loadIfNeeded());
             }
             return cache;
           },
         ),
-        ChangeNotifierProxyProvider<FenceServiceClientProviderV2, UserProvider>(
+        ChangeNotifierProxyProvider2<FenceServiceClientProviderV2,
+            UserDataProvider, UserProvider>(
           create: (context) => UserProvider(
             context.read<FenceServiceClientProviderV2>().fenceServiceClient,
           ),
-          update: (context, fenceProvider, previous) {
-            if (previous != null) return previous;
-            final provider = UserProvider(fenceProvider.fenceServiceClient);
-            if (context.read<AccessTokenProvider>().accessToken.isNotEmpty) {
+          update: (context, fenceProvider, userData, previous) {
+            final provider =
+                previous ?? UserProvider(fenceProvider.fenceServiceClient);
+            if (userData.isUserLoggedIn() && provider.users.isEmpty) {
               Future.microtask(() => provider.loadUsers());
             }
             return provider;

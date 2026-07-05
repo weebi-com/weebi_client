@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
 import 'package:provider/provider.dart';
 import 'package:web_admin/providers/server.dart';
+import 'package:web_admin/providers/user_data_provider.dart';
 
 /// Loads firm licences for attribution indicators (user list, detail, accesses, create-user).
 ///
@@ -13,8 +14,8 @@ import 'package:web_admin/providers/server.dart';
 /// often have no billing tab, but still need licence status; the billing RPC enforces
 /// authorization server-side. On failure, returns `null` and widgets omit licence UI.
 Future<Iterable<License>?> loadFirmLicensesIfPermitted(BuildContext context) async {
-  final perm = context.read<PermissionProvider>();
-  if (!perm.hasToken) return null;
+  final userData = context.read<UserDataProvider>();
+  if (!userData.isUserLoggedIn()) return null;
   try {
     final response = await context
         .read<BillingServiceClientProvider>()

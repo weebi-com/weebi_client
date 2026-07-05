@@ -393,6 +393,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "statsMetricCashflowSpending": MessageLookupByLibrary.simpleMessage(
       "Décaissements",
     ),
+    "statsNoAccess": MessageLookupByLibrary.simpleMessage(
+      "Vous n\'avez pas l\'autorisation de consulter les statistiques. Demandez à l\'administrateur de votre entreprise de vous accorder l\'accès.",
+    ),
     "statsNoDataAvailable": MessageLookupByLibrary.simpleMessage(
       "Aucune donnée disponible",
     ),

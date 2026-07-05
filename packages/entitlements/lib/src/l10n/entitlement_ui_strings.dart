@@ -64,7 +64,7 @@ abstract final class EntitlementUiStrings {
       'Attribuez une licence pour un usage complet et les fonctionnalités avancées.';
 
   /// Portail licences et crédits (Weebi Cloud).
-  static const String cloudLicensesPortalUrl = 'https://cloud.weebi.com/#/licenses';
+  static const String cloudLicensesPortalUrl = 'https://cloud.weebi.com/#/billing';
 
   static const String accessOperationalLicenseOpenBilling =
       'Licences et crédits Weebi';

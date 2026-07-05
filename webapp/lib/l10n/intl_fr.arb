@@ -18,6 +18,7 @@
   "billingLifetime": "À vie",
   "billingMyLicenses": "Mes licences",
   "billingNoAccess": "Vous n'avez pas l'autorisation de gérer les licences. Demandez à l'administrateur de votre entreprise de vous accorder l'accès.",
+  "statsNoAccess": "Vous n'avez pas l'autorisation de consulter les statistiques. Demandez à l'administrateur de votre entreprise de vous accorder l'accès.",
   "billingNotYetAttributed": "Pas encore attribuée(s)",
   "billingNoUsersAvailable": "Aucun utilisateur à attribuer. Ajoutez des utilisateurs dans Utilisateurs d'abord.",
   "billingPaymentProcessing": "Paiement reçu. Votre ou vos licences apparaîtront sous peu ; vous pourrez ensuite attribuer les places aux utilisateurs.",

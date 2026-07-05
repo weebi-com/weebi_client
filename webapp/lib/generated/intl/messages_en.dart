@@ -374,6 +374,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "statsMetricCashflowSpending": MessageLookupByLibrary.simpleMessage(
       "Cashflow Spending",
     ),
+    "statsNoAccess": MessageLookupByLibrary.simpleMessage(
+      "You don\'t have permission to view statistics. Ask your enterprise administrator to grant you access.",
+    ),
     "statsNoDataAvailable": MessageLookupByLibrary.simpleMessage(
       "No data available",
     ),

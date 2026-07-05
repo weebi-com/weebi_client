@@ -279,6 +279,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "statsMetricAllSpending": MessageLookupByLibrary.simpleMessage("总支出"),
     "statsMetricCashflowIncome": MessageLookupByLibrary.simpleMessage("现金流入"),
     "statsMetricCashflowSpending": MessageLookupByLibrary.simpleMessage("现金流出"),
+    "statsNoAccess": MessageLookupByLibrary.simpleMessage(
+      "您没有查看统计数据的权限。请联系企业管理员为您开通权限。",
+    ),
     "statsNoDataAvailable": MessageLookupByLibrary.simpleMessage("暂无数据"),
     "statsPeriodDay": MessageLookupByLibrary.simpleMessage("日"),
     "statsPeriodMonth": MessageLookupByLibrary.simpleMessage("月"),

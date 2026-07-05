@@ -35,6 +35,7 @@
   "billingPlanPremium": "Weebi Premium",
   "billingPerUser": "per user",
   "billingNoAccess": "You don't have permission to manage licenses. Ask your enterprise administrator to grant you billing access.",
+  "statsNoAccess": "You don't have permission to view statistics. Ask your enterprise administrator to grant you access.",
   "billingActionNotPermitted": "You don't have permission for this action.",
   "buttonEmphasis": "Button Emphasis",
   "buttons": "{count, plural, one{Button} other{Buttons}}",
