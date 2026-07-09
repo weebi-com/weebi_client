@@ -12,8 +12,22 @@ class UserProvider extends ChangeNotifier {
   UserPublic? _selectedUser;
   bool _isLoading = false;
   String? _error;
+  bool _isDisposed = false;
 
   UserProvider(this._fenceServiceClient);
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  @override
+  void notifyListeners() {
+    if (!_isDisposed) {
+      super.notifyListeners();
+    }
+  }
 
   // Getters
   List<UserPublic> get users => _users;

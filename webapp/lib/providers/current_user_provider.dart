@@ -10,6 +10,7 @@ class CurrentUserProvider extends ChangeNotifier {
   UserPublic? _user;
   Future<UserPublic?>? _loading;
   Object? _error;
+  bool _isDisposed = false;
 
   UserPublic? get user => _user;
   Object? get error => _error;
@@ -19,6 +20,19 @@ class CurrentUserProvider extends ChangeNotifier {
   String get userId => _user?.userId ?? permissions.userId;
   String get firmId => permissions.firmId;
   FenceServiceClient get fenceServiceClient => _fenceServiceClient;
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  @override
+  void notifyListeners() {
+    if (!_isDisposed) {
+      super.notifyListeners();
+    }
+  }
 
   set fenceServiceClient(FenceServiceClient value) {
     _fenceServiceClient = value;

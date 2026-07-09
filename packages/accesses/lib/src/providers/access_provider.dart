@@ -15,12 +15,26 @@ class AccessProvider extends ChangeNotifier {
   // Loading states
   bool _isLoading = false;
   String? _error;
+  bool _isDisposed = false;
 
   AccessProvider({
     required UserProvider userProvider,
     required BoutiqueProvider boutiqueProvider,
   })  : _userProvider = userProvider,
         _boutiqueProvider = boutiqueProvider;
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  @override
+  void notifyListeners() {
+    if (!_isDisposed) {
+      super.notifyListeners();
+    }
+  }
 
   // Getters
   bool get isLoading => _isLoading;

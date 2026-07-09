@@ -14,8 +14,22 @@ class BoutiqueProvider extends ChangeNotifier {
   BoutiqueMongo? _selectedBoutique;
   bool _isLoading = false;
   String? _error;
+  bool _isDisposed = false;
 
   BoutiqueProvider(this._fenceServiceClient);
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  @override
+  void notifyListeners() {
+    if (!_isDisposed) {
+      super.notifyListeners();
+    }
+  }
 
   // Getters
   List<Chain> get chains => _chains;
