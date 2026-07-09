@@ -110,7 +110,11 @@ class SessionRecoveryCoordinator {
   Future<bool> _refreshTokens() async {
     try {
       final tokens = await _authService.authenticateWithRefreshToken();
-      if (tokens.accessToken.isEmpty) return false;
+      if (Config.isBffMode) {
+        if (tokens.sessionId.isEmpty) return false;
+      } else {
+        if (tokens.accessToken.isEmpty) return false;
+      }
 
       accessTokenProvider.accessToken = tokens.accessToken;
       await persistedTokenProvider.setAndUpsertAccessToken(tokens.accessToken);
