@@ -166,7 +166,10 @@ class AuthService {
             );
 
       final response = await stub.authenticateWithRefreshToken(
-        RefreshToken(refreshToken: refreshToken),
+        RefreshToken(
+          refreshToken: refreshToken,
+          isWebApp: Config.isBffMode,
+        ),
         options: options,
       );
 
