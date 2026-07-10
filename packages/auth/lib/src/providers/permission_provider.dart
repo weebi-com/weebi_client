@@ -7,7 +7,6 @@ import 'package:protos_weebi/protos_weebi_io.dart';
 // Project imports:
 import 'access_token_provider.dart';
 import '../extensions/user_permissions_extensions.dart';
-import '../utils/permissions_helper.dart';
 
 /// Provider for managing user permissions from JWT token
 /// Single source of truth for permissions - reads from AccessTokenProvider
