@@ -6,6 +6,7 @@ class SharePrefKeys {
   static const String mail = 'MAIL';
   static const String accessToken = 'ACCESS_TOKEN';
   static const String refreshToken = 'REFRESH_TOKEN';
+  static const String bffSessionId = 'BFF_SESSION_ID';
   static const String userProfileImageUrl = 'USER_PROFILE_IMAGE_URL';
   static const String fxRateBackupPrefix = 'FX_RATE_BACKUP_';
 }

@@ -6,6 +6,7 @@ import 'package:boutiques_weebi/boutiques_weebi.dart' show BoutiqueProvider;
 import 'package:flutter/foundation.dart';
 import 'package:grpc/grpc.dart' as grpc;
 import 'package:web_admin/core/services/auth_service.dart';
+import 'package:web_admin/core/session/bff_session_store.dart';
 import 'package:web_admin/environment.dart';
 import 'package:web_admin/providers/current_user_provider.dart';
 import 'package:web_admin/providers/operational_license_gate.dart';
@@ -92,7 +93,11 @@ class SessionRecoveryCoordinator {
   }
 
   Future<void> ensureSessionForRequest(Map<String, String> metadata) async {
-    if (Config.isBffMode && accessTokenProvider.accessToken.isEmpty) {
+    if (Config.isBffMode) {
+      final sessionId = await BffSessionStore.getSessionId();
+      if (sessionId != null && sessionId.isNotEmpty) {
+        metadata['x-session-id'] = sessionId;
+      }
       return;
     }
 
@@ -123,22 +128,25 @@ class SessionRecoveryCoordinator {
       final tokens = await _authService.authenticateWithRefreshToken();
       if (Config.isBffMode) {
         if (tokens.sessionId.isEmpty) return false;
+        await BffSessionStore.setSessionId(tokens.sessionId);
       } else {
         if (tokens.accessToken.isEmpty) return false;
       }
 
-      accessTokenProvider.accessToken = tokens.accessToken;
-      await persistedTokenProvider.setAndUpsertAccessToken(tokens.accessToken);
-      await userDataProvider.setUserDataAsync(
-        accessToken: tokens.accessToken,
-        refreshToken:
-            tokens.refreshToken.isNotEmpty ? tokens.refreshToken : null,
-      );
-
-      if (tokens.refreshToken.isNotEmpty) {
-        await persistedTokenProvider.setAndUpsertRefreshToken(
-          tokens.refreshToken,
+      if (!Config.isBffMode) {
+        accessTokenProvider.accessToken = tokens.accessToken;
+        await persistedTokenProvider.setAndUpsertAccessToken(tokens.accessToken);
+        await userDataProvider.setUserDataAsync(
+          accessToken: tokens.accessToken,
+          refreshToken:
+              tokens.refreshToken.isNotEmpty ? tokens.refreshToken : null,
         );
+
+        if (tokens.refreshToken.isNotEmpty) {
+          await persistedTokenProvider.setAndUpsertRefreshToken(
+            tokens.refreshToken,
+          );
+        }
       }
 
       currentUserProvider.clear();
@@ -155,6 +163,7 @@ class SessionRecoveryCoordinator {
 
     try {
       await userDataProvider.clearSessionDataAsync();
+      await BffSessionStore.clear();
       accessTokenProvider.clearAccessToken();
       await persistedTokenProvider.clearAccessToken();
       await persistedTokenProvider.clearRefreshToken();

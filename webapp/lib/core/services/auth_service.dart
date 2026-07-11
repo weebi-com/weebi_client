@@ -4,6 +4,7 @@ import 'package:protos_weebi/grpc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_admin/environment.dart';
 import 'package:web_admin/grpc/server.dart';
+import 'package:web_admin/core/session/bff_session_store.dart';
 import '../models/sign_in_result.dart';
 import '../models/sign_up_result.dart';
 import 'grpc_client_service.dart';
@@ -52,11 +53,15 @@ class AuthService {
       );
 
       await _saveTokens(response.accessToken, response.refreshToken);
+      if (Config.isBffMode && response.sessionId.isNotEmpty) {
+        await BffSessionStore.setSessionId(response.sessionId);
+      }
 
       return SignInResult(
         success: true,
         message: "",
         accessToken: response.accessToken,
+        sessionId: response.sessionId,
       );
     } catch (e) {
       return _handleSignInError(e);
@@ -157,13 +162,15 @@ class AuthService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final accessToken = prefs.getString(SharePrefKeys.accessToken);
-      final refreshToken = prefs.getString(SharePrefKeys.refreshToken);
+      final refreshToken = prefs.getString(SharePrefKeys.refreshToken) ?? '';
 
-      final options = Config.isBffMode || accessToken == null
-          ? callOptions
-          : callOptions.mergedWith(
-              CallOptions(metadata: {'authorization': accessToken}),
-            );
+      final options = Config.isBffMode
+          ? securedCallOptions
+          : accessToken == null || accessToken.isEmpty
+              ? callOptions
+              : securedCallOptions.mergedWith(
+                  CallOptions(metadata: {'authorization': accessToken}),
+                );
 
       final response = await stub.authenticateWithRefreshToken(
         RefreshToken(
@@ -172,6 +179,10 @@ class AuthService {
         ),
         options: options,
       );
+
+      if (Config.isBffMode && response.sessionId.isNotEmpty) {
+        await BffSessionStore.setSessionId(response.sessionId);
+      }
 
       return response;
     } catch (e) {

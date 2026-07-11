@@ -498,6 +498,7 @@ class _BillingScreenState extends State<BillingScreen> {
         _billingQueryParams()['success'] == 'true' && !_loading;
 
     return PortalMasterLayout(
+      key: const Key('billingScreen'),
       body: ListView(
         padding: const EdgeInsets.all(kDefaultPadding),
         children: [

@@ -203,6 +203,7 @@ class _StatsScreenState extends State<StatsScreen> {
     }
 
     return PortalMasterLayout(
+      key: const Key('statsScreen'),
       body: RefreshIndicator(
         onRefresh: () async {
           _fetchChart();

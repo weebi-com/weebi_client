@@ -103,6 +103,7 @@ class UserDataProvider extends ChangeNotifier {
     await sharedPref.remove(SharePrefKeys.userProfileImageUrl);
     await sharedPref.remove(SharePrefKeys.accessToken);
     await sharedPref.remove(SharePrefKeys.refreshToken);
+    await sharedPref.remove(SharePrefKeys.bffSessionId);
 
     _firstname = '';
     _lastname = '';
