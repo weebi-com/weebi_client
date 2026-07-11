@@ -24,21 +24,31 @@ class SessionRecoveryBinding {
     _coordinator = coordinator;
   }
 
-  void noteIfUnauthenticated(Object error) {
+  bool isUnauthenticated(Object error) {
     if (error is! grpc.GrpcError) {
-      return;
+      return false;
     }
 
-    final isUnauthenticated = error.code == grpc.StatusCode.unauthenticated ||
+    return error.code == grpc.StatusCode.unauthenticated ||
         (error.code == grpc.StatusCode.internal &&
             error.message != null &&
             error.message!.contains('UNAUTHENTICATED'));
+  }
 
-    if (!isUnauthenticated) {
-      return;
+  void noteIfUnauthenticated(Object error) {
+    if (isUnauthenticated(error)) {
+      unawaited(_coordinator?.recoverFromUnauthenticated());
     }
+  }
 
-    unawaited(_coordinator?.recoverFromUnauthenticated());
+  Future<bool> recoverFromUnauthenticated() async {
+    if (_coordinator == null) return false;
+    try {
+      await _coordinator!.recoverFromUnauthenticated();
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   Future<void> ensureSessionForRequest(
@@ -68,10 +78,10 @@ class SessionRecoveryCoordinator {
   final TicketsBoutiqueCache ticketsBoutiqueCache;
   final AuthService _authService;
 
-  Future<void>? _recovery;
+  Future<bool>? _recovery;
   bool _loggingOut = false;
 
-  Future<void> recoverFromUnauthenticated() {
+  Future<bool> recoverFromUnauthenticated() {
     final activeRecovery = _recovery;
     if (activeRecovery != null) return activeRecovery;
 
@@ -99,12 +109,13 @@ class SessionRecoveryCoordinator {
     await forceLogout();
   }
 
-  Future<void> _recover() async {
+  Future<bool> _recover() async {
     if (await _refreshTokens()) {
-      return;
+      return true;
     }
 
     await forceLogout();
+    return false;
   }
 
   Future<bool> _refreshTokens() async {
