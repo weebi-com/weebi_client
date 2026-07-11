@@ -110,16 +110,16 @@ class AuthService {
         }
       }
 
-          final responseTokens2 =
-              response.statusResponse.type == StatusResponse_Type.UPDATED
-                  ? responseTokens
-                  : await stub2.authenticateWithCredentials(
-                      Credentials(
-                        mail: mail,
-                        password: password,
-                        isWebApp: Config.isBffMode,
-                      ),
-                    );
+      final responseTokens2 =
+          response.statusResponse.type == StatusResponse_Type.UPDATED
+              ? responseTokens
+              : await stub2.authenticateWithCredentials(
+                  Credentials(
+                    mail: mail,
+                    password: password,
+                    isWebApp: Config.isBffMode,
+                  ),
+                );
       if (responseTokens2.accessToken.isEmpty) {
         return _handleSignUpError('error responseTokens2.accessToken.isEmpty');
       }
