@@ -9,6 +9,7 @@ import 'package:web_admin/providers/current_user_provider.dart';
 import 'package:web_admin/providers/operational_license_gate.dart';
 import 'package:web_admin/providers/tickets_boutique_cache.dart';
 import 'package:web_admin/providers/user_data_provider.dart';
+import 'package:web_admin/core/session/bff_session_store.dart';
 
 class LogoutScreen extends StatefulWidget {
   const LogoutScreen({super.key});
@@ -28,6 +29,7 @@ class _LogoutScreenState extends State<LogoutScreen> {
     required VoidCallback onSuccess,
   }) async {
     await userDataProvider.clearSessionDataAsync();
+    await BffSessionStore.clear();
     accessTokenProvider.clearAccessToken();
     await persistedTokenProvider.clearAccessToken();
     await persistedTokenProvider.clearRefreshToken();

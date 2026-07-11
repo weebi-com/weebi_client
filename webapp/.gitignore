@@ -60,3 +60,6 @@ s/docs/IMPLEMENTATION_STATUS.md
 /doc/currency_and_migration.md
 /packages/charts_weebi/example/windows
 grpc/agent_docs
+patrol_test/test_bundle.dart
+test-results/
+node_modules/

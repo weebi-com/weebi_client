@@ -177,6 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             padding: const EdgeInsets.only(
                                 bottom: kDefaultPadding * 1.5),
                             child: FormBuilderTextField(
+                              key: const Key('loginMailField'),
                               name: 'mail',
                               decoration: InputDecoration(
                                 labelText: lang.mail,
@@ -206,6 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             padding: const EdgeInsets.only(
                                 bottom: kDefaultPadding),
                             child: FormBuilderTextField(
+                              key: const Key('loginPasswordField'),
                               name: 'password',
                               decoration: InputDecoration(
                                 labelText: lang.password,
@@ -266,6 +268,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               height: 40.0,
                               width: double.infinity,
                               child: ElevatedButton(
+                                key: const Key('loginSubmitButton'),
                                 style: themeData
                                     .extension<AppButtonTheme>()!
                                     .primaryElevated,

@@ -36,6 +36,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final summaryCardCrossAxisCount = (size.width >= kScreenWidthLg ? 4 : 2);
 
     return PortalMasterLayout(
+      key: const Key('dashboardScreen'),
       body: ListView(
         padding: const EdgeInsets.all(kDefaultPadding),
         children: [
@@ -140,6 +141,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                     _HoverableTile(
+                      key: const Key('dashboardLicensesTile'),
                       onTap: () =>
                           GoRouter.of(context).go(RouteUri.billing),
                       child: SummaryCard(
@@ -153,6 +155,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                     _HoverableTile(
+                      key: const Key('dashboardStatsTile'),
                       onTap: () => GoRouter.of(context).go(RouteUri.stats),
                       child: SummaryCard(
                         title: lang.todaySales,
@@ -367,6 +370,7 @@ class _HoverableTile extends StatefulWidget {
   final Widget child;
 
   const _HoverableTile({
+    super.key,
     required this.onTap,
     required this.child,
   });
