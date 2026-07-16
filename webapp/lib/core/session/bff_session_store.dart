@@ -3,9 +3,9 @@ import 'package:web_admin/core/constants/values.dart';
 
 /// Persists the BFF [sessionId] returned by the server after login/refresh.
 ///
-/// Envoy normally forwards the session cookie as `x-session-id` metadata, but
-/// when the cookie is missing or stale the client can still attach the stored
-/// session id so refresh and protected RPCs remain recoverable.
+/// Used locally to know a BFF session was established. Auth itself relies on
+/// the HttpOnly session cookie set by Envoy (`withCredentials: true`). Do not
+/// send this id as a custom browser header — that breaks CORS.
 class BffSessionStore {
   BffSessionStore._();
 

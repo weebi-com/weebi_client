@@ -1,16 +1,20 @@
 # melos_managed_dependency_overrides: charts_weebi,accesses_weebi,auth_weebi,boutiques_weebi,devices_weebi,users_weebi,entitlements_weebi,protos_weebi
 dependency_overrides:
   accesses_weebi:
-    path: ..\\packages\\accesses
+    path: ../packages/accesses
   auth_weebi:
-    path: ..\\packages\\auth
+    path: ../packages/auth
   boutiques_weebi:
-    path: ..\\packages\\boutiques
+    path: ../packages/boutiques
   devices_weebi:
-    path: ..\\packages\\devices
+    path: ../packages/devices
   entitlements_weebi:
-    path: ..\\packages\\entitlements
+    path: ../packages/entitlements
   protos_weebi:
     path: ../../weebi_server/packages/protos/protos_weebi
   users_weebi:
-    path: ..\\packages\\users
+    path: ../packages/users
+  # Flutter 3.44+: IconData is final; font_awesome_flutter 10.x still subclasses it.
+  font_awesome_flutter: ^11.0.0
+  design_weebi:
+    path: ../packages/design_weebi_local

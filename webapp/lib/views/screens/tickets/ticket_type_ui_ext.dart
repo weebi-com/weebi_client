@@ -7,7 +7,8 @@ extension TicketTypePbUI on TicketTypePb {
   Icon get icon {
     switch (this) {
       case TicketTypePb.sell:
-        return Icon(FontAwesomeIcons.cashRegister, color: iconColor, size: 20);
+        return Icon(FontAwesomeIcons.cashRegister.data,
+            color: iconColor, size: 20);
       case TicketTypePb.sellDeferred:
         return Icon(Icons.record_voice_over, color: iconColor);
       case TicketTypePb.sellCovered:
@@ -33,7 +34,7 @@ extension TicketTypePbUI on TicketTypePb {
   IconData get iconData {
     switch (this) {
       case TicketTypePb.sell:
-        return FontAwesomeIcons.cashRegister;
+        return FontAwesomeIcons.cashRegister.data;
       case TicketTypePb.sellDeferred:
         return Icons.record_voice_over;
       case TicketTypePb.sellCovered:
@@ -86,11 +87,11 @@ extension TicketTypePbUI on TicketTypePb {
       case TicketTypePb.sell:
       case TicketTypePb.sellDeferred:
       case TicketTypePb.sellCovered:
-        return const Icon(FontAwesomeIcons.faceSmile);
+        return Icon(FontAwesomeIcons.faceSmile.data);
       case TicketTypePb.spend:
       case TicketTypePb.spendDeferred:
       case TicketTypePb.spendCovered:
-        return const Icon(FontAwesomeIcons.faceGrimace);
+        return Icon(FontAwesomeIcons.faceGrimace.data);
       default:
         return const Icon(Icons.device_unknown);
     }

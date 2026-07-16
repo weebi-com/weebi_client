@@ -42,8 +42,9 @@ class SupportScreen extends StatelessWidget {
                     onTap: () => html.window.open('mailto:hello@weebi.com', '_self'),
                   ),
                   _ContactTile(
-                    icon: FontAwesomeIcons.whatsapp,
+                    icon: FontAwesomeIcons.whatsapp.data,
                     iconColor: null,
+                    isWhatsApp: true,
                     label: 'WhatsApp',
                     subtitle: lang.supportChatWhatsApp,
                     onTap: () => html.window.open(
@@ -64,6 +65,7 @@ class SupportScreen extends StatelessWidget {
 class _ContactTile extends StatelessWidget {
   final IconData icon;
   final Color? iconColor;
+  final bool isWhatsApp;
   final String label;
   final String subtitle;
   final VoidCallback onTap;
@@ -71,6 +73,7 @@ class _ContactTile extends StatelessWidget {
   const _ContactTile({
     required this.icon,
     this.iconColor,
+    this.isWhatsApp = false,
     required this.label,
     required this.subtitle,
     required this.onTap,
@@ -81,7 +84,7 @@ class _ContactTile extends StatelessWidget {
     final themeData = Theme.of(context);
     final isWhiteBackground = themeData.brightness == Brightness.light;
     final color = iconColor ??
-        (icon == FontAwesomeIcons.whatsapp
+        (isWhatsApp
             ? (isWhiteBackground ? ColorsWeebi.whatsapp : Colors.white)
             : themeData.colorScheme.primary);
 
