@@ -42,7 +42,7 @@ class SupportScreen extends StatelessWidget {
                     onTap: () => html.window.open('mailto:hello@weebi.com', '_self'),
                   ),
                   _ContactTile(
-                    icon: FontAwesomeIcons.whatsapp.data,
+                    icon: FontAwesomeIcons.whatsapp,
                     iconColor: null,
                     isWhatsApp: true,
                     label: 'WhatsApp',

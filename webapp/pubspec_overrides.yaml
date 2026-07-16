@@ -14,7 +14,3 @@ dependency_overrides:
     path: ../../weebi_server/packages/protos/protos_weebi
   users_weebi:
     path: ../packages/users
-  # Flutter 3.44+: IconData is final; font_awesome_flutter 10.x still subclasses it.
-  font_awesome_flutter: ^11.0.0
-  design_weebi:
-    path: ../packages/design_weebi_local
