@@ -25,7 +25,7 @@ dependencies:
     # path: ../weebi/packages/users
   accesses_weebi: ^1.0.8
   devices_weebi: ^1.0.8
-  design_weebi: ^0.1.5
+  design_weebi: ^0.1.5 # will need to upgrand and ++ font
 
   shared_preferences: ^2.2.2
   provider: ^6.1.2
@@ -45,7 +45,7 @@ dependencies:
 
   flutter_markdown: ^0.7.7+1
   aptabase_flutter: ^0.4.1
-  font_awesome_flutter: ^11.0.0
+  font_awesome_flutter: ^10.9.1 #^11.0.0
 
 dev_dependencies:
   flutter_test:
@@ -53,12 +53,12 @@ dev_dependencies:
 
   integration_test:
     sdk: flutter
-  patrol: ^4.1.0
   intl_utils: ^2.8.7
   flutter_lints: ^3.0.0
-patrol:
-  app_name: Weebi Web Admin
-  test_directory: patrol_test
+#  patrol: ^4.1.0
+#patrol:
+#  app_name: Weebi Web Admin
+#  test_directory: patrol_test
 
 dependency_overrides:
   #protos_weebi:
