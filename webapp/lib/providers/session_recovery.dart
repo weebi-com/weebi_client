@@ -93,11 +93,11 @@ class SessionRecoveryCoordinator {
   }
 
   Future<void> ensureSessionForRequest(Map<String, String> metadata) async {
+    // BFF auth is cookie-based (WebCallOptions.withCredentials). Do NOT inject
+    // `x-session-id` as a custom gRPC-web header: that triggers a CORS preflight
+    // which Envoy typically does not allowlist, causing
+    // "HTTP request completed without a status (potential CORS issue)".
     if (Config.isBffMode) {
-      final sessionId = await BffSessionStore.getSessionId();
-      if (sessionId != null && sessionId.isNotEmpty) {
-        metadata['x-session-id'] = sessionId;
-      }
       return;
     }
 
