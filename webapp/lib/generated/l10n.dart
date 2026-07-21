@@ -894,6 +894,16 @@ class Lang {
     );
   }
 
+  /// `The web console lets you manage tickets (view, filter, search) and discover prepared catalog products to set up your POS. Contacts and operations (sales, purchases, stock movements, etc.) remain available in the mobile app for now.`
+  String get helpScopeBodyDev {
+    return Intl.message(
+      'The web console lets you manage tickets (view, filter, search) and discover prepared catalog products to set up your POS. Contacts and operations (sales, purchases, stock movements, etc.) remain available in the mobile app for now.',
+      name: 'helpScopeBodyDev',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `What can I do from the web console?`
   String get helpScopeTitle {
     return Intl.message(
@@ -1099,6 +1109,16 @@ class Lang {
     );
   }
 
+  /// `Contacts and operations (sales, purchases, stock movements, etc.) are available in the mobile app for now. Catalog discovery and tickets are available here.`
+  String get menuScopeDisclaimerDev {
+    return Intl.message(
+      'Contacts and operations (sales, purchases, stock movements, etc.) are available in the mobile app for now. Catalog discovery and tickets are available here.',
+      name: 'menuScopeDisclaimerDev',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Statistics`
   String get menuStats {
     return Intl.message('Statistics', name: 'menuStats', desc: '', args: []);
@@ -1112,6 +1132,129 @@ class Lang {
   /// `Users`
   String get menuUsers {
     return Intl.message('Users', name: 'menuUsers', desc: '', args: []);
+  }
+
+  /// `Catalog`
+  String get menuCatalog {
+    return Intl.message('Catalog', name: 'menuCatalog', desc: '', args: []);
+  }
+
+  /// `Pick the FMCG products you sell, adjust price and cost, then add them to your chain catalog.`
+  String get catalogDiscoverySubtitle {
+    return Intl.message(
+      'Pick the FMCG products you sell, adjust price and cost, then add them to your chain catalog.',
+      name: 'catalogDiscoverySubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chain`
+  String get catalogSelectChain {
+    return Intl.message(
+      'Chain',
+      name: 'catalogSelectChain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All`
+  String get catalogAllCategories {
+    return Intl.message(
+      'All',
+      name: 'catalogAllCategories',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No products match your search.`
+  String get catalogNoProductsMatch {
+    return Intl.message(
+      'No products match your search.',
+      name: 'catalogNoProductsMatch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pick`
+  String get catalogPick {
+    return Intl.message('Pick', name: 'catalogPick', desc: '', args: []);
+  }
+
+  /// `Picked`
+  String get catalogPicked {
+    return Intl.message('Picked', name: 'catalogPicked', desc: '', args: []);
+  }
+
+  /// `Already in catalog`
+  String get catalogAlreadyInCatalog {
+    return Intl.message(
+      'Already in catalog',
+      name: 'catalogAlreadyInCatalog',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count, plural, =0{Selection} one{Selection (1)} other{Selection ({count})}}`
+  String catalogSelectionTitle(int count) {
+    return Intl.plural(
+      count,
+      zero: 'Selection',
+      one: 'Selection (1)',
+      other: 'Selection ($count)',
+      name: 'catalogSelectionTitle',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Pick products from the grid to build your catalog.`
+  String get catalogSelectionEmpty {
+    return Intl.message(
+      'Pick products from the grid to build your catalog.',
+      name: 'catalogSelectionEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear`
+  String get catalogClearSelection {
+    return Intl.message(
+      'Clear',
+      name: 'catalogClearSelection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add to catalog`
+  String get catalogAddToCatalog {
+    return Intl.message(
+      'Add to catalog',
+      name: 'catalogAddToCatalog',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove`
+  String get catalogRemove {
+    return Intl.message('Remove', name: 'catalogRemove', desc: '', args: []);
+  }
+
+  /// `Price`
+  String get catalogPrice {
+    return Intl.message('Price', name: 'catalogPrice', desc: '', args: []);
+  }
+
+  /// `Cost`
+  String get catalogCost {
+    return Intl.message('Cost', name: 'catalogCost', desc: '', args: []);
   }
 
   /// `Value must be greater than or equal to {min}.`

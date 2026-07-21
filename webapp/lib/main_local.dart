@@ -5,7 +5,7 @@ import 'package:web_admin/shared_prefs.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-      Config.init(apiUrl: 'http://localhost:8080', locale: 'fr');
+  Config.init(apiUrl: 'http://localhost:8080', locale: 'fr', isDev: true);
 
   runApp(const SharedPrefsFetchWidget(child: RootApp()));
 }

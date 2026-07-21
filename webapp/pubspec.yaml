@@ -74,6 +74,7 @@ flutter:
 
   assets:
     - assets/images/app_logo.png
+    - assets/catalog/fmcg_seed.json
     - lib/cgv_en.md
     - lib/cgv_fr.md
     - ../packages/boutiques/lib/currency_picker/src/res/

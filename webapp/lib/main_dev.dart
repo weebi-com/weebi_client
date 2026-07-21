@@ -12,6 +12,6 @@ import 'package:web_admin/shared_prefs.dart';
 /// ```
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Config.init(apiUrl: kApiUrlDev, locale: 'fr');
+  Config.init(apiUrl: kApiUrlDev, locale: 'fr', isDev: true);
   runApp(const SharedPrefsFetchWidget(child: RootApp()));
 }

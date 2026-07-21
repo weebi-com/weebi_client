@@ -2,6 +2,7 @@ import 'package:auth_weebi/auth_weebi.dart' show PermissionProvider;
 import 'package:flutter/foundation.dart' show Listenable;
 import 'package:go_router/go_router.dart';
 import 'package:web_admin/contacts/view/contacts_page.dart';
+import 'package:web_admin/environment.dart';
 import 'package:web_admin/providers/user_data_provider.dart';
 import 'package:web_admin/views/screens/buttons_screen.dart';
 import 'package:web_admin/views/screens/boutiques/boutiques_package_screen.dart';
@@ -31,6 +32,7 @@ import 'package:web_admin/views/screens/help/help_screen.dart';
 import 'package:web_admin/views/screens/support/support_screen.dart';
 import 'package:web_admin/views/screens/about/about_screen.dart';
 import 'package:web_admin/views/screens/billing/billing_screen.dart';
+import 'package:web_admin/views/screens/catalog/catalog_discovery_screen.dart';
 import 'package:web_admin/views/screens/stats_screen.dart';
 import 'package:web_admin/views/screens/legal/legal_document_screen.dart';
 
@@ -64,6 +66,8 @@ class RouteUri {
 
   static const String listAccess = '/accesses';
   static const String listDevice = '/devices';
+
+  static const String catalog = '/catalog';
 
   static const String ticketsOverview = '/tickets';
   static const String ticketDetail = '/tickets/detail';
@@ -296,6 +300,18 @@ GoRouter appRouter(
         },
       ),
 
+      // =========================== CATALOG DISCOVERY ===========================
+
+      GoRoute(
+        path: RouteUri.catalog,
+        pageBuilder: (context, state) {
+          return NoTransitionPage<void>(
+            key: state.pageKey,
+            child: const CatalogDiscoveryScreen(),
+          );
+        },
+      ),
+
       // =========================== TICKETS ===========================
 
       GoRoute(
@@ -405,6 +421,9 @@ GoRouter appRouter(
       ),
     ],
     redirect: (context, state) {
+      if (state.matchedLocation == RouteUri.catalog && !Config.isDev) {
+        return RouteUri.dashboard;
+      }
       if (unrestrictedRoutes.contains(state.matchedLocation)) {
         return null;
       } else if (publicRoutes.contains(state.matchedLocation)) {

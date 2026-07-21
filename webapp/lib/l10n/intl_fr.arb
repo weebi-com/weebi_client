@@ -100,6 +100,7 @@
   "helpReadFaq": "Lire la FAQ",
   "helpResourcesTitle": "Ressources",
   "helpScopeBody": "La console web permet de gérer les tickets (consultation, filtres, recherche). Les articles, contacts et opérations (ventes, achats, mouvements de stock, etc.) sont uniquement disponibles sur l'application de caisse pour l'instant.",
+  "helpScopeBodyDev": "La console web permet de gérer les tickets (consultation, filtres, recherche) et de découvrir des produits préparés pour configurer votre caisse. Les contacts et opérations (ventes, achats, mouvements de stock, etc.) restent disponibles sur l'application de caisse pour l'instant.",
   "helpScopeTitle": "Que puis-je faire depuis la console web ?",
   "helpWatchDemos": "Voir les démos vidéo",
   "hi": "Salut",
@@ -127,9 +128,32 @@
   "menuDevices": "Appareils",
   "menuFirm": "Mon entreprise",
   "menuScopeDisclaimer": "Les articles, contacts et opérations (ventes, achats, mouvements de stock, etc.) sont uniquement disponibles sur l'application de caisse pour l'instant.",
+  "menuScopeDisclaimerDev": "Les contacts et opérations (ventes, achats, mouvements de stock, etc.) sont uniquement disponibles sur l'application de caisse pour l'instant. La découverte de catalogue et les tickets sont disponibles ici.",
   "menuStats": "Statistiques",
   "menuTickets": "Tickets",
   "menuUsers": "Utilisateurs",
+  "menuCatalog": "Catalogue",
+  "catalogDiscoverySubtitle": "Sélectionnez les produits FMCG que vous vendez, ajustez le prix et le coût, puis ajoutez-les au catalogue de votre chaîne.",
+  "catalogSelectChain": "Chaîne",
+  "catalogAllCategories": "Tous",
+  "catalogNoProductsMatch": "Aucun produit ne correspond à votre recherche.",
+  "catalogPick": "Choisir",
+  "catalogPicked": "Choisi",
+  "catalogAlreadyInCatalog": "Déjà au catalogue",
+  "catalogSelectionTitle": "{count, plural, =0{Sélection} one{Sélection (1)} other{Sélection ({count})}}",
+  "@catalogSelectionTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "catalogSelectionEmpty": "Choisissez des produits dans la grille pour constituer votre catalogue.",
+  "catalogClearSelection": "Vider",
+  "catalogAddToCatalog": "Ajouter au catalogue",
+  "catalogRemove": "Retirer",
+  "catalogPrice": "Prix",
+  "catalogCost": "Coût",
   "minErrorText": "La valeur doit être supérieure ou égale à {min}.",
   "minLengthErrorText": "La longueur doit être supérieure ou égale à {minLength}.",
   "myProfile": "Mon Profil",

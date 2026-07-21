@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:auth_weebi/auth_weebi.dart' show PermissionProvider;
+import 'package:web_admin/environment.dart';
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/providers/user_data_provider.dart';
 import 'package:web_admin/utils/profile_image_provider.dart';
@@ -161,7 +162,9 @@ class _SidebarState extends State<Sidebar> {
                     Padding(
                       padding: const EdgeInsets.only(top: 12.0),
                       child: Text(
-                        Lang.of(context).menuScopeDisclaimer,
+                        Config.isDev
+                            ? Lang.of(context).menuScopeDisclaimerDev
+                            : Lang.of(context).menuScopeDisclaimer,
                         style: TextStyle(
                           fontSize: sidebarTheme.menuFontSize - 2,
                           color: sidebarTheme.foregroundColor.withOpacity(0.7),

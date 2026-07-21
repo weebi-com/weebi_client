@@ -3,6 +3,7 @@ import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
 import 'package:web_admin/core/constants/dimens.dart';
+import 'package:web_admin/environment.dart';
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
 
@@ -39,7 +40,7 @@ class HelpScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    lang.helpScopeBody,
+                    Config.isDev ? lang.helpScopeBodyDev : lang.helpScopeBody,
                     style: themeData.textTheme.bodyMedium,
                   ),
                   const Divider(height: 24),

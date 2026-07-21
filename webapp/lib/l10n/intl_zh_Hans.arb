@@ -87,6 +87,7 @@
   "helpReadFaq": "阅读常见问题",
   "helpResourcesTitle": "资源",
   "helpScopeBody": "Web控制台可管理票据（查看、筛选、搜索）。文章、联系人和操作（销售、采购、库存移动等）目前仅在移动应用中可用。",
+  "helpScopeBodyDev": "Web控制台可管理票据（查看、筛选、搜索），并发现预制商品目录以配置收银机。联系人和操作（销售、采购、库存移动等）目前仍在移动应用中可用。",
   "helpScopeTitle": "我可以在Web控制台做什么？",
   "helpWatchDemos": "观看视频演示",
   "hi": "您好",
@@ -112,9 +113,32 @@
   "menuDevices": "设备",
   "menuFirm": "我的企业",
   "menuScopeDisclaimer": "文章、联系人和操作（销售、采购、库存移动等）目前仅在移动应用中可用。",
+  "menuScopeDisclaimerDev": "联系人和操作（销售、采购、库存移动等）目前仅在移动应用中可用。目录发现和票据可在此使用。",
   "menuStats": "统计数据",
   "menuTickets": "票据",
   "menuUsers": "用户",
+  "menuCatalog": "商品目录",
+  "catalogDiscoverySubtitle": "选择您销售的快消品，调整售价与成本，然后添加到连锁店目录。",
+  "catalogSelectChain": "连锁",
+  "catalogAllCategories": "全部",
+  "catalogNoProductsMatch": "没有匹配的商品。",
+  "catalogPick": "选择",
+  "catalogPicked": "已选",
+  "catalogAlreadyInCatalog": "已在目录中",
+  "catalogSelectionTitle": "{count, plural, =0{已选} one{已选 (1)} other{已选 ({count})}}",
+  "@catalogSelectionTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "catalogSelectionEmpty": "从网格中选择商品以建立目录。",
+  "catalogClearSelection": "清空",
+  "catalogAddToCatalog": "添加到目录",
+  "catalogRemove": "移除",
+  "catalogPrice": "售价",
+  "catalogCost": "成本",
   "minErrorText": "此字段必须大于或等于{min}",
   "minLengthErrorText": "此字段的长度必须大于或等于{minLength}",
   "myProfile": "我的个人资料",

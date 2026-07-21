@@ -1,13 +1,14 @@
 import 'package:design_weebi/design_weebi.dart' show IconsWeebi;
 import 'package:flutter/material.dart';
 import 'package:web_admin/app_router.dart';
+import 'package:web_admin/environment.dart';
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/sidebar.dart';
 
 //import 'dart:math' as math;
 
-final sidebarMenuConfigs = [
+List<SidebarMenuConfig> get sidebarMenuConfigs => [
   SidebarMenuConfig(
     uri: RouteUri.dashboard,
     icon: Icons.dashboard_rounded,
@@ -38,6 +39,12 @@ final sidebarMenuConfigs = [
     icon: Icons.devices_rounded,
     title: (context) => Lang.of(context).menuDevices,
   ),
+  if (Config.isDev)
+    SidebarMenuConfig(
+      uri: RouteUri.catalog,
+      icon: Icons.shopping_basket_rounded,
+      title: (context) => Lang.of(context).menuCatalog,
+    ),
   SidebarMenuConfig(
     uri: RouteUri.ticketsOverview,
     icon: IconsWeebi.ticketsIconData,

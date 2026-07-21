@@ -100,6 +100,7 @@
   "helpReadFaq": "Read the FAQ",
   "helpResourcesTitle": "Resources",
   "helpScopeBody": "The web console lets you manage tickets (view, filter, search). Articles, contacts and operations (sales, purchases, stock movements, etc.) are available in the mobile app for now.",
+  "helpScopeBodyDev": "The web console lets you manage tickets (view, filter, search) and discover prepared catalog products to set up your POS. Contacts and operations (sales, purchases, stock movements, etc.) remain available in the mobile app for now.",
   "helpScopeTitle": "What can I do from the web console?",
   "helpWatchDemos": "Watch video demos",
   "hi": "Hi",
@@ -127,9 +128,32 @@
   "menuDevices": "Devices",
   "menuFirm": "My enterprise",
   "menuScopeDisclaimer": "Articles, contacts and operations (sales, purchases, stock movements, etc.) are available in the mobile app for now.",
+  "menuScopeDisclaimerDev": "Contacts and operations (sales, purchases, stock movements, etc.) are available in the mobile app for now. Catalog discovery and tickets are available here.",
   "menuStats": "Statistics",
   "menuTickets": "Tickets",
   "menuUsers": "Users",
+  "menuCatalog": "Catalog",
+  "catalogDiscoverySubtitle": "Pick the FMCG products you sell, adjust price and cost, then add them to your chain catalog.",
+  "catalogSelectChain": "Chain",
+  "catalogAllCategories": "All",
+  "catalogNoProductsMatch": "No products match your search.",
+  "catalogPick": "Pick",
+  "catalogPicked": "Picked",
+  "catalogAlreadyInCatalog": "Already in catalog",
+  "catalogSelectionTitle": "{count, plural, =0{Selection} one{Selection (1)} other{Selection ({count})}}",
+  "@catalogSelectionTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "catalogSelectionEmpty": "Pick products from the grid to build your catalog.",
+  "catalogClearSelection": "Clear",
+  "catalogAddToCatalog": "Add to catalog",
+  "catalogRemove": "Remove",
+  "catalogPrice": "Price",
+  "catalogCost": "Cost",
   "minErrorText": "Value must be greater than or equal to {min}.",
   "minLengthErrorText": "Value must have a length greater than or equal to {minLength}",
   "myProfile": "My Profile",
