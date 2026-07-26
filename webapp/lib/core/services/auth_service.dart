@@ -156,6 +156,22 @@ class AuthService {
     }
   }
 
+  /// Public RPC: exchanges a one-time App->Web bridge token for a BFF session.
+  /// Envoy sets `weebi_session_id` from [Tokens.sessionId] on the response.
+  Future<Tokens> exchangeWebBridgeToken(String token) async {
+    final stub = FenceServiceClient(
+      _grpcClientService.channel,
+      options: callOptions,
+    );
+    final response = await stub.exchangeWebBridgeToken(
+      ExchangeWebBridgeTokenRequest(token: token),
+    );
+    if (Config.isBffMode && response.sessionId.isNotEmpty) {
+      await BffSessionStore.setSessionId(response.sessionId);
+    }
+    return response;
+  }
+
   Future<Tokens> authenticateWithRefreshToken() async {
     final stub = FenceServiceClient(_grpcClientService.channel);
 

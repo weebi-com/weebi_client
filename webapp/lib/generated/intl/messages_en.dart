@@ -116,6 +116,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingAttributedTo": MessageLookupByLibrary.simpleMessage(
       "Attributed to",
     ),
+    "billingChoosePaymentMethod": MessageLookupByLibrary.simpleMessage(
+      "How do you want to pay?",
+    ),
     "billingLicenses": MessageLookupByLibrary.simpleMessage("License(s)"),
     "billingLifetime": MessageLookupByLibrary.simpleMessage("Lifetime"),
     "billingMyLicenses": MessageLookupByLibrary.simpleMessage("My licenses"),
@@ -128,8 +131,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingNotYetAttributed": MessageLookupByLibrary.simpleMessage(
       "Not yet attributed",
     ),
+    "billingPayWithCard": MessageLookupByLibrary.simpleMessage("Card (Stripe)"),
+    "billingPayWithMobileMoney": MessageLookupByLibrary.simpleMessage(
+      "Mobile money (PawaPay)",
+    ),
     "billingPaymentProcessing": MessageLookupByLibrary.simpleMessage(
-      "Payment received. We\'re confirming with Stripe — your license(s) will appear shortly; you can then assign seats to users. If they don\'t appear, check your webhook configuration.",
+      "Payment received. We\'re confirming it — your license(s) will appear shortly; you can then assign seats to users.",
     ),
     "billingPaymentSuccess": MessageLookupByLibrary.simpleMessage(
       "Payment accepted. One or more licenses were purchased successfully: you can assign seats to the relevant users.",
@@ -141,10 +148,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingPlanPremium": MessageLookupByLibrary.simpleMessage("Weebi Premium"),
     "billingPurchase": MessageLookupByLibrary.simpleMessage("Purchase"),
     "billingPurchaseLicense": MessageLookupByLibrary.simpleMessage(
-      "Purchase a license",
+      "Purchase Premium",
     ),
     "billingPurchaseLicenseDescription": MessageLookupByLibrary.simpleMessage(
-      "Choose a license to unlock Weebi\'s advanced features. Each seat is a one-time purchase: it does not expire, and this is not a subscription—no renewals, no ticking clock.",
+      "The Premium license unlocks remote tracking, multi-store management and the advanced dashboard. One-time purchase per user: no subscription, no expiry.",
     ),
     "billingReassignNoOtherUser": MessageLookupByLibrary.simpleMessage(
       "No other user can receive this seat. Add a user or free a license seat elsewhere first.",
@@ -156,6 +163,28 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingRetry": MessageLookupByLibrary.simpleMessage("Retry"),
     "billingSeatsAttributed": MessageLookupByLibrary.simpleMessage(
       "license(s) attributed",
+    ),
+    "billingSyscohadaComingSoon": MessageLookupByLibrary.simpleMessage(
+      "Purchase from this screen coming soon.",
+    ),
+    "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage(
+      "per fiscal year",
+    ),
+    "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage("1,900 FCFA"),
+    "billingSyscohadaPurchase": MessageLookupByLibrary.simpleMessage(
+      "Pay for this year",
+    ),
+    "billingSyscohadaPurchasedYears": MessageLookupByLibrary.simpleMessage(
+      "Years already paid",
+    ),
+    "billingSyscohadaSelectYear": MessageLookupByLibrary.simpleMessage(
+      "Fiscal year",
+    ),
+    "billingSyscohadaSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Minimum Cash System — one-time purchase per fiscal year (not a subscription)",
+    ),
+    "billingSyscohadaTitle": MessageLookupByLibrary.simpleMessage(
+      "SYSCOHADA financial statements",
     ),
     "billingUsers": MessageLookupByLibrary.simpleMessage("users"),
     "billingValidUntil": MessageLookupByLibrary.simpleMessage("Valid until"),

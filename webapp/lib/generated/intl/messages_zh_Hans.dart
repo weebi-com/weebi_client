@@ -96,6 +96,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "在“访问”中为用户分配您的新席位",
     ),
     "billingAttributedTo": MessageLookupByLibrary.simpleMessage("已分配给"),
+    "billingChoosePaymentMethod": MessageLookupByLibrary.simpleMessage(
+      "您想如何付款？",
+    ),
     "billingLicenses": MessageLookupByLibrary.simpleMessage("许可证"),
     "billingLifetime": MessageLookupByLibrary.simpleMessage("终身"),
     "billingMyLicenses": MessageLookupByLibrary.simpleMessage("我的许可证"),
@@ -106,8 +109,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "没有可分配的用户。请先在「用户」中添加用户。",
     ),
     "billingNotYetAttributed": MessageLookupByLibrary.simpleMessage("尚未分配"),
+    "billingPayWithCard": MessageLookupByLibrary.simpleMessage("银行卡（Stripe）"),
+    "billingPayWithMobileMoney": MessageLookupByLibrary.simpleMessage(
+      "移动支付（PawaPay）",
+    ),
     "billingPaymentProcessing": MessageLookupByLibrary.simpleMessage(
-      "付款已收到。我们正在与 Stripe 确认 — 您的许可证将很快显示。如未显示，请检查 webhook 配置。",
+      "付款已收到。正在确认 — 您的许可证将很快显示，然后可分配给用户。",
     ),
     "billingPaymentSuccess": MessageLookupByLibrary.simpleMessage(
       "您的付款已接受。您现已拥有有效许可证。",
@@ -116,9 +123,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingPlanEntreprise": MessageLookupByLibrary.simpleMessage("Weebi 企业版"),
     "billingPlanPremium": MessageLookupByLibrary.simpleMessage("Weebi 高级版"),
     "billingPurchase": MessageLookupByLibrary.simpleMessage("购买"),
-    "billingPurchaseLicense": MessageLookupByLibrary.simpleMessage("购买许可证"),
+    "billingPurchaseLicense": MessageLookupByLibrary.simpleMessage(
+      "购买 Premium",
+    ),
     "billingPurchaseLicenseDescription": MessageLookupByLibrary.simpleMessage(
-      "选择许可证即可使用 Weebi 的高级功能。每个席位为一次性购买：不设到期，也不是订阅——无需续费，没有倒计时。",
+      "Premium 许可证解锁远程跟踪、多门店管理和高级仪表板。按用户一次性购买：非订阅、无到期。",
     ),
     "billingReassignNoOtherUser": MessageLookupByLibrary.simpleMessage(
       "没有其他用户可接收此席位。请先添加用户或在其他位置释放一个席位。",
@@ -129,6 +138,22 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "billingRetry": MessageLookupByLibrary.simpleMessage("重试"),
     "billingSeatsAttributed": MessageLookupByLibrary.simpleMessage("许可证已分配"),
+    "billingSyscohadaComingSoon": MessageLookupByLibrary.simpleMessage(
+      "即将可在此页面购买。",
+    ),
+    "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage("每个财政年度"),
+    "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage("1 900 FCFA"),
+    "billingSyscohadaPurchase": MessageLookupByLibrary.simpleMessage("支付该年度"),
+    "billingSyscohadaPurchasedYears": MessageLookupByLibrary.simpleMessage(
+      "已支付年份",
+    ),
+    "billingSyscohadaSelectYear": MessageLookupByLibrary.simpleMessage("财政年度"),
+    "billingSyscohadaSubtitle": MessageLookupByLibrary.simpleMessage(
+      "最低现金系统 — 按财政年度一次性购买（非订阅）",
+    ),
+    "billingSyscohadaTitle": MessageLookupByLibrary.simpleMessage(
+      "SYSCOHADA 财务报表",
+    ),
     "billingUsers": MessageLookupByLibrary.simpleMessage("用户"),
     "billingValidUntil": MessageLookupByLibrary.simpleMessage("有效期至"),
     "billingViewFullTerms": MessageLookupByLibrary.simpleMessage("在新标签页查看完整文档"),

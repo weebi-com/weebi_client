@@ -22,10 +22,12 @@ extension TicketTypePbUI on TicketTypePb {
       case TicketTypePb.stockIn:
       case TicketTypePb.stockOut:
         return Icon(Icons.layers, color: iconColor);
-      case TicketTypePb.wage:
-        return Icon(Icons.attach_money, color: iconColor);
       case TicketTypePb.inventory:
         return Icon(Icons.inventory_rounded, color: iconColor);
+      case TicketTypePb.rebalance:
+        return Icon(Icons.swap_horiz, color: iconColor);
+      case TicketTypePb.inventoryClosingValue:
+        return Icon(Icons.warehouse_outlined, color: iconColor);
       default:
         return const Icon(Icons.device_unknown);
     }
@@ -48,8 +50,6 @@ extension TicketTypePbUI on TicketTypePb {
       case TicketTypePb.stockIn:
       case TicketTypePb.stockOut:
         return Icons.layers;
-      case TicketTypePb.wage:
-        return Icons.attach_money;
       case TicketTypePb.inventory:
         return Icons.inventory_rounded;
       default:
@@ -73,8 +73,6 @@ extension TicketTypePbUI on TicketTypePb {
         return ColorsWeebi.pinkStockEntry;
       case TicketTypePb.stockOut:
         return ColorsWeebi.pinkStockExit;
-      case TicketTypePb.wage:
-        return Colors.red;
       case TicketTypePb.inventory:
         return ColorsWeebi.blueInventory;
       default:

@@ -20,19 +20,10 @@ import 'package:web_admin/providers/current_user_provider.dart';
 
 import '../../../core/constants/dimens.dart';
 import '../../../core/theme/theme_extensions/app_color_scheme.dart';
+import 'package:web_admin/core/billing/billing_bridge_destination.dart';
+
 import 'billing_plan_label.dart';
 import 'billing_plan_theme.dart';
-
-/// Query params from current URL. With hash routing, params may be in the fragment (#/billing?success=...).
-Map<String, String> _billingQueryParams() {
-  final base = Uri.base;
-  final fragment = base.fragment;
-  final qIndex = fragment.indexOf('?');
-  if (qIndex >= 0) {
-    return Uri.splitQueryString(fragment.substring(qIndex + 1));
-  }
-  return base.queryParameters;
-}
 
 class BillingScreen extends StatefulWidget {
   const BillingScreen({super.key});
@@ -44,15 +35,29 @@ class BillingScreen extends StatefulWidget {
 class _BillingScreenState extends State<BillingScreen> {
   List<License> _licenses = [];
   List<BillingProduct> _products = [];
+  BillingProduct? _syscohadaProduct;
+  List<AccountingYearPurchase> _accountingPurchases = [];
+  late int _syscohadaFiscalYear;
   /// User info by userId, loaded when we have licenses (to show attributed users).
   Map<String, UserPublic>? _usersById;
   bool _loading = true;
   String? _errorMessage;
   String? _checkoutProductId;
+  /// Product highlighted from App->Web magic-link / deep-link (`premium` or `syscohada`).
+  String? _bridgeHighlightProductId;
   bool _acceptedEnterpriseTerms = false;
   bool _licensePurchaseConfirmedLogged = false;
   bool _checkoutCanceledLogged = false;
   bool _dataLoaded = false;
+
+  void _applyBridgeDeepLink(Map<String, String> params) {
+    final dest = parseBillingBridgeDestination(query: params);
+    if (dest == null) return;
+    _bridgeHighlightProductId = dest.productId;
+    if (dest.fiscalYear != null) {
+      _syscohadaFiscalYear = dest.fiscalYear!;
+    }
+  }
 
   /// Check if user has billing read permission from either JWT or session (BFF mode)
   bool _hasReadBillingPermission(BuildContext context) {
@@ -107,31 +112,20 @@ class _BillingScreenState extends State<BillingScreen> {
   @override
   void initState() {
     super.initState();
+    _syscohadaFiscalYear = DateTime.now().year;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
+      final params = billingQueryParamsFromLocation();
+      _applyBridgeDeepLink(params);
       if (!_hasReadBillingPermission(context)) return;
 
       Aptabase.instance.trackEvent('billing_screen_opened', {});
       _loadData();
-      // If returning from Stripe success with session_id, sync license (webhook may have failed)
-      final params = _billingQueryParams();
-      final sessionId = params['session_id'];
-      if (params['success'] == 'true' &&
-          sessionId != null &&
-          sessionId.isNotEmpty) {
+      // Returning from Stripe / PawaPay: sync fulfill if webhook lagged
+      if (params['success'] == 'true') {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           if (!mounted) return;
-          final provider = context.read<BillingServiceClientProvider>();
-          try {
-            await provider.billingServiceClient.fulfillFromStripeCheckoutSession(
-              FulfillFromStripeCheckoutSessionRequest(
-                checkoutSessionId: sessionId,
-                legalTermsVersionDate: kEnterpriseTermsVersionId,
-              ),
-            );
-          } catch (_) {
-            // Idempotent: already fulfilled or not paid yet; loadData will show current state
-          }
+          await _syncFulfillAfterCheckoutReturn(params);
           if (mounted) _loadData();
         });
       } else if (params['canceled'] == 'true') {
@@ -150,7 +144,7 @@ class _BillingScreenState extends State<BillingScreen> {
 
   void _maybeTrackLicensePurchaseConfirmed(List<License> licenses) {
     if (_licensePurchaseConfirmedLogged) return;
-    if (_billingQueryParams()['success'] != 'true') return;
+    if (billingQueryParamsFromLocation()['success'] != 'true') return;
     if (licenses.isEmpty) return;
     _licensePurchaseConfirmedLogged = true;
     Aptabase.instance.trackEvent('billing_license_purchase_confirmed', {
@@ -180,6 +174,23 @@ class _BillingScreenState extends State<BillingScreen> {
       final licenses = licensesResponse.licenses;
       final products = productsResponse.products;
 
+      BillingProduct? syscohada;
+      for (final p in products) {
+        if (isSyscohadaBillingProduct(p.productId)) {
+          syscohada = p;
+          break;
+        }
+      }
+
+      List<AccountingYearPurchase> accountingPurchases = const [];
+      try {
+        final accountingResponse = await provider.billingServiceClient
+            .readAccountingYearPurchases(Empty());
+        accountingPurchases = accountingResponse.purchases;
+      } catch (_) {
+        // Older servers may not expose this RPC yet.
+      }
+
       Map<String, UserPublic>? usersById;
       if (licenses.isNotEmpty) {
         try {
@@ -196,6 +207,8 @@ class _BillingScreenState extends State<BillingScreen> {
               licenses.where(isBillingCatalogLicense).toList();
           _products =
               products.where((p) => isBillingCatalogProduct(p.productId)).toList();
+          _syscohadaProduct = syscohada;
+          _accountingPurchases = accountingPurchases;
           _usersById = usersById;
           _loading = false;
           _errorMessage = null;
@@ -283,10 +296,85 @@ class _BillingScreenState extends State<BillingScreen> {
     Aptabase.instance.trackEvent('billing_license_purchase_clicked', {
       'product_id': product.productId,
     });
-    _purchaseProduct(product);
+    _startPurchase(product);
   }
 
-  Future<void> _purchaseProduct(BillingProduct product) async {
+  void _onSyscohadaPurchaseTapped() {
+    final product = _syscohadaProduct;
+    if (product == null) return;
+    Aptabase.instance.trackEvent('billing_syscohada_purchase_clicked', {
+      'product_id': product.productId,
+      'fiscal_year': _syscohadaFiscalYear,
+    });
+    _startPurchase(product, fiscalYear: _syscohadaFiscalYear);
+  }
+
+  Future<void> _syncFulfillAfterCheckoutReturn(Map<String, String> params) async {
+    final provider = context.read<BillingServiceClientProvider>();
+    final checkoutId = params['checkout_id'] ??
+        html.window.sessionStorage['pawapay_checkout_id'];
+    final isPawapay = params['provider'] == 'pawapay' ||
+        (checkoutId != null && checkoutId.isNotEmpty && params['session_id'] == null);
+    try {
+      if (isPawapay && checkoutId != null && checkoutId.isNotEmpty) {
+        await provider.billingServiceClient.fulfillFromPawapayCheckout(
+          FulfillFromPawapayCheckoutRequest(
+            checkoutId: checkoutId,
+            legalTermsVersionDate: kEnterpriseTermsVersionId,
+          ),
+        );
+        html.window.sessionStorage.remove('pawapay_checkout_id');
+        return;
+      }
+      final sessionId = params['session_id'];
+      if (sessionId != null && sessionId.isNotEmpty) {
+        await provider.billingServiceClient.fulfillFromStripeCheckoutSession(
+          FulfillFromStripeCheckoutSessionRequest(
+            checkoutSessionId: sessionId,
+            legalTermsVersionDate: kEnterpriseTermsVersionId,
+          ),
+        );
+      }
+    } catch (_) {
+      // Idempotent: already fulfilled or not paid yet; loadData shows current state
+    }
+  }
+
+  Future<_BillingPaymentMethod?> _askPaymentMethod() {
+    final lang = Lang.of(context);
+    return showDialog<_BillingPaymentMethod>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(lang.billingChoosePaymentMethod),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.credit_card),
+              title: Text(lang.billingPayWithCard),
+              onTap: () => Navigator.of(ctx).pop(_BillingPaymentMethod.stripe),
+            ),
+            ListTile(
+              leading: const Icon(Icons.phone_android),
+              title: Text(lang.billingPayWithMobileMoney),
+              onTap: () => Navigator.of(ctx).pop(_BillingPaymentMethod.pawapay),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(lang.cancel),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _startPurchase(
+    BillingProduct product, {
+    int? fiscalYear,
+  }) async {
     if (!mounted) return;
     if (!_hasCreateBillingPermission(context)) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -300,6 +388,19 @@ class _BillingScreenState extends State<BillingScreen> {
       );
       return;
     }
+    final method = await _askPaymentMethod();
+    if (method == null || !mounted) return;
+    if (method == _BillingPaymentMethod.stripe) {
+      await _purchaseWithStripe(product, fiscalYear: fiscalYear);
+    } else {
+      await _purchaseWithPawapay(product, fiscalYear: fiscalYear);
+    }
+  }
+
+  Future<void> _purchaseWithStripe(
+    BillingProduct product, {
+    int? fiscalYear,
+  }) async {
     final provider = context.read<BillingServiceClientProvider>();
     final stripePriceId = product.stripePriceId;
     if (stripePriceId.isEmpty) return;
@@ -307,26 +408,28 @@ class _BillingScreenState extends State<BillingScreen> {
     setState(() => _checkoutProductId = product.productId);
 
     try {
-      // Use hash-based return URL so the app router (e.g. #/billing) shows Billing after redirect
       final origin = html.window.location.origin;
       const billingPath = RouteUri.billing;
-      final successUrl = '$origin/#$billingPath?success=true&session_id={CHECKOUT_SESSION_ID}';
+      final successUrl =
+          '$origin/#$billingPath?success=true&session_id={CHECKOUT_SESSION_ID}';
       final cancelUrl = '$origin/#$billingPath?canceled=true';
       final request = CreateCheckoutSessionRequest(
         priceId: stripePriceId,
         successUrl: successUrl,
         cancelUrl: cancelUrl,
         legalTermsVersionDate: kEnterpriseTermsVersionId,
+        fiscalYear: fiscalYear,
       );
 
-      final response = await provider.billingServiceClient
-          .createCheckoutSession(request);
+      final response =
+          await provider.billingServiceClient.createCheckoutSession(request);
 
       if (!mounted) return;
       if (response.checkoutUrl.isEmpty) {
         Aptabase.instance.trackEvent('billing_license_checkout_failed', {
           'reason': 'empty_checkout_url',
           'product_id': product.productId,
+          'provider': 'stripe',
         });
         setState(() {
           _checkoutProductId = null;
@@ -339,6 +442,7 @@ class _BillingScreenState extends State<BillingScreen> {
       Aptabase.instance.trackEvent('billing_license_checkout_failed', {
         'reason': 'checkout_session_grpc',
         'product_id': product.productId,
+        'provider': 'stripe',
         'code': e.code,
         'detail': e.message ?? '',
       });
@@ -352,6 +456,76 @@ class _BillingScreenState extends State<BillingScreen> {
       Aptabase.instance.trackEvent('billing_license_checkout_failed', {
         'reason': 'checkout_session_error',
         'product_id': product.productId,
+        'provider': 'stripe',
+        'detail': e.toString(),
+      });
+      if (mounted) {
+        setState(() {
+          _checkoutProductId = null;
+          _errorMessage = e.toString();
+        });
+      }
+    }
+  }
+
+  Future<void> _purchaseWithPawapay(
+    BillingProduct product, {
+    int? fiscalYear,
+  }) async {
+    final provider = context.read<BillingServiceClientProvider>();
+    setState(() => _checkoutProductId = product.productId);
+
+    try {
+      final origin = html.window.location.origin;
+      const billingPath = RouteUri.billing;
+      final returnUrl =
+          '$origin/#$billingPath?success=true&provider=pawapay';
+      final request = CreatePawapayCheckoutRequest(
+        productId: product.productId,
+        returnUrl: returnUrl,
+        legalTermsVersionDate: kEnterpriseTermsVersionId,
+        fiscalYear: fiscalYear,
+      );
+
+      final response =
+          await provider.billingServiceClient.createPawapayCheckout(request);
+
+      if (!mounted) return;
+      if (response.redirectUrl.isEmpty) {
+        Aptabase.instance.trackEvent('billing_license_checkout_failed', {
+          'reason': 'empty_redirect_url',
+          'product_id': product.productId,
+          'provider': 'pawapay',
+        });
+        setState(() {
+          _checkoutProductId = null;
+          _errorMessage = 'Checkout failed';
+        });
+        return;
+      }
+      if (response.checkoutId.isNotEmpty) {
+        html.window.sessionStorage['pawapay_checkout_id'] = response.checkoutId;
+      }
+      html.window.location.href = response.redirectUrl;
+    } on GrpcError catch (e) {
+      Aptabase.instance.trackEvent('billing_license_checkout_failed', {
+        'reason': 'pawapay_checkout_grpc',
+        'product_id': product.productId,
+        'provider': 'pawapay',
+        'code': e.code,
+        'detail': e.message ?? '',
+      });
+      if (mounted) {
+        setState(() {
+          _checkoutProductId = null;
+          _errorMessage = e.message ?? 'Checkout failed';
+        });
+      }
+    } catch (e) {
+      Aptabase.instance.trackEvent('billing_license_checkout_failed', {
+        'reason': 'pawapay_checkout_error',
+        'product_id': product.productId,
+        'provider': 'pawapay',
         'detail': e.toString(),
       });
       if (mounted) {
@@ -495,7 +669,7 @@ class _BillingScreenState extends State<BillingScreen> {
     final canManageSeats = _hasUpdateBillingPermission(context);
     final totalSeats = _licenses.fold<int>(0, (sum, l) => sum + l.maxUsers);
     final returnedFromSuccess =
-        _billingQueryParams()['success'] == 'true' && !_loading;
+        billingQueryParamsFromLocation()['success'] == 'true' && !_loading;
 
     return PortalMasterLayout(
       key: const Key('billingScreen'),
@@ -635,8 +809,25 @@ class _BillingScreenState extends State<BillingScreen> {
                                       isLoading: _checkoutProductId == p.productId,
                                       purchaseEnabled:
                                           canPurchase && _acceptedEnterpriseTerms,
+                                      highlighted: _bridgeHighlightProductId ==
+                                          p.productId.toLowerCase(),
                                     ))
                                 .toList(),
+                          ),
+                          const SizedBox(height: kDefaultPadding * 2),
+                          _SyscohadaAddonCard(
+                            product: _syscohadaProduct,
+                            purchasedYears: _accountingPurchases,
+                            selectedYear: _syscohadaFiscalYear,
+                            onYearChanged: (y) =>
+                                setState(() => _syscohadaFiscalYear = y),
+                            onPurchase: _onSyscohadaPurchaseTapped,
+                            isLoading:
+                                _checkoutProductId == kSyscohadaProductId,
+                            purchaseEnabled:
+                                canPurchase && _acceptedEnterpriseTerms,
+                            highlighted: _bridgeHighlightProductId ==
+                                kSyscohadaProductId,
                           ),
                         ],
                       ),
@@ -671,8 +862,44 @@ class _BillingScreenState extends State<BillingScreen> {
                                         isLoading: _checkoutProductId == p.productId,
                                         purchaseEnabled: canPurchase &&
                                             _acceptedEnterpriseTerms,
+                                        highlighted:
+                                            _bridgeHighlightProductId ==
+                                                p.productId.toLowerCase(),
                                       ))
                                   .toList(),
+                            ),
+                            const SizedBox(height: kDefaultPadding * 2),
+                            _SyscohadaAddonCard(
+                              product: _syscohadaProduct,
+                              purchasedYears: _accountingPurchases,
+                              selectedYear: _syscohadaFiscalYear,
+                              onYearChanged: (y) =>
+                                  setState(() => _syscohadaFiscalYear = y),
+                              onPurchase: _onSyscohadaPurchaseTapped,
+                              isLoading:
+                                  _checkoutProductId == kSyscohadaProductId,
+                              purchaseEnabled:
+                                  canPurchase && _acceptedEnterpriseTerms,
+                              highlighted: _bridgeHighlightProductId ==
+                                  kSyscohadaProductId,
+                            ),
+                            const SizedBox(height: kDefaultPadding * 2),
+                            const Divider(),
+                            const SizedBox(height: kDefaultPadding * 2),
+                          ] else ...[
+                            _SyscohadaAddonCard(
+                              product: _syscohadaProduct,
+                              purchasedYears: _accountingPurchases,
+                              selectedYear: _syscohadaFiscalYear,
+                              onYearChanged: (y) =>
+                                  setState(() => _syscohadaFiscalYear = y),
+                              onPurchase: _onSyscohadaPurchaseTapped,
+                              isLoading:
+                                  _checkoutProductId == kSyscohadaProductId,
+                              purchaseEnabled:
+                                  canPurchase && _acceptedEnterpriseTerms,
+                              highlighted: _bridgeHighlightProductId ==
+                                  kSyscohadaProductId,
                             ),
                             const SizedBox(height: kDefaultPadding * 2),
                             const Divider(),
@@ -710,17 +937,150 @@ class _BillingScreenState extends State<BillingScreen> {
   }
 }
 
+class _SyscohadaAddonCard extends StatelessWidget {
+  const _SyscohadaAddonCard({
+    required this.product,
+    required this.purchasedYears,
+    required this.selectedYear,
+    required this.onYearChanged,
+    required this.onPurchase,
+    required this.isLoading,
+    required this.purchaseEnabled,
+    this.highlighted = false,
+  });
+
+  final BillingProduct? product;
+  final List<AccountingYearPurchase> purchasedYears;
+  final int selectedYear;
+  final ValueChanged<int> onYearChanged;
+  final VoidCallback onPurchase;
+  final bool isLoading;
+  final bool purchaseEnabled;
+  final bool highlighted;
+
+  @override
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    final lang = Lang.of(context);
+    final nowYear = DateTime.now().year;
+    final yearOptions = List<int>.generate(6, (i) => nowYear - 2 + i);
+    final paidYears = purchasedYears.map((p) => p.year).toSet();
+    final priceLabel = product == null
+        ? lang.billingSyscohadaPrice
+        : '${(product!.amountCents / 100).toStringAsFixed(2)} ${product!.currency.isNotEmpty ? product!.currency.toUpperCase() : 'EUR'}';
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(kDefaultPadding * 1.25),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: highlighted
+              ? themeData.colorScheme.primary
+              : themeData.dividerColor.withValues(alpha: 0.6),
+          width: highlighted ? 2 : 1,
+        ),
+        color: themeData.colorScheme.surfaceContainerHighest
+            .withValues(alpha: 0.35),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            lang.billingSyscohadaTitle,
+            style: themeData.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            lang.billingSyscohadaSubtitle,
+            style: themeData.textTheme.bodyMedium,
+          ),
+          const SizedBox(height: kDefaultPadding),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(
+                priceLabel,
+                style: themeData.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                lang.billingSyscohadaPerReport,
+                style: themeData.textTheme.bodyMedium?.copyWith(
+                  color: themeData.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+          if (paidYears.isNotEmpty) ...[
+            const SizedBox(height: kDefaultPadding),
+            Text(
+              '${lang.billingSyscohadaPurchasedYears}: ${paidYears.toList()..sort()}',
+              style: themeData.textTheme.bodySmall,
+            ),
+          ],
+          if (product != null) ...[
+            const SizedBox(height: kDefaultPadding),
+            Text(lang.billingSyscohadaSelectYear),
+            const SizedBox(height: 8),
+            DropdownButton<int>(
+              value: selectedYear,
+              items: yearOptions
+                  .map(
+                    (y) => DropdownMenuItem(
+                      value: y,
+                      child: Text(
+                        paidYears.contains(y) ? '$y ✓' : '$y',
+                      ),
+                    ),
+                  )
+                  .toList(),
+              onChanged: isLoading
+                  ? null
+                  : (y) {
+                      if (y != null) onYearChanged(y);
+                    },
+            ),
+            const SizedBox(height: kDefaultPadding),
+            FilledButton(
+              onPressed: (!purchaseEnabled ||
+                      isLoading ||
+                      paidYears.contains(selectedYear))
+                  ? null
+                  : onPurchase,
+              child: isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text(lang.billingSyscohadaPurchase),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
 class _ProductOfferCard extends StatelessWidget {
   final BillingProduct product;
   final VoidCallback onPurchase;
   final bool isLoading;
   final bool purchaseEnabled;
+  final bool highlighted;
 
   const _ProductOfferCard({
     required this.product,
     required this.onPurchase,
     required this.isLoading,
     required this.purchaseEnabled,
+    this.highlighted = false,
   });
 
   @override
@@ -736,11 +1096,14 @@ class _ProductOfferCard extends StatelessWidget {
     return SizedBox(
       width: 240,
       child: Card(
-        elevation: style.elevation,
+        elevation: highlighted ? style.elevation + 2 : style.elevation,
         color: style.background,
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
+          side: highlighted
+              ? BorderSide(color: themeData.colorScheme.primary, width: 2)
+              : BorderSide.none,
         ),
         child: Padding(
           padding: const EdgeInsets.all(kDefaultPadding * 1.25),
@@ -1221,3 +1584,5 @@ class _UserListView extends StatelessWidget {
     );
   }
 }
+
+enum _BillingPaymentMethod { stripe, pawapay }

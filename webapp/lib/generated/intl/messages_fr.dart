@@ -117,6 +117,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Attribuez vos nouvelles licences aux utilisateurs ci‑dessous.",
     ),
     "billingAttributedTo": MessageLookupByLibrary.simpleMessage("Attribué à"),
+    "billingChoosePaymentMethod": MessageLookupByLibrary.simpleMessage(
+      "Comment souhaitez-vous payer ?",
+    ),
     "billingLicenses": MessageLookupByLibrary.simpleMessage("Licence(s)"),
     "billingLifetime": MessageLookupByLibrary.simpleMessage("À vie"),
     "billingMyLicenses": MessageLookupByLibrary.simpleMessage("Mes licences"),
@@ -129,8 +132,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingNotYetAttributed": MessageLookupByLibrary.simpleMessage(
       "Pas encore attribuée(s)",
     ),
+    "billingPayWithCard": MessageLookupByLibrary.simpleMessage(
+      "Carte (Stripe)",
+    ),
+    "billingPayWithMobileMoney": MessageLookupByLibrary.simpleMessage(
+      "Mobile money (PawaPay)",
+    ),
     "billingPaymentProcessing": MessageLookupByLibrary.simpleMessage(
-      "Paiement reçu. Votre ou vos licences apparaîtront sous peu ; vous pourrez ensuite attribuer les places aux utilisateurs.",
+      "Paiement reçu. Confirmation en cours — votre ou vos licences apparaîtront sous peu ; vous pourrez ensuite les attribuer aux utilisateurs.",
     ),
     "billingPaymentSuccess": MessageLookupByLibrary.simpleMessage(
       "Paiement accepté. Une ou plusieurs licences ont bien été achetées : vous pouvez les attribuer aux utilisateurs concernés.",
@@ -142,10 +151,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingPlanPremium": MessageLookupByLibrary.simpleMessage("Weebi Premium"),
     "billingPurchase": MessageLookupByLibrary.simpleMessage("Acheter"),
     "billingPurchaseLicense": MessageLookupByLibrary.simpleMessage(
-      "Acheter une licence",
+      "Acheter Premium",
     ),
     "billingPurchaseLicenseDescription": MessageLookupByLibrary.simpleMessage(
-      "Choisissez une licence pour débloquer les fonctions avancées de Weebi. Chaque license est un achat unique : il n\'expire pas, et ce n\'est pas un abonnement — pas de renouvellement, pas de date limite.",
+      "La licence Premium débloque le suivi à distance, le multi-boutiques et le tableau de bord avancé. Achat unique par utilisateur : pas d\'abonnement, pas de date limite.",
     ),
     "billingReassignNoOtherUser": MessageLookupByLibrary.simpleMessage(
       "Aucun autre utilisateur ne peut recevoir cette license. Ajoutez un utilisateur ou libérez une license ailleurs d’abord.",
@@ -157,6 +166,28 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingRetry": MessageLookupByLibrary.simpleMessage("Réessayer"),
     "billingSeatsAttributed": MessageLookupByLibrary.simpleMessage(
       "licence(s) attribuée(s)",
+    ),
+    "billingSyscohadaComingSoon": MessageLookupByLibrary.simpleMessage(
+      "Bientôt disponible à l\'achat depuis cet écran.",
+    ),
+    "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage(
+      "par année fiscale",
+    ),
+    "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage("1 900 FCFA"),
+    "billingSyscohadaPurchase": MessageLookupByLibrary.simpleMessage(
+      "Payer cette année",
+    ),
+    "billingSyscohadaPurchasedYears": MessageLookupByLibrary.simpleMessage(
+      "Années déjà payées",
+    ),
+    "billingSyscohadaSelectYear": MessageLookupByLibrary.simpleMessage(
+      "Année fiscale",
+    ),
+    "billingSyscohadaSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Système Minimal de Trésorerie — achat ponctuel (pas d\'abonnement)",
+    ),
+    "billingSyscohadaTitle": MessageLookupByLibrary.simpleMessage(
+      "États financiers SYSCOHADA",
     ),
     "billingUsers": MessageLookupByLibrary.simpleMessage("utilisateur(s)"),
     "billingValidUntil": MessageLookupByLibrary.simpleMessage(

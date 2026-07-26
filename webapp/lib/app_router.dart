@@ -16,6 +16,7 @@ import 'package:web_admin/views/screens/firm/create_firm_screen.dart';
 import 'package:web_admin/views/screens/firm/firm_view_screen.dart';
 import 'package:web_admin/views/screens/general_ui_screen.dart';
 import 'package:web_admin/views/screens/iframe_demo_screen.dart';
+import 'package:web_admin/views/screens/authentication/bridge_screen.dart';
 import 'package:web_admin/views/screens/authentication/login_screen.dart';
 import 'package:web_admin/views/screens/authentication/logout_screen.dart';
 import 'package:web_admin/views/screens/my_profile_screen.dart';
@@ -49,6 +50,8 @@ class RouteUri {
   static const String dialogs = '/dialogs';
   static const String error404 = '/404';
   static const String login = '/login';
+  /// App->Web magic-link landing (exchanges one-time token for BFF session).
+  static const String bridge = '/bridge';
   static const String register = '/register';
   static const String crud = '/crud';
   static const String crudDetail = '/crud-detail';
@@ -91,6 +94,7 @@ const List<String> unrestrictedRoutes = [
   RouteUri.logout,
   RouteUri.login, // Remove this line for actual authentication flow.
   RouteUri.register, // Remove this line for actual authentication flow.
+  RouteUri.bridge,
   RouteUri.legalTermsEn,
   RouteUri.legalCgvFr,
 ];
@@ -185,6 +189,13 @@ GoRouter appRouter(
         pageBuilder: (context, state) => NoTransitionPage<void>(
           key: state.pageKey,
           child: const LoginScreen(),
+        ),
+      ),
+      GoRoute(
+        path: RouteUri.bridge,
+        pageBuilder: (context, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const BridgeScreen(),
         ),
       ),
       GoRoute(

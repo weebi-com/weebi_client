@@ -37,7 +37,6 @@ void main() {
         TicketTypePb.spend,
         TicketTypePb.spendDeferred,
         TicketTypePb.spendCovered,
-        TicketTypePb.wage,
       ];
 
       for (final type in financialTypes) {
@@ -164,20 +163,6 @@ void main() {
       await tester.pumpWidget(MaterialApp(
         home: _TicketContactIconMock(ticket: spendDeferred),
       ));
-      expect(find.byType(ErrorWidget), findsNothing);
-    });
-
-    testWidgets('wage type represents supplier payment (grimacing)',
-        (WidgetTester tester) async {
-      final ticket = TicketPb(
-        ticketType: TicketTypePb.wage,
-      );
-
-      await tester.pumpWidget(MaterialApp(
-        home: _TicketContactIconMock(ticket: ticket),
-      ));
-
-      expect(find.byType(Icon), findsWidgets);
       expect(find.byType(ErrorWidget), findsNothing);
     });
   });
@@ -314,8 +299,6 @@ class _TicketTypeIconMock extends StatelessWidget {
       case TicketTypePb.sellCovered:
       case TicketTypePb.spendCovered:
         return Icons.card_giftcard;
-      case TicketTypePb.wage:
-        return Icons.payments;
       case TicketTypePb.stockIn:
         return Icons.arrow_downward;
       case TicketTypePb.stockOut:
@@ -363,7 +346,6 @@ class _TicketContactIconMock extends StatelessWidget {
       case TicketTypePb.spend:
       case TicketTypePb.spendDeferred:
       case TicketTypePb.spendCovered:
-      case TicketTypePb.wage:
         return Icons.sentiment_dissatisfied;
       default:
         return Icons.sentiment_neutral;

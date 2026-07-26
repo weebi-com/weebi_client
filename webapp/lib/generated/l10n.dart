@@ -219,10 +219,10 @@ class Lang {
     );
   }
 
-  /// `Payment received. We're confirming with Stripe — your license(s) will appear shortly; you can then assign seats to users. If they don't appear, check your webhook configuration.`
+  /// `Payment received. We're confirming it — your license(s) will appear shortly; you can then assign seats to users.`
   String get billingPaymentProcessing {
     return Intl.message(
-      'Payment received. We\'re confirming with Stripe — your license(s) will appear shortly; you can then assign seats to users. If they don\'t appear, check your webhook configuration.',
+      'Payment received. We\'re confirming it — your license(s) will appear shortly; you can then assign seats to users.',
       name: 'billingPaymentProcessing',
       desc: '',
       args: [],
@@ -239,6 +239,36 @@ class Lang {
     );
   }
 
+  /// `Card (Stripe)`
+  String get billingPayWithCard {
+    return Intl.message(
+      'Card (Stripe)',
+      name: 'billingPayWithCard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mobile money (PawaPay)`
+  String get billingPayWithMobileMoney {
+    return Intl.message(
+      'Mobile money (PawaPay)',
+      name: 'billingPayWithMobileMoney',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `How do you want to pay?`
+  String get billingChoosePaymentMethod {
+    return Intl.message(
+      'How do you want to pay?',
+      name: 'billingChoosePaymentMethod',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Purchase`
   String get billingPurchase {
     return Intl.message(
@@ -249,21 +279,101 @@ class Lang {
     );
   }
 
-  /// `Purchase a license`
+  /// `Purchase Premium`
   String get billingPurchaseLicense {
     return Intl.message(
-      'Purchase a license',
+      'Purchase Premium',
       name: 'billingPurchaseLicense',
       desc: '',
       args: [],
     );
   }
 
-  /// `Choose a license to unlock Weebi's advanced features. Each seat is a one-time purchase: it does not expire, and this is not a subscription—no renewals, no ticking clock.`
+  /// `The Premium license unlocks remote tracking, multi-store management and the advanced dashboard. One-time purchase per user: no subscription, no expiry.`
   String get billingPurchaseLicenseDescription {
     return Intl.message(
-      'Choose a license to unlock Weebi\'s advanced features. Each seat is a one-time purchase: it does not expire, and this is not a subscription—no renewals, no ticking clock.',
+      'The Premium license unlocks remote tracking, multi-store management and the advanced dashboard. One-time purchase per user: no subscription, no expiry.',
       name: 'billingPurchaseLicenseDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `SYSCOHADA financial statements`
+  String get billingSyscohadaTitle {
+    return Intl.message(
+      'SYSCOHADA financial statements',
+      name: 'billingSyscohadaTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Minimum Cash System — one-time purchase per fiscal year (not a subscription)`
+  String get billingSyscohadaSubtitle {
+    return Intl.message(
+      'Minimum Cash System — one-time purchase per fiscal year (not a subscription)',
+      name: 'billingSyscohadaSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `1,900 FCFA`
+  String get billingSyscohadaPrice {
+    return Intl.message(
+      '1,900 FCFA',
+      name: 'billingSyscohadaPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `per fiscal year`
+  String get billingSyscohadaPerReport {
+    return Intl.message(
+      'per fiscal year',
+      name: 'billingSyscohadaPerReport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fiscal year`
+  String get billingSyscohadaSelectYear {
+    return Intl.message(
+      'Fiscal year',
+      name: 'billingSyscohadaSelectYear',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pay for this year`
+  String get billingSyscohadaPurchase {
+    return Intl.message(
+      'Pay for this year',
+      name: 'billingSyscohadaPurchase',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Years already paid`
+  String get billingSyscohadaPurchasedYears {
+    return Intl.message(
+      'Years already paid',
+      name: 'billingSyscohadaPurchasedYears',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Purchase from this screen coming soon.`
+  String get billingSyscohadaComingSoon {
+    return Intl.message(
+      'Purchase from this screen coming soon.',
+      name: 'billingSyscohadaComingSoon',
       desc: '',
       args: [],
     );
