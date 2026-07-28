@@ -76,6 +76,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "account": MessageLookupByLibrary.simpleMessage("账户"),
     "adminPortalLogin": MessageLookupByLibrary.simpleMessage("管理后台登录"),
     "backToLogin": MessageLookupByLibrary.simpleMessage("返回登入页面"),
+    "billingAcceptAccountingReportTerms": MessageLookupByLibrary.simpleMessage(
+      "我已阅读并同意购买现金报告的销售条款和条件。",
+    ),
     "billingAcceptEnterpriseTerms": MessageLookupByLibrary.simpleMessage(
       "我已阅读并同意企业版许可证的销售条款和条件。",
     ),
@@ -99,9 +102,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingChoosePaymentMethod": MessageLookupByLibrary.simpleMessage(
       "您想如何付款？",
     ),
+    "billingHistoryNoLicenses": MessageLookupByLibrary.simpleMessage(
+      "尚无已购买的 Premium 许可证。",
+    ),
+    "billingHistoryNoSyscohadaYears": MessageLookupByLibrary.simpleMessage(
+      "尚无已支付财政年度。",
+    ),
     "billingLicenses": MessageLookupByLibrary.simpleMessage("许可证"),
     "billingLifetime": MessageLookupByLibrary.simpleMessage("终身"),
-    "billingMyLicenses": MessageLookupByLibrary.simpleMessage("我的许可证"),
+    "billingMyLicenses": MessageLookupByLibrary.simpleMessage("我的 Premium 许可证"),
     "billingNoAccess": MessageLookupByLibrary.simpleMessage(
       "您没有管理许可证的权限。请联系企业管理员为您开通账单相关权限。",
     ),
@@ -154,6 +163,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingSyscohadaTitle": MessageLookupByLibrary.simpleMessage(
       "SYSCOHADA 财务报表",
     ),
+    "billingTabHistory": MessageLookupByLibrary.simpleMessage("购买 / 许可证分配"),
+    "billingTabOffers": MessageLookupByLibrary.simpleMessage("套餐"),
     "billingUsers": MessageLookupByLibrary.simpleMessage("用户"),
     "billingValidUntil": MessageLookupByLibrary.simpleMessage("有效期至"),
     "billingViewFullTerms": MessageLookupByLibrary.simpleMessage("在新标签页查看完整文档"),
@@ -256,6 +267,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "integerErrorText": MessageLookupByLibrary.simpleMessage("此字段需要有效的整数。"),
     "ipErrorText": MessageLookupByLibrary.simpleMessage("此字段需要有效的IP。"),
     "language": MessageLookupByLibrary.simpleMessage("语言"),
+    "lastName": MessageLookupByLibrary.simpleMessage("姓"),
+    "legalDocTitleCgvAccountingReportFr": MessageLookupByLibrary.simpleMessage(
+      "销售条款和条件 - 现金报告",
+    ),
     "legalDocTitleCgvFr": MessageLookupByLibrary.simpleMessage(
       "Conditions Générales de Vente",
     ),
@@ -274,7 +289,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "maxErrorText": m8,
     "maxLengthErrorText": m9,
     "menuAccesses": MessageLookupByLibrary.simpleMessage("访问"),
-    "menuBilling": MessageLookupByLibrary.simpleMessage("Weebi 许可证"),
+    "menuBilling": MessageLookupByLibrary.simpleMessage("Weebi 套餐"),
     "menuBoutiques": MessageLookupByLibrary.simpleMessage("店铺"),
     "menuCatalog": MessageLookupByLibrary.simpleMessage("商品目录"),
     "menuDevices": MessageLookupByLibrary.simpleMessage("设备"),

@@ -5,8 +5,11 @@ import 'package:web_admin/views/screens/billing/billing_plan_label.dart';
 
 const kWebBridgePremiumProductId = 'premium';
 
-/// Query params from current URL. With hash routing, params may be in the
-/// fragment (`#/billing?success=...` or `#/bridge?t=...`).
+/// Query params from current URL.
+///
+/// Prefers the hash query (`#/bridge?t=…` or `#/billing?success=…`) when
+/// present; otherwise uses the document query (`/?t=…&product=…#/bridge`) so
+/// magic-link tokens survive external browser launch that drops fragments.
 Map<String, String> billingQueryParamsFromLocation() {
   final base = Uri.base;
   final fragment = base.fragment;

@@ -46,6 +46,12 @@ List<SidebarMenuConfig> get sidebarMenuConfigs => [
       title: (context) => Lang.of(context).menuCatalog,
     ),
   SidebarMenuConfig(
+    uri: RouteUri.billing,
+    icon: Icons.workspace_premium_rounded,
+    title: (context) => Lang.of(context).menuBilling,
+    highlightGold: true,
+  ),
+  SidebarMenuConfig(
     uri: RouteUri.ticketsOverview,
     icon: IconsWeebi.ticketsIconData,
     title: (context) => Lang.of(context).menuTickets,
@@ -54,11 +60,6 @@ List<SidebarMenuConfig> get sidebarMenuConfigs => [
     uri: RouteUri.stats,
     icon: Icons.ssid_chart_rounded,
     title: (context) => Lang.of(context).menuStats,
-  ),
-  SidebarMenuConfig(
-    uri: RouteUri.billing,
-    icon: Icons.credit_card_rounded,
-    title: (context) => Lang.of(context).menuBilling,
   ),
   SidebarMenuConfig(
     uri: RouteUri.help,

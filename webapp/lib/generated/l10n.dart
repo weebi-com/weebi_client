@@ -99,6 +99,16 @@ class Lang {
     );
   }
 
+  /// `I have read and accept the Terms and Conditions of Sale for the cash report.`
+  String get billingAcceptAccountingReportTerms {
+    return Intl.message(
+      'I have read and accept the Terms and Conditions of Sale for the cash report.',
+      name: 'billingAcceptAccountingReportTerms',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `I have read and accept the Terms and Conditions of Sale for the Enterprise license.`
   String get billingAcceptEnterpriseTerms {
     return Intl.message(
@@ -189,10 +199,10 @@ class Lang {
     );
   }
 
-  /// `My licenses`
+  /// `My Premium licenses`
   String get billingMyLicenses {
     return Intl.message(
-      'My licenses',
+      'My Premium licenses',
       name: 'billingMyLicenses',
       desc: '',
       args: [],
@@ -299,6 +309,41 @@ class Lang {
     );
   }
 
+  /// `No Premium licenses purchased yet.`
+  String get billingHistoryNoLicenses {
+    return Intl.message(
+      'No Premium licenses purchased yet.',
+      name: 'billingHistoryNoLicenses',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No fiscal years paid yet.`
+  String get billingHistoryNoSyscohadaYears {
+    return Intl.message(
+      'No fiscal years paid yet.',
+      name: 'billingHistoryNoSyscohadaYears',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Purchases / License assignment`
+  String get billingTabHistory {
+    return Intl.message(
+      'Purchases / License assignment',
+      name: 'billingTabHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Offers`
+  String get billingTabOffers {
+    return Intl.message('Offers', name: 'billingTabOffers', desc: '', args: []);
+  }
+
   /// `SYSCOHADA financial statements`
   String get billingSyscohadaTitle {
     return Intl.message(
@@ -374,6 +419,16 @@ class Lang {
     return Intl.message(
       'Purchase from this screen coming soon.',
       name: 'billingSyscohadaComingSoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This report cannot be generated until the fiscal year is over.`
+  String get billingSyscohadaCurrentYearDisclaimer {
+    return Intl.message(
+      'This report cannot be generated until the fiscal year is over.',
+      name: 'billingSyscohadaCurrentYearDisclaimer',
       desc: '',
       args: [],
     );
@@ -1079,6 +1134,16 @@ class Lang {
     return Intl.message('Last Name', name: 'lastName', desc: '', args: []);
   }
 
+  /// `Terms and Conditions of Sale - Cash Report`
+  String get legalDocTitleCgvAccountingReportFr {
+    return Intl.message(
+      'Terms and Conditions of Sale - Cash Report',
+      name: 'legalDocTitleCgvAccountingReportFr',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Conditions Générales de Vente`
   String get legalDocTitleCgvFr {
     return Intl.message(
@@ -1179,10 +1244,10 @@ class Lang {
     return Intl.message('Accesses', name: 'menuAccesses', desc: '', args: []);
   }
 
-  /// `Weebi licenses`
+  /// `Weebi offers`
   String get menuBilling {
     return Intl.message(
-      'Weebi licenses',
+      'Weebi offers',
       name: 'menuBilling',
       desc: '',
       args: [],

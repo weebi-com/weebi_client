@@ -3,3 +3,9 @@
 dependency_overrides:
   protos_weebi:
     path: ../../weebi_server/packages/protos/protos_weebi
+  auth_weebi:
+    path: ../packages/auth
+  boutiques_weebi:
+    path: ../packages/boutiques
+  entitlements_weebi:
+    path: ../packages/entitlements

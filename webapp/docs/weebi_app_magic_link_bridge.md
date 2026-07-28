@@ -56,7 +56,9 @@ user pull-to-refresh (or auto-poll) licenses /
 
 ## What the webapp already does
 
-1. Opens `/#/bridge?t=…&product=premium` or `…&product=syscohada&year=Y`.
+1. Opens `/?t=…&product=premium#/bridge` (or with `year=Y` for syscohada).
+   Query params are **before** the hash so OS/`url_launcher` handoff keeps the
+   token; the webapp also still accepts the older `/#/bridge?t=…` shape.
 2. Calls `exchangeWebBridgeToken` → Envoy sets `weebi_session_id`.
 3. Redirects to `/#/billing?product=…` (and `year` for syscohada).
 4. Highlights the matching card; **terms still required** before Stripe checkout.

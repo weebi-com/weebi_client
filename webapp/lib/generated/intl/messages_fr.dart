@@ -95,6 +95,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "backToLogin": MessageLookupByLibrary.simpleMessage(
       "Retour à la Connexion",
     ),
+    "billingAcceptAccountingReportTerms": MessageLookupByLibrary.simpleMessage(
+      "J\'ai lu et j\'accepte les Conditions Générales de Vente applicables à l\'achat d\'un rapport de trésorerie.",
+    ),
     "billingAcceptEnterpriseTerms": MessageLookupByLibrary.simpleMessage(
       "J\'ai lu et j\'accepte les Conditions Générales de Vente applicables à l\'achat d\'une licence Entreprise.",
     ),
@@ -120,9 +123,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingChoosePaymentMethod": MessageLookupByLibrary.simpleMessage(
       "Comment souhaitez-vous payer ?",
     ),
+    "billingHistoryNoLicenses": MessageLookupByLibrary.simpleMessage(
+      "Aucune licence Premium achetée pour le moment.",
+    ),
+    "billingHistoryNoSyscohadaYears": MessageLookupByLibrary.simpleMessage(
+      "Aucune année fiscale payée pour le moment.",
+    ),
     "billingLicenses": MessageLookupByLibrary.simpleMessage("Licence(s)"),
     "billingLifetime": MessageLookupByLibrary.simpleMessage("À vie"),
-    "billingMyLicenses": MessageLookupByLibrary.simpleMessage("Mes licences"),
+    "billingMyLicenses": MessageLookupByLibrary.simpleMessage(
+      "Mes licences Premium",
+    ),
     "billingNoAccess": MessageLookupByLibrary.simpleMessage(
       "Vous n\'avez pas l\'autorisation de gérer les licences. Demandez à l\'administrateur de votre entreprise de vous accorder l\'accès.",
     ),
@@ -167,9 +178,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingSeatsAttributed": MessageLookupByLibrary.simpleMessage(
       "licence(s) attribuée(s)",
     ),
-    "billingSyscohadaComingSoon": MessageLookupByLibrary.simpleMessage(
-      "Bientôt disponible à l\'achat depuis cet écran.",
-    ),
+    "billingSyscohadaCurrentYearDisclaimer":
+        MessageLookupByLibrary.simpleMessage(
+          "Ce rapport ne peut être généré avant la fin de l\'exercice fiscal.",
+        ),
     "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage(
       "par année fiscale",
     ),
@@ -184,11 +196,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Année fiscale",
     ),
     "billingSyscohadaSubtitle": MessageLookupByLibrary.simpleMessage(
-      "Système Minimal de Trésorerie — achat ponctuel (pas d\'abonnement)",
+      "Système Minimal de Trésorerie",
     ),
     "billingSyscohadaTitle": MessageLookupByLibrary.simpleMessage(
       "États financiers SYSCOHADA",
     ),
+    "billingTabHistory": MessageLookupByLibrary.simpleMessage(
+      "Achats / Attribution licence",
+    ),
+    "billingTabOffers": MessageLookupByLibrary.simpleMessage("Offres"),
     "billingUsers": MessageLookupByLibrary.simpleMessage("utilisateur(s)"),
     "billingValidUntil": MessageLookupByLibrary.simpleMessage(
       "Valide jusqu\'au",
@@ -351,6 +367,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "language": MessageLookupByLibrary.simpleMessage("Langue"),
     "lastName": MessageLookupByLibrary.simpleMessage("Nom"),
+    "legalDocTitleCgvAccountingReportFr": MessageLookupByLibrary.simpleMessage(
+      "Conditions Générales de Vente - Rapport de trésorerie",
+    ),
     "legalDocTitleCgvFr": MessageLookupByLibrary.simpleMessage(
       "Conditions Générales de Vente",
     ),
@@ -374,7 +393,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "maxErrorText": m8,
     "maxLengthErrorText": m9,
     "menuAccesses": MessageLookupByLibrary.simpleMessage("Accès"),
-    "menuBilling": MessageLookupByLibrary.simpleMessage("Licences Weebi"),
+    "menuBilling": MessageLookupByLibrary.simpleMessage("Offres Weebi"),
     "menuBoutiques": MessageLookupByLibrary.simpleMessage("Mes Boutiques"),
     "menuCatalog": MessageLookupByLibrary.simpleMessage("Catalogue"),
     "menuDevices": MessageLookupByLibrary.simpleMessage("Appareils"),

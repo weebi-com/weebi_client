@@ -92,6 +92,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Admin Portal Login",
     ),
     "backToLogin": MessageLookupByLibrary.simpleMessage("Back to Login"),
+    "billingAcceptAccountingReportTerms": MessageLookupByLibrary.simpleMessage(
+      "I have read and accept the Terms and Conditions of Sale for the cash report.",
+    ),
     "billingAcceptEnterpriseTerms": MessageLookupByLibrary.simpleMessage(
       "I have read and accept the Terms and Conditions of Sale for the Enterprise license.",
     ),
@@ -119,9 +122,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingChoosePaymentMethod": MessageLookupByLibrary.simpleMessage(
       "How do you want to pay?",
     ),
+    "billingHistoryNoLicenses": MessageLookupByLibrary.simpleMessage(
+      "No Premium licenses purchased yet.",
+    ),
+    "billingHistoryNoSyscohadaYears": MessageLookupByLibrary.simpleMessage(
+      "No fiscal years paid yet.",
+    ),
     "billingLicenses": MessageLookupByLibrary.simpleMessage("License(s)"),
     "billingLifetime": MessageLookupByLibrary.simpleMessage("Lifetime"),
-    "billingMyLicenses": MessageLookupByLibrary.simpleMessage("My licenses"),
+    "billingMyLicenses": MessageLookupByLibrary.simpleMessage(
+      "My Premium licenses",
+    ),
     "billingNoAccess": MessageLookupByLibrary.simpleMessage(
       "You don\'t have permission to manage licenses. Ask your enterprise administrator to grant you billing access.",
     ),
@@ -167,6 +178,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingSyscohadaComingSoon": MessageLookupByLibrary.simpleMessage(
       "Purchase from this screen coming soon.",
     ),
+    "billingSyscohadaCurrentYearDisclaimer":
+        MessageLookupByLibrary.simpleMessage(
+          "This report cannot be generated until the fiscal year is over.",
+        ),
     "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage(
       "per fiscal year",
     ),
@@ -186,6 +201,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingSyscohadaTitle": MessageLookupByLibrary.simpleMessage(
       "SYSCOHADA financial statements",
     ),
+    "billingTabHistory": MessageLookupByLibrary.simpleMessage(
+      "Purchases / License assignment",
+    ),
+    "billingTabOffers": MessageLookupByLibrary.simpleMessage("Offers"),
     "billingUsers": MessageLookupByLibrary.simpleMessage("users"),
     "billingValidUntil": MessageLookupByLibrary.simpleMessage("Valid until"),
     "billingViewFullTerms": MessageLookupByLibrary.simpleMessage(
@@ -336,6 +355,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "language": MessageLookupByLibrary.simpleMessage("Language"),
     "lastName": MessageLookupByLibrary.simpleMessage("Last Name"),
+    "legalDocTitleCgvAccountingReportFr": MessageLookupByLibrary.simpleMessage(
+      "Terms and Conditions of Sale - Cash Report",
+    ),
     "legalDocTitleCgvFr": MessageLookupByLibrary.simpleMessage(
       "Conditions Générales de Vente",
     ),
@@ -359,7 +381,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "maxErrorText": m8,
     "maxLengthErrorText": m9,
     "menuAccesses": MessageLookupByLibrary.simpleMessage("Accesses"),
-    "menuBilling": MessageLookupByLibrary.simpleMessage("Weebi licenses"),
+    "menuBilling": MessageLookupByLibrary.simpleMessage("Weebi offers"),
     "menuBoutiques": MessageLookupByLibrary.simpleMessage("My Boutiques"),
     "menuCatalog": MessageLookupByLibrary.simpleMessage("Catalog"),
     "menuDevices": MessageLookupByLibrary.simpleMessage("Devices"),

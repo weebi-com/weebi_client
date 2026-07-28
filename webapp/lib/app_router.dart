@@ -87,6 +87,9 @@ class RouteUri {
 
   /// Stable URL for French CGV (shareable, citeable).
   static const String legalCgvFr = '/legal/cgv';
+
+  /// Stable URL for French Syscohada CGV (shareable, citeable).
+  static const String legalCgvAccountingReportFr = '/legal/cgv-accounting-report';
 }
 
 const List<String> unrestrictedRoutes = [
@@ -97,6 +100,7 @@ const List<String> unrestrictedRoutes = [
   RouteUri.bridge,
   RouteUri.legalTermsEn,
   RouteUri.legalCgvFr,
+  RouteUri.legalCgvAccountingReportFr,
 ];
 
 const List<String> publicRoutes = [
@@ -392,6 +396,15 @@ GoRouter appRouter(
           key: state.pageKey,
           child: const LegalDocumentScreen(
             document: EnterpriseLegalDocument.cgvFr,
+          ),
+        ),
+      ),
+      GoRoute(
+        path: RouteUri.legalCgvAccountingReportFr,
+        pageBuilder: (context, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const LegalDocumentScreen(
+            document: EnterpriseLegalDocument.cgvAccountingReportFr,
           ),
         ),
       ),
