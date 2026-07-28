@@ -2,3 +2,5 @@
 dependency_overrides:
   auth_weebi:
     path: ..\\auth
+  protos_weebi:
+    path: ..\\..\\..\\weebi_server\\packages\\protos\\protos_weebi

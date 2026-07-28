@@ -1,3 +1,4 @@
+import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:web_admin/config/api_url.dart';
 import 'package:web_admin/environment.dart';
@@ -12,6 +13,7 @@ import 'package:web_admin/shared_prefs.dart';
 /// ```
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Config.init(apiUrl: kApiUrlDev, locale: 'fr');
+  await Aptabase.init('A-EU-6900117896');
+  Config.init(apiUrl: kApiUrlDev, locale: 'fr', isDev: true);
   runApp(const SharedPrefsFetchWidget(child: RootApp()));
 }

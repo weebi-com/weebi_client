@@ -2,6 +2,7 @@ import 'package:auth_weebi/auth_weebi.dart' show PermissionProvider;
 import 'package:flutter/foundation.dart' show Listenable;
 import 'package:go_router/go_router.dart';
 import 'package:web_admin/contacts/view/contacts_page.dart';
+import 'package:web_admin/environment.dart';
 import 'package:web_admin/providers/user_data_provider.dart';
 import 'package:web_admin/views/screens/buttons_screen.dart';
 import 'package:web_admin/views/screens/boutiques/boutiques_package_screen.dart';
@@ -15,6 +16,7 @@ import 'package:web_admin/views/screens/firm/create_firm_screen.dart';
 import 'package:web_admin/views/screens/firm/firm_view_screen.dart';
 import 'package:web_admin/views/screens/general_ui_screen.dart';
 import 'package:web_admin/views/screens/iframe_demo_screen.dart';
+import 'package:web_admin/views/screens/authentication/bridge_screen.dart';
 import 'package:web_admin/views/screens/authentication/login_screen.dart';
 import 'package:web_admin/views/screens/authentication/logout_screen.dart';
 import 'package:web_admin/views/screens/my_profile_screen.dart';
@@ -31,6 +33,7 @@ import 'package:web_admin/views/screens/help/help_screen.dart';
 import 'package:web_admin/views/screens/support/support_screen.dart';
 import 'package:web_admin/views/screens/about/about_screen.dart';
 import 'package:web_admin/views/screens/billing/billing_screen.dart';
+import 'package:web_admin/views/screens/catalog/catalog_discovery_screen.dart';
 import 'package:web_admin/views/screens/stats_screen.dart';
 import 'package:web_admin/views/screens/legal/legal_document_screen.dart';
 
@@ -47,6 +50,8 @@ class RouteUri {
   static const String dialogs = '/dialogs';
   static const String error404 = '/404';
   static const String login = '/login';
+  /// App->Web magic-link landing (exchanges one-time token for BFF session).
+  static const String bridge = '/bridge';
   static const String register = '/register';
   static const String crud = '/crud';
   static const String crudDetail = '/crud-detail';
@@ -65,6 +70,8 @@ class RouteUri {
   static const String listAccess = '/accesses';
   static const String listDevice = '/devices';
 
+  static const String catalog = '/catalog';
+
   static const String ticketsOverview = '/tickets';
   static const String ticketDetail = '/tickets/detail';
 
@@ -80,6 +87,9 @@ class RouteUri {
 
   /// Stable URL for French CGV (shareable, citeable).
   static const String legalCgvFr = '/legal/cgv';
+
+  /// Stable URL for French Syscohada CGV (shareable, citeable).
+  static const String legalCgvAccountingReportFr = '/legal/cgv-accounting-report';
 }
 
 const List<String> unrestrictedRoutes = [
@@ -87,8 +97,10 @@ const List<String> unrestrictedRoutes = [
   RouteUri.logout,
   RouteUri.login, // Remove this line for actual authentication flow.
   RouteUri.register, // Remove this line for actual authentication flow.
+  RouteUri.bridge,
   RouteUri.legalTermsEn,
   RouteUri.legalCgvFr,
+  RouteUri.legalCgvAccountingReportFr,
 ];
 
 const List<String> publicRoutes = [
@@ -181,6 +193,13 @@ GoRouter appRouter(
         pageBuilder: (context, state) => NoTransitionPage<void>(
           key: state.pageKey,
           child: const LoginScreen(),
+        ),
+      ),
+      GoRoute(
+        path: RouteUri.bridge,
+        pageBuilder: (context, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const BridgeScreen(),
         ),
       ),
       GoRoute(
@@ -296,6 +315,18 @@ GoRouter appRouter(
         },
       ),
 
+      // =========================== CATALOG DISCOVERY ===========================
+
+      GoRoute(
+        path: RouteUri.catalog,
+        pageBuilder: (context, state) {
+          return NoTransitionPage<void>(
+            key: state.pageKey,
+            child: const CatalogDiscoveryScreen(),
+          );
+        },
+      ),
+
       // =========================== TICKETS ===========================
 
       GoRoute(
@@ -368,6 +399,15 @@ GoRouter appRouter(
           ),
         ),
       ),
+      GoRoute(
+        path: RouteUri.legalCgvAccountingReportFr,
+        pageBuilder: (context, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const LegalDocumentScreen(
+            document: EnterpriseLegalDocument.cgvAccountingReportFr,
+          ),
+        ),
+      ),
 
       // =========================== BILLING ===========================
 
@@ -405,6 +445,9 @@ GoRouter appRouter(
       ),
     ],
     redirect: (context, state) {
+      if (state.matchedLocation == RouteUri.catalog && !Config.isDev) {
+        return RouteUri.dashboard;
+      }
       if (unrestrictedRoutes.contains(state.matchedLocation)) {
         return null;
       } else if (publicRoutes.contains(state.matchedLocation)) {

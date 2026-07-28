@@ -99,6 +99,16 @@ class Lang {
     );
   }
 
+  /// `I have read and accept the Terms and Conditions of Sale for the cash report.`
+  String get billingAcceptAccountingReportTerms {
+    return Intl.message(
+      'I have read and accept the Terms and Conditions of Sale for the cash report.',
+      name: 'billingAcceptAccountingReportTerms',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `I have read and accept the Terms and Conditions of Sale for the Enterprise license.`
   String get billingAcceptEnterpriseTerms {
     return Intl.message(
@@ -189,10 +199,10 @@ class Lang {
     );
   }
 
-  /// `My licenses`
+  /// `My Premium licenses`
   String get billingMyLicenses {
     return Intl.message(
-      'My licenses',
+      'My Premium licenses',
       name: 'billingMyLicenses',
       desc: '',
       args: [],
@@ -219,10 +229,10 @@ class Lang {
     );
   }
 
-  /// `Payment received. We're confirming with Stripe — your license(s) will appear shortly; you can then assign seats to users. If they don't appear, check your webhook configuration.`
+  /// `Payment received. We're confirming it — your license(s) will appear shortly; you can then assign seats to users.`
   String get billingPaymentProcessing {
     return Intl.message(
-      'Payment received. We\'re confirming with Stripe — your license(s) will appear shortly; you can then assign seats to users. If they don\'t appear, check your webhook configuration.',
+      'Payment received. We\'re confirming it — your license(s) will appear shortly; you can then assign seats to users.',
       name: 'billingPaymentProcessing',
       desc: '',
       args: [],
@@ -239,6 +249,36 @@ class Lang {
     );
   }
 
+  /// `Card (Stripe)`
+  String get billingPayWithCard {
+    return Intl.message(
+      'Card (Stripe)',
+      name: 'billingPayWithCard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mobile money (PawaPay)`
+  String get billingPayWithMobileMoney {
+    return Intl.message(
+      'Mobile money (PawaPay)',
+      name: 'billingPayWithMobileMoney',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `How do you want to pay?`
+  String get billingChoosePaymentMethod {
+    return Intl.message(
+      'How do you want to pay?',
+      name: 'billingChoosePaymentMethod',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Purchase`
   String get billingPurchase {
     return Intl.message(
@@ -249,21 +289,146 @@ class Lang {
     );
   }
 
-  /// `Purchase a license`
+  /// `Purchase Premium`
   String get billingPurchaseLicense {
     return Intl.message(
-      'Purchase a license',
+      'Purchase Premium',
       name: 'billingPurchaseLicense',
       desc: '',
       args: [],
     );
   }
 
-  /// `Choose a license to unlock Weebi's advanced features. Each seat is a one-time purchase: it does not expire, and this is not a subscription—no renewals, no ticking clock.`
+  /// `The Premium license unlocks remote tracking, multi-store management and the advanced dashboard. One-time purchase per user: no subscription, no expiry.`
   String get billingPurchaseLicenseDescription {
     return Intl.message(
-      'Choose a license to unlock Weebi\'s advanced features. Each seat is a one-time purchase: it does not expire, and this is not a subscription—no renewals, no ticking clock.',
+      'The Premium license unlocks remote tracking, multi-store management and the advanced dashboard. One-time purchase per user: no subscription, no expiry.',
       name: 'billingPurchaseLicenseDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Premium licenses purchased yet.`
+  String get billingHistoryNoLicenses {
+    return Intl.message(
+      'No Premium licenses purchased yet.',
+      name: 'billingHistoryNoLicenses',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No fiscal years paid yet.`
+  String get billingHistoryNoSyscohadaYears {
+    return Intl.message(
+      'No fiscal years paid yet.',
+      name: 'billingHistoryNoSyscohadaYears',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Purchases / License assignment`
+  String get billingTabHistory {
+    return Intl.message(
+      'Purchases / License assignment',
+      name: 'billingTabHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Offers`
+  String get billingTabOffers {
+    return Intl.message('Offers', name: 'billingTabOffers', desc: '', args: []);
+  }
+
+  /// `SYSCOHADA financial statements`
+  String get billingSyscohadaTitle {
+    return Intl.message(
+      'SYSCOHADA financial statements',
+      name: 'billingSyscohadaTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Minimum Cash System — one-time purchase per fiscal year (not a subscription)`
+  String get billingSyscohadaSubtitle {
+    return Intl.message(
+      'Minimum Cash System — one-time purchase per fiscal year (not a subscription)',
+      name: 'billingSyscohadaSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `1,900 FCFA`
+  String get billingSyscohadaPrice {
+    return Intl.message(
+      '1,900 FCFA',
+      name: 'billingSyscohadaPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `per fiscal year`
+  String get billingSyscohadaPerReport {
+    return Intl.message(
+      'per fiscal year',
+      name: 'billingSyscohadaPerReport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fiscal year`
+  String get billingSyscohadaSelectYear {
+    return Intl.message(
+      'Fiscal year',
+      name: 'billingSyscohadaSelectYear',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pay for this year`
+  String get billingSyscohadaPurchase {
+    return Intl.message(
+      'Pay for this year',
+      name: 'billingSyscohadaPurchase',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Years already paid`
+  String get billingSyscohadaPurchasedYears {
+    return Intl.message(
+      'Years already paid',
+      name: 'billingSyscohadaPurchasedYears',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Purchase from this screen coming soon.`
+  String get billingSyscohadaComingSoon {
+    return Intl.message(
+      'Purchase from this screen coming soon.',
+      name: 'billingSyscohadaComingSoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This report cannot be generated until the fiscal year is over.`
+  String get billingSyscohadaCurrentYearDisclaimer {
+    return Intl.message(
+      'This report cannot be generated until the fiscal year is over.',
+      name: 'billingSyscohadaCurrentYearDisclaimer',
       desc: '',
       args: [],
     );
@@ -894,6 +1059,16 @@ class Lang {
     );
   }
 
+  /// `The web console lets you manage tickets (view, filter, search) and discover prepared catalog products to set up your POS. Contacts and operations (sales, purchases, stock movements, etc.) remain available in the mobile app for now.`
+  String get helpScopeBodyDev {
+    return Intl.message(
+      'The web console lets you manage tickets (view, filter, search) and discover prepared catalog products to set up your POS. Contacts and operations (sales, purchases, stock movements, etc.) remain available in the mobile app for now.',
+      name: 'helpScopeBodyDev',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `What can I do from the web console?`
   String get helpScopeTitle {
     return Intl.message(
@@ -957,6 +1132,16 @@ class Lang {
   /// `Last Name`
   String get lastName {
     return Intl.message('Last Name', name: 'lastName', desc: '', args: []);
+  }
+
+  /// `Terms and Conditions of Sale - Cash Report`
+  String get legalDocTitleCgvAccountingReportFr {
+    return Intl.message(
+      'Terms and Conditions of Sale - Cash Report',
+      name: 'legalDocTitleCgvAccountingReportFr',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Conditions Générales de Vente`
@@ -1059,10 +1244,10 @@ class Lang {
     return Intl.message('Accesses', name: 'menuAccesses', desc: '', args: []);
   }
 
-  /// `Weebi licenses`
+  /// `Weebi offers`
   String get menuBilling {
     return Intl.message(
-      'Weebi licenses',
+      'Weebi offers',
       name: 'menuBilling',
       desc: '',
       args: [],
@@ -1099,6 +1284,16 @@ class Lang {
     );
   }
 
+  /// `Contacts and operations (sales, purchases, stock movements, etc.) are available in the mobile app for now. Catalog discovery and tickets are available here.`
+  String get menuScopeDisclaimerDev {
+    return Intl.message(
+      'Contacts and operations (sales, purchases, stock movements, etc.) are available in the mobile app for now. Catalog discovery and tickets are available here.',
+      name: 'menuScopeDisclaimerDev',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Statistics`
   String get menuStats {
     return Intl.message('Statistics', name: 'menuStats', desc: '', args: []);
@@ -1112,6 +1307,129 @@ class Lang {
   /// `Users`
   String get menuUsers {
     return Intl.message('Users', name: 'menuUsers', desc: '', args: []);
+  }
+
+  /// `Catalog`
+  String get menuCatalog {
+    return Intl.message('Catalog', name: 'menuCatalog', desc: '', args: []);
+  }
+
+  /// `Pick the FMCG products you sell, adjust price and cost, then add them to your chain catalog.`
+  String get catalogDiscoverySubtitle {
+    return Intl.message(
+      'Pick the FMCG products you sell, adjust price and cost, then add them to your chain catalog.',
+      name: 'catalogDiscoverySubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chain`
+  String get catalogSelectChain {
+    return Intl.message(
+      'Chain',
+      name: 'catalogSelectChain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All`
+  String get catalogAllCategories {
+    return Intl.message(
+      'All',
+      name: 'catalogAllCategories',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No products match your search.`
+  String get catalogNoProductsMatch {
+    return Intl.message(
+      'No products match your search.',
+      name: 'catalogNoProductsMatch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pick`
+  String get catalogPick {
+    return Intl.message('Pick', name: 'catalogPick', desc: '', args: []);
+  }
+
+  /// `Picked`
+  String get catalogPicked {
+    return Intl.message('Picked', name: 'catalogPicked', desc: '', args: []);
+  }
+
+  /// `Already in catalog`
+  String get catalogAlreadyInCatalog {
+    return Intl.message(
+      'Already in catalog',
+      name: 'catalogAlreadyInCatalog',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count, plural, =0{Selection} one{Selection (1)} other{Selection ({count})}}`
+  String catalogSelectionTitle(int count) {
+    return Intl.plural(
+      count,
+      zero: 'Selection',
+      one: 'Selection (1)',
+      other: 'Selection ($count)',
+      name: 'catalogSelectionTitle',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Pick products from the grid to build your catalog.`
+  String get catalogSelectionEmpty {
+    return Intl.message(
+      'Pick products from the grid to build your catalog.',
+      name: 'catalogSelectionEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear`
+  String get catalogClearSelection {
+    return Intl.message(
+      'Clear',
+      name: 'catalogClearSelection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add to catalog`
+  String get catalogAddToCatalog {
+    return Intl.message(
+      'Add to catalog',
+      name: 'catalogAddToCatalog',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove`
+  String get catalogRemove {
+    return Intl.message('Remove', name: 'catalogRemove', desc: '', args: []);
+  }
+
+  /// `Price`
+  String get catalogPrice {
+    return Intl.message('Price', name: 'catalogPrice', desc: '', args: []);
+  }
+
+  /// `Cost`
+  String get catalogCost {
+    return Intl.message('Cost', name: 'catalogCost', desc: '', args: []);
   }
 
   /// `Value must be greater than or equal to {min}.`

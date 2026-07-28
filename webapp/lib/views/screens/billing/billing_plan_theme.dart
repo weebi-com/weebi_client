@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
 
-/// Visual identity for Entreprise vs Premium on billing screens.
+/// Visual identity for license plans on billing screens (Premium + legacy Entreprise).
 class BillingPlanVisual {
   const BillingPlanVisual({
     required this.background,

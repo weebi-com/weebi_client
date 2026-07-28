@@ -78,6 +78,8 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
   // Common controllers
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _commercialRegisterController = TextEditingController();
+  CommerceTypePb? _commerceType;
 
   // Boutique-specific controllers
   final _addressStreetController = TextEditingController();
@@ -138,6 +140,14 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
           _secondaryDisplayCurrencyController.text =
               kDefaultSecondaryDisplayCurrencyUsd;
         }
+        if (chain.hasCommercialRegisterNumber()) {
+          _commercialRegisterController.text =
+              chain.commercialRegisterNumber.trim();
+        }
+        if (chain.hasCommerceType() &&
+            chain.commerceType != CommerceTypePb.unknown) {
+          _commerceType = chain.commerceType;
+        }
       } else if (widget.boutique != null) {
         // Editing boutique
         final boutique = widget.boutique!;
@@ -155,6 +165,14 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
             boutique.boutique.currency.trim().isNotEmpty) {
           _billingCurrencyController.text =
               boutique.boutique.currency.trim().toUpperCase();
+        }
+        if (boutique.boutique.hasCommercialRegisterNumber()) {
+          _commercialRegisterController.text =
+              boutique.boutique.commercialRegisterNumber.trim();
+        }
+        if (boutique.boutique.hasCommerceType() &&
+            boutique.boutique.commerceType != CommerceTypePb.unknown) {
+          _commerceType = boutique.boutique.commerceType;
         }
 
         // Address
@@ -232,6 +250,7 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
+    _commercialRegisterController.dispose();
     _addressStreetController.dispose();
     _addressCityController.dispose();
     _addressCodeController.dispose();
@@ -373,6 +392,48 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
     );
   }
 
+  void _applyLegalFieldsToChain(Chain chain) {
+    final register = _commercialRegisterController.text.trim();
+    if (register.isNotEmpty) {
+      chain.commercialRegisterNumber = register;
+    } else {
+      chain.clearCommercialRegisterNumber();
+    }
+    if (_commerceType != null && _commerceType != CommerceTypePb.unknown) {
+      chain.commerceType = _commerceType!;
+    } else {
+      chain.clearCommerceType();
+    }
+  }
+
+  void _applyLegalFieldsToChainRequest(ChainRequest request) {
+    final register = _commercialRegisterController.text.trim();
+    if (register.isNotEmpty) {
+      request.commercialRegisterNumber = register;
+    } else {
+      request.clearCommercialRegisterNumber();
+    }
+    if (_commerceType != null && _commerceType != CommerceTypePb.unknown) {
+      request.commerceType = _commerceType!;
+    } else {
+      request.clearCommerceType();
+    }
+  }
+
+  void _applyLegalFieldsToBoutiquePb(BoutiquePb boutique) {
+    final register = _commercialRegisterController.text.trim();
+    if (register.isNotEmpty) {
+      boutique.commercialRegisterNumber = register;
+    } else {
+      boutique.clearCommercialRegisterNumber();
+    }
+    if (_commerceType != null && _commerceType != CommerceTypePb.unknown) {
+      boutique.commerceType = _commerceType!;
+    } else {
+      boutique.clearCommerceType();
+    }
+  }
+
   List<Widget> _extraFormSections() {
     final sections = widget.formExtensions?.extraFormSections ?? const [];
     if (sections.isEmpty) return const [];
@@ -481,6 +542,45 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
                 textInputAction: TextInputAction.next,
                 onChanged: (value) => setState(() {}), // For clear button
               ),
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: _commercialRegisterController,
+              textCapitalization: TextCapitalization.characters,
+              decoration: const InputDecoration(
+                labelText: 'N° registre de commerce',
+                hintText: 'RCCM (facultatif)',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.badge_outlined),
+              ),
+              textInputAction: TextInputAction.next,
+            ),
+            const SizedBox(height: 12),
+            DropdownButtonFormField<CommerceTypePb>(
+              value: _commerceType == CommerceTypePb.unknown
+                  ? null
+                  : _commerceType,
+              decoration: const InputDecoration(
+                labelText: 'Type de commerce',
+                hintText: 'Facultatif',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.store_mall_directory_outlined),
+              ),
+              items: const [
+                DropdownMenuItem(
+                  value: CommerceTypePb.negoce,
+                  child: Text('Négoce'),
+                ),
+                DropdownMenuItem(
+                  value: CommerceTypePb.artisanat,
+                  child: Text('Artisanat'),
+                ),
+                DropdownMenuItem(
+                  value: CommerceTypePb.services,
+                  child: Text('Services'),
+                ),
+              ],
+              onChanged: (v) => setState(() => _commerceType = v),
             ),
             if (!_isCreatingChain()) ...[
               const SizedBox(height: 12),
@@ -973,6 +1073,7 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
       chain.clearCurrency();
     }
     _applyDualToChain(chain);
+    _applyLegalFieldsToChain(chain);
     widget.formExtensions?.augmentChain?.call(chain);
 
     if (widget.isEditing && widget.chain != null) {
@@ -985,6 +1086,7 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
         request.clearCurrency();
       }
       _applyDualToChainRequest(request);
+      _applyLegalFieldsToChainRequest(request);
       widget.formExtensions?.augmentChainRequest?.call(request);
       return await provider.updateChain(request);
     }
@@ -1044,6 +1146,7 @@ class _BoutiqueCreateViewState extends State<BoutiqueCreateView> {
     }
 
     _applyDualToBoutiquePb(boutique, provider);
+    _applyLegalFieldsToBoutiquePb(boutique);
     widget.formExtensions?.augmentBoutique?.call(boutique);
 
     if (!widget.isEditing) {

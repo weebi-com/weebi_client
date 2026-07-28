@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:auth_weebi/auth_weebi.dart' show PermissionProvider;
+import 'package:web_admin/environment.dart';
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/providers/user_data_provider.dart';
 import 'package:web_admin/utils/profile_image_provider.dart';
@@ -17,6 +18,8 @@ class SidebarMenuConfig {
   final List<SidebarChildMenuConfig> children;
   /// When non-null and returns false, the item is hidden (e.g. billing for users without [Right.read] on billing).
   final bool Function(BuildContext context)? isVisible;
+  /// Soft gold treatment to draw attention (e.g. Offres Weebi).
+  final bool highlightGold;
 
   const SidebarMenuConfig({
     required this.uri,
@@ -24,6 +27,7 @@ class SidebarMenuConfig {
     required this.title,
     List<SidebarChildMenuConfig>? children,
     this.isVisible,
+    this.highlightGold = false,
   }) : children = children ?? const [];
 }
 
@@ -161,7 +165,9 @@ class _SidebarState extends State<Sidebar> {
                     Padding(
                       padding: const EdgeInsets.only(top: 12.0),
                       child: Text(
-                        Lang.of(context).menuScopeDisclaimer,
+                        Config.isDev
+                            ? Lang.of(context).menuScopeDisclaimerDev
+                            : Lang.of(context).menuScopeDisclaimer,
                         style: TextStyle(
                           fontSize: sidebarTheme.menuFontSize - 2,
                           color: sidebarTheme.foregroundColor.withOpacity(0.7),
@@ -224,6 +230,7 @@ class _SidebarState extends State<Sidebar> {
               menu.icon,
               menu.title(context),
               (currentLocation.startsWith(menu.uri)),
+              highlightGold: menu.highlightGold,
             );
           } else {
             return _expandableSidebarMenu(
@@ -251,19 +258,28 @@ class _SidebarState extends State<Sidebar> {
     String uri,
     IconData icon,
     String title,
-    bool isSelected,
-  ) {
+    bool isSelected, {
+    bool highlightGold = false,
+  }) {
     final sidebarTheme = Theme.of(context).extension<AppSidebarTheme>()!;
-    final textColor = (isSelected
+    const gold = Color(0xFFC9A227);
+    const goldSoft = Color(0x33D4AF37);
+    final textColor = isSelected
         ? sidebarTheme.menuSelectedFontColor
-        : sidebarTheme.foregroundColor);
+        : highlightGold
+            ? gold
+            : sidebarTheme.foregroundColor;
 
     return Padding(
       padding: padding,
       child: Card(
-        color: Colors.transparent,
+        color: highlightGold && !isSelected ? goldSoft : Colors.transparent,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(sidebarTheme.menuBorderRadius)),
+          borderRadius: BorderRadius.circular(sidebarTheme.menuBorderRadius),
+          side: highlightGold
+              ? const BorderSide(color: gold, width: 1)
+              : BorderSide.none,
+        ),
         elevation: 0.0,
         margin: EdgeInsets.zero,
         clipBehavior: Clip.antiAlias,
@@ -277,11 +293,15 @@ class _SidebarState extends State<Sidebar> {
                 color: textColor,
               ),
               const SizedBox(width: kDefaultPadding * 0.5),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: sidebarTheme.menuFontSize,
-                  color: textColor,
+              Flexible(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: sidebarTheme.menuFontSize,
+                    color: textColor,
+                    fontWeight:
+                        highlightGold ? FontWeight.w600 : FontWeight.normal,
+                  ),
                 ),
               ),
             ],

@@ -1,8 +1,8 @@
-# Conditions Générales de Vente — Licence Entreprise
+# Conditions Générales de Vente — Licence Utilisateur Premium
 
-- **Dernière mise à jour : 22 Mars 2026**
+- **Dernière mise à jour : 27 juillet 2026**
+- **Application : Weebi — Licence Utilisateur Premium**
 - **Fournisseur: Boutiques Broker OÜ (“BB”)** - 3 Ruunaoja Street, Lasnamäe District, Harju County, 11415 Tallinn, Estonia
-- **Application : Weebi — Licence Entreprise**
 
 ---
 
@@ -10,7 +10,7 @@
 
 L’Application **Weebi** est un logiciel de gestion de caisse fonctionnant principalement en mode *offline‑first*, permettant la saisie, la consultation et la synchronisation de données commerciales entre un ou plusieurs points de vente.
 
-La **Licence Entreprise** fournie par **Boutiques Broker OÜ** donne accès à l’utilisation professionnelle de l’Application et aux services associés, notamment la synchronisation multi‑appareils.  
+La **Licence Premium** fournie par **Boutiques Broker OÜ** donne accès à l’utilisation professionnelle de l’Application et aux services associés, notamment la synchronisation multi‑appareils.
 Weebi est l’application ; Boutiques Broker est l’entreprise qui commercialise, active et maintient les services liés à cette Licence.
 
 Toute commande implique l’acceptation intégrale des présentes Conditions Générales de Vente (CGV).
@@ -37,9 +37,9 @@ Le Client est responsable de son **matériel**, de son **réseau**, de ses **par
 
 ## 2. Prix, paiement, durée, remboursement et suspension
 
-Les prix sont exprimés **hors taxes** et payables **en une seule fois, d’avance**, avant activation de la Licence Entreprise.
+Les prix sont exprimés **hors taxes** et payables **en une seule fois, d’avance**, avant activation de la Licence Premium.
 
-La Licence Entreprise est accordée pour une **durée illimitée** après paiement.
+La Licence Premium est accordée pour une **durée illimitée** après paiement.
 
 **Chaque licence correspond à un (1) utilisateur unique.**  
 L’utilisation d’une licence individuelle par plusieurs employés ou personnes constitue un **usage abusif** et une **fraude**, pouvant entraîner la suspension de la Licence sans compensation.
@@ -76,7 +76,7 @@ BB s’efforce d’assurer une expérience stable **dans la mesure de ses moyens
 
 ### Limitation de responsabilité  
 - BB est soumise à une **obligation de moyens**, jamais de résultat.  
-- Sa responsabilité totale est **limitée au montant payé pour la Licence Entreprise**.  
+- Sa responsabilité totale est **limitée au montant payé pour la Licence Premium**.  
 - BB n’est pas responsable des pertes d’exploitation, pertes de données ou dommages indirects.
 
 ---
@@ -90,6 +90,8 @@ Aucun engagement contractuel de délai ou de niveau de service n’est prévu.
 
 ## 5. Droit applicable et juridiction
 
-Les présentes CGV sont régies par le **droit estonien**.
+Les présentes CGV sont régies par le droit français.
 
-Les litiges seront portés devant les **tribunaux d’Estonie**, sauf si la loi du pays d’utilisation impose une juridiction obligatoire en matière B2B ; dans ce cas, cette juridiction peut être saisie selon les exigences de la loi locale.
+Les parties s'engagent à rechercher une solution amiable à tout différend pendant une durée minimale de trente (30) jours à compter de la notification écrite du litige.
+
+À défaut d'accord amiable, tout litige relatif à la validité, l'interprétation, l'exécution ou la résiliation des présentes CGV sera soumis à la compétence exclusive des tribunaux de Paris, sauf disposition impérative contraire.

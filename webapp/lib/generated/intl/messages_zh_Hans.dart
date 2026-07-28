@@ -22,47 +22,50 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(count) => "${Intl.plural(count, one: '按钮', other: '按钮')}";
 
-  static String m1(count) => "${Intl.plural(count, one: '颜色', other: '颜色')}";
+  static String m1(count) =>
+      "${Intl.plural(count, zero: '已选', one: '已选 (1)', other: '已选 (${count})')}";
 
-  static String m2(name) => "企业「${name}」已成功创建。";
+  static String m2(count) => "${Intl.plural(count, one: '颜色', other: '颜色')}";
 
-  static String m3(count) => "${Intl.plural(count, one: '弹窗', other: '弹窗')}";
+  static String m3(name) => "企业「${name}」已成功创建。";
 
-  static String m4(value) => "此字段必须与${value}相符";
+  static String m4(count) => "${Intl.plural(count, one: '弹窗', other: '弹窗')}";
 
-  static String m5(count) => "${Intl.plural(count, one: '扩展', other: '扩展')}";
+  static String m5(value) => "此字段必须与${value}相符";
 
-  static String m6(count) => "${Intl.plural(count, one: '表单', other: '表单')}";
+  static String m6(count) => "${Intl.plural(count, one: '扩展', other: '扩展')}";
 
-  static String m7(max) => "此字段必须小于或等于${max}";
+  static String m7(count) => "${Intl.plural(count, one: '表单', other: '表单')}";
 
-  static String m8(maxLength) => "此字段的长度必须小于或等于${maxLength}";
+  static String m8(max) => "此字段必须小于或等于${max}";
 
-  static String m9(min) => "此字段必须大于或等于${min}";
+  static String m9(maxLength) => "此字段的长度必须小于或等于${maxLength}";
 
-  static String m10(minLength) => "此字段的长度必须大于或等于${minLength}";
+  static String m10(min) => "此字段必须大于或等于${min}";
 
-  static String m11(count) => "${Intl.plural(count, one: '新订单', other: '新订单')}";
+  static String m11(minLength) => "此字段的长度必须大于或等于${minLength}";
 
-  static String m12(count) => "${Intl.plural(count, one: '新用户', other: '新用户')}";
+  static String m12(count) => "${Intl.plural(count, one: '新订单', other: '新订单')}";
 
-  static String m13(value) => "此字段不得等于${value}";
+  static String m13(count) => "${Intl.plural(count, one: '新用户', other: '新用户')}";
 
-  static String m14(count) => "${Intl.plural(count, one: '页面', other: '页面')}";
+  static String m14(value) => "此字段不得等于${value}";
 
-  static String m15(count) =>
-      "${Intl.plural(count, one: '未决问题', other: '未决问题')}";
+  static String m15(count) => "${Intl.plural(count, one: '页面', other: '页面')}";
 
   static String m16(count) =>
+      "${Intl.plural(count, one: '未决问题', other: '未决问题')}";
+
+  static String m17(count) =>
       "${Intl.plural(count, one: '最新订单', other: '最新订单')}";
 
-  static String m17(ticketId) => "小票详情 #${ticketId}";
+  static String m18(ticketId) => "小票详情 #${ticketId}";
 
-  static String m18(count) => "${count} 项";
+  static String m19(count) => "${count} 项";
 
-  static String m19(count) => "${Intl.plural(count, other: '# 张小票')}";
+  static String m20(count) => "${Intl.plural(count, other: '# 张小票')}";
 
-  static String m20(count) =>
+  static String m21(count) =>
       "${Intl.plural(count, one: 'UI 元素', other: 'UI 元素')}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -73,6 +76,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "account": MessageLookupByLibrary.simpleMessage("账户"),
     "adminPortalLogin": MessageLookupByLibrary.simpleMessage("管理后台登录"),
     "backToLogin": MessageLookupByLibrary.simpleMessage("返回登入页面"),
+    "billingAcceptAccountingReportTerms": MessageLookupByLibrary.simpleMessage(
+      "我已阅读并同意购买现金报告的销售条款和条件。",
+    ),
     "billingAcceptEnterpriseTerms": MessageLookupByLibrary.simpleMessage(
       "我已阅读并同意企业版许可证的销售条款和条件。",
     ),
@@ -93,9 +99,18 @@ class MessageLookup extends MessageLookupByLibrary {
       "在“访问”中为用户分配您的新席位",
     ),
     "billingAttributedTo": MessageLookupByLibrary.simpleMessage("已分配给"),
+    "billingChoosePaymentMethod": MessageLookupByLibrary.simpleMessage(
+      "您想如何付款？",
+    ),
+    "billingHistoryNoLicenses": MessageLookupByLibrary.simpleMessage(
+      "尚无已购买的 Premium 许可证。",
+    ),
+    "billingHistoryNoSyscohadaYears": MessageLookupByLibrary.simpleMessage(
+      "尚无已支付财政年度。",
+    ),
     "billingLicenses": MessageLookupByLibrary.simpleMessage("许可证"),
     "billingLifetime": MessageLookupByLibrary.simpleMessage("终身"),
-    "billingMyLicenses": MessageLookupByLibrary.simpleMessage("我的许可证"),
+    "billingMyLicenses": MessageLookupByLibrary.simpleMessage("我的 Premium 许可证"),
     "billingNoAccess": MessageLookupByLibrary.simpleMessage(
       "您没有管理许可证的权限。请联系企业管理员为您开通账单相关权限。",
     ),
@@ -103,8 +118,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "没有可分配的用户。请先在「用户」中添加用户。",
     ),
     "billingNotYetAttributed": MessageLookupByLibrary.simpleMessage("尚未分配"),
+    "billingPayWithCard": MessageLookupByLibrary.simpleMessage("银行卡（Stripe）"),
+    "billingPayWithMobileMoney": MessageLookupByLibrary.simpleMessage(
+      "移动支付（PawaPay）",
+    ),
     "billingPaymentProcessing": MessageLookupByLibrary.simpleMessage(
-      "付款已收到。我们正在与 Stripe 确认 — 您的许可证将很快显示。如未显示，请检查 webhook 配置。",
+      "付款已收到。正在确认 — 您的许可证将很快显示，然后可分配给用户。",
     ),
     "billingPaymentSuccess": MessageLookupByLibrary.simpleMessage(
       "您的付款已接受。您现已拥有有效许可证。",
@@ -113,9 +132,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingPlanEntreprise": MessageLookupByLibrary.simpleMessage("Weebi 企业版"),
     "billingPlanPremium": MessageLookupByLibrary.simpleMessage("Weebi 高级版"),
     "billingPurchase": MessageLookupByLibrary.simpleMessage("购买"),
-    "billingPurchaseLicense": MessageLookupByLibrary.simpleMessage("购买许可证"),
+    "billingPurchaseLicense": MessageLookupByLibrary.simpleMessage(
+      "购买 Premium",
+    ),
     "billingPurchaseLicenseDescription": MessageLookupByLibrary.simpleMessage(
-      "选择许可证即可使用 Weebi 的高级功能。每个席位为一次性购买：不设到期，也不是订阅——无需续费，没有倒计时。",
+      "Premium 许可证解锁远程跟踪、多门店管理和高级仪表板。按用户一次性购买：非订阅、无到期。",
     ),
     "billingReassignNoOtherUser": MessageLookupByLibrary.simpleMessage(
       "没有其他用户可接收此席位。请先添加用户或在其他位置释放一个席位。",
@@ -126,17 +147,53 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "billingRetry": MessageLookupByLibrary.simpleMessage("重试"),
     "billingSeatsAttributed": MessageLookupByLibrary.simpleMessage("许可证已分配"),
+    "billingSyscohadaComingSoon": MessageLookupByLibrary.simpleMessage(
+      "即将可在此页面购买。",
+    ),
+    "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage("每个财政年度"),
+    "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage("1 900 FCFA"),
+    "billingSyscohadaPurchase": MessageLookupByLibrary.simpleMessage("支付该年度"),
+    "billingSyscohadaPurchasedYears": MessageLookupByLibrary.simpleMessage(
+      "已支付年份",
+    ),
+    "billingSyscohadaSelectYear": MessageLookupByLibrary.simpleMessage("财政年度"),
+    "billingSyscohadaSubtitle": MessageLookupByLibrary.simpleMessage(
+      "最低现金系统 — 按财政年度一次性购买（非订阅）",
+    ),
+    "billingSyscohadaTitle": MessageLookupByLibrary.simpleMessage(
+      "SYSCOHADA 财务报表",
+    ),
+    "billingTabHistory": MessageLookupByLibrary.simpleMessage("购买 / 许可证分配"),
+    "billingTabOffers": MessageLookupByLibrary.simpleMessage("套餐"),
     "billingUsers": MessageLookupByLibrary.simpleMessage("用户"),
     "billingValidUntil": MessageLookupByLibrary.simpleMessage("有效期至"),
     "billingViewFullTerms": MessageLookupByLibrary.simpleMessage("在新标签页查看完整文档"),
     "buttonEmphasis": MessageLookupByLibrary.simpleMessage("按钮强调"),
     "buttons": m0,
     "cancel": MessageLookupByLibrary.simpleMessage("取消"),
+    "catalogAddToCatalog": MessageLookupByLibrary.simpleMessage("添加到目录"),
+    "catalogAllCategories": MessageLookupByLibrary.simpleMessage("全部"),
+    "catalogAlreadyInCatalog": MessageLookupByLibrary.simpleMessage("已在目录中"),
+    "catalogClearSelection": MessageLookupByLibrary.simpleMessage("清空"),
+    "catalogCost": MessageLookupByLibrary.simpleMessage("成本"),
+    "catalogDiscoverySubtitle": MessageLookupByLibrary.simpleMessage(
+      "选择您销售的快消品，调整售价与成本，然后添加到连锁店目录。",
+    ),
+    "catalogNoProductsMatch": MessageLookupByLibrary.simpleMessage("没有匹配的商品。"),
+    "catalogPick": MessageLookupByLibrary.simpleMessage("选择"),
+    "catalogPicked": MessageLookupByLibrary.simpleMessage("已选"),
+    "catalogPrice": MessageLookupByLibrary.simpleMessage("售价"),
+    "catalogRemove": MessageLookupByLibrary.simpleMessage("移除"),
+    "catalogSelectChain": MessageLookupByLibrary.simpleMessage("连锁"),
+    "catalogSelectionEmpty": MessageLookupByLibrary.simpleMessage(
+      "从网格中选择商品以建立目录。",
+    ),
+    "catalogSelectionTitle": m1,
     "changeProfilePhoto": MessageLookupByLibrary.simpleMessage("更换照片"),
     "closeNavigationMenu": MessageLookupByLibrary.simpleMessage("关闭导航菜单"),
     "colorPalette": MessageLookupByLibrary.simpleMessage("调色板"),
     "colorScheme": MessageLookupByLibrary.simpleMessage("配色方案"),
-    "colors": m1,
+    "colors": m2,
     "confirmDeleteRecord": MessageLookupByLibrary.simpleMessage("确定删除此记录？"),
     "confirmSubmitRecord": MessageLookupByLibrary.simpleMessage("确定提交此记录？"),
     "copy": MessageLookupByLibrary.simpleMessage("复制"),
@@ -144,7 +201,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "创建企业时出错：",
     ),
     "createEnterprisePageTitle": MessageLookupByLibrary.simpleMessage("创建企业"),
-    "createEnterpriseSuccessTitle": m2,
+    "createEnterpriseSuccessTitle": m3,
     "creditCardErrorText": MessageLookupByLibrary.simpleMessage(
       "此字段需要有效的信用卡号码。",
     ),
@@ -164,20 +221,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "dateStringErrorText": MessageLookupByLibrary.simpleMessage(
       "此字段需要有效的日期字符串。",
     ),
-    "dialogs": m3,
+    "dialogs": m4,
     "dontHaveAnAccount": MessageLookupByLibrary.simpleMessage("还未有账户？"),
     "email": MessageLookupByLibrary.simpleMessage("电子邮件地址"),
     "emailErrorText": MessageLookupByLibrary.simpleMessage("此字段需要有效的电子邮件地址。"),
     "enterpriseNameFieldHint": MessageLookupByLibrary.simpleMessage("企业名称"),
     "enterpriseNameFieldLabel": MessageLookupByLibrary.simpleMessage("企业"),
-    "equalErrorText": m4,
+    "equalErrorText": m5,
     "error404": MessageLookupByLibrary.simpleMessage("404 错误"),
     "error404Message": MessageLookupByLibrary.simpleMessage(
       "很抱歉，你正在寻找的页面不存在或已经被移除。",
     ),
     "error404Title": MessageLookupByLibrary.simpleMessage("找不到页面"),
     "example": MessageLookupByLibrary.simpleMessage("例子"),
-    "extensions": m5,
+    "extensions": m6,
     "firmCardDescription": MessageLookupByLibrary.simpleMessage(
       "企业汇总您的用户与门店/连锁。",
     ),
@@ -191,13 +248,16 @@ class MessageLookup extends MessageLookupByLibrary {
       "输入您的电子邮件地址，我们将向您发送重置密码的链接。",
     ),
     "forgotPasswordTitle": MessageLookupByLibrary.simpleMessage("重置您的密码"),
-    "forms": m6,
+    "forms": m7,
     "generalUi": MessageLookupByLibrary.simpleMessage("常规 UI"),
     "help": MessageLookupByLibrary.simpleMessage("帮助"),
     "helpReadFaq": MessageLookupByLibrary.simpleMessage("阅读常见问题"),
     "helpResourcesTitle": MessageLookupByLibrary.simpleMessage("资源"),
     "helpScopeBody": MessageLookupByLibrary.simpleMessage(
       "Web控制台可管理票据（查看、筛选、搜索）。文章、联系人和操作（销售、采购、库存移动等）目前仅在移动应用中可用。",
+    ),
+    "helpScopeBodyDev": MessageLookupByLibrary.simpleMessage(
+      "Web控制台可管理票据（查看、筛选、搜索），并发现预制商品目录以配置收银机。联系人和操作（销售、采购、库存移动等）目前仍在移动应用中可用。",
     ),
     "helpScopeTitle": MessageLookupByLibrary.simpleMessage("我可以在Web控制台做什么？"),
     "helpWatchDemos": MessageLookupByLibrary.simpleMessage("观看视频演示"),
@@ -207,6 +267,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "integerErrorText": MessageLookupByLibrary.simpleMessage("此字段需要有效的整数。"),
     "ipErrorText": MessageLookupByLibrary.simpleMessage("此字段需要有效的IP。"),
     "language": MessageLookupByLibrary.simpleMessage("语言"),
+    "lastName": MessageLookupByLibrary.simpleMessage("姓"),
+    "legalDocTitleCgvAccountingReportFr": MessageLookupByLibrary.simpleMessage(
+      "销售条款和条件 - 现金报告",
+    ),
     "legalDocTitleCgvFr": MessageLookupByLibrary.simpleMessage(
       "Conditions Générales de Vente",
     ),
@@ -222,25 +286,29 @@ class MessageLookup extends MessageLookupByLibrary {
       "这时候风雨也停止进行曲的合奏，四方云集，由何处开始",
     ),
     "matchErrorText": MessageLookupByLibrary.simpleMessage("此字段与格式不匹配。"),
-    "maxErrorText": m7,
-    "maxLengthErrorText": m8,
+    "maxErrorText": m8,
+    "maxLengthErrorText": m9,
     "menuAccesses": MessageLookupByLibrary.simpleMessage("访问"),
-    "menuBilling": MessageLookupByLibrary.simpleMessage("Weebi 许可证"),
+    "menuBilling": MessageLookupByLibrary.simpleMessage("Weebi 套餐"),
     "menuBoutiques": MessageLookupByLibrary.simpleMessage("店铺"),
+    "menuCatalog": MessageLookupByLibrary.simpleMessage("商品目录"),
     "menuDevices": MessageLookupByLibrary.simpleMessage("设备"),
     "menuFirm": MessageLookupByLibrary.simpleMessage("我的企业"),
     "menuScopeDisclaimer": MessageLookupByLibrary.simpleMessage(
       "文章、联系人和操作（销售、采购、库存移动等）目前仅在移动应用中可用。",
     ),
+    "menuScopeDisclaimerDev": MessageLookupByLibrary.simpleMessage(
+      "联系人和操作（销售、采购、库存移动等）目前仅在移动应用中可用。目录发现和票据可在此使用。",
+    ),
     "menuStats": MessageLookupByLibrary.simpleMessage("统计数据"),
     "menuTickets": MessageLookupByLibrary.simpleMessage("票据"),
     "menuUsers": MessageLookupByLibrary.simpleMessage("用户"),
-    "minErrorText": m9,
-    "minLengthErrorText": m10,
+    "minErrorText": m10,
+    "minLengthErrorText": m11,
     "myProfile": MessageLookupByLibrary.simpleMessage("我的个人资料"),
-    "newOrders": m11,
-    "newUsers": m12,
-    "notEqualErrorText": m13,
+    "newOrders": m12,
+    "newUsers": m13,
+    "notEqualErrorText": m14,
     "numericErrorText": MessageLookupByLibrary.simpleMessage("此字段必须是数字。"),
     "openInNewTab": MessageLookupByLibrary.simpleMessage("在新标签打开"),
     "operationalLicenseBlockedBody": MessageLookupByLibrary.simpleMessage(
@@ -251,14 +319,14 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "operationalLicenseOpenBilling": MessageLookupByLibrary.simpleMessage("计费"),
     "operationalLicenseRetry": MessageLookupByLibrary.simpleMessage("重试"),
-    "pages": m14,
+    "pages": m15,
     "password": MessageLookupByLibrary.simpleMessage("密码"),
     "passwordNotMatch": MessageLookupByLibrary.simpleMessage("密码不匹配。"),
     "passwordResetEmailSent": MessageLookupByLibrary.simpleMessage(
       "如果此电子邮件有对应账户，您将收到重置密码的链接。",
     ),
-    "pendingIssues": m15,
-    "recentOrders": m16,
+    "pendingIssues": m16,
+    "recentOrders": m17,
     "recordDeletedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "记录已成功删除。",
     ),
@@ -295,8 +363,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "text": MessageLookupByLibrary.simpleMessage("文字"),
     "textEmphasis": MessageLookupByLibrary.simpleMessage("文字强调"),
     "textTheme": MessageLookupByLibrary.simpleMessage("文字主题"),
-    "ticketDetailTitle": m17,
-    "ticketItemsShort": m18,
+    "ticketDetailTitle": m18,
+    "ticketItemsShort": m19,
     "ticketNotProvided": MessageLookupByLibrary.simpleMessage("未提供小票"),
     "ticketTypeDefault": MessageLookupByLibrary.simpleMessage("小票"),
     "ticketsBoutiqueAll": MessageLookupByLibrary.simpleMessage("全部门店"),
@@ -309,7 +377,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "日期 · 编号",
     ),
     "ticketsColumnType": MessageLookupByLibrary.simpleMessage("类型"),
-    "ticketsCount": m19,
+    "ticketsCount": m20,
     "ticketsDateAll": MessageLookupByLibrary.simpleMessage("全部日期"),
     "ticketsDeletedChip": MessageLookupByLibrary.simpleMessage("已删除"),
     "ticketsDeletedExclude": MessageLookupByLibrary.simpleMessage("未删除"),
@@ -350,7 +418,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ticketsTooltipRefresh": MessageLookupByLibrary.simpleMessage("刷新"),
     "todaySales": MessageLookupByLibrary.simpleMessage("今日销售额"),
     "typography": MessageLookupByLibrary.simpleMessage("排版"),
-    "uiElements": m20,
+    "uiElements": m21,
     "urlErrorText": MessageLookupByLibrary.simpleMessage("此字段需要有效的URL地址。"),
     "username": MessageLookupByLibrary.simpleMessage("用户名"),
     "yes": MessageLookupByLibrary.simpleMessage("是的"),

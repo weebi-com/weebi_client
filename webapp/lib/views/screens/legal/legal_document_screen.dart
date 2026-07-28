@@ -10,12 +10,15 @@ import '../../../core/constants/dimens.dart';
 enum EnterpriseLegalDocument {
   termsEn,
   cgvFr,
+  cgvAccountingReportFr,
 }
 
 extension EnterpriseLegalDocumentX on EnterpriseLegalDocument {
   String get assetKey => switch (this) {
         EnterpriseLegalDocument.termsEn => 'lib/cgv_en.md',
         EnterpriseLegalDocument.cgvFr => 'lib/cgv_fr.md',
+        EnterpriseLegalDocument.cgvAccountingReportFr =>
+          'lib/cgv_accounting_report_fr.md',
       };
 }
 
@@ -62,6 +65,8 @@ class _LegalDocumentScreenState extends State<LegalDocumentScreen> {
     return switch (widget.document) {
       EnterpriseLegalDocument.termsEn => lang.legalDocTitleTermsEn,
       EnterpriseLegalDocument.cgvFr => lang.legalDocTitleCgvFr,
+      EnterpriseLegalDocument.cgvAccountingReportFr =>
+        lang.legalDocTitleCgvAccountingReportFr,
     };
   }
 

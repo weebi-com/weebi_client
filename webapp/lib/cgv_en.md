@@ -1,8 +1,8 @@
-# Terms and Conditions of Sale — Enterprise License
+# Terms and Conditions of Sale — Premium License
 
-- **Last updated: 22nd of March 2026**  
+- **Last updated: 27th of July 2026**  
+- **Application: Weebi — Premium User License**
 - **Provider: Boutiques Broker OÜ (“BB”)** - 3 Ruunaoja Street, Lasnamäe District, Harju County, 11415 Tallinn, Estonia
-- **Application: Weebi — Enterprise License**
 
 ---
 
@@ -10,7 +10,7 @@
 
 The **Weebi** Application is a point‑of‑sale (POS) software designed to operate primarily in *offline‑first* mode, enabling the entry, consultation, and synchronization of commercial data across one or multiple points of sale.
 
-The **Enterprise License** provided by **Boutiques Broker OÜ** grants professional use of the Application and access to its associated services, including multi‑device synchronization.  
+The **Premium License** provided by **Boutiques Broker OÜ** grants professional use of the Application and access to its associated services, including multi‑device synchronization.  
 Weebi is the application; Boutiques Broker is the company that commercializes, activates, and maintains the services related to this License.
 
 Any purchase implies full acceptance of these Terms and Conditions of Sale (TCS).
@@ -37,9 +37,9 @@ The Client is responsible for their **hardware**, **network**, **configuration**
 
 ## 2. Pricing, payment, duration, refund policy and suspension
 
-Prices are indicated **excluding taxes** and must be paid **once, in advance**, before the Enterprise License is activated.
+Prices are indicated **excluding taxes** and must be paid **once, in advance**, before the Premium License is activated.
 
-The Enterprise License is granted for an **unlimited duration** after payment.
+The Premium License is granted for an **unlimited duration** after payment.
 
 **Each license corresponds to one (1) individual user.**  
 Using a single license across multiple employees or individuals constitutes **abusive use** and **fraud**, and may result in suspension without compensation.
@@ -76,7 +76,7 @@ BB strives to provide a stable experience **to the best of its available capacit
 
 ### Liability limitation  
 - BB has an **obligation of means**, not an obligation of result.  
-- BB’s total liability is **limited to the amount paid for the Enterprise License**.  
+- BB’s total liability is **limited to the amount paid for the Premium License**.  
 - BB is not liable for lost profits, data loss, or indirect damages.
 
 ---
@@ -88,8 +88,10 @@ No contractual commitment regarding response time or service level is offered.
 
 ---
 
-## 5. Governing law and jurisdiction
+## 5. Governing Law and Jurisdiction
 
-These TCS are governed by **Estonian law**.
+These Terms and Conditions shall be governed by and construed in accordance with the laws of France.
 
-Disputes will be submitted to the **courts of Estonia**, unless the Client’s country requires a mandatory B2B jurisdiction by law; in such cases, that jurisdiction may be used according to local legal requirements.
+The Parties agree to seek an amicable resolution of any dispute for a minimum period of thirty (30) days from the date on which written notice of the dispute is given by one Party to the other.
+
+Failing such amicable resolution, any dispute relating to the validity, interpretation, performance, or termination of these Terms and Conditions shall be subject to the exclusive jurisdiction of the courts of Paris, France, unless mandatory applicable law provides otherwise.

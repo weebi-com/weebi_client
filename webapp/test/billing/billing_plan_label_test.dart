@@ -12,7 +12,7 @@ void main() {
   });
 
   group('billingPlanLabel', () {
-    test('entreprise productId', () {
+    test('entreprise productId (legacy label)', () {
       expect(
         billingPlanLabel(lang, productId: 'entreprise'),
         'Weebi Entreprise',
@@ -49,16 +49,24 @@ void main() {
   });
 
   group('isBillingCatalogProduct', () {
-    test('allows entreprise and premium only', () {
-      expect(isBillingCatalogProduct('entreprise'), isTrue);
+    test('allows premium only for purchase', () {
       expect(isBillingCatalogProduct('premium'), isTrue);
+      expect(isBillingCatalogProduct('entreprise'), isFalse);
+      expect(isBillingCatalogProduct('syscohada'), isFalse);
       expect(isBillingCatalogProduct('pro'), isFalse);
       expect(isBillingCatalogProduct('solo'), isFalse);
     });
   });
 
+  group('isSyscohadaBillingProduct', () {
+    test('recognizes syscohada only', () {
+      expect(isSyscohadaBillingProduct('syscohada'), isTrue);
+      expect(isSyscohadaBillingProduct('premium'), isFalse);
+    });
+  });
+
   group('isBillingCatalogLicense', () {
-    test('allows ENTERPRISE and PREMIUM only', () {
+    test('allows ENTERPRISE and PREMIUM owned licenses', () {
       expect(
         isBillingCatalogLicense(License()..licensePlan = LicensePlan.ENTERPRISE),
         isTrue,
