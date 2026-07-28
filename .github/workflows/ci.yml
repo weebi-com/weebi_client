@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Analyze & test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure git
+        run: |
+          git config --global url."https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/".insteadOf "https://github.com/"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          # Keep in sync with Dockerfile FLUTTER_VERSION
+          flutter-version: 3.29.3
+          cache: true
+
+      - name: Set up Melos
+        uses: bluefireteam/melos-action@v3
+        with:
+          melos-version: '6.3.0'
+
+      - name: Analyze
+        run: melos run analyze
+
+      #- name: Check formatting
+      #  run: melos run format
+
+      - name: Run tests
+        run: melos run test
