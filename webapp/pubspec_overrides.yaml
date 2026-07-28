@@ -1,8 +1,6 @@
 # Local-only (gitignored). Enables TDD against unpublished bridge RPCs.
 # Do not ship / push weebi_client with path overrides for protos_weebi.
 dependency_overrides:
-  protos_weebi:
-    path: ../../weebi_server/packages/protos/protos_weebi
   auth_weebi:
     path: ../packages/auth
   boutiques_weebi:
