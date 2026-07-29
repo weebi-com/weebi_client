@@ -1,6 +1,9 @@
 # Local-only (gitignored). Enables TDD against unpublished bridge RPCs.
 # Do not ship / push weebi_client with path overrides for protos_weebi.
 dependency_overrides:
+  font_awesome_flutter: ^11.0.0
+  design_weebi:
+    path: ../../weebi/packages/design
   auth_weebi:
     path: ../packages/auth
   boutiques_weebi:

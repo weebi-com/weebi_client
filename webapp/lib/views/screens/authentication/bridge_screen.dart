@@ -51,16 +51,26 @@ class _BridgeScreenState extends State<BridgeScreen> {
       }
 
       if (!mounted) return;
+
+      // Mark legacy go_router gate as logged-in *before* readOneUser / billing
+      // navigation so refreshListenable cannot bounce us to /login mid-bridge.
+      await context.read<UserDataProvider>().setUserDataAsync(
+            mail: 'bridge@weebi',
+            userProfileImageUrl:
+                'https://www.weebi.com/images/Weebi_Logo_Full.png',
+          );
+
+      if (!mounted) return;
       final currentUser = context.read<CurrentUserProvider>();
       currentUser.clear();
       final user = await currentUser.load(force: true);
       if (!mounted) return;
 
-      await context.read<UserDataProvider>().setUserDataAsync(
-            mail: user?.mail.isNotEmpty == true ? user!.mail : 'bridge@weebi',
-            userProfileImageUrl:
-                'https://www.weebi.com/images/Weebi_Logo_Full.png',
-          );
+      if (user?.mail.isNotEmpty == true) {
+        await context.read<UserDataProvider>().setUserDataAsync(
+              mail: user!.mail,
+            );
+      }
 
       if (!mounted) return;
       GoRouter.of(context).go(destination.billingLocation);
@@ -77,6 +87,7 @@ class _BridgeScreenState extends State<BridgeScreen> {
   Widget build(BuildContext context) {
     if (_error != null) {
       return Scaffold(
+        key: const Key('bridgeScreen'),
         body: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 420),
@@ -86,12 +97,14 @@ class _BridgeScreenState extends State<BridgeScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
+                    key: const Key('bridgeErrorText'),
                     _error!,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 16),
                   FilledButton(
+                    key: const Key('bridgeGoToLoginButton'),
                     onPressed: () => GoRouter.of(context).go(RouteUri.login),
                     child: const Text('Go to login'),
                   ),
@@ -104,6 +117,7 @@ class _BridgeScreenState extends State<BridgeScreen> {
     }
 
     return const Scaffold(
+      key: Key('bridgeScreen'),
       body: Center(child: CircularProgressIndicator()),
     );
   }

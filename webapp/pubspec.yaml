@@ -45,7 +45,7 @@ dependencies:
 
   flutter_markdown: ^0.7.7+1
   aptabase_flutter: ^0.4.1
-  font_awesome_flutter: ^10.9.1 #^11.0.0
+  font_awesome_flutter: ^11.0.0
 
 dev_dependencies:
   flutter_test:
@@ -55,12 +55,12 @@ dev_dependencies:
     sdk: flutter
   intl_utils: ^2.8.7
   flutter_lints: ^3.0.0
-#  patrol: ^4.1.0
-#patrol:
+  patrol: ^4.1.0
 #  app_name: Weebi Web Admin
 #  test_directory: patrol_test
 
 dependency_overrides:
+  font_awesome_flutter: ^11.0.0
   #protos_weebi:
   #  path: ../../weebi_server/packages/protos/protos_weebi
   # rive_native 0.1.6 references Flutter semantics APIs that are not present in
