@@ -26,10 +26,10 @@ extension GetTicketTypeIcon on TicketType {
       return Icon(Icons.layers, color: iconColor);
     } else if (this == TicketType.inventory) {
       return Icon(Icons.inventory_rounded, color: iconColor);
-    } else if (this == TicketType.rebalance) {
+/*     } else if (this == TicketType.rebalance) {
       return Icon(Icons.swap_horiz, color: iconColor);
     } else if (this == TicketType.inventoryClosingValue) {
-      return Icon(Icons.warehouse_outlined, color: iconColor);
+      return Icon(Icons.warehouse_outlined, color: iconColor); */
     } else {
       return const Icon(Icons.device_unknown);
     }
@@ -54,10 +54,10 @@ extension GetTicketTypeIcon on TicketType {
       return Icons.layers;
     } else if (this == TicketType.inventory) {
       return Icons.inventory_rounded;
-    } else if (this == TicketType.rebalance) {
+/*     } else if (this == TicketType.rebalance) {
       return Icons.swap_horiz;
     } else if (this == TicketType.inventoryClosingValue) {
-      return Icons.warehouse_outlined;
+      return Icons.warehouse_outlined; */
     } else {
       return Icons.device_unknown;
     }
@@ -82,10 +82,10 @@ extension GetTicketTypeIcon on TicketType {
       return ColorsWeebi.pinkStockExit;
     } else if (this == TicketType.inventory) {
       return ColorsWeebi.blueInventory;
-    } else if (this == TicketType.rebalance) {
+/*     } else if (this == TicketType.rebalance) {
       return ColorsWeebi.ohadaBlue;
     } else if (this == TicketType.inventoryClosingValue) {
-      return ColorsWeebi.blueInventory;
+      return ColorsWeebi.blueInventory; */
     } else {
       return Colors.grey;
     }

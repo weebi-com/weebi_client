@@ -34,7 +34,7 @@ jobs:
         with:
           channel: stable
           # Keep in sync with Dockerfile FLUTTER_VERSION
-          flutter-version: 3.29.3
+          flutter-version: 3.44.8
           cache: true
 
       - name: Set up Melos

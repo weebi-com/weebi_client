@@ -20,7 +20,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 ARG FLUTTER_SDK=/usr/local/flutter
-ARG FLUTTER_VERSION=3.29.3
+ARG FLUTTER_VERSION=3.44.8
 ARG APP=/app
 
 RUN git clone --depth 1 --branch "$FLUTTER_VERSION" https://github.com/flutter/flutter.git "$FLUTTER_SDK"
