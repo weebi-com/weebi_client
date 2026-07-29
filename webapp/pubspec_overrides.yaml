@@ -3,16 +3,16 @@
 # Do not ship / push weebi_client with path overrides for protos_weebi.
 dependency_overrides:
   accesses_weebi:
-    path: ..\\packages\\accesses
+    path: ../packages/accesses
   auth_weebi:
     path: ../packages/auth
   boutiques_weebi:
     path: ../packages/boutiques
   design_weebi:
-    path: ..\\packages\\design
+    path: ../packages/design
   devices_weebi:
-    path: ..\\packages\\devices
+    path: ../packages/devices
   entitlements_weebi:
     path: ../packages/entitlements
   users_weebi:
-    path: ..\\packages\\users
+    path: ../packages/users
