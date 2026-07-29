@@ -25,7 +25,8 @@ dependencies:
     # path: ../weebi/packages/users
   accesses_weebi: ^1.0.8
   devices_weebi: ^1.0.8
-  design_weebi: ^0.1.5 # will need to upgrand and ++ font
+  design_weebi: #^0.1.5 # will need to upgrand and ++ font
+    path: ../packages/design
 
   shared_preferences: ^2.2.2
   provider: ^6.1.2
@@ -60,7 +61,6 @@ dev_dependencies:
 #  test_directory: patrol_test
 
 dependency_overrides:
-  font_awesome_flutter: ^11.0.0
   #protos_weebi:
   #  path: ../../weebi_server/packages/protos/protos_weebi
   # rive_native 0.1.6 references Flutter semantics APIs that are not present in

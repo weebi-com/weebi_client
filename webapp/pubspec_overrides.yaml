@@ -1,12 +1,18 @@
+# melos_managed_dependency_overrides: accesses_weebi,design_weebi,devices_weebi,users_weebi
 # Local-only (gitignored). Enables TDD against unpublished bridge RPCs.
 # Do not ship / push weebi_client with path overrides for protos_weebi.
 dependency_overrides:
-  font_awesome_flutter: ^11.0.0
-  design_weebi:
-    path: ../../weebi/packages/design
+  accesses_weebi:
+    path: ..\\packages\\accesses
   auth_weebi:
     path: ../packages/auth
   boutiques_weebi:
     path: ../packages/boutiques
+  design_weebi:
+    path: ..\\packages\\design
+  devices_weebi:
+    path: ..\\packages\\devices
   entitlements_weebi:
     path: ../packages/entitlements
+  users_weebi:
+    path: ..\\packages\\users
