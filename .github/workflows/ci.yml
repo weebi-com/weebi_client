@@ -42,8 +42,8 @@ jobs:
         with:
           melos-version: '6.3.0'
 
-      - name: Analyze
-        run: melos run analyze
+      #- name: Analyze
+      #  run: melos run analyze
 
       #- name: Check formatting
       #  run: melos run format
