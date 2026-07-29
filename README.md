@@ -11,3 +11,8 @@ Additional modifications are © 2026 Boutiques Broker
 
 Internal packages are licensed under the MIT License.
 See individual LICENSE files for details.
+
+
+## TESTME
+cd webapp
+patrol test -t patrol_test/first_login_tile_test.dart -d chrome --web-headless

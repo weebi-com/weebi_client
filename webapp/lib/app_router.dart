@@ -2,6 +2,7 @@ import 'package:auth_weebi/auth_weebi.dart' show PermissionProvider;
 import 'package:flutter/foundation.dart' show Listenable;
 import 'package:go_router/go_router.dart';
 import 'package:web_admin/contacts/view/contacts_page.dart';
+import 'package:web_admin/core/routing/bridge_auth_redirect.dart';
 import 'package:web_admin/environment.dart';
 import 'package:web_admin/providers/user_data_provider.dart';
 import 'package:web_admin/views/screens/buttons_screen.dart';
@@ -110,12 +111,16 @@ const List<String> publicRoutes = [
 
 GoRouter appRouter(
   UserDataProvider userDataProvider,
-  PermissionProvider permissionProvider,
-) {
+  PermissionProvider permissionProvider, {
+  Uri? browserUri,
+}) {
+  final uri = browserUri ?? Uri.base;
   return GoRouter(
     refreshListenable:
         Listenable.merge([permissionProvider, userDataProvider]),
-    initialLocation: RouteUri.home,
+    // Prefer hash deep links (#/bridge) so cold start after async prefs boot
+    // does not fall back to `/` → dashboard → login and drop the magic link.
+    initialLocation: resolveGoRouterInitialLocation(uri),
     errorPageBuilder: (context, state) => NoTransitionPage<void>(
       key: state.pageKey,
       child: const ErrorScreen(),
@@ -448,29 +453,14 @@ GoRouter appRouter(
       if (state.matchedLocation == RouteUri.catalog && !Config.isDev) {
         return RouteUri.dashboard;
       }
-      if (unrestrictedRoutes.contains(state.matchedLocation)) {
-        return null;
-      } else if (publicRoutes.contains(state.matchedLocation)) {
-        // Is public route.
-        if (userDataProvider.isUserLoggedIn()) {
-          // User is logged in, redirect to home page.
-          return RouteUri.home;
-        }
-      } else {
-        // Not public route.
-        if (!userDataProvider.isUserLoggedIn()) {
-          // User is not logged in, redirect to login page.
-          return RouteUri.login;
-        }
-      }
 
-      if (state.matchedLocation == RouteUri.billing &&
-          userDataProvider.isUserLoggedIn()) {
-        // Allow navigation to billing route; the screen itself will show "no access" if needed
-        // In BFF mode, permissions may not be loaded yet from the session
-      }
-
-      return null;
+      return resolveAuthRedirect(
+        matchedLocation: state.matchedLocation,
+        isLoggedIn: userDataProvider.isUserLoggedIn(),
+        documentQuery: Uri.base.queryParameters,
+        unrestrictedRoutes: unrestrictedRoutes,
+        publicRoutes: publicRoutes,
+      );
     },
   );
 }

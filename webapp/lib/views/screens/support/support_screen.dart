@@ -63,7 +63,7 @@ class SupportScreen extends StatelessWidget {
 }
 
 class _ContactTile extends StatelessWidget {
-  final IconData icon;
+  final dynamic icon;
   final Color? iconColor;
   final bool isWhatsApp;
   final String label;
@@ -88,8 +88,15 @@ class _ContactTile extends StatelessWidget {
             ? (isWhiteBackground ? ColorsWeebi.whatsapp : Colors.white)
             : themeData.colorScheme.primary);
 
+    final Widget leadingIcon;
+    if (icon is IconData) {
+      leadingIcon = Icon(icon as IconData, color: color, size: 26);
+    } else {
+      leadingIcon = FaIcon(icon as FaIconData, color: color, size: 26);
+    }
+
     return ListTile(
-      leading: Icon(icon, color: color, size: 26),
+      leading: leadingIcon,
       title: Text(label),
       subtitle: Text(subtitle),
       trailing: const Icon(Icons.open_in_new_rounded, size: 18),

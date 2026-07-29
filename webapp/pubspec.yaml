@@ -4,7 +4,7 @@ publish_to: 'none'
 version: 1.0.7
 
 environment:
-  sdk: '>=3.3.3 <4.0.0'
+  sdk: '>=3.9.0 <4.0.0'
 
 # avoid risking `flutter pub upgrade --major-versions`
 # prefer `flutter pub outdated`
@@ -25,7 +25,8 @@ dependencies:
     # path: ../weebi/packages/users
   accesses_weebi: ^1.0.8
   devices_weebi: ^1.0.8
-  design_weebi: ^0.1.5 # will need to upgrand and ++ font
+  design_weebi: #^0.1.5 # will need to upgrand and ++ font
+    path: ../packages/design
 
   shared_preferences: ^2.2.2
   provider: ^6.1.2
@@ -45,7 +46,7 @@ dependencies:
 
   flutter_markdown: ^0.7.7+1
   aptabase_flutter: ^0.4.1
-  font_awesome_flutter: ^10.9.1 #^11.0.0
+  font_awesome_flutter: ^11.0.0
 
 dev_dependencies:
   flutter_test:
@@ -55,8 +56,7 @@ dev_dependencies:
     sdk: flutter
   intl_utils: ^2.8.7
   flutter_lints: ^3.0.0
-#  patrol: ^4.1.0
-#patrol:
+  patrol: ^4.1.0
 #  app_name: Weebi Web Admin
 #  test_directory: patrol_test
 

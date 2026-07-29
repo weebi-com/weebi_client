@@ -142,3 +142,6 @@ webapp/pubspec.lock
 webapp/WIDGET_TESTS_README.md
 /webapp/agent/API_URL.md
 webapp/agent/WIDGET_TESTS_README.md
+webapp/playwright-report/index.html
+webapp/playwright-report/data/aa412736a69da0556c2d1e1083181d9f98be2bbd.md
+webapp/playwright-report/index.html
