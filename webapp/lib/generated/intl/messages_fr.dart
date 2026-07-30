@@ -144,10 +144,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Pas encore attribuée(s)",
     ),
     "billingPayWithCard": MessageLookupByLibrary.simpleMessage(
-      "Carte (Stripe)",
+      "Carte/Banque",
     ),
     "billingPayWithMobileMoney": MessageLookupByLibrary.simpleMessage(
-      "Mobile money (PawaPay)",
+      "Mobile Money",
     ),
     "billingPaymentProcessing": MessageLookupByLibrary.simpleMessage(
       "Paiement reçu. Confirmation en cours — votre ou vos licences apparaîtront sous peu ; vous pourrez ensuite les attribuer aux utilisateurs.",
@@ -185,7 +185,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage(
       "par année fiscale",
     ),
-    "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage("1 900 FCFA"),
+    "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage("1 900 XOF / 2.90 EUR"),
     "billingSyscohadaPurchase": MessageLookupByLibrary.simpleMessage(
       "Payer cette année",
     ),

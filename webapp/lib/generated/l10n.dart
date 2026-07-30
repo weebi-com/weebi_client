@@ -249,20 +249,20 @@ class Lang {
     );
   }
 
-  /// `Card (Stripe)`
+  /// `Card/Bank`
   String get billingPayWithCard {
     return Intl.message(
-      'Card (Stripe)',
+      'Card/Bank',
       name: 'billingPayWithCard',
       desc: '',
       args: [],
     );
   }
 
-  /// `Mobile money (PawaPay)`
+  /// `Mobile Money`
   String get billingPayWithMobileMoney {
     return Intl.message(
-      'Mobile money (PawaPay)',
+      'Mobile Money',
       name: 'billingPayWithMobileMoney',
       desc: '',
       args: [],
@@ -364,10 +364,10 @@ class Lang {
     );
   }
 
-  /// `1,900 FCFA`
+  /// `1,900 XOF / 2.90 EUR`
   String get billingSyscohadaPrice {
     return Intl.message(
-      '1,900 FCFA',
+      '1,900 XOF / 2.90 EUR',
       name: 'billingSyscohadaPrice',
       desc: '',
       args: [],

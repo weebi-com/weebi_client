@@ -37,3 +37,50 @@ String billingPlanLabel(
   if (productId != null && productId.isNotEmpty) return productId;
   return licensePlan?.name ?? '';
 }
+
+/// Marketing XOF list prices (aligned with PawaPay checkout amounts).
+int? billingXofListPrice(String productId) {
+  switch (productId.trim().toLowerCase()) {
+    case kSyscohadaProductId:
+      return 1900;
+    case 'premium':
+      return 19000;
+    default:
+      return null;
+  }
+}
+
+/// Offer price for the billing UI: prefer XOF when known, then catalog EUR.
+///
+/// Example: `19 000 XOF / 14.00 EUR`
+String formatBillingOfferPrice({
+  required int amountCents,
+  required String currency,
+  required String productId,
+}) {
+  final catalogCurrency =
+      currency.trim().isNotEmpty ? currency.trim().toUpperCase() : 'EUR';
+  final isFcfa =
+      catalogCurrency == 'XOF' || catalogCurrency == 'XAF';
+  final catalogAmount = isFcfa
+      ? (amountCents / 100).round().toString()
+      : (amountCents / 100).toStringAsFixed(2);
+  final catalogLabel = '$catalogAmount $catalogCurrency';
+
+  final xof = billingXofListPrice(productId);
+  if (xof == null) return catalogLabel;
+  final xofLabel = '${_formatThousandsSpaces(xof)} XOF';
+  if (isFcfa) return xofLabel;
+  return '$xofLabel / $catalogLabel';
+}
+
+String _formatThousandsSpaces(int value) {
+  final digits = value.abs().toString();
+  final buf = StringBuffer();
+  if (value < 0) buf.write('-');
+  for (var i = 0; i < digits.length; i++) {
+    if (i > 0 && (digits.length - i) % 3 == 0) buf.write('\u00A0');
+    buf.write(digits[i]);
+  }
+  return buf.toString();
+}

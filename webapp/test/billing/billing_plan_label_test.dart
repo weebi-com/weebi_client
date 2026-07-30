@@ -65,6 +65,41 @@ void main() {
     });
   });
 
+  group('formatBillingOfferPrice', () {
+    test('shows XOF first then EUR for premium', () {
+      expect(
+        formatBillingOfferPrice(
+          amountCents: 1400,
+          currency: 'eur',
+          productId: 'premium',
+        ),
+        '19\u00A0000 XOF / 14.00 EUR',
+      );
+    });
+
+    test('shows XOF first then EUR for syscohada', () {
+      expect(
+        formatBillingOfferPrice(
+          amountCents: 290,
+          currency: 'eur',
+          productId: 'syscohada',
+        ),
+        '1\u00A0900 XOF / 2.90 EUR',
+      );
+    });
+
+    test('falls back to catalog amount when no XOF list price', () {
+      expect(
+        formatBillingOfferPrice(
+          amountCents: 9900,
+          currency: 'eur',
+          productId: 'legacy',
+        ),
+        '99.00 EUR',
+      );
+    });
+  });
+
   group('isBillingCatalogLicense', () {
     test('allows ENTERPRISE and PREMIUM owned licenses', () {
       expect(

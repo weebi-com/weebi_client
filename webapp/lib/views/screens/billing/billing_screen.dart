@@ -647,7 +647,23 @@ class _BillingScreenState extends State<BillingScreen>
     return ListView(
       padding: const EdgeInsets.all(kDefaultPadding),
       children: [
-        if (_products.isNotEmpty)
+        _SyscohadaAddonCard(
+          product: _syscohadaProduct,
+          purchasedYears: _accountingPurchases,
+          selectedYear: _syscohadaFiscalYear,
+          onYearChanged: (y) => setState(() => _syscohadaFiscalYear = y),
+          onPurchase: _onSyscohadaPurchaseTapped,
+          isLoading: _checkoutProductId == kSyscohadaProductId,
+          purchaseEnabled: canPurchase,
+          accepted: _acceptedSyscohadaTerms,
+          onAcceptedChanged: (v) =>
+              setState(() => _acceptedSyscohadaTerms = v ?? false),
+          onViewTerms: _openSyscohadaTermsInNewTab,
+          highlighted: _bridgeHighlightProductId == kSyscohadaProductId,
+          showPurchasedYearsSummary: false,
+        ),
+        if (_products.isNotEmpty) ...[
+          const SizedBox(height: kDefaultPadding * 2),
           Wrap(
             spacing: kDefaultPadding,
             runSpacing: kDefaultPadding,
@@ -666,22 +682,7 @@ class _BillingScreenState extends State<BillingScreen>
                     ))
                 .toList(),
           ),
-        if (_products.isNotEmpty) const SizedBox(height: kDefaultPadding * 2),
-        _SyscohadaAddonCard(
-          product: _syscohadaProduct,
-          purchasedYears: _accountingPurchases,
-          selectedYear: _syscohadaFiscalYear,
-          onYearChanged: (y) => setState(() => _syscohadaFiscalYear = y),
-          onPurchase: _onSyscohadaPurchaseTapped,
-          isLoading: _checkoutProductId == kSyscohadaProductId,
-          purchaseEnabled: canPurchase,
-          accepted: _acceptedSyscohadaTerms,
-          onAcceptedChanged: (v) =>
-              setState(() => _acceptedSyscohadaTerms = v ?? false),
-          onViewTerms: _openSyscohadaTermsInNewTab,
-          highlighted: _bridgeHighlightProductId == kSyscohadaProductId,
-          showPurchasedYearsSummary: false,
-        ),
+        ],
       ],
     );
   }
@@ -1051,7 +1052,11 @@ class _SyscohadaAddonCard extends StatelessWidget {
     final paidYears = purchasedYears.map((p) => p.year).toSet();
     final priceLabel = product == null
         ? lang.billingSyscohadaPrice
-        : '${(product!.amountCents / 100).toStringAsFixed(2)} ${product!.currency.isNotEmpty ? product!.currency.toUpperCase() : 'EUR'}';
+        : formatBillingOfferPrice(
+            amountCents: product!.amountCents,
+            currency: product!.currency,
+            productId: product!.productId,
+          );
 
     return Container(
       width: double.infinity,
@@ -1231,9 +1236,11 @@ class _ProductOfferCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final lang = Lang.of(context);
-    final priceStr = (product.amountCents / 100).toStringAsFixed(2);
-    final currency =
-        product.currency.isNotEmpty ? product.currency.toUpperCase() : 'EUR';
+    final priceLabel = formatBillingOfferPrice(
+      amountCents: product.amountCents,
+      currency: product.currency,
+      productId: product.productId,
+    );
     final planName = billingPlanLabel(lang, productId: product.productId);
     final style = BillingPlanVisual.fromProductId(product.productId);
 
@@ -1267,7 +1274,7 @@ class _ProductOfferCard extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                '$priceStr $currency',
+                priceLabel,
                 style: themeData.textTheme.headlineSmall!.copyWith(
                   color: style.priceColor,
                   fontWeight: FontWeight.bold,

@@ -142,9 +142,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingNotYetAttributed": MessageLookupByLibrary.simpleMessage(
       "Not yet attributed",
     ),
-    "billingPayWithCard": MessageLookupByLibrary.simpleMessage("Card (Stripe)"),
+    "billingPayWithCard": MessageLookupByLibrary.simpleMessage("Card/Bank"),
     "billingPayWithMobileMoney": MessageLookupByLibrary.simpleMessage(
-      "Mobile money (PawaPay)",
+      "Mobile Money",
     ),
     "billingPaymentProcessing": MessageLookupByLibrary.simpleMessage(
       "Payment received. We\'re confirming it — your license(s) will appear shortly; you can then assign seats to users.",
@@ -185,7 +185,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage(
       "per fiscal year",
     ),
-    "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage("1,900 FCFA"),
+    "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage("1,900 XOF / 2.90 EUR"),
     "billingSyscohadaPurchase": MessageLookupByLibrary.simpleMessage(
       "Pay for this year",
     ),

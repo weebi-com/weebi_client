@@ -118,9 +118,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "没有可分配的用户。请先在「用户」中添加用户。",
     ),
     "billingNotYetAttributed": MessageLookupByLibrary.simpleMessage("尚未分配"),
-    "billingPayWithCard": MessageLookupByLibrary.simpleMessage("银行卡（Stripe）"),
+    "billingPayWithCard": MessageLookupByLibrary.simpleMessage("银行卡/银行"),
     "billingPayWithMobileMoney": MessageLookupByLibrary.simpleMessage(
-      "移动支付（PawaPay）",
+      "移动支付",
     ),
     "billingPaymentProcessing": MessageLookupByLibrary.simpleMessage(
       "付款已收到。正在确认 — 您的许可证将很快显示，然后可分配给用户。",
@@ -151,7 +151,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "即将可在此页面购买。",
     ),
     "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage("每个财政年度"),
-    "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage("1 900 FCFA"),
+    "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage("1 900 XOF / 2.90 EUR"),
     "billingSyscohadaPurchase": MessageLookupByLibrary.simpleMessage("支付该年度"),
     "billingSyscohadaPurchasedYears": MessageLookupByLibrary.simpleMessage(
       "已支付年份",
