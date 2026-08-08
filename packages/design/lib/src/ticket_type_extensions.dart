@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:models_weebi/models.dart' show TicketType;
 
 import 'colors.dart';
@@ -8,8 +7,7 @@ import 'colors.dart';
 extension GetTicketTypeIcon on TicketType {
   Widget get icon {
     if (this == TicketType.sell) {
-      return FaIcon(FontAwesomeIcons.cashRegister,
-          color: iconColor, size: 20);
+      return Icon(Icons.point_of_sale, color: iconColor, size: 20);
     } else if (this == TicketType.sellDeferred) {
       return Icon(Icons.record_voice_over, color: iconColor);
     } else if (this == TicketType.sellCovered) {
@@ -35,9 +33,9 @@ extension GetTicketTypeIcon on TicketType {
     }
   }
 
-  dynamic get iconData {
+  IconData get iconData {
     if (this == TicketType.sell) {
-      return FontAwesomeIcons.cashRegister;
+      return Icons.shopping_basket;
     } else if (this == TicketType.sellDeferred) {
       return Icons.record_voice_over;
     } else if (this == TicketType.sellCovered) {
@@ -95,11 +93,11 @@ extension GetTicketTypeIcon on TicketType {
     if (this == TicketType.sell ||
         this == TicketType.sellDeferred ||
         this == TicketType.sellCovered) {
-      return const FaIcon(FontAwesomeIcons.faceSmile);
+      return Icon(Icons.face, color: iconColor);
     } else if (this == TicketType.spend ||
         this == TicketType.spendDeferred ||
         this == TicketType.spendCovered) {
-      return const FaIcon(FontAwesomeIcons.faceGrimace);
+      return Icon(Icons.face_retouching_off, color: iconColor);
     } else {
       return const Icon(Icons.device_unknown);
     }

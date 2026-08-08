@@ -1,11 +1,8 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
-
 import 'package:design_weebi/design_weebi.dart' show ColorsWeebi;
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:web_admin/core/constants/contact.dart';
 import 'package:web_admin/core/constants/dimens.dart';
+import 'package:web_admin/core/web/web_platform.dart' as web;
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
 
@@ -39,17 +36,18 @@ class SupportScreen extends StatelessWidget {
                     iconColor: null,
                     label: lang.supportEmailUs,
                     subtitle: 'hello@weebi.com',
-                    onTap: () => html.window.open('mailto:hello@weebi.com', '_self'),
+                    onTap: () =>
+                        web.openUrl('mailto:hello@weebi.com', target: '_self'),
                   ),
                   _ContactTile(
-                    icon: FontAwesomeIcons.whatsapp,
+                    icon: Icons.chat_outlined,
                     iconColor: null,
                     isWhatsApp: true,
                     label: 'WhatsApp',
                     subtitle: lang.supportChatWhatsApp,
-                    onTap: () => html.window.open(
+                    onTap: () => web.openUrl(
                       'https://wa.me/${Contact.weebiWhatsapp}',
-                      '_blank',
+                      target: '_blank',
                     ),
                   ),
                 ],
@@ -92,7 +90,8 @@ class _ContactTile extends StatelessWidget {
     if (icon is IconData) {
       leadingIcon = Icon(icon as IconData, color: color, size: 26);
     } else {
-      leadingIcon = FaIcon(icon as FaIconData, color: color, size: 26);
+      // Robust handling for custom icon types (like FalconData)
+      leadingIcon = Icon(Icons.help_outline, color: color, size: 26);
     }
 
     return ListTile(

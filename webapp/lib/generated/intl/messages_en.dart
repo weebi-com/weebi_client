@@ -185,7 +185,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage(
       "per fiscal year",
     ),
-    "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage("1,900 XOF / 2.90 EUR"),
+    "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage(
+      "1,900 XOF / 2.90 EUR",
+    ),
     "billingSyscohadaPurchase": MessageLookupByLibrary.simpleMessage(
       "Pay for this year",
     ),
@@ -314,13 +316,31 @@ class MessageLookup extends MessageLookupByLibrary {
     "firmCardDescription": MessageLookupByLibrary.simpleMessage(
       "Your enterprise groups your users and your store chains.",
     ),
+    "firmCreatedAtLabel": MessageLookupByLibrary.simpleMessage("Created on"),
+    "firmCurrencyLabel": MessageLookupByLibrary.simpleMessage(
+      "Default currency",
+    ),
+    "firmDualCurrencyLabel": MessageLookupByLibrary.simpleMessage(
+      "Dual currency",
+    ),
+    "firmEmailVerifiedLabel": MessageLookupByLibrary.simpleMessage(
+      "Email verified",
+    ),
     "firmErrorCreateHint": MessageLookupByLibrary.simpleMessage(
       "Please create a new enterprise by clicking the \"Add an enterprise\" button.",
     ),
     "firmErrorUnexpected": MessageLookupByLibrary.simpleMessage(
       "An unexpected error occurred.",
     ),
+    "firmIdLabel": MessageLookupByLibrary.simpleMessage("Enterprise ID"),
+    "firmNameLabel": MessageLookupByLibrary.simpleMessage("Name"),
     "firmPageTitle": MessageLookupByLibrary.simpleMessage("My enterprise"),
+    "firmSecondaryCurrencyLabel": MessageLookupByLibrary.simpleMessage(
+      "Secondary currency",
+    ),
+    "firmStatusActive": MessageLookupByLibrary.simpleMessage("Active"),
+    "firmStatusInactive": MessageLookupByLibrary.simpleMessage("Inactive"),
+    "firmStatusLabel": MessageLookupByLibrary.simpleMessage("Status"),
     "firstName": MessageLookupByLibrary.simpleMessage("First Name"),
     "forgotPassword": MessageLookupByLibrary.simpleMessage("Forgot password?"),
     "forgotPasswordMessage": MessageLookupByLibrary.simpleMessage(

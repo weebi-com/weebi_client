@@ -39,7 +39,7 @@ RUN dart run melos bootstrap
 
 WORKDIR $APP/webapp
 RUN flutter clean && flutter pub get
-RUN flutter build web --verbose
+RUN flutter build web --wasm --verbose
 
 # Runtime stage
 FROM nginx:alpine

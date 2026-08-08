@@ -14,11 +14,11 @@ class IntegrationExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final storage = const FlutterSecureStorage( mOptions: MacOsOptions(
-                    accessibility:
-                        KeychainAccessibility.first_unlock_this_device,
-                    useDataProtectionKeyChain: true,
-                  ),);
+    final storage = const FlutterSecureStorage(
+      mOptions: MacOsOptions(
+        accessibility: KeychainAccessibility.first_unlock_this_device,
+      ),
+    );
     return MultiProvider(
       providers: [
         // 1. Auth service backed by secure storage

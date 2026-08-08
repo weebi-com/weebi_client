@@ -66,17 +66,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   }
 
   Future<void> _pickProfileImage(BuildContext context) async {
-    final result = await FilePicker.platform.pickFiles(
+    final file = await FilePicker.pickFile(
       type: FileType.image,
-      withData: true,
-      allowMultiple: false,
     );
-    if (result == null ||
-        result.files.isEmpty ||
-        result.files.first.bytes == null) return;
+    if (file == null) return;
 
-    final bytes = result.files.first.bytes!;
-    final extension = result.files.first.extension ?? 'jpeg';
+    final bytes = await file.readAsBytes();
+    if (bytes == null) return;
+
+    final extension = file.extension ?? 'jpeg';
     final mimeType = switch (extension.toLowerCase()) {
       'png' => 'image/png',
       'gif' => 'image/gif',

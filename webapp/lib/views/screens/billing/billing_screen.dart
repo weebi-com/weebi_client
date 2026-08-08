@@ -1,6 +1,5 @@
-// ignore_for_file: avoid_web_libraries_in_flutter, deprecated_member_use
+// ignore_for_file: deprecated_member_use
 import 'dart:async';
-import 'dart:html' as html;
 
 import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:auth_weebi/auth_weebi.dart' show PermissionProvider;
@@ -10,6 +9,8 @@ import 'package:provider/provider.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
 import 'package:auth_weebi/src/extensions/user_permissions_extensions.dart';
 import 'package:web_admin/app_router.dart';
+import 'package:web_admin/core/billing/billing_url_utils.dart';
+import 'package:web_admin/core/web/web_platform.dart' as web;
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/providers/server.dart';
 import 'package:web_admin/views/widgets/card_elements.dart';
@@ -175,26 +176,9 @@ class _BillingScreenState extends State<BillingScreen>
         _licenses.isNotEmpty || _accountingPurchases.isNotEmpty;
     if (!purchaseVisible) return;
     _checkoutReturnHandled = true;
-    final uri = Uri.parse(html.window.location.href);
-    final fragment = uri.fragment;
-    final qIndex = fragment.indexOf('?');
-    if (qIndex < 0) return;
-    final path = fragment.substring(0, qIndex);
-    final cleaned = Map<String, String>.from(
-      Uri.splitQueryString(fragment.substring(qIndex + 1)),
-    );
-    cleaned.remove('success');
-    cleaned.remove('provider');
-    cleaned.remove('checkout_id');
-    cleaned.remove('session_id');
-    final newFragment = cleaned.isEmpty
-        ? path
-        : '$path?${Uri(queryParameters: cleaned).query}';
-    html.window.history.replaceState(
-      null,
-      '',
-      '${uri.origin}${uri.path}${uri.hasQuery ? '?${uri.query}' : ''}#$newFragment',
-    );
+
+    final newUrl = clearCheckoutQueryParams(web.locationHref);
+    web.replaceHistoryState(newUrl);
   }
 
   void _maybeTrackLicensePurchaseConfirmed(List<License> licenses) {
@@ -304,15 +288,15 @@ class _BillingScreenState extends State<BillingScreen>
     final path = locale.languageCode == 'fr'
         ? RouteUri.legalCgvFr
         : RouteUri.legalTermsEn;
-    final url = '${html.window.location.origin}/#$path';
-    html.window.open(url, '_blank');
+    final url = '${web.locationOrigin}/#$path';
+    web.openUrl(url, target: '_blank');
   }
 
   void _openSyscohadaTermsInNewTab() {
     Aptabase.instance.trackEvent('billing_syscohada_terms_opened', {});
     final path = RouteUri.legalCgvAccountingReportFr;
-    final url = '${html.window.location.origin}/#$path';
-    html.window.open(url, '_blank');
+    final url = '${web.locationOrigin}/#$path';
+    web.openUrl(url, target: '_blank');
   }
 
   void _setEnterpriseTermsAccepted(bool value) {
@@ -344,7 +328,7 @@ class _BillingScreenState extends State<BillingScreen>
   Future<void> _syncFulfillAfterCheckoutReturn(Map<String, String> params) async {
     final provider = context.read<BillingServiceClientProvider>();
     final checkoutId = params['checkout_id'] ??
-        html.window.sessionStorage['pawapay_checkout_id'];
+        web.sessionStorageGet('pawapay_checkout_id');
     final isPawapay = params['provider'] == 'pawapay' ||
         (checkoutId != null &&
             checkoutId.isNotEmpty &&
@@ -359,7 +343,7 @@ class _BillingScreenState extends State<BillingScreen>
           ),
         )
             .timeout(const Duration(seconds: 20));
-        html.window.sessionStorage.remove('pawapay_checkout_id');
+        web.sessionStorageRemove('pawapay_checkout_id');
         return;
       }
       final sessionId = params['session_id'];
@@ -448,7 +432,7 @@ class _BillingScreenState extends State<BillingScreen>
     setState(() => _checkoutProductId = product.productId);
 
     try {
-      final origin = html.window.location.origin;
+      final origin = web.locationOrigin;
       const billingPath = RouteUri.billing;
       final successUrl =
           '$origin/#$billingPath?success=true&session_id={CHECKOUT_SESSION_ID}';
@@ -477,7 +461,7 @@ class _BillingScreenState extends State<BillingScreen>
         });
         return;
       }
-      html.window.location.href = response.checkoutUrl;
+      web.navigateTo(response.checkoutUrl);
     } on GrpcError catch (e) {
       Aptabase.instance.trackEvent('billing_license_checkout_failed', {
         'reason': 'checkout_session_grpc',
@@ -516,7 +500,7 @@ class _BillingScreenState extends State<BillingScreen>
     setState(() => _checkoutProductId = product.productId);
 
     try {
-      final origin = html.window.location.origin;
+      final origin = web.locationOrigin;
       const billingPath = RouteUri.billing;
       final returnUrl =
           '$origin/#$billingPath?success=true&provider=pawapay';
@@ -544,9 +528,9 @@ class _BillingScreenState extends State<BillingScreen>
         return;
       }
       if (response.checkoutId.isNotEmpty) {
-        html.window.sessionStorage['pawapay_checkout_id'] = response.checkoutId;
+        web.sessionStorageSet('pawapay_checkout_id', response.checkoutId);
       }
-      html.window.location.href = response.redirectUrl;
+      web.navigateTo(response.redirectUrl);
     } on GrpcError catch (e) {
       Aptabase.instance.trackEvent('billing_license_checkout_failed', {
         'reason': 'pawapay_checkout_grpc',
@@ -1081,30 +1065,19 @@ class _SyscohadaAddonCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           Text(
             lang.billingSyscohadaSubtitle,
-            style: themeData.textTheme.bodyMedium,
+            style: themeData.textTheme.bodyMedium?.copyWith(
+              color: themeData.colorScheme.onSurfaceVariant,
+            ),
           ),
-          const SizedBox(height: kDefaultPadding),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              Text(
-                priceLabel,
-                style: themeData.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                lang.billingSyscohadaPerReport,
-                style: themeData.textTheme.bodyMedium?.copyWith(
-                  color: themeData.colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
+          const SizedBox(height: kDefaultPadding * 1.5),
+          Text(
+            priceLabel,
+            style: themeData.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           if (showPurchasedYearsSummary && paidYears.isNotEmpty) ...[
             const SizedBox(height: kDefaultPadding),
@@ -1114,11 +1087,21 @@ class _SyscohadaAddonCard extends StatelessWidget {
             ),
           ],
           if (product != null) ...[
-            const SizedBox(height: kDefaultPadding),
-            Text(lang.billingSyscohadaSelectYear),
-            const SizedBox(height: 8),
+            const SizedBox(height: kDefaultPadding * 1.25),
+            Text(
+              lang.billingSyscohadaSelectYear,
+              style: themeData.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 4),
             DropdownButton<int>(
               value: selectedYear,
+              isExpanded: false,
+              underline: Container(
+                height: 2,
+                color: themeData.colorScheme.primary.withValues(alpha: 0.5),
+              ),
               items: yearOptions
                   .map(
                     (y) => DropdownMenuItem(
@@ -1145,7 +1128,7 @@ class _SyscohadaAddonCard extends StatelessWidget {
                 ),
               ),
             ],
-            const SizedBox(height: kDefaultPadding),
+            const SizedBox(height: kDefaultPadding * 1.5),
             // CGV Block for SYSCOHADA
             TextButton(
               onPressed: onViewTerms,
@@ -1155,16 +1138,16 @@ class _SyscohadaAddonCard extends StatelessWidget {
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               child: Text(
-                lang.billingViewFullTerms, // Placeholder or specific label if exists
+                lang.billingViewFullTerms,
                 style: TextStyle(
                   color: themeData.colorScheme.primary,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: 13,
                   decoration: TextDecoration.underline,
                 ),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -1174,35 +1157,41 @@ class _SyscohadaAddonCard extends StatelessWidget {
                   child: Checkbox(
                     value: accepted,
                     onChanged: onAcceptedChanged,
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 12),
                 Expanded(
                   child: GestureDetector(
                     onTap: () => onAcceptedChanged(!accepted),
                     child: Text(
                       lang.billingAcceptAccountingReportTerms,
-                      style: themeData.textTheme.bodySmall,
+                      style: themeData.textTheme.bodySmall?.copyWith(
+                        height: 1.2,
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: kDefaultPadding),
-            FilledButton(
-              onPressed: (!purchaseEnabled ||
-                      isLoading ||
-                      !accepted ||
-                      paidYears.contains(selectedYear))
-                  ? null
-                  : onPurchase,
-              child: isLoading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : Text(lang.billingSyscohadaPurchase),
+            SizedBox(
+              width: 200,
+              child: FilledButton(
+                onPressed: (!purchaseEnabled ||
+                        isLoading ||
+                        !accepted ||
+                        paidYears.contains(selectedYear))
+                    ? null
+                    : onPurchase,
+                child: isLoading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : Text(lang.billingSyscohadaPurchase),
+              ),
             ),
           ],
         ],

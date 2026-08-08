@@ -1,12 +1,11 @@
 import 'package:design_weebi/src/ticket_type_extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:models_weebi/models.dart';
 
 extension PaiementTypeIcon on PaymentType {
   Widget get paymentTypeIcon {
     if (this == PaymentType.cash) {
-      return const FaIcon(FontAwesomeIcons.moneyBill1Wave, size: 18);
+      return const Icon(Icons.payments, size: 18);
     } else if (this == PaymentType.mobileMoney) {
       return const Icon(Icons.phone_android);
     } else if (this == PaymentType.goods) {
@@ -27,7 +26,7 @@ extension TicketPaiementTypeIcon on TicketWeebi {
   Widget get paymentTypeColoredIcon {
     final color = ticketType.iconColor;
     if (paymentType == PaymentType.cash) {
-      return FaIcon(FontAwesomeIcons.moneyBill1Wave, size: 18, color: color);
+      return Icon(Icons.payments, size: 18, color: color);
     } else if (paymentType == PaymentType.mobileMoney) {
       return Icon(Icons.phone_android, color: color);
     } else if (paymentType == PaymentType.goods) {

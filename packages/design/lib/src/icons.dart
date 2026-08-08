@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'colors.dart';
 
@@ -13,8 +12,8 @@ abstract class IconsWeebi {
       Icon(Icons.format_list_bulleted, color: ColorsWeebi.orangeArticle);
   static const articlePhotos =
       Icon(Icons.image, color: ColorsWeebi.orangeArticle);
-  static const accounting = FontAwesomeIcons.calculator;
-  static const chartsFinancial = FontAwesomeIcons.chartPie;
+  static const accounting = Icons.calculate;
+  static const chartsFinancial = Icons.pie_chart;
   static const boutique = Icon(Icons.storefront, color: ColorsWeebi.boutique);
   static const boutiqueIconData = Icons.storefront;
   static const contacts = Icon(Icons.contacts, color: ColorsWeebi.blueContact);
@@ -25,7 +24,7 @@ abstract class IconsWeebi {
   static const firmIconData = Icons.business;
   static const user = Icon(Icons.account_circle);
   static const chain = Icon(Icons.account_tree);
-  static const scanBarcodeIcondata = FontAwesomeIcons.barcode;
+  static const scanBarcodeIcondata = Icons.qr_code_scanner;
   static const devices = Icon(Icons.important_devices);
   static const specialPermission = Icons.star;
   static const permissions = Icons.admin_panel_settings;
@@ -37,11 +36,11 @@ abstract class IconsWeebi {
   static const versement = Icons.playlist_add;
   static const spend = Icons.shopping_cart;
 
-  static const paymentTypeCashIconData = FontAwesomeIcons.moneyBillWave;
-  static const paymentTypePhoneIconData = FontAwesomeIcons.mobileScreen;
-  static const paymentTypeCreditCardIconData = FontAwesomeIcons.creditCard;
-  static const paymentTypeChequeIconData = FontAwesomeIcons.moneyCheck;
-  static const paymentTypeCreditIconData = FontAwesomeIcons.chalkboardUser;
+  static const paymentTypeCashIconData = Icons.payments;
+  static const paymentTypePhoneIconData = Icons.phone_android;
+  static const paymentTypeCreditCardIconData = Icons.credit_card;
+  static const paymentTypeChequeIconData = Icons.description;
+  static const paymentTypeCreditIconData = Icons.account_balance_wallet;
 
   static const tax = Icons.content_cut;
   static const promo = Icons.redeem;

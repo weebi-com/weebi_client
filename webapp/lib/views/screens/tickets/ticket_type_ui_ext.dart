@@ -1,14 +1,12 @@
 import 'package:design_weebi/design_weebi.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
 
 extension TicketTypePbUI on TicketTypePb {
   Widget get icon {
     switch (this) {
       case TicketTypePb.sell:
-        return FaIcon(FontAwesomeIcons.cashRegister,
-            color: iconColor, size: 20);
+        return Icon(Icons.point_of_sale, color: iconColor, size: 20);
       case TicketTypePb.sellDeferred:
         return Icon(Icons.record_voice_over, color: iconColor);
       case TicketTypePb.sellCovered:
@@ -33,10 +31,10 @@ extension TicketTypePbUI on TicketTypePb {
     }
   }
 
-  dynamic get iconData {
+  IconData get iconData {
     switch (this) {
       case TicketTypePb.sell:
-        return FontAwesomeIcons.cashRegister;
+        return Icons.shopping_basket;
       case TicketTypePb.sellDeferred:
         return Icons.record_voice_over;
       case TicketTypePb.sellCovered:
@@ -85,11 +83,11 @@ extension TicketTypePbUI on TicketTypePb {
       case TicketTypePb.sell:
       case TicketTypePb.sellDeferred:
       case TicketTypePb.sellCovered:
-        return const FaIcon(FontAwesomeIcons.faceSmile);
+        return Icon(Icons.face, color: iconColor);
       case TicketTypePb.spend:
       case TicketTypePb.spendDeferred:
       case TicketTypePb.spendCovered:
-        return const FaIcon(FontAwesomeIcons.faceGrimace);
+        return Icon(Icons.face_retouching_off, color: iconColor);
       default:
         return const Icon(Icons.device_unknown);
     }

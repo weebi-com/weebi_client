@@ -3,9 +3,9 @@ import 'package:protos_weebi/grpc.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
 import 'package:web_admin/core/services/firm_service.dart';
 import 'package:web_admin/generated/l10n.dart';
+import 'package:web_admin/views/screens/firm/firm_overview_body.dart';
 import 'package:web_admin/views/widgets/card_elements.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
-import 'firm_dynamic_body.dart';
 
 import '../../../core/constants/dimens.dart';
 import '../../../core/theme/theme_extensions/app_color_scheme.dart';
@@ -21,6 +21,7 @@ class _FirmListScreenState extends State<FirmListScreen> {
   final FirmService _firmService = FirmService();
   Firm? currentFirm;
   String? errorMessage;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -29,11 +30,17 @@ class _FirmListScreenState extends State<FirmListScreen> {
   }
 
   Future<void> _loadUserFirm() async {
+    setState(() {
+      _isLoading = true;
+      errorMessage = null;
+    });
     try {
       final firm = await _firmService.readOneFirm();
+      if (!mounted) return;
       setState(() {
         currentFirm = firm;
         errorMessage = null;
+        _isLoading = false;
       });
     } catch (error) {
       if (!mounted) return;
@@ -41,10 +48,12 @@ class _FirmListScreenState extends State<FirmListScreen> {
       if (error is GrpcError && error.code == 7) {
         setState(() {
           errorMessage = lang.firmErrorCreateHint;
+          _isLoading = false;
         });
       } else {
         setState(() {
           errorMessage = lang.firmErrorUnexpected;
+          _isLoading = false;
         });
       }
     }
@@ -76,36 +85,31 @@ class _FirmListScreenState extends State<FirmListScreen> {
                   ),
                   CardBody(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              bottom: kDefaultPadding * 2.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (errorMessage != null)
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: kDefaultPadding),
-                                  child: Chip(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 4.0,
-                                      vertical: 6.0,
-                                    ),
-                                    backgroundColor: appColorScheme.error,
-                                    label: Text(
-                                      errorMessage!,
-                                      style: TextStyle(
-                                        color: themeData.colorScheme.onPrimary,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              else if (currentFirm != null)
-                                FirmDynamicBody(firm: currentFirm!),
-                            ],
-                          ),
-                        ),
+                        if (_isLoading)
+                          const Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: kDefaultPadding * 2.0,
+                            ),
+                            child: Center(child: CircularProgressIndicator()),
+                          )
+                        else if (errorMessage != null)
+                          Chip(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 4.0,
+                              vertical: 6.0,
+                            ),
+                            backgroundColor: appColorScheme.error,
+                            label: Text(
+                              errorMessage!,
+                              style: TextStyle(
+                                color: themeData.colorScheme.onPrimary,
+                              ),
+                            ),
+                          )
+                        else if (currentFirm != null)
+                          FirmOverviewBody(firm: currentFirm!),
                       ],
                     ),
                   ),

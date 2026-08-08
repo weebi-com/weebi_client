@@ -932,6 +932,46 @@ class Lang {
     );
   }
 
+  /// `Created on`
+  String get firmCreatedAtLabel {
+    return Intl.message(
+      'Created on',
+      name: 'firmCreatedAtLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Default currency`
+  String get firmCurrencyLabel {
+    return Intl.message(
+      'Default currency',
+      name: 'firmCurrencyLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dual currency`
+  String get firmDualCurrencyLabel {
+    return Intl.message(
+      'Dual currency',
+      name: 'firmDualCurrencyLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email verified`
+  String get firmEmailVerifiedLabel {
+    return Intl.message(
+      'Email verified',
+      name: 'firmEmailVerifiedLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Please create a new enterprise by clicking the "Add an enterprise" button.`
   String get firmErrorCreateHint {
     return Intl.message(
@@ -952,6 +992,21 @@ class Lang {
     );
   }
 
+  /// `Enterprise ID`
+  String get firmIdLabel {
+    return Intl.message(
+      'Enterprise ID',
+      name: 'firmIdLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name`
+  String get firmNameLabel {
+    return Intl.message('Name', name: 'firmNameLabel', desc: '', args: []);
+  }
+
   /// `My enterprise`
   String get firmPageTitle {
     return Intl.message(
@@ -960,6 +1015,36 @@ class Lang {
       desc: '',
       args: [],
     );
+  }
+
+  /// `Secondary currency`
+  String get firmSecondaryCurrencyLabel {
+    return Intl.message(
+      'Secondary currency',
+      name: 'firmSecondaryCurrencyLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active`
+  String get firmStatusActive {
+    return Intl.message('Active', name: 'firmStatusActive', desc: '', args: []);
+  }
+
+  /// `Inactive`
+  String get firmStatusInactive {
+    return Intl.message(
+      'Inactive',
+      name: 'firmStatusInactive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Status`
+  String get firmStatusLabel {
+    return Intl.message('Status', name: 'firmStatusLabel', desc: '', args: []);
   }
 
   /// `First Name`

@@ -1,7 +1,5 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
-
 import 'package:flutter/material.dart';
+import 'package:web_admin/core/web/web_platform.dart' as web;
 import 'package:web_admin/generated/l10n.dart';
 
 import '../../core/constants/dimens.dart';
@@ -34,7 +32,7 @@ class UrlNewTabLauncher extends StatelessWidget {
         MouseRegion(
           cursor: SystemMouseCursors.click,
           child: GestureDetector(
-            onTap: () => html.window.open(url, "_blank"),
+            onTap: () => web.openUrl(url, target: "_blank"),
             child: Tooltip(
               message: lang.openInNewTab,
               child: Row(
@@ -45,7 +43,8 @@ class UrlNewTabLauncher extends StatelessWidget {
                     child: Text(
                       displayText,
                       style: TextStyle(
-                        color: (fontColor ?? themeData.extension<AppColorScheme>()!.hyperlink),
+                        color: (fontColor ??
+                            themeData.extension<AppColorScheme>()!.hyperlink),
                         decoration: TextDecoration.underline,
                       ),
                     ),
@@ -53,7 +52,8 @@ class UrlNewTabLauncher extends StatelessWidget {
                   Icon(
                     Icons.exit_to_app_rounded,
                     size: (fontSize + 2.0),
-                    color: (fontColor ?? themeData.extension<AppColorScheme>()!.hyperlink),
+                    color: (fontColor ??
+                        themeData.extension<AppColorScheme>()!.hyperlink),
                   ),
                 ],
               ),

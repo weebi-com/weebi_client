@@ -221,8 +221,18 @@
   "dashboardCardTicketsShort": "小票",
   "firmPageTitle": "我的企业",
   "firmCardDescription": "企业汇总您的用户与门店/连锁。",
+  "firmCreatedAtLabel": "创建于",
+  "firmCurrencyLabel": "默认货币",
+  "firmDualCurrencyLabel": "双币种",
+  "firmEmailVerifiedLabel": "邮箱已验证",
   "firmErrorCreateHint": "请点击「添加企业」按钮创建新企业。",
   "firmErrorUnexpected": "发生意外错误。",
+  "firmIdLabel": "企业 ID",
+  "firmNameLabel": "名称",
+  "firmSecondaryCurrencyLabel": "第二货币",
+  "firmStatusActive": "有效",
+  "firmStatusInactive": "无效",
+  "firmStatusLabel": "状态",
   "ticketDetailTitle": "小票详情 #{ticketId}",
   "@ticketDetailTitle": {
     "placeholders": {

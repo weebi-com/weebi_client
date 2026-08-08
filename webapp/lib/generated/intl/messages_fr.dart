@@ -143,9 +143,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingNotYetAttributed": MessageLookupByLibrary.simpleMessage(
       "Pas encore attribuée(s)",
     ),
-    "billingPayWithCard": MessageLookupByLibrary.simpleMessage(
-      "Carte/Banque",
-    ),
+    "billingPayWithCard": MessageLookupByLibrary.simpleMessage("Carte/Banque"),
     "billingPayWithMobileMoney": MessageLookupByLibrary.simpleMessage(
       "Mobile Money",
     ),
@@ -185,7 +183,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage(
       "par année fiscale",
     ),
-    "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage("1 900 XOF / 2.90 EUR"),
+    "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage(
+      "1 900 XOF / 2.90 EUR",
+    ),
     "billingSyscohadaPurchase": MessageLookupByLibrary.simpleMessage(
       "Payer cette année",
     ),
@@ -322,13 +322,31 @@ class MessageLookup extends MessageLookupByLibrary {
     "firmCardDescription": MessageLookupByLibrary.simpleMessage(
       "Votre entreprise regroupe vos utilisateurs et vos chaînes ou boutiques.",
     ),
+    "firmCreatedAtLabel": MessageLookupByLibrary.simpleMessage("Créée le"),
+    "firmCurrencyLabel": MessageLookupByLibrary.simpleMessage(
+      "Devise par défaut",
+    ),
+    "firmDualCurrencyLabel": MessageLookupByLibrary.simpleMessage(
+      "Double devise",
+    ),
+    "firmEmailVerifiedLabel": MessageLookupByLibrary.simpleMessage(
+      "E-mail vérifié",
+    ),
     "firmErrorCreateHint": MessageLookupByLibrary.simpleMessage(
       "Veuillez créer une nouvelle entreprise en cliquant sur le bouton « Ajouter une entreprise ».",
     ),
     "firmErrorUnexpected": MessageLookupByLibrary.simpleMessage(
       "Une erreur inattendue est survenue.",
     ),
+    "firmIdLabel": MessageLookupByLibrary.simpleMessage("ID entreprise"),
+    "firmNameLabel": MessageLookupByLibrary.simpleMessage("Nom"),
     "firmPageTitle": MessageLookupByLibrary.simpleMessage("Mon entreprise"),
+    "firmSecondaryCurrencyLabel": MessageLookupByLibrary.simpleMessage(
+      "Devise secondaire",
+    ),
+    "firmStatusActive": MessageLookupByLibrary.simpleMessage("Actif"),
+    "firmStatusInactive": MessageLookupByLibrary.simpleMessage("Inactif"),
+    "firmStatusLabel": MessageLookupByLibrary.simpleMessage("Statut"),
     "firstName": MessageLookupByLibrary.simpleMessage("Prénom"),
     "forgotPassword": MessageLookupByLibrary.simpleMessage(
       "Mot de passe oublié ?",

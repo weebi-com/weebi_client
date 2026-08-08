@@ -119,9 +119,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "billingNotYetAttributed": MessageLookupByLibrary.simpleMessage("尚未分配"),
     "billingPayWithCard": MessageLookupByLibrary.simpleMessage("银行卡/银行"),
-    "billingPayWithMobileMoney": MessageLookupByLibrary.simpleMessage(
-      "移动支付",
-    ),
+    "billingPayWithMobileMoney": MessageLookupByLibrary.simpleMessage("移动支付"),
     "billingPaymentProcessing": MessageLookupByLibrary.simpleMessage(
       "付款已收到。正在确认 — 您的许可证将很快显示，然后可分配给用户。",
     ),
@@ -151,7 +149,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "即将可在此页面购买。",
     ),
     "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage("每个财政年度"),
-    "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage("1 900 XOF / 2.90 EUR"),
+    "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage(
+      "1 900 XOF / 2.90 EUR",
+    ),
     "billingSyscohadaPurchase": MessageLookupByLibrary.simpleMessage("支付该年度"),
     "billingSyscohadaPurchasedYears": MessageLookupByLibrary.simpleMessage(
       "已支付年份",
@@ -238,11 +238,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "firmCardDescription": MessageLookupByLibrary.simpleMessage(
       "企业汇总您的用户与门店/连锁。",
     ),
+    "firmCreatedAtLabel": MessageLookupByLibrary.simpleMessage("创建于"),
+    "firmCurrencyLabel": MessageLookupByLibrary.simpleMessage("默认货币"),
+    "firmDualCurrencyLabel": MessageLookupByLibrary.simpleMessage("双币种"),
+    "firmEmailVerifiedLabel": MessageLookupByLibrary.simpleMessage("邮箱已验证"),
     "firmErrorCreateHint": MessageLookupByLibrary.simpleMessage(
       "请点击「添加企业」按钮创建新企业。",
     ),
     "firmErrorUnexpected": MessageLookupByLibrary.simpleMessage("发生意外错误。"),
+    "firmIdLabel": MessageLookupByLibrary.simpleMessage("企业 ID"),
+    "firmNameLabel": MessageLookupByLibrary.simpleMessage("名称"),
     "firmPageTitle": MessageLookupByLibrary.simpleMessage("我的企业"),
+    "firmSecondaryCurrencyLabel": MessageLookupByLibrary.simpleMessage("第二货币"),
+    "firmStatusActive": MessageLookupByLibrary.simpleMessage("有效"),
+    "firmStatusInactive": MessageLookupByLibrary.simpleMessage("无效"),
+    "firmStatusLabel": MessageLookupByLibrary.simpleMessage("状态"),
     "forgotPassword": MessageLookupByLibrary.simpleMessage("忘记密码？"),
     "forgotPasswordMessage": MessageLookupByLibrary.simpleMessage(
       "输入您的电子邮件地址，我们将向您发送重置密码的链接。",
@@ -267,7 +277,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "integerErrorText": MessageLookupByLibrary.simpleMessage("此字段需要有效的整数。"),
     "ipErrorText": MessageLookupByLibrary.simpleMessage("此字段需要有效的IP。"),
     "language": MessageLookupByLibrary.simpleMessage("语言"),
-    "lastName": MessageLookupByLibrary.simpleMessage("姓"),
     "legalDocTitleCgvAccountingReportFr": MessageLookupByLibrary.simpleMessage(
       "销售条款和条件 - 现金报告",
     ),

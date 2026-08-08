@@ -1,8 +1,6 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
-
 import 'package:flutter/material.dart';
 import 'package:web_admin/core/constants/dimens.dart';
+import 'package:web_admin/core/web/web_platform.dart' as web;
 import 'package:web_admin/environment.dart';
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
@@ -57,13 +55,15 @@ class HelpScreen extends StatelessWidget {
                     onTap: () {
                       final locale = Localizations.localeOf(context).languageCode;
                       final langPath = (locale == 'fr') ? 'fr' : 'en';
-                      html.window.open('https://www.weebi.com/$langPath/user-guide/', '_blank');
+                      web.openUrl('https://www.weebi.com/$langPath/user-guide/',
+                          target: '_blank');
                     },
                   ),
                   _LinkTile(
                     icon: Icons.subscriptions_rounded,
                     label: lang.helpWatchDemos,
-                    onTap: () => html.window.open('https://youtube.com/@Weebi', '_blank'),
+                    onTap: () =>
+                        web.openUrl('https://youtube.com/@Weebi', target: '_blank'),
                   ),
                 ],
               ),

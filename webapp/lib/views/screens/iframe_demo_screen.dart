@@ -1,9 +1,6 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
-import 'dart:ui_web' as ui_web;
-
 import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
+import 'package:web_admin/core/web/web_platform.dart' as web;
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/views/widgets/card_elements.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
@@ -59,13 +56,17 @@ class _IFrameDemoScreenState extends State<IFrameDemoScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(bottom: kDefaultPadding),
+                          padding:
+                              const EdgeInsets.only(bottom: kDefaultPadding),
                           child: Text(
                             '${lang.example} 1',
                             style: themeData.textTheme.titleMedium,
                           ),
                         ),
-                        _pointerInterceptedIFrame('https://www.youtube.com/embed/rCugckXUC8M/', iframeHeight, iframeWidth),
+                        _pointerInterceptedIFrame(
+                            'https://www.youtube.com/embed/rCugckXUC8M/',
+                            iframeHeight,
+                            iframeWidth),
                         Padding(
                           padding: const EdgeInsets.only(
                             top: kDefaultPadding * 3.0,
@@ -76,7 +77,8 @@ class _IFrameDemoScreenState extends State<IFrameDemoScreen> {
                             style: themeData.textTheme.titleMedium,
                           ),
                         ),
-                        _pointerInterceptedIFrame('https://www.lipsum.com/', iframeHeight, iframeWidth),
+                        _pointerInterceptedIFrame('https://www.lipsum.com/',
+                            iframeHeight, iframeWidth),
                         Padding(
                           padding: const EdgeInsets.only(
                             top: kDefaultPadding * 3.0,
@@ -87,7 +89,10 @@ class _IFrameDemoScreenState extends State<IFrameDemoScreen> {
                             style: themeData.textTheme.titleMedium,
                           ),
                         ),
-                        _pointerInterceptedIFrame('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50704.09814353644!2d-122.11637223349575!3d37.413329910198634!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb7495bec0189%3A0x7c17d44a466baf9b!2sMountain%20View%2C%20CA%2C%20USA!5e0!3m2!1sen!2smy!4v1655050103494!5m2!1sen!2smy', iframeHeight, iframeWidth),
+                        _pointerInterceptedIFrame(
+                            'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50704.09814353644!2d-122.11637223349575!3d37.413329910198634!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb7495bec0189%3A0x7c17d44a466baf9b!2sMountain%20View%2C%20CA%2C%20USA!5e0!3m2!1sen!2smy!4v1655050103494!5m2!1sen!2smy',
+                            iframeHeight,
+                            iframeWidth),
                       ],
                     ),
                   ),
@@ -100,7 +105,8 @@ class _IFrameDemoScreenState extends State<IFrameDemoScreen> {
     );
   }
 
-  Widget _pointerInterceptedIFrame(String url, double iframeHeight, double iframeWidth) {
+  Widget _pointerInterceptedIFrame(
+      String url, double iframeHeight, double iframeWidth) {
     return Stack(
       children: [
         SizedBox(
@@ -148,21 +154,9 @@ class HtmlIFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iframe = html.IFrameElement();
-
-    iframe.height = '$height';
-    iframe.width = '$width';
-    iframe.src = url;
-    iframe.style.border = 'none';
-    iframe.allowFullscreen = false;
-
     final viewType = 'iframeElement_$url';
 
-    // ignore: undefined_prefixed_name
-    ui_web.platformViewRegistry.registerViewFactory(
-      viewType,
-      (int viewId) => iframe,
-    );
+    web.registerIFrameViewFactory(viewType, url, width, height);
 
     return HtmlElementView(
       key: ValueKey(viewType),

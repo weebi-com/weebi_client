@@ -40,15 +40,12 @@ MultiProvider initCrossRoutesTestV2(
   required String initialAccessToken,
 }) {
   final storage = const FlutterSecureStorage(
-    aOptions: AndroidOptions(
-      encryptedSharedPreferences: false,
-    ),
+    aOptions: AndroidOptions(),
     iOptions: IOSOptions(
       accessibility: KeychainAccessibility.first_unlock,
     ),
     mOptions: MacOsOptions(
       accessibility: KeychainAccessibility.first_unlock_this_device,
-      useDataProtectionKeyChain: true,
     ),
   );
   return MultiProvider(
