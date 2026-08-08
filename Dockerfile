@@ -22,6 +22,7 @@ RUN apt-get update \
 ARG FLUTTER_SDK=/usr/local/flutter
 ARG FLUTTER_VERSION=3.44.8
 ARG APP=/app
+ARG TARGET=lib/main.dart
 
 RUN git clone --depth 1 --branch "$FLUTTER_VERSION" https://github.com/flutter/flutter.git "$FLUTTER_SDK"
 
@@ -39,7 +40,8 @@ RUN dart run melos bootstrap
 
 WORKDIR $APP/webapp
 RUN flutter clean && flutter pub get
-RUN flutter build web --wasm --verbose
+ARG TARGET
+RUN flutter build web --wasm -t ${TARGET} --verbose
 
 # Runtime stage
 FROM nginx:alpine
