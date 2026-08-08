@@ -40,7 +40,9 @@ RUN dart run melos bootstrap
 
 WORKDIR $APP/webapp
 RUN flutter clean && flutter pub get
-ARG TARGET
+
+# Re-declare ARG here to ensure it's visible to the next RUN command
+ARG TARGET=lib/main.dart
 RUN flutter build web --wasm -t ${TARGET} --verbose
 
 # Runtime stage
