@@ -95,6 +95,20 @@ void main() {
       );
     });
 
+    test('protected /billing stays put while BFF session check is pending', () {
+      expect(
+        resolveAuthRedirect(
+          matchedLocation: RouteUri.billing,
+          isLoggedIn: false,
+          isAuthCheckPending: true,
+          documentQuery: {},
+          unrestrictedRoutes: unrestricted,
+          publicRoutes: public,
+        ),
+        isNull,
+      );
+    });
+
     test('protected /billing redirects to login when logged out', () {
       expect(
         resolveAuthRedirect(

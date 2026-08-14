@@ -457,6 +457,7 @@ GoRouter appRouter(
       return resolveAuthRedirect(
         matchedLocation: state.matchedLocation,
         isLoggedIn: userDataProvider.isUserLoggedIn(),
+        isAuthCheckPending: userDataProvider.isBffSessionCheckPending,
         documentQuery: Uri.base.queryParameters,
         unrestrictedRoutes: unrestrictedRoutes,
         publicRoutes: publicRoutes,

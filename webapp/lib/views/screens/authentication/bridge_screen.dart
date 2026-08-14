@@ -58,6 +58,7 @@ class _BridgeScreenState extends State<BridgeScreen> {
             mail: 'bridge@weebi',
             userProfileImageUrl:
                 'https://www.weebi.com/images/Weebi_Logo_Full.png',
+            bffSessionLive: true,
           );
 
       if (!mounted) return;
