@@ -26,7 +26,7 @@ void main() {
         base: 'EUR',
         quote: 'USD',
         rate: 1.1,
-        fetchedAtUtc: DateTime.utc(2026, 1, 15, 12),
+        fetchedAtUtc: DateTime.now().toUtc(),
       );
       final decoded = FxRateSnapshot.fromJson(
         jsonDecode(jsonEncode(original.toJson())) as Map<String, dynamic>,
@@ -52,7 +52,7 @@ void main() {
         base: 'EUR',
         quote: 'USD',
         rate: 1.25,
-        fetchedAtUtc: DateTime.utc(2026, 3, 1),
+        fetchedAtUtc: DateTime.now().toUtc(),
       );
       SharedPreferences.setMockInitialValues({
         '${SharePrefKeys.fxRateBackupPrefix}EUR_USD': jsonEncode(snap.toJson()),
@@ -71,7 +71,7 @@ void main() {
         base: 'GBP',
         quote: 'USD',
         rate: 1.3,
-        fetchedAtUtc: DateTime.utc(2026, 3, 1),
+        fetchedAtUtc: DateTime.now().toUtc(),
       );
       SharedPreferences.setMockInitialValues({
         '${SharePrefKeys.fxRateBackupPrefix}GBP_USD': jsonEncode(snap.toJson()),
@@ -87,7 +87,7 @@ void main() {
         base: 'EUR',
         quote: 'USD',
         rate: 2.0,
-        fetchedAtUtc: DateTime.utc(2026, 3, 1),
+        fetchedAtUtc: DateTime.now().toUtc(),
       );
       SharedPreferences.setMockInitialValues({
         '${SharePrefKeys.fxRateBackupPrefix}EUR_USD': jsonEncode(snap.toJson()),
