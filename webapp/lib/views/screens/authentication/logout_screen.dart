@@ -5,6 +5,7 @@ import 'package:boutiques_weebi/boutiques_weebi.dart' show BoutiqueProvider;
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:web_admin/app_router.dart';
+import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/providers/current_user_provider.dart';
 import 'package:web_admin/providers/operational_license_gate.dart';
 import 'package:web_admin/providers/tickets_boutique_cache.dart';

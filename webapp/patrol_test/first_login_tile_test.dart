@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:patrol/patrol.dart';
-import 'package:web_admin/app_router.dart';
+import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/core/session/bff_session_store.dart';
 import 'package:web_admin/main_patrol.dart' as app;
 
