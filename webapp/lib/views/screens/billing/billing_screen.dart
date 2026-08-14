@@ -1040,6 +1040,7 @@ class _SyscohadaAddonCard extends StatelessWidget {
             amountCents: product!.amountCents,
             currency: product!.currency,
             productId: product!.productId,
+            languageCode: Localizations.localeOf(context).languageCode,
           );
 
     return Container(
@@ -1229,6 +1230,7 @@ class _ProductOfferCard extends StatelessWidget {
       amountCents: product.amountCents,
       currency: product.currency,
       productId: product.productId,
+      languageCode: Localizations.localeOf(context).languageCode,
     );
     final planName = billingPlanLabel(lang, productId: product.productId);
     final style = BillingPlanVisual.fromProductId(product.productId);

@@ -44,7 +44,7 @@ int? billingXofListPrice(String productId) {
     case kSyscohadaProductId:
       return 1900;
     case 'premium':
-      return 19000;
+      return 9900;
     default:
       return null;
   }
@@ -52,11 +52,13 @@ int? billingXofListPrice(String productId) {
 
 /// Offer price for the billing UI: prefer XOF when known, then catalog EUR.
 ///
-/// Example: `19 000 XOF / 14.00 EUR`
+/// Example (en): `9 900 XOF / 14.00 EUR`
+/// Example (fr): `9 900 CFA / 14.00 EUR`
 String formatBillingOfferPrice({
   required int amountCents,
   required String currency,
   required String productId,
+  String languageCode = 'en',
 }) {
   final catalogCurrency =
       currency.trim().isNotEmpty ? currency.trim().toUpperCase() : 'EUR';
@@ -65,14 +67,22 @@ String formatBillingOfferPrice({
   final catalogAmount = isFcfa
       ? (amountCents / 100).round().toString()
       : (amountCents / 100).toStringAsFixed(2);
-  final catalogLabel = '$catalogAmount $catalogCurrency';
+  final catalogCode = isFcfa
+      ? _cfaDisplayCode(languageCode)
+      : catalogCurrency;
+  final catalogLabel = '$catalogAmount $catalogCode';
 
   final xof = billingXofListPrice(productId);
   if (xof == null) return catalogLabel;
-  final xofLabel = '${_formatThousandsSpaces(xof)} XOF';
+  final xofLabel =
+      '${_formatThousandsSpaces(xof)} ${_cfaDisplayCode(languageCode)}';
   if (isFcfa) return xofLabel;
   return '$xofLabel / $catalogLabel';
 }
+
+/// French UI uses CFA; ISO XOF stays for other languages.
+String _cfaDisplayCode(String languageCode) =>
+    languageCode.toLowerCase().startsWith('fr') ? 'CFA' : 'XOF';
 
 String _formatThousandsSpaces(int value) {
   final digits = value.abs().toString();
