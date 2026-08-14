@@ -74,7 +74,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     final bytes = await file.readAsBytes();
     if (bytes == null) return;
 
-    final extension = file.extension ?? 'jpeg';
+    // PlatformFile.extension is missing on some file_picker versions
+    // (e.g. file_picker_platform_interface 3.x used by dart2js in CI).
+    final name = file.name;
+    final dot = name.lastIndexOf('.');
+    final extension = (dot >= 0 && dot < name.length - 1)
+        ? name.substring(dot + 1)
+        : 'jpeg';
     final mimeType = switch (extension.toLowerCase()) {
       'png' => 'image/png',
       'gif' => 'image/gif',

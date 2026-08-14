@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
 import 'package:users_weebi/users_weebi.dart';
-import 'package:web_admin/app_router.dart';
+import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/core/billing/load_firm_licenses.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
 

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:protos_weebi/protos_weebi_io.dart'
     show BoutiqueMongo, Chain, License;
-import 'package:web_admin/app_router.dart';
+import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/boutiques/business_rules_boutique_extensions.dart';
 import 'package:web_admin/core/billing/load_firm_licenses.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';

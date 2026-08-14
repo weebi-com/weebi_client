@@ -11,6 +11,9 @@ class UserDataProvider extends ChangeNotifier {
   var _mail = '';
   var _accessToken = '';
   var _refreshToken = '';
+  var _bffSessionId = '';
+  var _bffSessionVerified = false;
+  var _bffSessionCheckPending = false;
 
   String get userProfileImageUrl => _userProfileImageUrl;
 
@@ -19,6 +22,8 @@ class UserDataProvider extends ChangeNotifier {
   String get mail => _mail;
   String get accessToken => _accessToken;
   String get refreshToken => _refreshToken;
+  String get bffSessionId => _bffSessionId;
+  bool get isBffSessionCheckPending => _bffSessionCheckPending;
 
   Future<void> loadAsync() async {
     final sharedPref = await SharedPreferences.getInstance();
@@ -30,6 +35,16 @@ class UserDataProvider extends ChangeNotifier {
     _refreshToken = sharedPref.getString(SharePrefKeys.refreshToken) ?? '';
     _userProfileImageUrl =
         sharedPref.getString(SharePrefKeys.userProfileImageUrl) ?? '';
+    _bffSessionId = sharedPref.getString(SharePrefKeys.bffSessionId) ?? '';
+
+    if (Config.isBffMode) {
+      _bffSessionVerified = false;
+      _bffSessionCheckPending =
+          _mail.isNotEmpty && _bffSessionId.isNotEmpty;
+    } else {
+      _bffSessionVerified = false;
+      _bffSessionCheckPending = false;
+    }
 
     notifyListeners();
   }
@@ -39,6 +54,7 @@ class UserDataProvider extends ChangeNotifier {
     String? mail,
     String? accessToken,
     String? refreshToken,
+    bool? bffSessionLive,
   }) async {
     final sharedPref = await SharedPreferences.getInstance();
     var shouldNotify = false;
@@ -77,8 +93,37 @@ class UserDataProvider extends ChangeNotifier {
       shouldNotify = true;
     }
 
+    if (bffSessionLive != null) {
+      _bffSessionVerified = bffSessionLive;
+      _bffSessionCheckPending = false;
+      shouldNotify = true;
+    }
+
     if (shouldNotify) {
       notifyListeners();
+    }
+  }
+
+  /// Confirms the BFF session with a live RPC. Mail in prefs is not enough.
+  Future<void> verifyLiveBffSession(
+    Future<void> Function() probe, {
+    bool Function(Object error)? isDeadSession,
+  }) async {
+    if (!Config.isBffMode || !_bffSessionCheckPending) return;
+    try {
+      await probe();
+      _bffSessionVerified = true;
+      _bffSessionCheckPending = false;
+      notifyListeners();
+    } catch (e) {
+      final dead = isDeadSession?.call(e) ?? true;
+      if (dead) {
+        await clearSessionDataAsync();
+      } else {
+        _bffSessionVerified = false;
+        _bffSessionCheckPending = false;
+        notifyListeners();
+      }
     }
   }
 
@@ -90,6 +135,8 @@ class UserDataProvider extends ChangeNotifier {
 
     _mail = '';
     _userProfileImageUrl = '';
+    _bffSessionVerified = false;
+    _bffSessionCheckPending = false;
 
     notifyListeners();
   }
@@ -111,11 +158,17 @@ class UserDataProvider extends ChangeNotifier {
     _userProfileImageUrl = '';
     _accessToken = '';
     _refreshToken = '';
+    _bffSessionId = '';
+    _bffSessionVerified = false;
+    _bffSessionCheckPending = false;
 
     notifyListeners();
   }
 
   bool isUserLoggedIn() {
-    return _mail.isNotEmpty && (Config.isBffMode || _accessToken.isNotEmpty);
+    if (Config.isBffMode) {
+      return _mail.isNotEmpty && _bffSessionVerified;
+    }
+    return _mail.isNotEmpty && _accessToken.isNotEmpty;
   }
 }

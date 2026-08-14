@@ -7,6 +7,8 @@ import 'package:protos_weebi/utils.dart' show RegExpWeebi;
 import 'package:auth_weebi/auth_weebi.dart' show AccessTokenProvider;
 import 'package:provider/provider.dart';
 import 'package:web_admin/app_router.dart';
+import 'package:web_admin/core/routing/routes.dart';
+import 'package:web_admin/environment.dart';
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/utils/app_dialogs.dart';
 import 'package:web_admin/utils/app_focus_helper.dart';
@@ -67,6 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 accessToken: result.accessToken,
                 userProfileImageUrl:
                     'https://www.weebi.com/images/Weebi_Logo_Full.png',
+                bffSessionLive: Config.isBffMode,
               );
 
           if (!mounted) return;

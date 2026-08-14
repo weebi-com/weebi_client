@@ -42,6 +42,7 @@ String? resolveAuthRedirect({
   required Map<String, String> documentQuery,
   required List<String> unrestrictedRoutes,
   required List<String> publicRoutes,
+  bool isAuthCheckPending = false,
   String loginRoute = '/login',
   String bridgeRoute = '/bridge',
   String homeRoute = '/',
@@ -50,6 +51,7 @@ String? resolveAuthRedirect({
   final token = documentQuery['t']?.trim() ?? '';
   if (token.isNotEmpty &&
       !isLoggedIn &&
+      !isAuthCheckPending &&
       (matchedLocation == homeRoute || matchedLocation == dashboardRoute)) {
     return bridgeRoute;
   }
@@ -64,6 +66,7 @@ String? resolveAuthRedirect({
   }
 
   if (!isLoggedIn) {
+    if (isAuthCheckPending) return null;
     return loginRoute;
   }
 

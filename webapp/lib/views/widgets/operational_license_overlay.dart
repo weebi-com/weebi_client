@@ -2,7 +2,7 @@ import 'package:auth_weebi/auth_weebi.dart' show PermissionProvider;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:web_admin/app_router.dart';
+import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/core/grpc/firm_product_access.dart';
 import 'package:web_admin/core/constants/dimens.dart';
 import 'package:web_admin/generated/l10n.dart';

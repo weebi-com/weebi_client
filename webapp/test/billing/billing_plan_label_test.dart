@@ -73,7 +73,19 @@ void main() {
           currency: 'eur',
           productId: 'premium',
         ),
-        '19\u00A0000 XOF / 14.00 EUR',
+        '9\u00A0900 XOF / 14.00 EUR',
+      );
+    });
+
+    test('shows CFA first then EUR for premium in French', () {
+      expect(
+        formatBillingOfferPrice(
+          amountCents: 1400,
+          currency: 'eur',
+          productId: 'premium',
+          languageCode: 'fr',
+        ),
+        '9\u00A0900 CFA / 14.00 EUR',
       );
     });
 
@@ -85,6 +97,18 @@ void main() {
           productId: 'syscohada',
         ),
         '1\u00A0900 XOF / 2.90 EUR',
+      );
+    });
+
+    test('shows CFA first then EUR for syscohada in French', () {
+      expect(
+        formatBillingOfferPrice(
+          amountCents: 290,
+          currency: 'eur',
+          productId: 'syscohada',
+          languageCode: 'fr',
+        ),
+        '1\u00A0900 CFA / 2.90 EUR',
       );
     });
 

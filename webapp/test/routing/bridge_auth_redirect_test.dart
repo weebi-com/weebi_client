@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:web_admin/app_router.dart';
+import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/core/routing/bridge_auth_redirect.dart';
 
 void main() {
@@ -87,6 +87,20 @@ void main() {
         resolveAuthRedirect(
           matchedLocation: RouteUri.bridge,
           isLoggedIn: false,
+          documentQuery: {},
+          unrestrictedRoutes: unrestricted,
+          publicRoutes: public,
+        ),
+        isNull,
+      );
+    });
+
+    test('protected /billing stays put while BFF session check is pending', () {
+      expect(
+        resolveAuthRedirect(
+          matchedLocation: RouteUri.billing,
+          isLoggedIn: false,
+          isAuthCheckPending: true,
           documentQuery: {},
           unrestrictedRoutes: unrestricted,
           publicRoutes: public,

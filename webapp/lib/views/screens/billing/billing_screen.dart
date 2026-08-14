@@ -8,7 +8,7 @@ import 'package:grpc/grpc.dart' hide ConnectionState;
 import 'package:provider/provider.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
 import 'package:auth_weebi/src/extensions/user_permissions_extensions.dart';
-import 'package:web_admin/app_router.dart';
+import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/core/billing/billing_url_utils.dart';
 import 'package:web_admin/core/web/web_platform.dart' as web;
 import 'package:web_admin/generated/l10n.dart';
@@ -1040,6 +1040,7 @@ class _SyscohadaAddonCard extends StatelessWidget {
             amountCents: product!.amountCents,
             currency: product!.currency,
             productId: product!.productId,
+            languageCode: Localizations.localeOf(context).languageCode,
           );
 
     return Container(
@@ -1229,6 +1230,7 @@ class _ProductOfferCard extends StatelessWidget {
       amountCents: product.amountCents,
       currency: product.currency,
       productId: product.productId,
+      languageCode: Localizations.localeOf(context).languageCode,
     );
     final planName = billingPlanLabel(lang, productId: product.productId);
     final style = BillingPlanVisual.fromProductId(product.productId);
