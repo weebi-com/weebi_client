@@ -43,7 +43,7 @@ RUN flutter clean && flutter pub get
 
 # Re-declare ARG here to ensure it's visible to the next RUN command
 ARG TARGET=lib/main.dart
-RUN flutter build web --wasm -t ${TARGET} --verbose
+RUN flutter build web -t ${TARGET} --verbose
 
 # Runtime stage
 FROM nginx:alpine
