@@ -3,9 +3,10 @@ import 'package:web_admin/core/constants/values.dart';
 
 /// Persists the BFF [sessionId] returned by the server after login/refresh.
 ///
-/// Used locally to know a BFF session was established. Auth itself relies on
-/// the HttpOnly session cookie set by Envoy (`withCredentials: true`). Do not
-/// send this id as a custom browser header — that breaks CORS.
+/// Envoy looks up the JWT from this id. The HttpOnly `weebi_session_id` cookie
+/// is preferred, but after Stripe/PawaPay redirects third-party cookies are
+/// often blocked — [SessionRecoveryCoordinator] therefore also sends this value
+/// as `x-session-id` (allowlisted in Envoy CORS).
 class BffSessionStore {
   BffSessionStore._();
 
