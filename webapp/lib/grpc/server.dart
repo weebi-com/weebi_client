@@ -17,6 +17,21 @@ CallOptions get securedCallOptions => callOptions.mergedWith(
       ),
     );
 
+/// Authenticated call options for ad-hoc stubs that are not wired with
+/// [AuthInterceptor].
+///
+/// In BFF mode the access JWT is stored server-side; Envoy only injects it when
+/// it sees the session cookie **or** `x-session-id`. After Stripe/PawaPay
+/// redirects, third-party cookies are often missing, so cookies-only calls
+/// (`callOptions`) fail as `UNAUTHENTICATED` even though the user is logged in.
+CallOptions authenticatedCallOptions([String? accessToken]) {
+  if (Config.isBffMode) return securedCallOptions;
+  if (accessToken == null || accessToken.isEmpty) return callOptions;
+  return securedCallOptions.mergedWith(
+    CallOptions(metadata: {'authorization': accessToken}),
+  );
+}
+
 class GrpcWebClientChannelWeebi {
   final GrpcWebClientChannel clientChannel;
   GrpcWebClientChannelWeebi()
