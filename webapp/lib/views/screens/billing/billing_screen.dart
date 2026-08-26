@@ -16,6 +16,7 @@ import 'package:web_admin/providers/server.dart';
 import 'package:web_admin/views/widgets/card_elements.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
 import 'package:users_weebi/users_weebi.dart' show FenceServiceClientProviderV2;
+import 'package:boutiques_weebi/boutiques_weebi.dart' show BoutiqueProvider;
 import 'package:web_admin/legal/enterprise_terms_version.dart';
 import 'package:web_admin/environment.dart';
 import 'package:web_admin/providers/current_user_provider.dart';
@@ -236,6 +237,15 @@ class _BillingScreenState extends State<BillingScreen>
         accountingPurchases = accountingResponse.purchases;
       } catch (_) {
         // Older servers may not expose this RPC yet.
+      }
+
+      try {
+        final boutiqueProvider = context.read<BoutiqueProvider>();
+        if (boutiqueProvider.chains.isEmpty) {
+          await boutiqueProvider.loadChains();
+        }
+      } catch (_) {
+        // Price label falls back to XOF if chains cannot be loaded.
       }
 
       Map<String, UserPublic>? usersById;
@@ -634,6 +644,9 @@ class _BillingScreenState extends State<BillingScreen>
     required Lang lang,
     required bool canPurchase,
   }) {
+    final pawapayCurrency = pawapayOfferCurrencyFromChains(
+      context.watch<BoutiqueProvider>().chains,
+    );
     return ListView(
       padding: const EdgeInsets.all(kDefaultPadding),
       children: [
@@ -651,6 +664,7 @@ class _BillingScreenState extends State<BillingScreen>
           onViewTerms: _openSyscohadaTermsInNewTab,
           highlighted: _bridgeHighlightProductId == kSyscohadaProductId,
           showPurchasedYearsSummary: false,
+          pawapayCurrency: pawapayCurrency,
         ),
         if (_products.isNotEmpty) ...[
           const SizedBox(height: kDefaultPadding * 2),
@@ -669,6 +683,7 @@ class _BillingScreenState extends State<BillingScreen>
                       onViewTerms: _openLegalDocumentInNewTab,
                       highlighted:
                           _bridgeHighlightProductId == p.productId.toLowerCase(),
+                      pawapayCurrency: pawapayCurrency,
                     ))
                 .toList(),
           ),
@@ -1017,6 +1032,7 @@ class _SyscohadaAddonCard extends StatelessWidget {
     required this.onViewTerms,
     this.highlighted = false,
     this.showPurchasedYearsSummary = true,
+    this.pawapayCurrency = 'XOF',
   });
 
   final BillingProduct? product;
@@ -1031,6 +1047,7 @@ class _SyscohadaAddonCard extends StatelessWidget {
   final ValueChanged<bool?> onAcceptedChanged;
   final VoidCallback onViewTerms;
   final bool showPurchasedYearsSummary;
+  final String pawapayCurrency;
 
   @override
   Widget build(BuildContext context) {
@@ -1047,6 +1064,7 @@ class _SyscohadaAddonCard extends StatelessWidget {
             currency: product!.currency,
             productId: product!.productId,
             languageCode: Localizations.localeOf(context).languageCode,
+            pawapayCurrency: pawapayCurrency,
           );
 
     return Container(
@@ -1216,6 +1234,7 @@ class _ProductOfferCard extends StatelessWidget {
   final bool accepted;
   final ValueChanged<bool?> onAcceptedChanged;
   final VoidCallback onViewTerms;
+  final String pawapayCurrency;
 
   const _ProductOfferCard({
     required this.product,
@@ -1226,6 +1245,7 @@ class _ProductOfferCard extends StatelessWidget {
     required this.onAcceptedChanged,
     required this.onViewTerms,
     this.highlighted = false,
+    this.pawapayCurrency = 'XOF',
   });
 
   @override
@@ -1237,6 +1257,7 @@ class _ProductOfferCard extends StatelessWidget {
       currency: product.currency,
       productId: product.productId,
       languageCode: Localizations.localeOf(context).languageCode,
+      pawapayCurrency: pawapayCurrency,
     );
     final planName = billingPlanLabel(lang, productId: product.productId);
     final style = BillingPlanVisual.fromProductId(product.productId);
