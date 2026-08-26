@@ -1,5 +1,4 @@
 // Flutter imports:
-import 'package:auth_weebi/auth_weebi.dart' show JsonWebToken;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,11 +14,12 @@ import 'package:users_weebi/weebi_users.dart' show AccessTokenProvider;
 import 'package:entitlements_weebi/entitlements_weebi.dart';
 import '../l10n/user_ui_strings.dart';
 import '../providers/user_provider.dart';
+import '../require_firm_id.dart';
 import 'elegant_permissions_widget.dart';
 import 'phone_field_prefix_icon.dart';
 
-// user will need to sign up after this step
-// and will then be linked to boss' firm
+/// Admin creates a pending user already linked to the creator's firm
+/// ([UserPermissions.firmId] from the access token). The invitee then signs up.
 class UserCreateView extends StatefulWidget {
   const UserCreateView({
     super.key,
@@ -81,18 +81,25 @@ class _UserCreateViewState extends State<UserCreateView> {
   // Loading and error states
   bool _isCreating = false;
   String? _error;
+  bool _defaultsInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    _initializeDefaults();
+    // Country default only — firmId needs InheritedWidget (didChangeDependencies).
+    _countryCodePhone = CountryCode.fromDialCode('+221');
   }
 
-  void _initializeDefaults() {
-    // Set default country code to Sénégal
-    _countryCodePhone = CountryCode.fromDialCode('+221');
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_defaultsInitialized) return;
+    _defaultsInitialized = true;
+    _initializePermissionsFromToken();
+  }
 
-    // Initialize with minimal permissions (principle of least privilege)
+  void _initializePermissionsFromToken() {
+    // Minimal permissions (principle of least privilege); firmId from JWT.
     _userPermissions = UserPermissions.create()
       ..firmId = _getFirmIdFromToken()
       ..articleRights = ArticleRights(rights: [Right.read])
@@ -117,12 +124,11 @@ class _UserCreateViewState extends State<UserCreateView> {
     super.dispose();
   }
 
-  /// Extract firmId from bearer token via provider
+  /// Extract firmId from bearer token via provider (throws if missing/empty).
   String _getFirmIdFromToken() {
     try {
       final authProvider = context.read<AccessTokenProvider>();
-      final jwt = JsonWebToken.parse(authProvider.accessToken);
-      return jwt.permissions.firmId;
+      return requireFirmIdFromAccessToken(authProvider.accessToken);
     } catch (e) {
       throw Exception(UserUiStrings.couldNotExtractFirmId(e));
     }
@@ -140,6 +146,10 @@ class _UserCreateViewState extends State<UserCreateView> {
 
     try {
       _formKey.currentState!.save();
+
+      // Re-stamp firmId at save time in case the token was refreshed / widget
+      // permissions were edited without carrying identity.
+      _userPermissions.firmId = _getFirmIdFromToken();
 
       // Create the new user (backend will generate the user ID)
       final newUserRequest = UserPublic.create()

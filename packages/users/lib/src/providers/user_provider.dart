@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:protos_weebi/grpc.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
+import '../l10n/user_ui_strings.dart';
 
 /// Provider class for managing user state and permissions
 class UserProvider extends ChangeNotifier {
@@ -93,6 +94,10 @@ class UserProvider extends ChangeNotifier {
 
   /// Creates a new user
   Future<UserPublic> createUser(UserPublic user) async {
+    if (user.permissions.firmId.isEmpty) {
+      throw ArgumentError(UserUiStrings.createUserMissingFirmId);
+    }
+
     _isLoading = true;
     _error = null;
     notifyListeners();

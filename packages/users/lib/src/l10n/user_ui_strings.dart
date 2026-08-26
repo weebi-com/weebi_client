@@ -96,4 +96,7 @@ abstract final class UserUiStrings {
 
   static String couldNotExtractFirmId(Object e) =>
       'Impossible d’extraire l’identifiant d’entreprise du jeton : $e';
+
+  static const String createUserMissingFirmId =
+      'Impossible de créer un utilisateur sans identifiant d’entreprise (firmId).';
 }
