@@ -31,6 +31,13 @@ abstract final class UserUiStrings {
       'Voulez-vous vraiment abandonner les modifications ?';
   static const String discard = 'Abandonner';
 
+  static const String tempPasswordLabel = 'Mot de passe temporaire';
+  static const String tempPasswordHint =
+      'Notez ce mot de passe et communiquez-le à l’utilisateur pour sa première connexion. Il ne sera plus affiché.';
+  static const String copyPassword = 'Copier';
+  static const String passwordCopied = 'Mot de passe copié';
+  static const String loginEmailLabel = 'E-mail de connexion';
+
   static const String labelFirstName = 'Prénom *';
   static const String labelLastName = 'Nom *';
   static const String labelEmail = 'Adresse e-mail *';

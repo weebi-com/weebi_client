@@ -62,6 +62,7 @@ class AuthService {
         message: "",
         accessToken: response.accessToken,
         sessionId: response.sessionId,
+        mustChangePassword: response.mustChangePassword,
       );
     } catch (e) {
       return _handleSignInError(e);

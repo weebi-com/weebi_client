@@ -1,7 +1,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:protos_weebi/grpc.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
+import '../generate_temporary_password.dart';
 import '../l10n/user_ui_strings.dart';
+
+/// Result of [UserProvider.createUser]: the saved user plus the one-time
+/// plaintext password (never stored after this call).
+class CreatedUserResult {
+  final UserPublic user;
+  final String temporaryPassword;
+
+  const CreatedUserResult({
+    required this.user,
+    required this.temporaryPassword,
+  });
+}
 
 /// Provider class for managing user state and permissions
 class UserProvider extends ChangeNotifier {
@@ -43,15 +56,8 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Generates a secure random password for new users
-  /// Password will be encrypted by server and user must change on first login
-  String _generateSecureRandomPassword() {
-    const chars =
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#&*';
-    final random = DateTime.now().millisecondsSinceEpoch;
-    return List.generate(6, (index) => chars[(random + index) % chars.length])
-        .join();
-  }
+  /// Generates a one-time password shown to the admin after creation.
+  String _generateSecureRandomPassword() => generateTemporaryPassword();
 
   /// Loads all users
   Future<void> loadUsers() async {
@@ -92,8 +98,9 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  /// Creates a new user
-  Future<UserPublic> createUser(UserPublic user) async {
+  /// Creates a new user. The plaintext [CreatedUserResult.temporaryPassword]
+  /// is returned once so the admin can copy it; it is not stored.
+  Future<CreatedUserResult> createUser(UserPublic user) async {
     if (user.permissions.firmId.isEmpty) {
       throw ArgumentError(UserUiStrings.createUserMissingFirmId);
     }
@@ -103,7 +110,7 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // Create user with temporary password or email verification
+      final temporaryPassword = _generateSecureRandomPassword();
       final pendingUser = PendingUserRequest();
       pendingUser
         ..firstname = user.firstname
@@ -111,21 +118,21 @@ class UserProvider extends ChangeNotifier {
         ..mail = user.mail
         ..permissions = user.permissions
         ..phone = user.phone
-        ..password = _generateSecureRandomPassword();
+        ..password = temporaryPassword;
 
       final response = await _fenceServiceClient.createPendingUser(pendingUser);
 
-      // Get the complete user from the server response (includes userId)
       final createdUser = response.userPublic;
       print('UserProvider: Created user with userId: ${createdUser.userId}');
 
-      // Add to local list with the userId
       _users = [..._users, createdUser];
 
-      // Refresh the full list to ensure backend sync
       await loadUsers();
 
-      return createdUser; // Return the user with userId
+      return CreatedUserResult(
+        user: createdUser,
+        temporaryPassword: temporaryPassword,
+      );
     } on GrpcError catch (e) {
       _error = '${e.code} ${e.message}';
       _isLoading = false;

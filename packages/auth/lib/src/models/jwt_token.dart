@@ -42,6 +42,13 @@ class JsonWebToken {
   UserPermissions get permissions => UserPermissions.create()
     ..mergeFromProto3Json(_payload, ignoreUnknownFields: true);
 
+  /// Whether this token is from a service account
+  bool get isServiceAccount {
+    final tags = _payload['tags'];
+    if (tags is! List || !tags.contains('service_account')) return false;
+    return true;
+  }
+
   /// Get the full payload
   Map<String, dynamic> get payload => _payload;
 } 

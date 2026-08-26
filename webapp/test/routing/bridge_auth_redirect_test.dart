@@ -43,6 +43,8 @@ void main() {
         resolveAuthRedirect(
           matchedLocation: RouteUri.home,
           isLoggedIn: false,
+          hasFirm: false,
+          isServiceAccount: false,
           documentQuery: {
             't': 'abc',
             'product': 'syscohada',
@@ -61,6 +63,8 @@ void main() {
         resolveAuthRedirect(
           matchedLocation: RouteUri.dashboard,
           isLoggedIn: false,
+          hasFirm: false,
+          isServiceAccount: false,
           documentQuery: {'t': 'abc', 'product': 'premium'},
           unrestrictedRoutes: unrestricted,
           publicRoutes: public,
@@ -74,6 +78,8 @@ void main() {
         resolveAuthRedirect(
           matchedLocation: RouteUri.login,
           isLoggedIn: false,
+          hasFirm: false,
+          isServiceAccount: false,
           documentQuery: {'t': 'abc', 'product': 'premium'},
           unrestrictedRoutes: unrestricted,
           publicRoutes: public,
@@ -87,6 +93,8 @@ void main() {
         resolveAuthRedirect(
           matchedLocation: RouteUri.bridge,
           isLoggedIn: false,
+          hasFirm: false,
+          isServiceAccount: false,
           documentQuery: {},
           unrestrictedRoutes: unrestricted,
           publicRoutes: public,
@@ -100,6 +108,8 @@ void main() {
         resolveAuthRedirect(
           matchedLocation: RouteUri.billing,
           isLoggedIn: false,
+          hasFirm: false,
+          isServiceAccount: false,
           isAuthCheckPending: true,
           documentQuery: {},
           unrestrictedRoutes: unrestricted,
@@ -114,6 +124,8 @@ void main() {
         resolveAuthRedirect(
           matchedLocation: RouteUri.billing,
           isLoggedIn: false,
+          hasFirm: false,
+          isServiceAccount: false,
           documentQuery: {},
           unrestrictedRoutes: unrestricted,
           publicRoutes: public,
@@ -122,11 +134,44 @@ void main() {
       );
     });
 
-    test('protected /billing allowed when logged in', () {
+    test('protected /billing allowed when logged in and has firm', () {
       expect(
         resolveAuthRedirect(
           matchedLocation: RouteUri.billing,
           isLoggedIn: true,
+          hasFirm: true,
+          isServiceAccount: false,
+          documentQuery: {},
+          unrestrictedRoutes: unrestricted,
+          publicRoutes: public,
+        ),
+        isNull,
+      );
+    });
+
+    test('protected /billing funnels to /create-firm when logged in but no firm',
+        () {
+      expect(
+        resolveAuthRedirect(
+          matchedLocation: RouteUri.billing,
+          isLoggedIn: true,
+          hasFirm: false,
+          isServiceAccount: false,
+          documentQuery: {},
+          unrestrictedRoutes: unrestricted,
+          publicRoutes: public,
+        ),
+        RouteUri.createFirm,
+      );
+    });
+
+    test('service account allowed without firm', () {
+      expect(
+        resolveAuthRedirect(
+          matchedLocation: RouteUri.billing,
+          isLoggedIn: true,
+          hasFirm: false,
+          isServiceAccount: true,
           documentQuery: {},
           unrestrictedRoutes: unrestricted,
           publicRoutes: public,
@@ -140,6 +185,8 @@ void main() {
         resolveAuthRedirect(
           matchedLocation: RouteUri.home,
           isLoggedIn: false,
+          hasFirm: false,
+          isServiceAccount: false,
           documentQuery: {'product': 'premium'},
           unrestrictedRoutes: unrestricted,
           publicRoutes: public,

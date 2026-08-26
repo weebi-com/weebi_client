@@ -21,12 +21,16 @@ class UserAccessWidget extends StatefulWidget {
   /// When set (e.g. from [readLicenses]), shows seat status for this user.
   final Iterable<License>? firmLicenses;
 
+  /// Called after a successful save instead of [Navigator.pop].
+  final VoidCallback? onSaved;
+
   const UserAccessWidget({
     super.key,
     required this.user,
     this.currentUserId,
     this.showOperationalLicenseNotice = true,
     this.firmLicenses,
+    this.onSaved,
   });
 
   @override
@@ -578,7 +582,11 @@ class _UserAccessWidgetState extends State<UserAccessWidget> {
               backgroundColor: Colors.green,
             ),
           );
-          Navigator.of(context).pop();
+          if (widget.onSaved != null) {
+            widget.onSaved!();
+          } else {
+            Navigator.of(context).pop();
+          }
         }
       } else {
         setState(() {
