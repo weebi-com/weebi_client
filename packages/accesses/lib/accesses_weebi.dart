@@ -2,6 +2,7 @@
 
 // Core exports
 export 'src/l10n/access_ui_strings.dart';
+export 'src/permissions_access_merge.dart';
 export 'src/providers/access_provider.dart';
 export 'src/widgets/access_list_widget.dart';
 export 'src/widgets/user_access_widget.dart';

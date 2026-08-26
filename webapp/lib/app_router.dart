@@ -2,7 +2,7 @@ import 'package:auth_weebi/auth_weebi.dart' show PermissionProvider;
 import 'package:flutter/foundation.dart' show Listenable;
 import 'package:go_router/go_router.dart';
 import 'package:web_admin/contacts/view/contacts_page.dart';
-import 'package:protos_weebi/protos_weebi_io.dart' show TicketPb;
+import 'package:protos_weebi/protos_weebi_io.dart' show TicketPb, UserPublic;
 import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/core/routing/bridge_auth_redirect.dart';
 import 'package:web_admin/environment.dart';
@@ -231,9 +231,18 @@ GoRouter appRouter(
       GoRoute(
         path: RouteUri.listAccess,
         pageBuilder: (context, state) {
+          final extra = state.extra;
+          final args = extra is AccessesOpenArgs
+              ? extra
+              : extra is UserPublic
+                  ? AccessesOpenArgs(user: extra)
+                  : const AccessesOpenArgs();
           return NoTransitionPage<void>(
             key: state.pageKey,
-            child: const AccessesPackageScreen(),
+            child: AccessesPackageScreen(
+              initialUser: args.user,
+              returnToUsersOnSave: args.returnToUsersOnSave,
+            ),
           );
         },
       ),
@@ -387,6 +396,8 @@ GoRouter appRouter(
       return resolveAuthRedirect(
         matchedLocation: state.matchedLocation,
         isLoggedIn: userDataProvider.isUserLoggedIn(),
+        hasFirm: permissionProvider.firmId.isNotEmpty,
+        isServiceAccount: permissionProvider.isServiceAccount,
         isAuthCheckPending: userDataProvider.isBffSessionCheckPending,
         documentQuery: Uri.base.queryParameters,
         unrestrictedRoutes: unrestrictedRoutes,

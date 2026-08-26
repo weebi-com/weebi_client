@@ -1,5 +1,9 @@
 # changelog
 
+## 1.1.5 - august 2026
+
+- bump auth_weebi
+
 ## 1.1.4 - may 2026
 
 - merge flutter_currency_picker into boutiques package as local module (MIT licensed, credit: Daniel-Ioannou)

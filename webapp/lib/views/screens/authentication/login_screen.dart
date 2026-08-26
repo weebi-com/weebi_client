@@ -6,7 +6,6 @@ import 'package:protos_weebi/grpc.dart';
 import 'package:protos_weebi/utils.dart' show RegExpWeebi;
 import 'package:auth_weebi/auth_weebi.dart' show AccessTokenProvider;
 import 'package:provider/provider.dart';
-import 'package:web_admin/app_router.dart';
 import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/environment.dart';
 import 'package:web_admin/generated/l10n.dart';
@@ -73,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
               );
 
           if (!mounted) return;
-          _onLoginSuccess(context);
+          _onLoginSuccess(context, promptPasswordChange: result.mustChangePassword);
         } else {
           onError
               .call(result.errorMessage ?? 'Login failed. Please try again.');
@@ -88,8 +87,22 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void _onLoginSuccess(BuildContext context) {
+  void _onLoginSuccess(BuildContext context, {bool promptPasswordChange = false}) {
     GoRouter.of(context).go(RouteUri.home);
+    if (promptPasswordChange) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final messenger = ScaffoldMessenger.maybeOf(context);
+        messenger?.showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Pensez à changer votre mot de passe depuis Accès utilisateurs.',
+            ),
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(seconds: 6),
+          ),
+        );
+      });
+    }
   }
 
   void _onLoginError(BuildContext context, String message) {

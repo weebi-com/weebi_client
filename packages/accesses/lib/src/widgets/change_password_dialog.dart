@@ -52,7 +52,9 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
       final ok = await _updateUserPassword(
         selectedUserId: widget.selectedUserId,
         firmId: widget.firmId,
-        currentPassword: _currentPasswordController.text,
+        currentPassword: widget.isSelfService
+            ? _currentPasswordController.text
+            : '',
         newPassword: _newPasswordController.text,
       );
       if (ok && mounted) {
@@ -150,17 +152,18 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextFormField(
-                controller: _currentPasswordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: AccessUiStrings.currentPasswordLabel,
-                  border: OutlineInputBorder(),
+              if (widget.isSelfService)
+                TextFormField(
+                  controller: _currentPasswordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: AccessUiStrings.currentPasswordLabel,
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (v) => (v == null || v.isEmpty)
+                      ? AccessUiStrings.requiredField
+                      : null,
                 ),
-                validator: (v) => (v == null || v.isEmpty)
-                    ? AccessUiStrings.requiredField
-                    : null,
-              ),
               const SizedBox(height: 12),
               TextFormField(
                 controller: _newPasswordController,

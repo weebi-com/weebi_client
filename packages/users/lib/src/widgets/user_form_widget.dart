@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fl_country_code_picker_weebi/fl_country_code_picker.dart';
+import 'package:auth_weebi/auth_weebi.dart' show AccessTokenProvider;
 import 'package:protos_weebi/grpc.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
 import 'package:protos_weebi/utils.dart' show RegExpWeebi;
+import 'package:provider/provider.dart';
 import '../l10n/user_ui_strings.dart';
+import '../require_firm_id.dart';
 import 'phone_field_prefix_icon.dart';
 import '../providers/user_provider.dart';
 
@@ -95,6 +98,10 @@ class _UserFormWidgetState extends State<UserFormWidget> {
         user.othersAttributes.addAll(widget.user!.othersAttributes);
         await widget.userProvider.updateUser(user);
       } else {
+        final firmId = requireFirmIdFromAccessToken(
+          context.read<AccessTokenProvider>().accessToken,
+        );
+        user.permissions = UserPermissions.create()..firmId = firmId;
         await widget.userProvider.createUser(user);
       }
 

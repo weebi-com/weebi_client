@@ -6,6 +6,7 @@ import 'package:protos_weebi/protos_weebi_io.dart';
 
 // Project imports:
 import 'access_token_provider.dart';
+import '../models/jwt_token.dart';
 import '../extensions/user_permissions_extensions.dart';
 
 /// Provider for managing user permissions from JWT token
@@ -54,6 +55,17 @@ class PermissionProvider extends ChangeNotifier {
 
   /// Check if user is considered authenticated (either via JWT token or BFF session)
   bool get isAuthenticated => hasToken || _bffPermissions != null;
+
+  /// Whether this user is a service account
+  bool get isServiceAccount {
+    if (!hasToken) return false;
+    try {
+      return JsonWebToken.parse(_accessTokenProvider.accessToken)
+          .isServiceAccount;
+    } catch (_) {
+      return false;
+    }
+  }
 
   /// Context properties from token
   String get firmId => userPermissions.firmId;
