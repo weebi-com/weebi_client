@@ -64,7 +64,7 @@ class _RootAppState extends State<RootApp> {
       UserDataProvider userDataProvider,
       SharedPreferences sharedPrefs,
       FenceServiceClient fenceClient) async {
-    appPreferencesProvider.loadAsync(sharedPrefs);
+    await appPreferencesProvider.loadAsync(sharedPrefs);
     await userDataProvider.loadAsync();
     if (userDataProvider.isBffSessionCheckPending) {
       await userDataProvider.verifyLiveBffSession(
