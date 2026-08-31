@@ -163,6 +163,7 @@
   "login": "Connexion",
   "loginNow": "Connectez-vous",
   "logout": "Déconnexion",
+  "stayConnected": "Rester connecté",
   "loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
   "mail": "E-mail",
   "matchErrorText": "La valeur ne correspond pas au motif.",

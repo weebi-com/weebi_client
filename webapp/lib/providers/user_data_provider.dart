@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_admin/core/session/bff_session_store.dart';
 import 'package:web_admin/environment.dart';
 
 import '../core/constants/values.dart';
@@ -12,6 +13,7 @@ class UserDataProvider extends ChangeNotifier {
   var _accessToken = '';
   var _refreshToken = '';
   var _bffSessionId = '';
+  var _stayConnected = true;
   var _bffSessionVerified = false;
   var _bffSessionCheckPending = false;
 
@@ -23,6 +25,7 @@ class UserDataProvider extends ChangeNotifier {
   String get accessToken => _accessToken;
   String get refreshToken => _refreshToken;
   String get bffSessionId => _bffSessionId;
+  bool get stayConnected => _stayConnected;
   bool get isBffSessionCheckPending => _bffSessionCheckPending;
 
   Future<void> loadAsync() async {
@@ -35,7 +38,8 @@ class UserDataProvider extends ChangeNotifier {
     _refreshToken = sharedPref.getString(SharePrefKeys.refreshToken) ?? '';
     _userProfileImageUrl =
         sharedPref.getString(SharePrefKeys.userProfileImageUrl) ?? '';
-    _bffSessionId = sharedPref.getString(SharePrefKeys.bffSessionId) ?? '';
+    _stayConnected = sharedPref.getBool(SharePrefKeys.stayConnected) ?? true;
+    _bffSessionId = await BffSessionStore.getSessionId() ?? '';
 
     if (Config.isBffMode) {
       _bffSessionVerified = false;
@@ -54,10 +58,20 @@ class UserDataProvider extends ChangeNotifier {
     String? mail,
     String? accessToken,
     String? refreshToken,
+    String? bffSessionId,
+    bool? stayConnected,
     bool? bffSessionLive,
   }) async {
     final sharedPref = await SharedPreferences.getInstance();
     var shouldNotify = false;
+
+    if (stayConnected != null && stayConnected != _stayConnected) {
+      _stayConnected = stayConnected;
+      await sharedPref.setBool(SharePrefKeys.stayConnected, _stayConnected);
+      shouldNotify = true;
+    } else if (stayConnected != null) {
+      await sharedPref.setBool(SharePrefKeys.stayConnected, stayConnected);
+    }
 
     if (userProfileImageUrl != null &&
         userProfileImageUrl != _userProfileImageUrl) {
@@ -90,6 +104,27 @@ class UserDataProvider extends ChangeNotifier {
 
       await sharedPref.setString(SharePrefKeys.refreshToken, _refreshToken);
 
+      shouldNotify = true;
+    }
+
+    if (bffSessionId != null && bffSessionId != _bffSessionId) {
+      _bffSessionId = bffSessionId;
+      if (bffSessionId.isEmpty) {
+        await BffSessionStore.clear();
+        _bffSessionVerified = false;
+        _bffSessionCheckPending = false;
+      } else {
+        await BffSessionStore.setSessionId(
+          bffSessionId,
+          persist: _stayConnected,
+        );
+        // Explicit login / restore writes a live session. Cold-start load
+        // still goes through [verifyLiveBffSession].
+        if (bffSessionLive == null) {
+          _bffSessionVerified = true;
+          _bffSessionCheckPending = false;
+        }
+      }
       shouldNotify = true;
     }
 
@@ -141,20 +176,20 @@ class UserDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Clears the live session (tokens, names, BFF session id) but keeps
+  /// remembered [mail] and the Stay connected preference for the login form.
   Future<void> clearSessionDataAsync() async {
     final sharedPref = await SharedPreferences.getInstance();
 
     await sharedPref.remove(SharePrefKeys.firstname);
     await sharedPref.remove(SharePrefKeys.lastname);
-    await sharedPref.remove(SharePrefKeys.mail);
     await sharedPref.remove(SharePrefKeys.userProfileImageUrl);
     await sharedPref.remove(SharePrefKeys.accessToken);
     await sharedPref.remove(SharePrefKeys.refreshToken);
-    await sharedPref.remove(SharePrefKeys.bffSessionId);
+    await BffSessionStore.clear();
 
     _firstname = '';
     _lastname = '';
-    _mail = '';
     _userProfileImageUrl = '';
     _accessToken = '';
     _refreshToken = '';

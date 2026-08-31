@@ -164,6 +164,7 @@ class SessionRecoveryCoordinator {
     _loggingOut = true;
 
     try {
+      await _authService.logout();
       await userDataProvider.clearSessionDataAsync();
       await BffSessionStore.clear();
       accessTokenProvider.clearAccessToken();

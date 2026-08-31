@@ -120,6 +120,7 @@
   "login": "登入",
   "loginNow": "马上登入！",
   "logout": "登出",
+  "stayConnected": "保持登录",
   "loremIpsum": "这时候风雨也停止进行曲的合奏，四方云集，由何处开始",
   "matchErrorText": "此字段与格式不匹配。",
   "maxErrorText": "此字段必须小于或等于{max}",

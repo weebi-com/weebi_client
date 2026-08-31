@@ -365,6 +365,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "statsPeriodWeek": MessageLookupByLibrary.simpleMessage("周"),
     "statsSelectBoutiques": MessageLookupByLibrary.simpleMessage("选择门店："),
     "statsStackedByBoutique": MessageLookupByLibrary.simpleMessage("按门店堆叠"),
+    "stayConnected": MessageLookupByLibrary.simpleMessage("保持登录"),
     "submit": MessageLookupByLibrary.simpleMessage("提交"),
     "support": MessageLookupByLibrary.simpleMessage("支持"),
     "supportChatWhatsApp": MessageLookupByLibrary.simpleMessage("与Weebi支持聊天"),

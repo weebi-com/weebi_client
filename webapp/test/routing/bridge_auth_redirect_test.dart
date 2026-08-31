@@ -149,7 +149,7 @@ void main() {
       );
     });
 
-    test('protected /billing funnels to /create-firm when logged in but no firm',
+    test('protected /billing funnels to /create-firm when boss has no firm',
         () {
       expect(
         resolveAuthRedirect(
@@ -157,6 +157,7 @@ void main() {
           isLoggedIn: true,
           hasFirm: false,
           isServiceAccount: false,
+          canCreateFirm: true,
           documentQuery: {},
           unrestrictedRoutes: unrestricted,
           publicRoutes: public,

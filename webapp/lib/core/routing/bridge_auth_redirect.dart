@@ -39,8 +39,8 @@ bool isUnrestrictedLocation(
 String? resolveAuthRedirect({
   required String matchedLocation,
   required bool isLoggedIn,
-  required bool hasFirm,
-  required bool isServiceAccount,
+  bool hasFirm = false,
+  bool isServiceAccount = false,
   required Map<String, String> documentQuery,
   required List<String> unrestrictedRoutes,
   required List<String> publicRoutes,
@@ -51,6 +51,8 @@ String? resolveAuthRedirect({
   String dashboardRoute = '/dashboard',
   String createFirmRoute = '/create-firm',
   String logoutRoute = '/logout',
+  String firmId = '',
+  bool canCreateFirm = false,
 }) {
   final token = documentQuery['t']?.trim() ?? '';
   if (token.isNotEmpty &&
@@ -74,9 +76,12 @@ String? resolveAuthRedirect({
     return loginRoute;
   }
 
-  // User is logged in but has no firm.
-  // We MUST funnel them to create-firm unless they are trying to logout or they are a service account.
-  if (!hasFirm &&
+  // Boss signed up but firm creation never ran: recover on /create-firm.
+  // Invited users have canCreateFirm == false so they are not sent here.
+  // Service accounts and logout are never funneled here.
+  if (canCreateFirm &&
+      !hasFirm &&
+      firmId.isEmpty &&
       !isServiceAccount &&
       matchedLocation != createFirmRoute &&
       matchedLocation != logoutRoute) {

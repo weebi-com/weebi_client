@@ -444,17 +444,21 @@ class SidebarHeader extends StatelessWidget {
               ),
             ),
             const SizedBox(width: kDefaultPadding * 0.5),
-            Selector<UserDataProvider, String>(
-              selector: (context, provider) => provider.mail,
-              builder: (context, value, child) {
-                return Text(
-                  '${lang.hi}, $value',
-                  style: TextStyle(
-                    fontSize: sidebarTheme.headerUsernameFontSize,
-                    color: sidebarTheme.foregroundColor,
-                  ),
-                );
-              },
+            Expanded(
+              child: Selector<UserDataProvider, String>(
+                selector: (context, provider) => provider.mail,
+                builder: (context, value, child) {
+                  return Text(
+                    '${lang.hi}, $value',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: sidebarTheme.headerUsernameFontSize,
+                      color: sidebarTheme.foregroundColor,
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),

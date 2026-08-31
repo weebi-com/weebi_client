@@ -1777,6 +1777,16 @@ class Lang {
     return Intl.message('Search', name: 'search', desc: '', args: []);
   }
 
+  /// `Stay connected`
+  String get stayConnected {
+    return Intl.message(
+      'Stay connected',
+      name: 'stayConnected',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Submit`
   String get submit {
     return Intl.message('Submit', name: 'submit', desc: '', args: []);

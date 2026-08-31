@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:protos_weebi/protos_weebi_io.dart' show FenceServiceClient, UserId;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_admin/core/services/auth_service.dart';
+import 'package:web_admin/core/session/session_bootstrap.dart';
 import 'package:web_admin/environment.dart';
 import 'package:web_admin/app_router.dart';
 import 'package:web_admin/generated/l10n.dart';
@@ -66,6 +68,14 @@ class _RootAppState extends State<RootApp> {
       FenceServiceClient fenceClient) async {
     await appPreferencesProvider.loadAsync(sharedPrefs);
     await userDataProvider.loadAsync();
+    await SessionBootstrap.restore(
+      userDataProvider: userDataProvider,
+      isBffMode: Config.isBffMode,
+      refreshSession: () async {
+        final tokens = await AuthService().authenticateWithRefreshToken();
+        return SessionRestoreResult(sessionId: tokens.sessionId);
+      },
+    );
     if (userDataProvider.isBffSessionCheckPending) {
       await userDataProvider.verifyLiveBffSession(
         () async {
