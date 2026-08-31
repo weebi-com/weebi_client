@@ -24,7 +24,7 @@ class FirmService {
         throw const GrpcError.unauthenticated('Missing access token');
       }
       final options = Config.isBffMode
-          ? callOptions
+          ? securedCallOptions
           : CallOptions(metadata: {'authorization': token!});
 
       final req = CreateFirmRequest(name: name);
@@ -57,7 +57,7 @@ class FirmService {
         throw const GrpcError.unauthenticated('Missing access token');
       }
       final options = Config.isBffMode
-          ? callOptions
+          ? securedCallOptions
           : CallOptions(metadata: {'authorization': token!});
 
       final response = await stub.readOneFirm(Empty(), options: options);

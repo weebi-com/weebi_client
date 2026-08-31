@@ -460,6 +460,9 @@ GoRouter appRouter(
         documentQuery: Uri.base.queryParameters,
         unrestrictedRoutes: unrestrictedRoutes,
         publicRoutes: publicRoutes,
+        createFirmRoute: RouteUri.createFirm,
+        firmId: permissionProvider.firmId,
+        canCreateFirm: permissionProvider.canCreateFirm,
       );
     },
   );

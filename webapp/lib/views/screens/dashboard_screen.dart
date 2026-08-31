@@ -65,6 +65,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   runSpacing: kDefaultPadding,
                   children: [
                     _HoverableTile(
+                      key: const Key('dashboardFirmTile'),
                       onTap: () => GoRouter.of(context).go(RouteUri.firmDetail),
                       child: SummaryCard(
                         title: lang.pendingIssues(2),

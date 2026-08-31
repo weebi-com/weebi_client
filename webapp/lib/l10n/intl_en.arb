@@ -145,6 +145,7 @@
   "login": "Login",
   "loginNow": "Login now!",
   "logout": "Logout",
+  "stayConnected": "Stay connected",
   "loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
   "mail": "E-mail",
   "matchErrorText": "Value does not match pattern.",

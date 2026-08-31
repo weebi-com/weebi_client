@@ -510,6 +510,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "statsStackedByBoutique": MessageLookupByLibrary.simpleMessage(
       "Empilé par Boutique",
     ),
+    "stayConnected": MessageLookupByLibrary.simpleMessage("Rester connecté"),
     "submit": MessageLookupByLibrary.simpleMessage("Soumettre"),
     "support": MessageLookupByLibrary.simpleMessage("Support"),
     "supportChatWhatsApp": MessageLookupByLibrary.simpleMessage(

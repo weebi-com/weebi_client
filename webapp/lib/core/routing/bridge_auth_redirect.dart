@@ -46,6 +46,9 @@ String? resolveAuthRedirect({
   String bridgeRoute = '/bridge',
   String homeRoute = '/',
   String dashboardRoute = '/dashboard',
+  String createFirmRoute = '/create-firm',
+  String firmId = '',
+  bool canCreateFirm = false,
 }) {
   final token = documentQuery['t']?.trim() ?? '';
   if (token.isNotEmpty &&
@@ -65,6 +68,14 @@ String? resolveAuthRedirect({
 
   if (!isLoggedIn) {
     return loginRoute;
+  }
+
+  // Boss signed up but firm creation never ran: recover on /create-firm.
+  // Invited users have canCreateFirm == false so they are not sent here.
+  if (canCreateFirm &&
+      firmId.isEmpty &&
+      matchedLocation != createFirmRoute) {
+    return createFirmRoute;
   }
 
   return null;

@@ -32,6 +32,18 @@ class _LoginScreenState extends State<LoginScreen> {
   var _isFormLoading = false;
   var _obscurePassword = true;
   final authService = AuthService();
+  late final String _rememberedMail;
+  late final bool _stayConnectedInitial;
+
+  @override
+  void initState() {
+    super.initState();
+    final userData = context.read<UserDataProvider>();
+    _rememberedMail = userData.mail;
+    _stayConnectedInitial = userData.stayConnected;
+    _formData.mail = _rememberedMail;
+    _formData.stayConnected = _stayConnectedInitial;
+  }
 
   void _submitForm() {
     _doLoginAsync(
@@ -55,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
         final result = await authService.signIn(
           mail: _formData.mail,
           password: _formData.password,
+          stayConnected: _formData.stayConnected,
         );
 
         if (result.success) {
@@ -65,6 +78,8 @@ class _LoginScreenState extends State<LoginScreen> {
           await context.read<UserDataProvider>().setUserDataAsync(
                 mail: _formData.mail,
                 accessToken: result.accessToken,
+                bffSessionId: result.sessionId,
+                stayConnected: _formData.stayConnected,
                 userProfileImageUrl:
                     'https://www.weebi.com/images/Weebi_Logo_Full.png',
               );
@@ -168,9 +183,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 60.0,
                       ),
                     ),
-                    FormBuilder(
+                    AutofillGroup(
+                      child: FormBuilder(
                       key: _formKey,
                       autovalidateMode: AutovalidateMode.disabled,
+                      initialValue: {
+                        'mail': _rememberedMail,
+                        'stayConnected': _stayConnectedInitial,
+                      },
                       child: Column(
                         children: [
                           Padding(
@@ -187,6 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     FloatingLabelBehavior.always,
                               ),
                               keyboardType: TextInputType.emailAddress,
+                              autofillHints: const [AutofillHints.email],
                               textInputAction: TextInputAction.next,
                               validator: FormBuilderValidators.compose([
                                 FormBuilderValidators.required(),
@@ -227,6 +248,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                               enableSuggestions: false,
+                              autofillHints: const [AutofillHints.password],
                               obscureText: _obscurePassword,
                               textInputAction: TextInputAction.done,
                               validator: FormBuilderValidators.compose([
@@ -236,6 +258,18 @@ class _LoginScreenState extends State<LoginScreen> {
                               onSaved: (value) =>
                                   (_formData.password = value ?? ''),
                               onSubmitted: (_) => _submitForm(),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: kDefaultPadding),
+                            child: FormBuilderCheckbox(
+                              key: const Key('loginStayConnectedCheckbox'),
+                              name: 'stayConnected',
+                              initialValue: _stayConnectedInitial,
+                              title: Text(lang.stayConnected),
+                              onSaved: (value) =>
+                                  (_formData.stayConnected = value ?? true),
                             ),
                           ),
                           Padding(
@@ -280,6 +314,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(
                             width: double.infinity,
                             child: TextButton(
+                              key: const Key('loginRegisterNowButton'),
                               style: themeData
                                   .extension<AppButtonTheme>()!
                                   .secondaryText,
@@ -309,6 +344,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ],
                       ),
+                    ),
                     ),
                   ],
                 ),
@@ -425,4 +461,5 @@ class _ForgotPasswordDialogState extends State<_ForgotPasswordDialog> {
 class FormData {
   String mail = '';
   String password = '';
+  bool stayConnected = true;
 }

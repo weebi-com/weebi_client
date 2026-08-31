@@ -1,10 +1,10 @@
-import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:protos_weebi/grpc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_admin/environment.dart';
 import 'package:web_admin/grpc/server.dart';
 import 'package:web_admin/core/session/bff_session_store.dart';
+import 'package:web_admin/core/auth/signup_session.dart';
 import '../models/sign_in_result.dart';
 import '../models/sign_up_result.dart';
 import 'grpc_client_service.dart';
@@ -36,9 +36,39 @@ class AuthService {
     await prefs.setString(SharePrefKeys.refreshToken, refreshToken);
   }
 
+  Future<void> _persistAuth(
+    Tokens tokens, {
+    bool persistSession = true,
+  }) async {
+    await _saveTokens(tokens.accessToken, tokens.refreshToken);
+    if (Config.isBffMode && tokens.sessionId.isNotEmpty) {
+      await BffSessionStore.setSessionId(
+        tokens.sessionId,
+        persist: persistSession,
+      );
+    }
+  }
+
+  Future<bool> _shouldPersistBffSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(SharePrefKeys.stayConnected) ?? true;
+  }
+
+  bool _tokensProveAuth(Tokens tokens) => signupAuthSucceeded(
+        isBffMode: Config.isBffMode,
+        accessToken: tokens.accessToken,
+        sessionId: tokens.sessionId,
+      );
+
+  CallOptions _authenticatedOptions(Tokens tokens) {
+    if (Config.isBffMode) return securedCallOptions;
+    return CallOptions(metadata: {'authorization': tokens.accessToken});
+  }
+
   Future<SignInResult> signIn({
     required String mail,
     required String password,
+    bool stayConnected = true,
   }) async {
     final stub = FenceServiceClient(_grpcClientService.channel,
         options: callOptions);
@@ -52,10 +82,9 @@ class AuthService {
         ),
       );
 
-      await _saveTokens(response.accessToken, response.refreshToken);
-      if (Config.isBffMode && response.sessionId.isNotEmpty) {
-        await BffSessionStore.setSessionId(response.sessionId);
-      }
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(SharePrefKeys.stayConnected, stayConnected);
+      await _persistAuth(response, persistSession: stayConnected);
 
       return SignInResult(
         success: true,
@@ -68,6 +97,8 @@ class AuthService {
     }
   }
 
+  /// Boss path: signUp → authent → createFirm → refresh (firmId in session).
+  /// Invited path (`UPDATED`): signUp → authent, skip createFirm.
   Future<SignUpResult> signUp({
     required String firmName,
     required String firstName,
@@ -75,7 +106,10 @@ class AuthService {
     required String mail,
     required String password,
   }) async {
-    final stub = FenceServiceClient(_grpcClientService.channel);
+    final stub = FenceServiceClient(
+      _grpcClientService.channel,
+      options: callOptions,
+    );
 
     try {
       final response = await stub.signUp(
@@ -86,7 +120,19 @@ class AuthService {
           password: password,
         ),
       );
-      final responseTokens = await stub.authenticateWithCredentials(
+
+      final statusType = response.statusResponse.type;
+      if (statusType != StatusResponse_Type.CREATED &&
+          statusType != StatusResponse_Type.UPDATED) {
+        return SignUpResult(
+          success: false,
+          errorMessage: response.statusResponse.message.isNotEmpty
+              ? response.statusResponse.message
+              : 'Signup failed',
+        );
+      }
+
+      final tokens = await stub.authenticateWithCredentials(
         Credentials(
           mail: mail,
           password: password,
@@ -94,42 +140,60 @@ class AuthService {
         ),
       );
 
-      final stub2 = FenceServiceClient(_grpcClientService.channel,
-          options: CallOptions(
-              metadata: {'authorization': responseTokens.accessToken}));
+      if (!_tokensProveAuth(tokens)) {
+        return _handleSignUpError('authentication failed after signup');
+      }
+      await _persistAuth(tokens);
 
-      /// user will not be able to create the firm
-      /// we exfiltrated it from signup lobby, now we also avoid them this trap
-      if (response.statusResponse.type != StatusResponse_Type.UPDATED) {
-        try {
-          final statusResponse =
-              await stub2.createFirm(CreateFirmRequest(name: firmName));
-          if (statusResponse.statusResponse.type !=
-              StatusResponse_Type.CREATED) {
-            throw statusResponse.toString();
-          }
-        } on FormatException catch (e) {
-          debugPrint('createFirmServer $e');
-        } on GrpcError catch (e) {
-          debugPrint('createFirmServer $e');
-        }
+      final isPendingJoin = statusType == StatusResponse_Type.UPDATED;
+      if (isPendingJoin) {
+        return SignUpResult(
+          success: true,
+          userId: response.userId,
+          firmCreated: false,
+          accessToken: tokens.accessToken,
+          sessionId: tokens.sessionId,
+        );
       }
 
-      final responseTokens2 =
-          response.statusResponse.type == StatusResponse_Type.UPDATED
-              ? responseTokens
-              : await stub2.authenticateWithCredentials(
-                  Credentials(
-                    mail: mail,
-                    password: password,
-                    isWebApp: Config.isBffMode,
-                  ),
-                );
-      if (responseTokens2.accessToken.isEmpty) {
-        return _handleSignUpError('error responseTokens2.accessToken.isEmpty');
+      final firmResponse = await stub.createFirm(
+        CreateFirmRequest(name: firmName),
+        options: _authenticatedOptions(tokens),
+      );
+      if (firmResponse.statusResponse.type != StatusResponse_Type.CREATED) {
+        return SignUpResult(
+          success: false,
+          userId: response.userId,
+          errorMessage: firmResponse.statusResponse.message.isNotEmpty
+              ? firmResponse.statusResponse.message
+              : 'firm could not be created',
+        );
       }
 
-      return SignUpResult(success: true, userId: response.userId);
+      // createFirm updates user permissions; refresh so the session JWT
+      // contains firmId (BFF must update the existing web session).
+      final refreshed = Config.isBffMode
+          ? await authenticateWithRefreshToken()
+          : await stub.authenticateWithCredentials(
+              Credentials(
+                mail: mail,
+                password: password,
+                isWebApp: false,
+              ),
+            );
+      if (!_tokensProveAuth(refreshed)) {
+        return _handleSignUpError(
+            're-authentication failed after firm creation');
+      }
+      await _persistAuth(refreshed);
+
+      return SignUpResult(
+        success: true,
+        userId: response.userId,
+        firmCreated: true,
+        accessToken: refreshed.accessToken,
+        sessionId: refreshed.sessionId,
+      );
     } catch (e) {
       return _handleSignUpError(e);
     }
@@ -197,13 +261,30 @@ class AuthService {
       );
 
       if (Config.isBffMode && response.sessionId.isNotEmpty) {
-        await BffSessionStore.setSessionId(response.sessionId);
+        await BffSessionStore.setSessionId(
+          response.sessionId,
+          persist: await _shouldPersistBffSession(),
+        );
       }
 
       return response;
     } catch (e) {
       debugPrint('Erreur lors de authenticateWithRefreshToken: $e');
       rethrow;
+    }
+  }
+
+  /// Invalidates the server BFF session. Envoy clears the cookie on this path.
+  /// Failures are swallowed so local logout still proceeds.
+  Future<void> logout() async {
+    try {
+      final stub = FenceServiceClient(
+        _grpcClientService.channel,
+        options: securedCallOptions,
+      );
+      await stub.logout(Empty());
+    } catch (e) {
+      debugPrint('FenceService.logout failed: $e');
     }
   }
 }

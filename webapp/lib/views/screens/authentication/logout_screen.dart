@@ -9,6 +9,7 @@ import 'package:web_admin/providers/current_user_provider.dart';
 import 'package:web_admin/providers/operational_license_gate.dart';
 import 'package:web_admin/providers/tickets_boutique_cache.dart';
 import 'package:web_admin/providers/user_data_provider.dart';
+import 'package:web_admin/core/services/auth_service.dart';
 import 'package:web_admin/core/session/bff_session_store.dart';
 
 class LogoutScreen extends StatefulWidget {
@@ -26,8 +27,10 @@ class _LogoutScreenState extends State<LogoutScreen> {
     required CurrentUserProvider currentUserProvider,
     required BoutiqueProvider boutiqueProvider,
     required TicketsBoutiqueCache ticketsBoutiqueCache,
+    required AuthService authService,
     required VoidCallback onSuccess,
   }) async {
+    await authService.logout();
     await userDataProvider.clearSessionDataAsync();
     await BffSessionStore.clear();
     accessTokenProvider.clearAccessToken();
@@ -54,8 +57,9 @@ class _LogoutScreenState extends State<LogoutScreen> {
       final currentUserProvider = context.read<CurrentUserProvider>();
       final boutiqueProvider = context.read<BoutiqueProvider>();
       final ticketsBoutiqueCache = context.read<TicketsBoutiqueCache>();
+      final authService = AuthService();
 
-      // Clear local user data and redirect to login screen.
+      // Invalidate server session, clear local user data, redirect to login.
       await (_doLogoutAsync(
         userDataProvider: userDataProvider,
         accessTokenProvider: accessTokenProvider,
@@ -63,6 +67,7 @@ class _LogoutScreenState extends State<LogoutScreen> {
         currentUserProvider: currentUserProvider,
         boutiqueProvider: boutiqueProvider,
         ticketsBoutiqueCache: ticketsBoutiqueCache,
+        authService: authService,
         onSuccess: () => router.go(RouteUri.login),
       ));
     });
