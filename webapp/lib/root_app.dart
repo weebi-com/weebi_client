@@ -3,7 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:protos_weebi/protos_weebi_io.dart' show FenceServiceClient;
+import 'package:protos_weebi/protos_weebi_io.dart' show FenceServiceClient, UserId;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_admin/core/services/auth_service.dart';
 import 'package:web_admin/core/session/session_bootstrap.dart';
@@ -64,8 +64,9 @@ class _RootAppState extends State<RootApp> {
   Future<bool> _getScreenDataAsync(
       AppPreferencesProvider appPreferencesProvider,
       UserDataProvider userDataProvider,
-      SharedPreferences sharedPrefs) async {
-    appPreferencesProvider.loadAsync(sharedPrefs);
+      SharedPreferences sharedPrefs,
+      FenceServiceClient fenceClient) async {
+    await appPreferencesProvider.loadAsync(sharedPrefs);
     await userDataProvider.loadAsync();
     await SessionBootstrap.restore(
       userDataProvider: userDataProvider,
@@ -75,6 +76,14 @@ class _RootAppState extends State<RootApp> {
         return SessionRestoreResult(sessionId: tokens.sessionId);
       },
     );
+    if (userDataProvider.isBffSessionCheckPending) {
+      await userDataProvider.verifyLiveBffSession(
+        () async {
+          await fenceClient.readOneUser(UserId(), options: callOptions);
+        },
+        isDeadSession: SessionRecoveryBinding.instance.isUnauthenticated,
+      );
+    }
 
     return true;
   }
@@ -359,7 +368,10 @@ class _RootAppState extends State<RootApp> {
               future: (_future ??= _getScreenDataAsync(
                   context.read<AppPreferencesProvider>(),
                   context.read<UserDataProvider>(),
-                  context.read<SharedPreferences>())),
+                  context.read<SharedPreferences>(),
+                  context
+                      .read<FenceServiceClientProviderV2>()
+                      .fenceServiceClient)),
               builder: (context, snapshot) {
                 if (snapshot.hasData && snapshot.data!) {
                   return Consumer<AppPreferencesProvider>(

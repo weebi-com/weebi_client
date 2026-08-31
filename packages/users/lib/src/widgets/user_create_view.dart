@@ -1,5 +1,4 @@
 // Flutter imports:
-import 'package:auth_weebi/auth_weebi.dart' show JsonWebToken;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,11 +14,12 @@ import 'package:users_weebi/weebi_users.dart' show AccessTokenProvider;
 import 'package:entitlements_weebi/entitlements_weebi.dart';
 import '../l10n/user_ui_strings.dart';
 import '../providers/user_provider.dart';
+import '../require_firm_id.dart';
 import 'elegant_permissions_widget.dart';
 import 'phone_field_prefix_icon.dart';
 
-// user will need to sign up after this step
-// and will then be linked to boss' firm
+/// Admin creates a pending user already linked to the creator's firm
+/// ([UserPermissions.firmId] from the access token). The invitee then signs up.
 class UserCreateView extends StatefulWidget {
   const UserCreateView({
     super.key,
@@ -81,18 +81,26 @@ class _UserCreateViewState extends State<UserCreateView> {
   // Loading and error states
   bool _isCreating = false;
   String? _error;
+  bool _defaultsInitialized = false;
+  bool _userCreated = false;
 
   @override
   void initState() {
     super.initState();
-    _initializeDefaults();
+    // Country default only — firmId needs InheritedWidget (didChangeDependencies).
+    _countryCodePhone = CountryCode.fromDialCode('+221');
   }
 
-  void _initializeDefaults() {
-    // Set default country code to Sénégal
-    _countryCodePhone = CountryCode.fromDialCode('+221');
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_defaultsInitialized) return;
+    _defaultsInitialized = true;
+    _initializePermissionsFromToken();
+  }
 
-    // Initialize with minimal permissions (principle of least privilege)
+  void _initializePermissionsFromToken() {
+    // Minimal permissions (principle of least privilege); firmId from JWT.
     _userPermissions = UserPermissions.create()
       ..firmId = _getFirmIdFromToken()
       ..articleRights = ArticleRights(rights: [Right.read])
@@ -117,12 +125,11 @@ class _UserCreateViewState extends State<UserCreateView> {
     super.dispose();
   }
 
-  /// Extract firmId from bearer token via provider
+  /// Extract firmId from bearer token via provider (throws if missing/empty).
   String _getFirmIdFromToken() {
     try {
       final authProvider = context.read<AccessTokenProvider>();
-      final jwt = JsonWebToken.parse(authProvider.accessToken);
-      return jwt.permissions.firmId;
+      return requireFirmIdFromAccessToken(authProvider.accessToken);
     } catch (e) {
       throw Exception(UserUiStrings.couldNotExtractFirmId(e));
     }
@@ -141,6 +148,10 @@ class _UserCreateViewState extends State<UserCreateView> {
     try {
       _formKey.currentState!.save();
 
+      // Re-stamp firmId at save time in case the token was refreshed / widget
+      // permissions were edited without carrying identity.
+      _userPermissions.firmId = _getFirmIdFromToken();
+
       // Create the new user (backend will generate the user ID)
       final newUserRequest = UserPublic.create()
         ..firstname = _firstNameController.text.trim()
@@ -154,42 +165,15 @@ class _UserCreateViewState extends State<UserCreateView> {
         ..permissions = _userPermissions;
 
       final userProvider = context.read<UserProvider>();
-      final createdUser = await userProvider.createUser(newUserRequest);
+      final created = await userProvider.createUser(newUserRequest);
+      final createdUser = created.user;
 
-      // Show success message and offer to set up access
       if (mounted) {
-        // If callback is provided, show dialog to set up access
-        // Don't pop yet - let the dialog handle navigation
-        if (widget.onUserCreated != null) {
-          _showAccessSetupDialog(createdUser);
-        } else {
-          // No callback - show default success and pop immediately
-          Navigator.of(context).pop();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Row(
-                children: [
-                  const Icon(Icons.check, color: Colors.white, size: 20),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(UserUiStrings.userCreatedSuccess(
-                        createdUser.firstname, createdUser.lastname)),
-                  ),
-                ],
-              ),
-              backgroundColor: Colors.green[600],
-              behavior: SnackBarBehavior.floating,
-              duration: const Duration(seconds: 6),
-              action: SnackBarAction(
-                label: UserUiStrings.ok,
-                textColor: Colors.white,
-                onPressed: () {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                },
-              ),
-            ),
-          );
-        }
+        setState(() => _userCreated = true);
+        _showAccessSetupDialog(
+          createdUser,
+          temporaryPassword: created.temporaryPassword,
+        );
       }
     } on GrpcError catch (e) {
       final errorMsg = '${e.code} ${e.message}';
@@ -297,7 +281,7 @@ class _UserCreateViewState extends State<UserCreateView> {
   }
 
   Future<bool> _onWillPop() async {
-    // Check if form has been modified
+    if (_userCreated) return true;
     if (_firstNameController.text.isNotEmpty ||
         _lastNameController.text.isNotEmpty ||
         _emailController.text.isNotEmpty ||
@@ -327,7 +311,10 @@ class _UserCreateViewState extends State<UserCreateView> {
     );
   }
 
-  void _showAccessSetupDialog(UserPublic createdUser) {
+  void _showAccessSetupDialog(
+    UserPublic createdUser, {
+    required String temporaryPassword,
+  }) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -342,58 +329,136 @@ class _UserCreateViewState extends State<UserCreateView> {
               ),
             ],
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${createdUser.firstname} ${createdUser.lastname} a été créé.',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${createdUser.firstname} ${createdUser.lastname} a été créé.',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.orange[50],
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.orange[200]!),
+                const SizedBox(height: 16),
+                Text(
+                  UserUiStrings.loginEmailLabel,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[700],
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                child: Row(
-                  children: [
-                    Icon(Icons.warning_amber, color: Colors.orange[700]),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        EntitlementUiStrings.createUserPostCreateLicenseWarning,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.orange[900],
-                          height: 1.3,
+                const SizedBox(height: 4),
+                SelectableText(
+                  createdUser.mail,
+                  style: const TextStyle(fontSize: 15),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  UserUiStrings.tempPasswordLabel,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[700],
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.grey[300]!),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: SelectableText(
+                          temporaryPassword,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 1.2,
+                            fontFamily: 'monospace',
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                      IconButton(
+                        tooltip: UserUiStrings.copyPassword,
+                        icon: const Icon(Icons.copy),
+                        onPressed: () async {
+                          await Clipboard.setData(
+                            ClipboardData(text: temporaryPassword),
+                          );
+                          if (dialogContext.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(UserUiStrings.passwordCopied),
+                                behavior: SnackBarBehavior.floating,
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                EntitlementUiStrings.userCreatedSetUpAccessPrompt,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[700],
+                const SizedBox(height: 8),
+                Text(
+                  UserUiStrings.tempPasswordHint,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey[700],
+                    height: 1.3,
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.orange[50],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.orange[200]!),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.warning_amber, color: Colors.orange[700]),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          EntitlementUiStrings.createUserPostCreateLicenseWarning,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.orange[900],
+                            height: 1.3,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  EntitlementUiStrings.userCreatedSetUpAccessPrompt,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey[700],
+                  ),
+                ),
+              ],
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(dialogContext).pop(); // Close dialog
-                Navigator.of(context).pop(); // Pop UserCreateView
-                // Show reminder message
+                Navigator.of(dialogContext).pop();
+                Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: const Text(
@@ -409,12 +474,13 @@ class _UserCreateViewState extends State<UserCreateView> {
             ),
             ElevatedButton.icon(
               onPressed: () {
-                Navigator.of(dialogContext).pop(); // Close dialog
-                // Don't pop UserCreateView - let callback handle navigation
-                // Use post-frame callback to ensure dialog is fully closed
+                Navigator.of(dialogContext).pop();
                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (mounted) {
-                    widget.onUserCreated?.call(context, createdUser);
+                  if (!mounted) return;
+                  if (widget.onUserCreated != null) {
+                    widget.onUserCreated!(context, createdUser);
+                  } else {
+                    Navigator.of(context).pop();
                   }
                 });
               },
@@ -435,8 +501,15 @@ class _UserCreateViewState extends State<UserCreateView> {
   Widget build(BuildContext context) {
     final countryPicker = const FlCountryCodePicker();
 
-    Widget content = WillPopScope(
-      onWillPop: _onWillPop,
+    Widget content = PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) async {
+        if (didPop) return;
+        final shouldPop = await _onWillPop();
+        if (shouldPop && mounted) {
+          Navigator.of(context).pop();
+        }
+      },
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(

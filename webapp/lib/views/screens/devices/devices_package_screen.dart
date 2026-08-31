@@ -1,6 +1,6 @@
 import 'package:devices_weebi/devices_weebi.dart';
 import 'package:flutter/material.dart';
-import 'package:web_admin/app_router.dart';
+import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
 
 /// Devices view using devices_weebi package, embedded in the app's

@@ -6,6 +6,8 @@ class SignInResult {
   final String? accessToken;
   /// BFF session id when [success] is true in BFF mode.
   final String? sessionId;
+  /// Server hint that the user should change their password. Not a login blocker.
+  final bool mustChangePassword;
 
   SignInResult({
     required this.success,
@@ -13,5 +15,6 @@ class SignInResult {
     this.errorMessage,
     this.accessToken,
     this.sessionId,
+    this.mustChangePassword = false,
   });
 }

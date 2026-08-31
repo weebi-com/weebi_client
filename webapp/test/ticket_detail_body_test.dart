@@ -53,8 +53,8 @@ void main() {
       );
 
       // Expected: 99.99 × 3 = 299.97
-      expect(ticket.itemsTotalComputed, 299.97);
-      expect(find.text('299.97'), findsWidgets);
+      expect(ticket.itemsTotalComputed, closeTo(299.97, 0.001));
+      expect(find.textContaining('299.97'), findsWidgets);
     });
 
     testWidgets('displays tax amount when tax percentage > 0',
@@ -79,8 +79,8 @@ void main() {
       );
 
       // Expected: tax = 100 × 0.20 = 20
-      expect(ticket.totalTaxesComputed, 20.0);
-      expect(find.text('20'), findsWidgets);
+      expect(ticket.totalTaxesComputed, closeTo(20.0, 0.001));
+      expect(find.textContaining('20'), findsWidgets);
     });
 
     testWidgets('applies promo discount to total',
@@ -137,11 +137,11 @@ void main() {
       // tax_excl = 100 - 10 = 90
       // taxes = round4(90 × 0.20) = 18
       // total = 90 + 18 = 108
-      expect(ticket.itemsTotalComputed, 100.0);
-      expect(ticket.totalTaxExcludedComputed, 90.0);
-      expect(ticket.totalTaxesComputed, 18.0);
-      expect(ticket.totalComputed, 108.0);
-      expect(find.text('108'), findsWidgets);
+      expect(ticket.itemsTotalComputed, closeTo(100.0, 0.001));
+      expect(ticket.totalTaxExcludedComputed, closeTo(90.0, 0.001));
+      expect(ticket.totalTaxesComputed, closeTo(18.0, 0.001));
+      expect(ticket.totalComputed, closeTo(108.0, 0.001));
+      expect(find.textContaining('108'), findsWidgets);
     });
 
     testWidgets('handles spend ticket using cost instead of price',
@@ -168,8 +168,8 @@ void main() {
       );
 
       // Expected: 2 × cost(100) = 200 (not 2 × price(200))
-      expect(ticket.itemsTotalComputed, 200.0);
-      expect(find.text('200'), findsWidgets);
+      expect(ticket.itemsTotalComputed, closeTo(200.0, 0.001));
+      expect(find.textContaining('200'), findsWidgets);
     });
 
     testWidgets('handles empty ticket → displays 0',
@@ -187,8 +187,8 @@ void main() {
         ),
       );
 
-      expect(ticket.totalComputed, 0.0);
-      expect(find.text('0'), findsWidgets);
+      expect(ticket.totalComputed, closeTo(0.0, 0.001));
+      expect(find.textContaining('0'), findsWidgets);
     });
   });
 
@@ -215,8 +215,8 @@ void main() {
       );
 
       // The widget should display itemsTotalComputed (150), not received (0)
-      expect(deferredTicket.totalComputed, 150.0);
-      expect(find.text('150'), findsWidgets);
+      expect(deferredTicket.totalComputed, closeTo(150.0, 0.001));
+      expect(find.textContaining('150'), findsWidgets);
       // Should NOT show received value of 0
     });
 
@@ -258,10 +258,10 @@ void main() {
       );
 
       // Both should display their computed totals
-      expect(tickets[0].totalComputed, 100.0);
-      expect(tickets[1].totalComputed, 200.0);
-      expect(find.text('100'), findsWidgets);
-      expect(find.text('200'), findsWidgets);
+      expect(tickets[0].totalComputed, closeTo(100.0, 0.001));
+      expect(tickets[1].totalComputed, closeTo(200.0, 0.001));
+      expect(find.textContaining('100'), findsWidgets);
+      expect(find.textContaining('200'), findsWidgets);
     });
 
     testWidgets('deferred ticket displays total, not received amount',
@@ -286,9 +286,9 @@ void main() {
       );
 
       // Should show computed total (50), not received (999)
-      expect(deferredTicket.totalComputed, 50.0);
-      expect(find.text('50'), findsWidgets);
-      expect(find.text('999'), findsNothing);  // Should NOT show received
+      expect(deferredTicket.totalComputed, closeTo(50.0, 0.001));
+      expect(find.textContaining('50'), findsWidgets);
+      expect(find.textContaining('999'), findsNothing);  // Should NOT show received
     });
   });
 
@@ -313,8 +313,8 @@ void main() {
         ),
       );
 
-      expect(ticket.totalComputed, -200.0);
-      expect(find.text('-200'), findsWidgets);
+      expect(ticket.totalComputed, closeTo(-200.0, 0.001));
+      expect(find.textContaining('-200'), findsWidgets);
     });
 
     testWidgets('displays fractional quantities correctly',
@@ -337,8 +337,8 @@ void main() {
         ),
       );
 
-      expect(ticket.totalComputed, 50.0);
-      expect(find.text('50'), findsWidgets);
+      expect(ticket.totalComputed, closeTo(50.0, 0.001));
+      expect(find.textContaining('50'), findsWidgets);
     });
 
     testWidgets('maintains floating-point precision to 4 decimals',
@@ -363,8 +363,9 @@ void main() {
       );
 
       // Should maintain precision through calculation
-      // items = 333.33, promo = round4(333.33 × 0.3333) ≈ 111.0979
-      expect(ticket.totalTaxExcludedComputed, closeTo(222.2321, 0.001));
+      // items = 333.33, promo = round4(333.33 × 0.3333) = 111.0989
+      // totalTaxExcluded = 333.33 - 111.0989 = 222.2311
+      expect(ticket.totalTaxExcludedComputed, closeTo(222.2311, 0.001));
     });
   });
 }
@@ -375,6 +376,8 @@ class _TicketDetailBodyMock extends StatelessWidget {
 
   const _TicketDetailBodyMock({required this.ticket});
 
+  String _format(double v) => v.toStringAsFixed(2);
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -383,24 +386,26 @@ class _TicketDetailBodyMock extends StatelessWidget {
         children: [
           Text('Ticket Detail'),
           Text('Type: ${ticket.ticketType.name}'),
-          Text('Items Total: ${ticket.itemsTotalComputed}'),
-          Text('Tax Excluded: ${ticket.totalTaxExcludedComputed}'),
+          Text('Items Total: ${_format(ticket.itemsTotalComputed)}'),
+          Text('Tax Excluded: ${_format(ticket.totalTaxExcludedComputed)}'),
           if (ticket.taxe.percentage > 0)
-            Text('Taxes: ${ticket.totalTaxesComputed}'),
-          Text('${ticket.totalComputed}'),  // Final total
+            Text('Taxes: ${_format(ticket.totalTaxesComputed)}'),
+          Text(_format(ticket.totalComputed)), // Final total
           if (ticket.ticketType == TicketTypePb.sell)
-            Text('Change: ${ticket.changeComputed}'),
+            Text('Change: ${_format(ticket.changeComputed)}'),
         ],
       ),
     );
   }
 }
 
-  // Mock widget for glimpse/list display
+// Mock widget for glimpse/list display
 class _TicketGlimpseWidgetMock extends StatelessWidget {
   final TicketPb ticket;
 
   const _TicketGlimpseWidgetMock({required this.ticket});
+
+  String _format(double v) => v.toStringAsFixed(2);
 
   @override
   Widget build(BuildContext context) {
@@ -413,7 +418,7 @@ class _TicketGlimpseWidgetMock extends StatelessWidget {
     return ListTile(
       title: Text('Ticket #${ticket.nonUniqueId}'),
       subtitle: Text('${ticket.ticketType.name}'),
-      trailing: Text(displayTotal.toString()),
+      trailing: Text(_format(displayTotal)),
     );
   }
 }

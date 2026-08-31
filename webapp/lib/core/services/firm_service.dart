@@ -23,9 +23,7 @@ class FirmService {
       if (!Config.isBffMode && (token == null || token.isEmpty)) {
         throw const GrpcError.unauthenticated('Missing access token');
       }
-      final options = Config.isBffMode
-          ? securedCallOptions
-          : CallOptions(metadata: {'authorization': token!});
+      final options = authenticatedCallOptions(token);
 
       final req = CreateFirmRequest(name: name);
       if (defaultCurrency != null &&
@@ -56,9 +54,7 @@ class FirmService {
       if (!Config.isBffMode && (token == null || token.isEmpty)) {
         throw const GrpcError.unauthenticated('Missing access token');
       }
-      final options = Config.isBffMode
-          ? securedCallOptions
-          : CallOptions(metadata: {'authorization': token!});
+      final options = authenticatedCallOptions(token);
 
       final response = await stub.readOneFirm(Empty(), options: options);
 

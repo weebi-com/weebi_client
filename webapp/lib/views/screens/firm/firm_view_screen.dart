@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:protos_weebi/grpc.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
-import 'package:web_admin/app_router.dart';
+import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/core/services/firm_service.dart';
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/views/screens/firm/firm_overview_body.dart';

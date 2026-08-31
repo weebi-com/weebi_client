@@ -43,6 +43,7 @@ class SessionBootstrap {
       await userDataProvider.setUserDataAsync(
         bffSessionId: restored.sessionId,
         stayConnected: true,
+        bffSessionLive: true,
       );
     } catch (_) {
       await userDataProvider.clearSessionDataAsync();

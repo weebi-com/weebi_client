@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:protos_weebi/protos_weebi_io.dart'
     show TicketPb, FindTicketRequest;
-import 'package:web_admin/app_router.dart';
+import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/providers/server.dart';
 import 'package:web_admin/providers/tickets_boutique_cache.dart';
 import 'package:web_admin/core/money/money_formatting.dart';

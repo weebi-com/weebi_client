@@ -1,5 +1,10 @@
 # changelog 
 
+## 1.1.2
+
+- bump packages
+- fix user creation to guard against empty firmId
+
 ## 1.1.1
 
 - fix boolRights update

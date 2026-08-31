@@ -7,6 +7,7 @@ import 'package:entitlements_weebi/entitlements_weebi.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../l10n/access_ui_strings.dart';
+import '../permissions_access_merge.dart';
 import 'change_password_dialog.dart';
 
 /// Widget for managing a specific user's access to boutiques and chains
@@ -20,12 +21,16 @@ class UserAccessWidget extends StatefulWidget {
   /// When set (e.g. from [readLicenses]), shows seat status for this user.
   final Iterable<License>? firmLicenses;
 
+  /// Called after a successful save instead of [Navigator.pop].
+  final VoidCallback? onSaved;
+
   const UserAccessWidget({
     super.key,
     required this.user,
     this.currentUserId,
     this.showOperationalLicenseNotice = true,
     this.firmLicenses,
+    this.onSaved,
   });
 
   @override
@@ -546,27 +551,24 @@ class _UserAccessWidgetState extends State<UserAccessWidget> {
     });
 
     try {
+      // Refuse to save if we never loaded existing permissions — merging onto
+      // empty would wipe firmId and rights.
+      if (_userPermissions == null) {
+        setState(() {
+          _error = AccessUiStrings.failedSavePermissions;
+          _isSaving = false;
+        });
+        return;
+      }
+
       final accessProvider = context.read<AccessProvider>();
 
-      // Create new UserPermissions based on selections
-      final newPermissions = UserPermissions.create();
-      newPermissions.userId = widget.user.userId;
-
-      if (_hasFullAccess) {
-        // Set full access
-        final fullAccess = AccessFull.create();
-        fullAccess.hasFullAccess = true;
-        newPermissions.fullAccess = fullAccess;
-      } else {
-        // Set limited access
-        final limitedAccess = AccessLimited.create();
-        limitedAccess.chainIds = ChainIds.create();
-        limitedAccess.chainIds.ids.addAll(_selectedChainIds);
-        limitedAccess.boutiqueIds = BoutiqueIds.create();
-        limitedAccess.boutiqueIds.ids.addAll(_selectedBoutiqueIds);
-
-        newPermissions.limitedAccess = limitedAccess;
-      }
+      final newPermissions = applyAccessSelection(
+        existing: _userPermissions!,
+        hasFullAccess: _hasFullAccess,
+        chainIds: _selectedChainIds,
+        boutiqueIds: _selectedBoutiqueIds,
+      );
 
       final success = await accessProvider.updateUserPermissions(
           widget.user.userId, newPermissions);
@@ -580,7 +582,11 @@ class _UserAccessWidgetState extends State<UserAccessWidget> {
               backgroundColor: Colors.green,
             ),
           );
-          Navigator.of(context).pop();
+          if (widget.onSaved != null) {
+            widget.onSaved!();
+          } else {
+            Navigator.of(context).pop();
+          }
         }
       } else {
         setState(() {

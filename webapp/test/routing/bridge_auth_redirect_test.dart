@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:web_admin/app_router.dart';
+import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/core/routing/bridge_auth_redirect.dart';
 
 void main() {
@@ -43,6 +43,8 @@ void main() {
         resolveAuthRedirect(
           matchedLocation: RouteUri.home,
           isLoggedIn: false,
+          hasFirm: false,
+          isServiceAccount: false,
           documentQuery: {
             't': 'abc',
             'product': 'syscohada',
@@ -61,6 +63,8 @@ void main() {
         resolveAuthRedirect(
           matchedLocation: RouteUri.dashboard,
           isLoggedIn: false,
+          hasFirm: false,
+          isServiceAccount: false,
           documentQuery: {'t': 'abc', 'product': 'premium'},
           unrestrictedRoutes: unrestricted,
           publicRoutes: public,
@@ -74,6 +78,8 @@ void main() {
         resolveAuthRedirect(
           matchedLocation: RouteUri.login,
           isLoggedIn: false,
+          hasFirm: false,
+          isServiceAccount: false,
           documentQuery: {'t': 'abc', 'product': 'premium'},
           unrestrictedRoutes: unrestricted,
           publicRoutes: public,
@@ -87,6 +93,24 @@ void main() {
         resolveAuthRedirect(
           matchedLocation: RouteUri.bridge,
           isLoggedIn: false,
+          hasFirm: false,
+          isServiceAccount: false,
+          documentQuery: {},
+          unrestrictedRoutes: unrestricted,
+          publicRoutes: public,
+        ),
+        isNull,
+      );
+    });
+
+    test('protected /billing stays put while BFF session check is pending', () {
+      expect(
+        resolveAuthRedirect(
+          matchedLocation: RouteUri.billing,
+          isLoggedIn: false,
+          hasFirm: false,
+          isServiceAccount: false,
+          isAuthCheckPending: true,
           documentQuery: {},
           unrestrictedRoutes: unrestricted,
           publicRoutes: public,
@@ -100,6 +124,8 @@ void main() {
         resolveAuthRedirect(
           matchedLocation: RouteUri.billing,
           isLoggedIn: false,
+          hasFirm: false,
+          isServiceAccount: false,
           documentQuery: {},
           unrestrictedRoutes: unrestricted,
           publicRoutes: public,
@@ -108,11 +134,45 @@ void main() {
       );
     });
 
-    test('protected /billing allowed when logged in', () {
+    test('protected /billing allowed when logged in and has firm', () {
       expect(
         resolveAuthRedirect(
           matchedLocation: RouteUri.billing,
           isLoggedIn: true,
+          hasFirm: true,
+          isServiceAccount: false,
+          documentQuery: {},
+          unrestrictedRoutes: unrestricted,
+          publicRoutes: public,
+        ),
+        isNull,
+      );
+    });
+
+    test('protected /billing funnels to /create-firm when boss has no firm',
+        () {
+      expect(
+        resolveAuthRedirect(
+          matchedLocation: RouteUri.billing,
+          isLoggedIn: true,
+          hasFirm: false,
+          isServiceAccount: false,
+          canCreateFirm: true,
+          documentQuery: {},
+          unrestrictedRoutes: unrestricted,
+          publicRoutes: public,
+        ),
+        RouteUri.createFirm,
+      );
+    });
+
+    test('service account allowed without firm', () {
+      expect(
+        resolveAuthRedirect(
+          matchedLocation: RouteUri.billing,
+          isLoggedIn: true,
+          hasFirm: false,
+          isServiceAccount: true,
           documentQuery: {},
           unrestrictedRoutes: unrestricted,
           publicRoutes: public,
@@ -126,6 +186,8 @@ void main() {
         resolveAuthRedirect(
           matchedLocation: RouteUri.home,
           isLoggedIn: false,
+          hasFirm: false,
+          isServiceAccount: false,
           documentQuery: {'product': 'premium'},
           unrestrictedRoutes: unrestricted,
           publicRoutes: public,

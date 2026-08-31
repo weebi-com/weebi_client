@@ -5,7 +5,8 @@ import 'package:web_admin/core/constants/values.dart';
 ///
 /// Auth itself relies on the HttpOnly session cookie set by Envoy
 /// (`withCredentials: true`). [sessionId] is also sent as `x-session-id`
-/// when third-party cookies are blocked (Envoy must CORS-allowlist it).
+/// when third-party cookies are blocked (Envoy must CORS-allowlist it) —
+/// including after Stripe/PawaPay redirects.
 ///
 /// When [persist] is false (Stay connected off), the id lives in memory
 /// for this tab only and is not written to localStorage.

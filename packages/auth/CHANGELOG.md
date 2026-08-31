@@ -1,5 +1,9 @@
 # changelog
 
+## 1.0.9 - august 2026
+
+- guard firmId
+
 ## 1.0.8 - may 2026
 
 - fix upsert on FlutterSecureStorage

@@ -1,5 +1,9 @@
 # changelog
 
+## 1.1.1
+
+- guard firmId
+
 ## 1.1.0
 
 - android secure storage false

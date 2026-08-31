@@ -4,7 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:web_admin/app_router.dart';
+import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/providers/user_data_provider.dart';
 import 'package:web_admin/utils/app_dialogs.dart';
@@ -71,6 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 stayConnected: true,
                 userProfileImageUrl:
                     'https://www.weebi.com/images/Weebi_Logo_Full.png',
+                bffSessionLive: true,
               );
           if (!mounted) return;
           onSuccess.call('Your account has been successfully created');

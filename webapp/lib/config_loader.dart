@@ -22,6 +22,7 @@ Future<void> loadConfig() async {
         apiUrl: (map['API_URL'] as String?) ?? '',
         locale: (map['LOCALE'] as String?) ?? 'fr',
         isBffMode: map['IS_BFF_MODE'] == true || map['IS_BFF_MODE'] == 'true',
+        isDev: map['IS_DEV'] == true || map['IS_DEV'] == 'true',
       );
       return;
     }

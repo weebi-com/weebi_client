@@ -8,14 +8,15 @@ import 'package:grpc/grpc.dart' hide ConnectionState;
 import 'package:provider/provider.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
 import 'package:auth_weebi/src/extensions/user_permissions_extensions.dart';
-import 'package:web_admin/app_router.dart';
+import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/core/billing/billing_url_utils.dart';
 import 'package:web_admin/core/web/web_platform.dart' as web;
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/providers/server.dart';
 import 'package:web_admin/views/widgets/card_elements.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
-import 'package:web_admin/core/services/user_service.dart';
+import 'package:users_weebi/users_weebi.dart' show FenceServiceClientProviderV2;
+import 'package:boutiques_weebi/boutiques_weebi.dart' show BoutiqueProvider;
 import 'package:web_admin/legal/enterprise_terms_version.dart';
 import 'package:web_admin/environment.dart';
 import 'package:web_admin/providers/current_user_provider.dart';
@@ -199,6 +200,8 @@ class _BillingScreenState extends State<BillingScreen>
     if (!mounted) return;
     if (!_hasReadBillingPermission(context)) return;
     final provider = context.read<BillingServiceClientProvider>();
+    final fenceClient =
+        context.read<FenceServiceClientProviderV2>().fenceServiceClient;
     if (!silent || !_dataLoaded) {
       setState(() {
         _loading = true;
@@ -236,10 +239,19 @@ class _BillingScreenState extends State<BillingScreen>
         // Older servers may not expose this RPC yet.
       }
 
+      try {
+        final boutiqueProvider = context.read<BoutiqueProvider>();
+        if (boutiqueProvider.chains.isEmpty) {
+          await boutiqueProvider.loadChains();
+        }
+      } catch (_) {
+        // Price label falls back to XOF if chains cannot be loaded.
+      }
+
       Map<String, UserPublic>? usersById;
       if (licenses.isNotEmpty) {
         try {
-          final usersResponse = await UserService().readAllUsers();
+          final usersResponse = await fenceClient.readAllUsers(Empty());
           usersById = {for (final u in usersResponse.users) u.userId: u};
         } catch (_) {
           // Keep usersById null; cards will show userId only
@@ -583,6 +595,8 @@ class _BillingScreenState extends State<BillingScreen>
       builder: (ctx) => _AssignSeatDialog(
         license: license,
         allAttributedUserIds: allAttributedUserIds,
+        fenceClient:
+            context.read<FenceServiceClientProviderV2>().fenceServiceClient,
         onAssigned: () {
           Navigator.of(ctx).pop();
           _loadData();
@@ -615,6 +629,8 @@ class _BillingScreenState extends State<BillingScreen>
         license: license,
         allAttributedUserIds: allAttributedUserIds,
         replaceSeatUserId: previousUserId,
+        fenceClient:
+            context.read<FenceServiceClientProviderV2>().fenceServiceClient,
         onAssigned: () {
           Navigator.of(ctx).pop();
           _loadData();
@@ -628,6 +644,9 @@ class _BillingScreenState extends State<BillingScreen>
     required Lang lang,
     required bool canPurchase,
   }) {
+    final pawapayCurrency = pawapayOfferCurrencyFromChains(
+      context.watch<BoutiqueProvider>().chains,
+    );
     return ListView(
       padding: const EdgeInsets.all(kDefaultPadding),
       children: [
@@ -645,6 +664,7 @@ class _BillingScreenState extends State<BillingScreen>
           onViewTerms: _openSyscohadaTermsInNewTab,
           highlighted: _bridgeHighlightProductId == kSyscohadaProductId,
           showPurchasedYearsSummary: false,
+          pawapayCurrency: pawapayCurrency,
         ),
         if (_products.isNotEmpty) ...[
           const SizedBox(height: kDefaultPadding * 2),
@@ -663,6 +683,7 @@ class _BillingScreenState extends State<BillingScreen>
                       onViewTerms: _openLegalDocumentInNewTab,
                       highlighted:
                           _bridgeHighlightProductId == p.productId.toLowerCase(),
+                      pawapayCurrency: pawapayCurrency,
                     ))
                 .toList(),
           ),
@@ -1011,6 +1032,7 @@ class _SyscohadaAddonCard extends StatelessWidget {
     required this.onViewTerms,
     this.highlighted = false,
     this.showPurchasedYearsSummary = true,
+    this.pawapayCurrency = 'XOF',
   });
 
   final BillingProduct? product;
@@ -1025,6 +1047,7 @@ class _SyscohadaAddonCard extends StatelessWidget {
   final ValueChanged<bool?> onAcceptedChanged;
   final VoidCallback onViewTerms;
   final bool showPurchasedYearsSummary;
+  final String pawapayCurrency;
 
   @override
   Widget build(BuildContext context) {
@@ -1040,6 +1063,8 @@ class _SyscohadaAddonCard extends StatelessWidget {
             amountCents: product!.amountCents,
             currency: product!.currency,
             productId: product!.productId,
+            languageCode: Localizations.localeOf(context).languageCode,
+            pawapayCurrency: pawapayCurrency,
           );
 
     return Container(
@@ -1209,6 +1234,7 @@ class _ProductOfferCard extends StatelessWidget {
   final bool accepted;
   final ValueChanged<bool?> onAcceptedChanged;
   final VoidCallback onViewTerms;
+  final String pawapayCurrency;
 
   const _ProductOfferCard({
     required this.product,
@@ -1219,6 +1245,7 @@ class _ProductOfferCard extends StatelessWidget {
     required this.onAcceptedChanged,
     required this.onViewTerms,
     this.highlighted = false,
+    this.pawapayCurrency = 'XOF',
   });
 
   @override
@@ -1229,6 +1256,8 @@ class _ProductOfferCard extends StatelessWidget {
       amountCents: product.amountCents,
       currency: product.currency,
       productId: product.productId,
+      languageCode: Localizations.localeOf(context).languageCode,
+      pawapayCurrency: pawapayCurrency,
     );
     final planName = billingPlanLabel(lang, productId: product.productId);
     final style = BillingPlanVisual.fromProductId(product.productId);
@@ -1581,11 +1610,14 @@ class _AssignSeatDialog extends StatefulWidget {
   final Set<String> allAttributedUserIds;
   /// If non-empty, reassign this seat ([LicenseSeat.userId]) instead of adding a seat.
   final String? replaceSeatUserId;
+  /// Authenticated fence client (BFF session / JWT interceptors).
+  final FenceServiceClient fenceClient;
   final VoidCallback onAssigned;
 
   const _AssignSeatDialog({
     required this.license,
     required this.allAttributedUserIds,
+    required this.fenceClient,
     this.replaceSeatUserId,
     required this.onAssigned,
   });
@@ -1597,6 +1629,13 @@ class _AssignSeatDialog extends StatefulWidget {
 class _AssignSeatDialogState extends State<_AssignSeatDialog> {
   bool _assigning = false;
   String? _error;
+  late final Future<UsersPublic> _usersFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _usersFuture = widget.fenceClient.readAllUsers(Empty());
+  }
 
   Future<void> _assignSeatToUser(UserPublic user) async {
     if (!mounted) return;
@@ -1673,7 +1712,7 @@ class _AssignSeatDialogState extends State<_AssignSeatDialog> {
       content: SizedBox(
         width: double.maxFinite,
         child: FutureBuilder<UsersPublic>(
-          future: UserService().readAllUsers(),
+          future: _usersFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Padding(

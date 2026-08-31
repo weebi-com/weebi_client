@@ -50,7 +50,7 @@ class ProtoMessagesTable extends StatelessWidget {
           ? descriptor.byName.values
               .map((field) => DataColumn(label: Text(field.name)))
               .toList()
-          : [],
+          : [const DataColumn(label: Text('No data'))],
       source: dataSource,
       rowsPerPage: PaginatedDataTable.defaultRowsPerPage,
     );

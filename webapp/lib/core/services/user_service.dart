@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:protos_weebi/data_dummy.dart';
-import 'package:protos_weebi/grpc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_admin/environment.dart';
 import 'package:web_admin/grpc/server.dart';
@@ -27,14 +26,14 @@ class UserService {
       final token = prefs.getString(SharePrefKeys.accessToken);
       if (Config.isBffMode || (token != null && token.isNotEmpty)) {
         final currentUser = Config.isBffMode
-            ? (await stub.readOneUser(UserId(), options: callOptions)).user
+            ? (await stub.readOneUser(UserId(),
+                    options: authenticatedCallOptions(token)))
+                .user
             : null;
         final permissions = Config.isBffMode
             ? currentUser!.permissions
             : JsonWebToken.parse(token!).permissions;
-        final options = Config.isBffMode
-            ? callOptions
-            : CallOptions(metadata: {'authorization': token!});
+        final options = authenticatedCallOptions(token);
 
         int country = int.parse(countryCode);
 
@@ -83,9 +82,7 @@ class UserService {
       final token = prefs.getString(SharePrefKeys.accessToken);
       if (!Config.isBffMode && (token == null || token.isEmpty)) return null;
 
-      final options = Config.isBffMode
-          ? callOptions
-          : CallOptions(metadata: {'authorization': token!});
+      final options = authenticatedCallOptions(token);
       final response = await stub.readOneUser(
         UserId()..userId = userId,
         options: options,
@@ -104,9 +101,7 @@ class UserService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString(SharePrefKeys.accessToken);
-      final options = Config.isBffMode
-          ? callOptions
-          : CallOptions(metadata: {'authorization': token ?? ''});
+      final options = authenticatedCallOptions(token);
 
       final response = await stub.readAllUsers(options: options, Empty());
 
@@ -125,9 +120,7 @@ class UserService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString(SharePrefKeys.accessToken);
-      final options = Config.isBffMode
-          ? callOptions
-          : CallOptions(metadata: {'authorization': token ?? ''});
+      final options = authenticatedCallOptions(token);
 
       final response =
           await stub.deleteOneUser(UserId(userId: userId), options: options);

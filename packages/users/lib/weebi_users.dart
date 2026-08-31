@@ -27,6 +27,7 @@ export 'src/routes/user_routes.dart';
 // Fence client providers
 export 'src/fence_client_provider.dart';
 export 'src/dynamic_permissions_analyzer.dart';
+export 'src/require_firm_id.dart';
 export 'dynamic_body.dart';
 
 // Re-export auth_weebi for convenience

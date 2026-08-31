@@ -184,7 +184,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "par année fiscale",
     ),
     "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage(
-      "1 900 XOF / 2.90 EUR",
+      "1 900 CFA / 2.90 EUR",
     ),
     "billingSyscohadaPurchase": MessageLookupByLibrary.simpleMessage(
       "Payer cette année",
