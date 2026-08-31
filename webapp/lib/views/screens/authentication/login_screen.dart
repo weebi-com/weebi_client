@@ -185,12 +185,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     AutofillGroup(
                       child: FormBuilder(
-                      key: _formKey,
-                      autovalidateMode: AutovalidateMode.disabled,
-                      initialValue: {
-                        'mail': _rememberedMail,
-                        'stayConnected': _stayConnectedInitial,
-                      },
+                        key: _formKey,
+                        autovalidateMode: AutovalidateMode.disabled,
+                        initialValue: {
+                          'mail': _rememberedMail,
+                          'stayConnected': _stayConnectedInitial,
+                        },
                       child: Column(
                         children: [
                           Padding(
@@ -344,7 +344,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ],
                       ),
-                    ),
+                      ),
                     ),
                   ],
                 ),
