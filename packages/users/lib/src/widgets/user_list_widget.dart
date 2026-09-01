@@ -10,8 +10,12 @@ class UserListWidget extends StatefulWidget {
   /// Current user ID to exclude from the list (prevents self-permission editing)
   final String currentUserId;
 
-  /// When set (e.g. [GoRouter.push]), used for the FAB instead of
-  /// [Navigator.pushNamed]('/users/create'), which requires [MaterialApp.routes].
+  /// Optional callback when a user is created from the FAB / empty-state
+  /// create flow (used when [onCreateUser] is null).
+  final void Function(BuildContext, UserPublic)? onUserCreated;
+
+  /// When set (e.g. a fully custom create screen), used for the FAB instead of
+  /// pushing [UserCreateView] on the nearest [Navigator].
   final VoidCallback? onCreateUser;
 
   /// Optional firm licenses (e.g. from billing) to show seat status on user detail.
@@ -22,6 +26,7 @@ class UserListWidget extends StatefulWidget {
     required this.currentUserId,
     this.onPermissionsChanged,
     this.onCreateUser,
+    this.onUserCreated,
     this.firmLicenses,
   });
 
@@ -161,7 +166,7 @@ class _UserListWidgetState extends State<UserListWidget> {
                 const Text(UserUiStrings.noUsersFound),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: () => _showUserForm(context),
+                  onPressed: () => _openCreateUser(context),
                   child: const Text(UserUiStrings.addUser),
                 ),
               ],
@@ -340,14 +345,7 @@ class _UserListWidgetState extends State<UserListWidget> {
                               MediaQuery.of(context).padding.bottom + 16,
                           right: MediaQuery.of(context).padding.right + 16,
                           child: FloatingActionButton(
-                            onPressed: () {
-                              if (widget.onCreateUser != null) {
-                                widget.onCreateUser!();
-                              } else {
-                                Navigator.of(context)
-                                    .pushNamed('/users/create');
-                              }
-                            },
+                            onPressed: () => _openCreateUser(context),
                             child: const Icon(Icons.person_add),
                           ),
                         ),
@@ -367,6 +365,18 @@ class _UserListWidgetState extends State<UserListWidget> {
     ];
     final index = user.userId.hashCode % colors.length;
     return colors[index];
+  }
+
+  void _openCreateUser(BuildContext context) {
+    if (widget.onCreateUser != null) {
+      widget.onCreateUser!();
+      return;
+    }
+    UserRoutes.navigateToCreateUser(
+      context,
+      firmLicenses: widget.firmLicenses,
+      onUserCreated: widget.onUserCreated,
+    );
   }
 
   Future<void> _showUserForm(BuildContext context, [UserPublic? user]) async {

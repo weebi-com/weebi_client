@@ -8,7 +8,8 @@ import 'package:protos_weebi/grpc.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
 import 'package:protos_weebi/utils.dart' show RegExpWeebi;
 import 'package:provider/provider.dart';
-import 'package:users_weebi/weebi_users.dart' show AccessTokenProvider;
+import 'package:auth_weebi/auth_weebi.dart'
+    show AccessTokenProvider, PermissionProvider;
 
 // Project imports:
 import 'package:entitlements_weebi/entitlements_weebi.dart';
@@ -100,9 +101,11 @@ class _UserCreateViewState extends State<UserCreateView> {
   }
 
   void _initializePermissionsFromToken() {
-    // Minimal permissions (principle of least privilege); firmId from JWT.
+    // Minimal permissions (principle of least privilege). Never throw here —
+    // a missing firmId must not blank the form.
+    final firmId = _resolveFirmId() ?? '';
     _userPermissions = UserPermissions.create()
-      ..firmId = _getFirmIdFromToken()
+      ..firmId = firmId
       ..articleRights = ArticleRights(rights: [Right.read])
       ..contactRights = ContactRights(rights: [Right.read])
       ..ticketRights = TicketRights(rights: [Right.read])
@@ -112,7 +115,10 @@ class _UserCreateViewState extends State<UserCreateView> {
       ..userManagementRights = UserManagementRights.create()
       ..billingRights = BillingRights.create()
       ..boolRights = BoolRights.create()
-      ..limitedAccess = (AccessLimited.create());
+      ..limitedAccess = AccessLimited.create();
+    if (firmId.isEmpty) {
+      _error = UserUiStrings.createUserMissingFirmId;
+    }
   }
 
   @override
@@ -125,13 +131,19 @@ class _UserCreateViewState extends State<UserCreateView> {
     super.dispose();
   }
 
-  /// Extract firmId from bearer token via provider (throws if missing/empty).
-  String _getFirmIdFromToken() {
+  /// Firm id from [PermissionProvider] (BFF session) then JWT.
+  /// Returns null instead of throwing so the form can still render.
+  String? _resolveFirmId() {
     try {
-      final authProvider = context.read<AccessTokenProvider>();
-      return requireFirmIdFromAccessToken(authProvider.accessToken);
-    } catch (e) {
-      throw Exception(UserUiStrings.couldNotExtractFirmId(e));
+      final firmId = context.read<PermissionProvider>().firmId;
+      if (firmId.isNotEmpty) return firmId;
+    } catch (_) {}
+    try {
+      return requireFirmIdFromAccessToken(
+        context.read<AccessTokenProvider>().accessToken,
+      );
+    } catch (_) {
+      return null;
     }
   }
 
@@ -150,7 +162,12 @@ class _UserCreateViewState extends State<UserCreateView> {
 
       // Re-stamp firmId at save time in case the token was refreshed / widget
       // permissions were edited without carrying identity.
-      _userPermissions.firmId = _getFirmIdFromToken();
+      final firmId = _resolveFirmId();
+      if (firmId == null || firmId.isEmpty) {
+        setState(() => _error = UserUiStrings.createUserMissingFirmId);
+        return;
+      }
+      _userPermissions.firmId = firmId;
 
       // Create the new user (backend will generate the user ID)
       final newUserRequest = UserPublic.create()
@@ -681,6 +698,7 @@ class _UserCreateViewState extends State<UserCreateView> {
                     // Permission Editor
                     ElegantPermissionsWidget(
                   permissions: _userPermissions,
+                  shrinkWrap: true,
                   onPermissionsChanged: (updatedPermissions) {
                     setState(() {
                       _userPermissions = updatedPermissions;
