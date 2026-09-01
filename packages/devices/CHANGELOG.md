@@ -1,5 +1,9 @@
 # changelog 
 
+## 1.1.0 - september 2026
+
+- bump auth_weebi and boutiques_weebi
+
 ## 1.0.9 - august 2026
 
 - bump auth_weebi and boutiques_weebi

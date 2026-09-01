@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_admin/core/constants/values.dart';
 import 'package:web_admin/core/session/bff_session_store.dart';
 import 'package:web_admin/core/session/session_bootstrap.dart';
+import 'package:web_admin/environment.dart';
 import 'package:web_admin/providers/user_data_provider.dart';
 
 void main() {
@@ -10,6 +11,7 @@ void main() {
 
   setUp(() async {
     SharedPreferences.setMockInitialValues({});
+    Config.init(apiUrl: 'http://localhost', locale: 'fr', isBffMode: true);
     await BffSessionStore.clear();
   });
 
@@ -33,6 +35,12 @@ void main() {
       expect(await BffSessionStore.getSessionId(), 'mem-only');
       final prefs = await SharedPreferences.getInstance();
       expect(prefs.getString(SharePrefKeys.bffSessionId), isNull);
+    });
+
+    test('forgetMemory reloads id from prefs (tab-close analogue)', () async {
+      await BffSessionStore.setSessionId('persisted-sid');
+      BffSessionStore.forgetMemory();
+      expect(await BffSessionStore.getSessionId(), 'persisted-sid');
     });
   });
 
@@ -117,7 +125,33 @@ void main() {
       expect(await BffSessionStore.getSessionId(), 'new-sid');
     });
 
-    test('restore failure keeps mail and logs out', () async {
+    test('refresh failure with live probe keeps session and logs in', () async {
+      SharedPreferences.setMockInitialValues({
+        SharePrefKeys.mail: 'a@b.com',
+        SharePrefKeys.stayConnected: true,
+        SharePrefKeys.bffSessionId: 'old-sid',
+      });
+      var probed = false;
+      final provider = UserDataProvider();
+      await provider.loadAsync();
+      expect(provider.isUserLoggedIn(), isFalse);
+      expect(provider.isBffSessionCheckPending, isTrue);
+
+      await SessionBootstrap.restore(
+        userDataProvider: provider,
+        refreshSession: () async => throw Exception('refresh rpc failed'),
+        probeLiveSession: () async {
+          probed = true;
+        },
+      );
+
+      expect(probed, isTrue);
+      expect(provider.mail, 'a@b.com');
+      expect(provider.isUserLoggedIn(), isTrue);
+      expect(await BffSessionStore.getSessionId(), 'old-sid');
+    });
+
+    test('refresh failure with dead probe logs out but keeps mail', () async {
       SharedPreferences.setMockInitialValues({
         SharePrefKeys.mail: 'a@b.com',
         SharePrefKeys.stayConnected: true,
@@ -128,12 +162,57 @@ void main() {
 
       await SessionBootstrap.restore(
         userDataProvider: provider,
-        refreshSession: () async => throw Exception('expired'),
+        refreshSession: () async => throw Exception('refresh rpc failed'),
+        probeLiveSession: () async => throw Exception('unauthenticated'),
+        isDeadSession: (_) => true,
       );
 
       expect(provider.mail, 'a@b.com');
       expect(provider.isUserLoggedIn(), isFalse);
       expect(await BffSessionStore.getSessionId(), isNull);
+    });
+
+    test('refresh failure without probe does not wipe stored session', () async {
+      SharedPreferences.setMockInitialValues({
+        SharePrefKeys.mail: 'a@b.com',
+        SharePrefKeys.stayConnected: true,
+        SharePrefKeys.bffSessionId: 'old-sid',
+      });
+      final provider = UserDataProvider();
+      await provider.loadAsync();
+
+      await SessionBootstrap.restore(
+        userDataProvider: provider,
+        refreshSession: () async => throw Exception('refresh rpc failed'),
+      );
+
+      expect(provider.mail, 'a@b.com');
+      expect(provider.isUserLoggedIn(), isFalse);
+      expect(provider.isBffSessionCheckPending, isTrue);
+      expect(await BffSessionStore.getSessionId(), 'old-sid');
+    });
+
+    test('empty refresh sessionId falls through to live probe', () async {
+      SharedPreferences.setMockInitialValues({
+        SharePrefKeys.mail: 'a@b.com',
+        SharePrefKeys.stayConnected: true,
+        SharePrefKeys.bffSessionId: 'old-sid',
+      });
+      var probed = false;
+      final provider = UserDataProvider();
+      await provider.loadAsync();
+
+      await SessionBootstrap.restore(
+        userDataProvider: provider,
+        refreshSession: () async => const SessionRestoreResult(sessionId: ''),
+        probeLiveSession: () async {
+          probed = true;
+        },
+      );
+
+      expect(probed, isTrue);
+      expect(provider.isUserLoggedIn(), isTrue);
+      expect(await BffSessionStore.getSessionId(), 'old-sid');
     });
 
     test('stayConnected true without session id skips restore', () async {

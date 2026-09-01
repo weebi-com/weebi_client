@@ -1,6 +1,6 @@
 name: accesses_weebi
 description: "User access management package for Weebi - allows admins to manage user permissions and access to boutiques/chains"
-version: 1.1.1
+version: 1.1.2
 homepage: https://weebi.com
 repository: https://github.com/weebi-app/weebi-client/packages/accesses
 issue_tracker: https://github.com/weebi-app/weebi-client/issues
@@ -15,13 +15,13 @@ dependencies:
   ###
   # weebi's kitchen below
   protos_weebi: ^1.3.5
-  entitlements_weebi: ^1.0.0
-  users_weebi: ^1.1.0
-  boutiques_weebi: ^1.1.4
+  auth_weebi: ^1.1.0
+  entitlements_weebi: ^1.0.1
+  users_weebi: ^1.1.3
+  boutiques_weebi: ^1.1.6
   
   provider: ^6.1.4
   url_launcher: ^6.3.1
-  auth_weebi: ^1.0.8
 
 dev_dependencies:
   flutter_test:

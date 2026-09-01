@@ -1,4 +1,4 @@
-# melos_managed_dependency_overrides: accesses_weebi,design_weebi,devices_weebi,users_weebi
+# melos_managed_dependency_overrides: accesses_weebi,design_weebi,devices_weebi,users_weebi,flutter_secure_storage_web,flutter_secure_storage_platform_interface
 # Local-only (gitignored). Enables TDD against unpublished bridge RPCs.
 # Do not ship / push weebi_client with path overrides for protos_weebi.
 dependency_overrides:

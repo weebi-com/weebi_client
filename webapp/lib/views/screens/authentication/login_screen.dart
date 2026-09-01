@@ -279,13 +279,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           Padding(
                             padding: const EdgeInsets.only(
                                 bottom: kDefaultPadding),
-                            child: FormBuilderCheckbox(
-                              key: const Key('loginStayConnectedCheckbox'),
-                              name: 'stayConnected',
-                              initialValue: _stayConnectedInitial,
-                              title: Text(lang.stayConnected),
-                              onSaved: (value) =>
-                                  (_formData.stayConnected = value ?? true),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: IntrinsicWidth(
+                                child: FormBuilderCheckbox(
+                                  key: const Key('loginStayConnectedCheckbox'),
+                                  name: 'stayConnected',
+                                  initialValue: _stayConnectedInitial,
+                                  contentPadding: EdgeInsets.zero,
+                                  title: Text(lang.stayConnected),
+                                  onSaved: (value) => (_formData.stayConnected =
+                                      value ?? true),
+                                ),
+                              ),
                             ),
                           ),
                           Padding(

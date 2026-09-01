@@ -1,5 +1,9 @@
 # changelog
 
+## 1.1.6 - september 2026
+
+- bump auth_weebi
+
 ## 1.1.5 - august 2026
 
 - bump auth_weebi

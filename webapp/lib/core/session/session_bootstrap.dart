@@ -8,15 +8,19 @@ class SessionRestoreResult {
   final String sessionId;
 }
 
-/// Cold-start BFF session restore. Re-issues the HttpOnly cookie by calling
-/// authenticateWithRefreshToken when Stay connected is on and a session id
-/// is still in localStorage.
+/// Cold-start BFF session restore.
+///
+/// Cookie re-issue ([refreshSession]) is best-effort. The live session probe
+/// ([probeLiveSession], typically `readOneUser` with `x-session-id`) is the
+/// source of truth. A failed refresh must not wipe a still-valid session.
 class SessionBootstrap {
   SessionBootstrap._();
 
   static Future<void> restore({
     required UserDataProvider userDataProvider,
-    required Future<SessionRestoreResult> Function() refreshSession,
+    Future<SessionRestoreResult> Function()? refreshSession,
+    Future<void> Function()? probeLiveSession,
+    bool Function(Object error)? isDeadSession,
     bool isBffMode = true,
   }) async {
     if (!isBffMode) return;
@@ -34,19 +38,27 @@ class SessionBootstrap {
       return;
     }
 
-    try {
-      final restored = await refreshSession();
-      if (restored.sessionId.isEmpty) {
-        await userDataProvider.clearSessionDataAsync();
-        return;
+    if (refreshSession != null) {
+      try {
+        final restored = await refreshSession();
+        if (restored.sessionId.isNotEmpty) {
+          await userDataProvider.setUserDataAsync(
+            bffSessionId: restored.sessionId,
+            stayConnected: true,
+            bffSessionLive: true,
+          );
+          return;
+        }
+      } catch (_) {
+        // Fall through to the live probe. Do not clear prefs here.
       }
-      await userDataProvider.setUserDataAsync(
-        bffSessionId: restored.sessionId,
-        stayConnected: true,
-        bffSessionLive: true,
+    }
+
+    if (probeLiveSession != null) {
+      await userDataProvider.verifyLiveBffSession(
+        probeLiveSession,
+        isDeadSession: isDeadSession,
       );
-    } catch (_) {
-      await userDataProvider.clearSessionDataAsync();
     }
   }
 }

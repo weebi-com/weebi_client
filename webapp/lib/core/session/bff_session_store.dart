@@ -45,4 +45,9 @@ class BffSessionStore {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(SharePrefKeys.bffSessionId);
   }
+
+  /// Drops the in-process copy only. Prefs keep the id — same as closing a tab.
+  static void forgetMemory() {
+    _memorySessionId = null;
+  }
 }
