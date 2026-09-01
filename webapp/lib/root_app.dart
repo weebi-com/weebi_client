@@ -75,15 +75,14 @@ class _RootAppState extends State<RootApp> {
         final tokens = await AuthService().authenticateWithRefreshToken();
         return SessionRestoreResult(sessionId: tokens.sessionId);
       },
+      probeLiveSession: () async {
+        await fenceClient.readOneUser(
+          UserId(),
+          options: authenticatedCallOptions(),
+        );
+      },
+      isDeadSession: SessionRecoveryBinding.instance.isUnauthenticated,
     );
-    if (userDataProvider.isBffSessionCheckPending) {
-      await userDataProvider.verifyLiveBffSession(
-        () async {
-          await fenceClient.readOneUser(UserId(), options: callOptions);
-        },
-        isDeadSession: SessionRecoveryBinding.instance.isUnauthenticated,
-      );
-    }
 
     return true;
   }
