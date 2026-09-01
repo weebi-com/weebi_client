@@ -21,7 +21,7 @@ dependencies:
   fl_country_code_picker_weebi: ^0.2.3
 
   provider: ^6.1.4
-  flutter_secure_storage: ^11.0.0
+  flutter_secure_storage: ^10.3.0 #
   # Utilities
   #collection: ^1.19.1 read from auth
   intl: any #^0.20.2

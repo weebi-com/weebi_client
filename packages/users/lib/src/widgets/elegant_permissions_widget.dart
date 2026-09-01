@@ -18,6 +18,10 @@ class ElegantPermissionsWidget extends StatefulWidget {
   /// still follow [isEditable] (e.g. own profile: edit articles but not who can manage users).
   final bool userManagementReadOnly;
 
+  /// When true, sizes to children and disables inner scrolling so this widget
+  /// can live inside another [ScrollView] without an unbounded-height error.
+  final bool shrinkWrap;
+
   const ElegantPermissionsWidget({
     super.key,
     required this.permissions,
@@ -27,6 +31,7 @@ class ElegantPermissionsWidget extends StatefulWidget {
     this.showHeader = true,
     this.userManagementSectionHint,
     this.userManagementReadOnly = false,
+    this.shrinkWrap = false,
   });
 
   @override
@@ -56,37 +61,38 @@ class _ElegantPermissionsWidgetState extends State<ElegantPermissionsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final column = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (widget.showHeader) ...[
+          Row(
+            children: [
+              const Icon(Icons.admin_panel_settings, color: Colors.blue),
+              const SizedBox(width: 8),
+              Text(
+                widget.title ??
+                    PermissionsUiStrings.defaultUserPermissionsTitle,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+        ],
+        _buildPermissionsBody(),
+        const SizedBox(height: 25),
+      ],
+    );
+
     return Card(
       margin: const EdgeInsets.all(16),
       elevation: 2,
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (widget.showHeader) ...[
-                Row(
-                  children: [
-                    const Icon(Icons.admin_panel_settings, color: Colors.blue),
-                    const SizedBox(width: 8),
-                    Text(
-                      widget.title ??
-                          PermissionsUiStrings.defaultUserPermissionsTitle,
-                      style:
-                          Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-              ],
-              _buildPermissionsBody(),
-              const SizedBox(height: 25),
-            ],
-          ),
-        ),
+        child: widget.shrinkWrap
+            ? column
+            : SingleChildScrollView(child: column),
       ),
     );
   }

@@ -31,6 +31,7 @@ class UserRoutes {
               drawer: null,
               endDrawer: null,
               firmLicenses: firmLicenses,
+              onUserCreated: onUserCreated,
             ),
         '/users/create': (context) => buildCreateUserWithCustomScaffold(
               appBar:
@@ -65,6 +66,7 @@ class UserRoutes {
             drawer: null,
             endDrawer: null,
             firmLicenses: firmLicenses,
+            onUserCreated: onUserCreated,
           ),
           settings: settings,
         );
@@ -208,6 +210,7 @@ class UserRoutes {
     required Widget? endDrawer,
     Widget? floatingActionButton,
     VoidCallback? onCreateUser,
+    void Function(BuildContext, UserPublic)? onUserCreated,
     void Function(UserPublic, UserPermissions)? onPermissionsChanged,
     Iterable<License>? firmLicenses,
   }) {
@@ -219,6 +222,7 @@ class UserRoutes {
       body: UserListWidget(
         currentUserId: currentUserId,
         onCreateUser: onCreateUser,
+        onUserCreated: onUserCreated,
         onPermissionsChanged: onPermissionsChanged,
         firmLicenses: firmLicenses,
       ),
@@ -271,7 +275,11 @@ class UserRoutes {
     required String Function(BuildContext) getUserId,
     void Function(BuildContext, UserPublic)? onUserCreated,
   }) => {
-        '/users': (context) => _buildAuthenticatedUserList(context, getUserId),
+        '/users': (context) => _buildAuthenticatedUserList(
+              context,
+              getUserId,
+              onUserCreated: onUserCreated,
+            ),
         '/users/create': (context) => buildCreateUserWithCustomScaffold(
           appBar:
               AppBar(title: const Text(UserUiStrings.appBarCreateUser)),
@@ -283,16 +291,18 @@ class UserRoutes {
 
   /// Internal wrapper that uses callback to get currentUserId
   static Widget _buildAuthenticatedUserList(
-    BuildContext context, 
-    String Function(BuildContext) getUserId,
-  ) {
+    BuildContext context,
+    String Function(BuildContext) getUserId, {
+    void Function(BuildContext, UserPublic)? onUserCreated,
+  }) {
     final currentUserId = getUserId(context);
-    
+
     return buildUserListWithCustomScaffold(
       currentUserId: currentUserId,
       appBar: AppBar(title: const Text(UserUiStrings.appBarUsers)),
       drawer: null,
       endDrawer: null,
+      onUserCreated: onUserCreated,
     );
   }
 
@@ -313,6 +323,29 @@ class UserRoutes {
         final currentUserId = getUserId(context);
         return UserListWidget(currentUserId: currentUserId);
       },
+    );
+  }
+
+  /// Push the create-user form on the nearest [Navigator] (works with nested
+  /// navigators; does not require [MaterialApp.routes] or GoRouter).
+  static void navigateToCreateUser(
+    BuildContext context, {
+    void Function(BuildContext, UserPublic)? onUserCreated,
+    Iterable<License>? firmLicenses,
+    bool showLicenseReminder = true,
+  }) {
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => buildCreateUserWithCustomScaffold(
+          appBar: AppBar(title: const Text(UserUiStrings.appBarCreateUser)),
+          drawer: null,
+          endDrawer: null,
+          onUserCreated: onUserCreated,
+          firmLicenses: firmLicenses,
+          showLicenseReminder: showLicenseReminder,
+        ),
+      ),
     );
   }
 

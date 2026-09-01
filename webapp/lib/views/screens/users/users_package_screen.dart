@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:users_weebi/users_weebi.dart';
 import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/core/billing/load_firm_licenses.dart';
+import 'package:web_admin/views/screens/accesses/accesses_package_screen.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
 
 /// Users view using users_weebi package, embedded in the app's
@@ -58,7 +59,15 @@ class _UsersPackageScreenState extends State<UsersPackageScreen> {
               drawer: null,
               endDrawer: null,
               firmLicenses: firmLicenses,
-              onCreateUser: () => nestedContext.push(RouteUri.createUser),
+              onUserCreated: (ctx, createdUser) {
+                GoRouter.of(ctx).go(
+                  RouteUri.listAccess,
+                  extra: AccessesOpenArgs(
+                    user: createdUser,
+                    returnToUsersOnSave: true,
+                  ),
+                );
+              },
             ),
           );
         },
