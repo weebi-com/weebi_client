@@ -1,5 +1,10 @@
 # changelog 
 
+## 1.1.3 - september 2026 
+
+- bump auth 
+- chore: downgrade flutter_secure_storage: ^10.3.1 0
+
 ## 1.1.2
 
 - bump packages

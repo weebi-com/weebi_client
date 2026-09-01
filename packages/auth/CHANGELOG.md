@@ -1,5 +1,9 @@
 # changelog
 
+## 1.1.0 - sept 2026
+
+- chore: downgrade flutter_secure_storage: ^10.3.1 0
+
 ## 1.0.9 - august 2026
 
 - guard firmId

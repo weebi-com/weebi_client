@@ -1,5 +1,9 @@
 # changelog
 
+## 1.1.2 - september 2026
+
+- dump auth, users, boutique, entitlements
+
 ## 1.1.1
 
 - guard firmId
