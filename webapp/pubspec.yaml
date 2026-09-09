@@ -20,7 +20,7 @@ dependencies:
   flutter_secure_storage_platform_interface: ^2.0.3
 
   grpc: ^5.1.0 # grpc_web not exported from protos_weebi
-  protos_weebi: ^1.4.0
+  protos_weebi: ^1.4.2
   auth_weebi: ^1.2.0
   entitlements_weebi: ^1.2.0
   boutiques_weebi: ^1.2.0
@@ -67,11 +67,8 @@ dev_dependencies:
 dependency_overrides:
   flutter_secure_storage_web: ^2.1.1
   flutter_secure_storage_platform_interface: ^2.0.3
-  protos_weebi:
-    path: ../../weebi_server/packages/protos/protos_weebi
   # rive_native 0.1.6 references Flutter semantics APIs that are not present in
   # the Docker image's pinned Flutter SDK.
-
 
 
 flutter:

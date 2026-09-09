@@ -5,7 +5,6 @@ import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/master_layout_config.dart';
 import 'package:web_admin/providers/app_preferences_provider.dart';
-import 'package:web_admin/providers/freemium_dump_quota_gate.dart';
 import 'package:web_admin/views/widgets/freemium_dump_quota_banner.dart';
 import 'package:web_admin/views/widgets/operational_license_overlay.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/sidebar.dart';

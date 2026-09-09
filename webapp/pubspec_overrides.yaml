@@ -1,3 +1,4 @@
+# melos_managed_dependency_overrides: flutter_secure_storage_web,flutter_secure_storage_platform_interface
 # Local-only (gitignored). Cluster packages live in ../weebi/packages.
 # Do not ship / push weebi_client with path overrides for protos_weebi.
 dependency_overrides:
@@ -17,3 +18,5 @@ dependency_overrides:
     path: ../packages/design
   protos_weebi:
     path: ../../weebi_server/packages/protos/protos_weebi
+  flutter_secure_storage_web: ^2.1.1
+  flutter_secure_storage_platform_interface: ^2.0.3
