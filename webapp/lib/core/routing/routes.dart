@@ -22,6 +22,9 @@ class RouteUri {
   static const String createFirm = '/create-firm';
 
   static const String contacts = '/contacts';
+  static const String contactsNew = '/contacts/new';
+  static String contactsViewFor(int id) => '/contacts/$id';
+  static String contactsEditFor(int id) => '/contacts/$id/edit';
 
   static const String listUser = '/users';
   static const String createUser = '/create-user';
@@ -32,6 +35,9 @@ class RouteUri {
   static const String listDevice = '/devices';
 
   static const String catalog = '/catalog';
+  static const String catalogNew = '/catalog/new';
+  static String catalogViewFor(int id) => '/catalog/$id';
+  static String catalogEditFor(int id) => '/catalog/$id/edit';
 
   static const String ticketsOverview = '/tickets';
   static const String ticketDetail = '/tickets/detail';

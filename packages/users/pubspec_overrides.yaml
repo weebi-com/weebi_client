@@ -1,6 +1,0 @@
-# melos_managed_dependency_overrides: auth_weebi, entitlements_weebi
-dependency_overrides:
-  auth_weebi:
-    path: ..\\auth
-  entitlements_weebi:
-    path: ../entitlements

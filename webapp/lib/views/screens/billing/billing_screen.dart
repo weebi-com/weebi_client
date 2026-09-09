@@ -27,9 +27,27 @@ import 'package:web_admin/core/billing/billing_bridge_destination.dart';
 
 import 'billing_plan_label.dart';
 import 'billing_plan_theme.dart';
+import 'billing_referral_section.dart';
 
+BillingProduct _productWithReferralDiscount(BillingProduct product) {
+  final copy = BillingProduct()..mergeFromMessage(product);
+  copy.amountCents = referralBuyerChargeCents(product.amountCents);
+  if (product.pawapayAmounts.isNotEmpty) {
+    copy.pawapayAmounts.clear();
+    for (final e in product.pawapayAmounts.entries) {
+      copy.pawapayAmounts[e.key] = referralBuyerChargeCents(e.value);
+    }
+  }
+  return copy;
+}
 class BillingScreen extends StatefulWidget {
-  const BillingScreen({super.key});
+  const BillingScreen({
+    super.key,
+    this.wrapInPortal = true,
+  });
+
+  /// When false, renders content in a plain [Scaffold] (widget tests).
+  final bool wrapInPortal;
 
   @override
   State<BillingScreen> createState() => _BillingScreenState();
@@ -57,6 +75,10 @@ class _BillingScreenState extends State<BillingScreen>
   bool _dataLoaded = false;
   bool _checkoutReturnHandled = false;
   bool _bootstrapStarted = false;
+  final TextEditingController _referralCodeController = TextEditingController();
+  String? _ownReferralCode;
+  int _referralCreditBalanceCents = 0;
+  String? _referralFieldError;
 
   void _applyBridgeDeepLink(Map<String, String> params) {
     final dest = parseBillingBridgeDestination(query: params);
@@ -135,6 +157,7 @@ class _BillingScreenState extends State<BillingScreen>
 
   @override
   void dispose() {
+    _referralCodeController.dispose();
     _tabController.dispose();
     super.dispose();
   }
@@ -211,10 +234,8 @@ class _BillingScreenState extends State<BillingScreen>
     }
 
     try {
-      final licensesFuture =
-          provider.billingServiceClient.readLicenses(Empty());
-      final productsFuture =
-          provider.billingServiceClient.readBillingProducts(Empty());
+      final licensesFuture = provider.billingRpc.readLicenses(Empty());
+      final productsFuture = provider.billingRpc.readBillingProducts(Empty());
 
       final results = await Future.wait([licensesFuture, productsFuture]);
       final licensesResponse = results[0] as ReadLicensesResponse;
@@ -232,8 +253,8 @@ class _BillingScreenState extends State<BillingScreen>
 
       List<AccountingYearPurchase> accountingPurchases = const [];
       try {
-        final accountingResponse = await provider.billingServiceClient
-            .readAccountingYearPurchases(Empty());
+        final accountingResponse =
+            await provider.billingRpc.readAccountingYearPurchases(Empty());
         accountingPurchases = accountingResponse.purchases;
       } catch (_) {
         // Older servers may not expose this RPC yet.
@@ -258,6 +279,16 @@ class _BillingScreenState extends State<BillingScreen>
         }
       }
 
+      String? ownReferralCode = _ownReferralCode;
+      var referralBalance = _referralCreditBalanceCents;
+      try {
+        final referralInfo = await provider.billingRpc.getReferralInfo(Empty());
+        ownReferralCode = referralInfo.referralCode;
+        referralBalance = referralInfo.creditBalanceCents;
+      } catch (_) {
+        // Older servers may not expose referral info yet.
+      }
+
       if (mounted) {
         setState(() {
           _licenses =
@@ -267,6 +298,8 @@ class _BillingScreenState extends State<BillingScreen>
           _syscohadaProduct = syscohada;
           _accountingPurchases = accountingPurchases;
           _usersById = usersById;
+          _ownReferralCode = ownReferralCode;
+          _referralCreditBalanceCents = referralBalance;
           _loading = false;
           _errorMessage = null;
           _checkoutProductId = null;
@@ -347,8 +380,7 @@ class _BillingScreenState extends State<BillingScreen>
             params['session_id'] == null);
     try {
       if (isPawapay && checkoutId != null && checkoutId.isNotEmpty) {
-        await provider.billingServiceClient
-            .fulfillFromPawapayCheckout(
+        await provider.billingRpc.fulfillFromPawapayCheckout(
           FulfillFromPawapayCheckoutRequest(
             checkoutId: checkoutId,
             legalTermsVersionDate: kEnterpriseTermsVersionId,
@@ -360,8 +392,7 @@ class _BillingScreenState extends State<BillingScreen>
       }
       final sessionId = params['session_id'];
       if (sessionId != null && sessionId.isNotEmpty) {
-        await provider.billingServiceClient
-            .fulfillFromStripeCheckoutSession(
+        await provider.billingRpc.fulfillFromStripeCheckoutSession(
           FulfillFromStripeCheckoutSessionRequest(
             checkoutSessionId: sessionId,
             legalTermsVersionDate: kEnterpriseTermsVersionId,
@@ -418,6 +449,19 @@ class _BillingScreenState extends State<BillingScreen>
       );
       return;
     }
+    final referralCode = _referralCodeController.text.trim();
+    if (isSelfReferralCode(
+      entered: referralCode,
+      ownReferralCode: _ownReferralCode,
+    )) {
+      setState(() {
+        _referralFieldError = Lang.of(context).billingReferralSelfError;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(Lang.of(context).billingReferralSelfError)),
+      );
+      return;
+    }
     if (!accepted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(Lang.of(context).billingAcceptTermsToContinue)),
@@ -431,6 +475,21 @@ class _BillingScreenState extends State<BillingScreen>
     } else {
       await _purchaseWithPawapay(product, fiscalYear: fiscalYear);
     }
+  }
+
+  String? _referralCodeForCheckout() {
+    return referralCodeForCheckout(
+      entered: _referralCodeController.text,
+      ownReferralCode: _ownReferralCode,
+    );
+  }
+
+  bool get _referralDiscountPreviewActive {
+    return referralCodeForCheckout(
+          entered: _referralCodeController.text,
+          ownReferralCode: _ownReferralCode,
+        ) !=
+        null;
   }
 
   Future<void> _purchaseWithStripe(
@@ -455,10 +514,11 @@ class _BillingScreenState extends State<BillingScreen>
         cancelUrl: cancelUrl,
         legalTermsVersionDate: kEnterpriseTermsVersionId,
         fiscalYear: fiscalYear,
+        referralCode: _referralCodeForCheckout() ?? '',
       );
 
       final response =
-          await provider.billingServiceClient.createCheckoutSession(request);
+          await provider.billingRpc.createCheckoutSession(request);
 
       if (!mounted) return;
       if (response.checkoutUrl.isEmpty) {
@@ -521,10 +581,11 @@ class _BillingScreenState extends State<BillingScreen>
         returnUrl: returnUrl,
         legalTermsVersionDate: kEnterpriseTermsVersionId,
         fiscalYear: fiscalYear,
+        referralCode: _referralCodeForCheckout() ?? '',
       );
 
       final response =
-          await provider.billingServiceClient.createPawapayCheckout(request);
+          await provider.billingRpc.createPawapayCheckout(request);
 
       if (!mounted) return;
       if (response.redirectUrl.isEmpty) {
@@ -650,6 +711,8 @@ class _BillingScreenState extends State<BillingScreen>
     return ListView(
       padding: const EdgeInsets.all(kDefaultPadding),
       children: [
+        _buildReferralSection(themeData: themeData, lang: lang),
+        const SizedBox(height: kDefaultPadding * 1.5),
         _SyscohadaAddonCard(
           product: _syscohadaProduct,
           purchasedYears: _accountingPurchases,
@@ -665,6 +728,7 @@ class _BillingScreenState extends State<BillingScreen>
           highlighted: _bridgeHighlightProductId == kSyscohadaProductId,
           showPurchasedYearsSummary: false,
           pawapayCurrency: pawapayCurrency,
+          showReferralDiscount: _referralDiscountPreviewActive,
         ),
         if (_products.isNotEmpty) ...[
           const SizedBox(height: kDefaultPadding * 2),
@@ -684,11 +748,34 @@ class _BillingScreenState extends State<BillingScreen>
                       highlighted:
                           _bridgeHighlightProductId == p.productId.toLowerCase(),
                       pawapayCurrency: pawapayCurrency,
+                      showReferralDiscount: _referralDiscountPreviewActive,
                     ))
                 .toList(),
           ),
         ],
       ],
+    );
+  }
+
+  Widget _buildReferralSection({
+    required ThemeData themeData,
+    required Lang lang,
+  }) {
+    return BillingReferralSection(
+      controller: _referralCodeController,
+      ownReferralCode: _ownReferralCode,
+      creditBalanceCents: _referralCreditBalanceCents,
+      errorText: _referralFieldError,
+      onChanged: (value) {
+        setState(() {
+          _referralFieldError = isSelfReferralCode(
+            entered: value,
+            ownReferralCode: _ownReferralCode,
+          )
+              ? lang.billingReferralSelfError
+              : null;
+        });
+      },
     );
   }
 
@@ -761,6 +848,13 @@ class _BillingScreenState extends State<BillingScreen>
     );
   }
 
+  Widget _shell({required Widget body, Key? key}) {
+    if (!widget.wrapInPortal) {
+      return Scaffold(key: key, body: body);
+    }
+    return PortalMasterLayout(key: key, body: body);
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
@@ -777,7 +871,9 @@ class _BillingScreenState extends State<BillingScreen>
         if (!mounted) return;
         final params = billingQueryParamsFromLocation();
         _applyBridgeDeepLink(params);
-        Aptabase.instance.trackEvent('billing_screen_opened', {});
+        try {
+          Aptabase.instance.trackEvent('billing_screen_opened', {});
+        } catch (_) {}
         _bootstrapBilling(params);
       });
     }
@@ -789,7 +885,7 @@ class _BillingScreenState extends State<BillingScreen>
         if (currentUser.isLoading ||
             (currentUser.user == null && currentUser.error == null)) {
           // User data still loading; show spinner instead of "no access"
-          return PortalMasterLayout(
+          return _shell(
             body: const Center(
               child: CircularProgressIndicator(),
             ),
@@ -797,7 +893,7 @@ class _BillingScreenState extends State<BillingScreen>
         }
 
         if (currentUser.error != null) {
-          return PortalMasterLayout(
+          return _shell(
             body: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -814,8 +910,8 @@ class _BillingScreenState extends State<BillingScreen>
           );
         }
       }
-      
-      return PortalMasterLayout(
+
+      return _shell(
         body: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 440),
@@ -844,7 +940,7 @@ class _BillingScreenState extends State<BillingScreen>
         billingQueryParamsFromLocation()['success'] == 'true' &&
         !purchaseConfirmed;
 
-    return PortalMasterLayout(
+    return _shell(
       key: const Key('billingScreen'),
       body: Padding(
         padding: const EdgeInsets.all(kDefaultPadding),
@@ -1033,6 +1129,7 @@ class _SyscohadaAddonCard extends StatelessWidget {
     this.highlighted = false,
     this.showPurchasedYearsSummary = true,
     this.pawapayCurrency = 'XOF',
+    this.showReferralDiscount = false,
   });
 
   final BillingProduct? product;
@@ -1048,6 +1145,7 @@ class _SyscohadaAddonCard extends StatelessWidget {
   final VoidCallback onViewTerms;
   final bool showPurchasedYearsSummary;
   final String pawapayCurrency;
+  final bool showReferralDiscount;
 
   @override
   Widget build(BuildContext context) {
@@ -1065,6 +1163,7 @@ class _SyscohadaAddonCard extends StatelessWidget {
             productId: product!.productId,
             languageCode: Localizations.localeOf(context).languageCode,
             pawapayCurrency: pawapayCurrency,
+            product: product,
           );
 
     return Container(
@@ -1104,6 +1203,25 @@ class _SyscohadaAddonCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
+          if (showReferralDiscount && product != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              lang.billingReferralDiscountedPrice(
+                formatBillingOfferPrice(
+                  amountCents: referralBuyerChargeCents(product!.amountCents),
+                  currency: product!.currency,
+                  productId: product!.productId,
+                  languageCode: Localizations.localeOf(context).languageCode,
+                  pawapayCurrency: pawapayCurrency,
+                  product: _productWithReferralDiscount(product!),
+                ),
+              ),
+              style: themeData.textTheme.titleMedium?.copyWith(
+                color: themeData.colorScheme.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
           if (showPurchasedYearsSummary && paidYears.isNotEmpty) ...[
             const SizedBox(height: kDefaultPadding),
             Text(
@@ -1235,6 +1353,7 @@ class _ProductOfferCard extends StatelessWidget {
   final ValueChanged<bool?> onAcceptedChanged;
   final VoidCallback onViewTerms;
   final String pawapayCurrency;
+  final bool showReferralDiscount;
 
   const _ProductOfferCard({
     required this.product,
@@ -1246,6 +1365,7 @@ class _ProductOfferCard extends StatelessWidget {
     required this.onViewTerms,
     this.highlighted = false,
     this.pawapayCurrency = 'XOF',
+    this.showReferralDiscount = false,
   });
 
   @override
@@ -1258,6 +1378,15 @@ class _ProductOfferCard extends StatelessWidget {
       productId: product.productId,
       languageCode: Localizations.localeOf(context).languageCode,
       pawapayCurrency: pawapayCurrency,
+      product: product,
+    );
+    final discountedLabel = formatBillingOfferPrice(
+      amountCents: referralBuyerChargeCents(product.amountCents),
+      currency: product.currency,
+      productId: product.productId,
+      languageCode: Localizations.localeOf(context).languageCode,
+      pawapayCurrency: pawapayCurrency,
+      product: _productWithReferralDiscount(product),
     );
     final planName = billingPlanLabel(lang, productId: product.productId);
     final style = BillingPlanVisual.fromProductId(product.productId);
@@ -1298,6 +1427,16 @@ class _ProductOfferCard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              if (showReferralDiscount) ...[
+                const SizedBox(height: 4),
+                Text(
+                  lang.billingReferralDiscountedPrice(discountedLabel),
+                  style: themeData.textTheme.titleMedium?.copyWith(
+                    color: themeData.colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
               Text(
                 lang.billingPerUser,
                 style: themeData.textTheme.titleSmall?.copyWith(
@@ -1647,7 +1786,8 @@ class _AssignSeatDialogState extends State<_AssignSeatDialog> {
     try {
       // Persist attribution in the backend via BillingService.updateLicense (gRPC).
       // The license's seats (with userId) are stored in the firm document (e.g. MongoDB).
-      final billingClient = context.read<BillingServiceClientProvider>().billingServiceClient;
+      final billingClient =
+          context.read<BillingServiceClientProvider>().billingRpc;
       final updated = License()..mergeFromMessage(widget.license);
       final previous = widget.replaceSeatUserId?.trim() ?? '';
       if (previous.isNotEmpty) {

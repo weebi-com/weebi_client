@@ -1,18 +1,19 @@
-# melos_managed_dependency_overrides: accesses_weebi,design_weebi,devices_weebi,users_weebi,flutter_secure_storage_web,flutter_secure_storage_platform_interface
-# Local-only (gitignored). Enables TDD against unpublished bridge RPCs.
+# Local-only (gitignored). Cluster packages live in ../weebi/packages.
 # Do not ship / push weebi_client with path overrides for protos_weebi.
 dependency_overrides:
-  accesses_weebi:
-    path: ..\\packages\\accesses
   auth_weebi:
-    path: ../packages/auth
-  boutiques_weebi:
-    path: ../packages/boutiques
-  design_weebi:
-    path: ..\\packages\\design
-  devices_weebi:
-    path: ..\\packages\\devices
+    path: ../../weebi/packages/auth
   entitlements_weebi:
-    path: ../packages/entitlements
+    path: ../../weebi/packages/entitlements
+  boutiques_weebi:
+    path: ../../weebi/packages/boutiques
   users_weebi:
-    path: ..\\packages\\users
+    path: ../../weebi/packages/users
+  accesses_weebi:
+    path: ../../weebi/packages/accesses
+  devices_weebi:
+    path: ../../weebi/packages/devices
+  design_weebi:
+    path: ../packages/design
+  protos_weebi:
+    path: ../../weebi_server/packages/protos/protos_weebi

@@ -147,6 +147,24 @@ void main() {
         '7\u00A0900 CDF / 2.90 EUR',
       );
     });
+
+    test('prefers BillingProduct.pawapayAmounts over hardcoded fallback', () {
+      final product = BillingProduct(
+        productId: 'premium',
+        amountCents: 1400,
+        currency: 'eur',
+        pawapayAmounts: {'XOF': 8800, 'CDF': 35000}.entries,
+      );
+      expect(
+        formatBillingOfferPrice(
+          amountCents: 1400,
+          currency: 'eur',
+          productId: 'premium',
+          product: product,
+        ),
+        '8\u00A0800 XOF / 14.00 EUR',
+      );
+    });
   });
 
   group('pawapayOfferCurrency', () {

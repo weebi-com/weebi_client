@@ -1,4 +1,4 @@
-import 'package:design_weebi/design_weebi.dart' show IconsWeebi;
+import 'package:design_weebi/design_weebi.dart' show ColorsWeebi, IconsWeebi;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:web_admin/core/routing/routes.dart';
@@ -129,6 +129,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                     _HoverableTile(
+                      key: const Key('dashboardCatalogTile'),
+                      onTap: () => GoRouter.of(context).go(RouteUri.catalog),
+                      child: SummaryCard(
+                        title: lang.menuCatalog,
+                        value: lang.menuCatalog,
+                        icon: IconsWeebi.articlesIconData,
+                        backgroundColor: ColorsWeebi.orangeArticle,
+                        textColor: themeData.colorScheme.onPrimary,
+                        iconColor: Colors.black12,
+                        width: summaryCardWidth,
+                      ),
+                    ),
+                    _HoverableTile(
+                      key: const Key('dashboardContactsTile'),
+                      onTap: () => GoRouter.of(context).go(RouteUri.contacts),
+                      child: SummaryCard(
+                        title: lang.menuContacts,
+                        value: lang.menuContacts,
+                        icon: IconsWeebi.contactsIconData,
+                        backgroundColor: ColorsWeebi.blueContact,
+                        textColor: themeData.colorScheme.onPrimary,
+                        iconColor: Colors.black12,
+                        width: summaryCardWidth,
+                      ),
+                    ),
+                    _HoverableTile(
                       onTap: () =>
                           GoRouter.of(context).go(RouteUri.ticketsOverview),
                       child: SummaryCard(
@@ -169,26 +195,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
 
-                    // NOT READY YET
-/*                     InkWell(
-                      child: SummaryCard(
-                        title: lang.newOrders(2),
-                        value: 'Contacts',
-                        icon: Icons.person,
-                        backgroundColor: Colors.blue,
-                        textColor: themeData.colorScheme.onPrimary,
-                        iconColor: Colors.black12,
-                        width: summaryCardWidth,
-                      ),
-                      onTap: () {
-                        final chainId = JsonWebToken.parse(
-                                context.read<UserDataProvider>().accessToken)
-                            .permissions
-                            .firmId; // first chainId == firmId, making it simple
-                        GoRouter.of(context)
-                            .go(RouteUri.contacts, extra: chainId);
-                      },
-                    ), */
 /*                     GestureDetector(
                       child: SummaryCard(
                         title: lang.pendingIssues(2),

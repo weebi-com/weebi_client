@@ -97,6 +97,9 @@ class _AccessesPackageScreenState extends State<AccessesPackageScreen> {
                     firmLicenses: firmLicenses,
                     onSaved:
                         widget.returnToUsersOnSave ? _leaveToUsers : null,
+                    onOpenBillingPortal: (ctx) async {
+                      GoRouter.of(ctx).go(RouteUri.billing);
+                    },
                   ),
                 ),
               ),
@@ -145,6 +148,9 @@ class _AccessesPackageScreenState extends State<AccessesPackageScreen> {
                     firmLicenses: routeLicenses ?? firmLicenses,
                     onSaved:
                         widget.returnToUsersOnSave ? _leaveToUsers : null,
+                    onOpenBillingPortal: (ctx) async {
+                      GoRouter.of(ctx).go(RouteUri.billing);
+                    },
                   ),
                 ),
               );

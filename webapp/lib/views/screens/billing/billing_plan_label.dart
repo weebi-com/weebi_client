@@ -39,10 +39,25 @@ String billingPlanLabel(
 }
 
 /// Marketing XOF/XAF list prices (aligned with PawaPay checkout amounts).
+/// Prefer [billingPawapayListPriceFromProduct] when [BillingProduct] is available.
 int? billingXofListPrice(String productId) =>
     billingPawapayListPrice(productId, 'XOF');
 
+/// PawaPay list price from [BillingProduct.pawapayAmounts], else hardcoded fallback.
+int? billingPawapayListPriceFromProduct(
+  BillingProduct product,
+  String currency,
+) {
+  final cur = currency.trim().toUpperCase();
+  final fromMongo = product.pawapayAmounts[cur] ??
+      product.pawapayAmounts[cur.toLowerCase()];
+  if (fromMongo != null && fromMongo > 0) return fromMongo;
+  return billingPawapayListPrice(product.productId, currency);
+}
+
 /// PawaPay list price for [productId] in [currency] (XOF, XAF, or CDF).
+///
+/// Fallback when Mongo `pawapayAmounts` is not on the client product yet.
 int? billingPawapayListPrice(String productId, String currency) {
   final id = productId.trim().toLowerCase();
   final cur = currency.trim().toUpperCase();
@@ -134,6 +149,7 @@ String formatBillingOfferPrice({
   required String productId,
   String languageCode = 'en',
   String pawapayCurrency = 'XOF',
+  BillingProduct? product,
 }) {
   final catalogCurrency =
       currency.trim().isNotEmpty ? currency.trim().toUpperCase() : 'EUR';
@@ -150,7 +166,9 @@ String formatBillingOfferPrice({
   final offerCurrency = pawapayCurrency.trim().toUpperCase().isEmpty
       ? 'XOF'
       : pawapayCurrency.trim().toUpperCase();
-  final list = billingPawapayListPrice(productId, offerCurrency);
+  final list = product != null
+      ? billingPawapayListPriceFromProduct(product, offerCurrency)
+      : billingPawapayListPrice(productId, offerCurrency);
   if (list == null) return catalogLabel;
   final mobileLabel =
       '${_formatThousandsSpaces(list)} ${_mobileMoneyDisplayCode(offerCurrency, languageCode)}';
