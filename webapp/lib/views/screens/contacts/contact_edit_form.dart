@@ -3,7 +3,7 @@ import 'package:fl_country_code_picker_weebi/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:users_weebi/users_weebi.dart' show PhoneFieldPrefixIcon;
+import 'package:users_weebi/src/widgets/phone_field_prefix_icon.dart';
 import 'package:web_admin/contacts/contact_form_validator.dart';
 import 'package:web_admin/core/constants/dimens.dart';
 import 'package:web_admin/generated/l10n.dart';
