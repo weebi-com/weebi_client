@@ -57,4 +57,30 @@ void main() {
       expect(find.text('Forgot password'), findsOneWidget);
     });
   });
+
+  group('Stay connected', () {
+    testWidgets('stayConnected l10n string displays in English',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppThemeData.instance.light(),
+          localizationsDelegates: const [
+            Lang.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: Lang.delegate.supportedLocales,
+          locale: const Locale('en'),
+          home: Builder(
+            builder: (context) => Text(Lang.of(context).stayConnected),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Stay connected'), findsOneWidget);
+    });
+  });
 }

@@ -1,9 +1,12 @@
+import 'package:auth_weebi/auth_weebi.dart' show AccessTokenProvider;
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/generated/l10n.dart';
+import 'package:web_admin/providers/user_data_provider.dart';
 import 'package:web_admin/utils/app_dialogs.dart';
 import 'package:web_admin/utils/app_focus_helper.dart';
 import 'package:web_admin/views/widgets/public_master_layout/public_master_layout.dart';
@@ -56,29 +59,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
             password: _formData.password);
 
         if (result.success) {
-          _onRegisterSuccess(
-              context, 'Your account has been successfully created');
+          if (!mounted) return;
+          if (result.accessToken != null && result.accessToken!.isNotEmpty) {
+            context.read<AccessTokenProvider>().accessToken =
+                result.accessToken!;
+          }
+          await context.read<UserDataProvider>().setUserDataAsync(
+                mail: _formData.mail,
+                accessToken: result.accessToken,
+                bffSessionId: result.sessionId,
+                stayConnected: true,
+                userProfileImageUrl:
+                    'https://www.weebi.com/images/Weebi_Logo_Full.png',
+                bffSessionLive: true,
+              );
+          if (!mounted) return;
+          onSuccess.call('Your account has been successfully created');
         } else {
-          onError
-              .call(result.errorMessage ?? 'Login failed. Please try again.');
+          onError.call(
+              result.errorMessage ?? 'Signup failed. Please try again.');
         }
       } catch (e) {
         onError.call('An error occurred during register. Please try again.');
       } finally {
-        setState(() => _isFormLoading = false);
+        if (mounted) setState(() => _isFormLoading = false);
       }
     }
   }
 
   void _onRegisterSuccess(BuildContext context, String message) {
-    AppDialog.show(
-      context: context,
-      dialogType: AppDialogType.success,
-      desc: message,
-      width: kDialogWidth,
-      btnOkText: Lang.of(context).loginNow,
-      btnOkOnPress: () => GoRouter.of(context).go(RouteUri.login),
-    );
+    GoRouter.of(context).go(RouteUri.home);
   }
 
   void _onRegisterError(BuildContext context, String message) {
@@ -106,6 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     return PublicMasterLayout(
       body: SingleChildScrollView(
+        key: const Key('registerScreen'),
         child: Align(
           alignment: Alignment.topCenter,
           child: Container(
@@ -142,6 +153,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             padding:
                                 const EdgeInsets.only(bottom: kDefaultPadding),
                             child: FormBuilderTextField(
+                              key: const Key('registerFirmNameField'),
                               name: 'firmName',
                               decoration: InputDecoration(
                                 prefixIcon: const Icon(Icons.business),
@@ -162,6 +174,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             padding:
                                 const EdgeInsets.only(bottom: kDefaultPadding),
                             child: FormBuilderTextField(
+                              key: const Key('registerFirstNameField'),
                               name: 'firstName',
                               decoration: InputDecoration(
                                 labelText: lang.firstName,
@@ -181,6 +194,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             padding:
                                 const EdgeInsets.only(bottom: kDefaultPadding),
                             child: FormBuilderTextField(
+                              key: const Key('registerLastNameField'),
                               name: 'lastName',
                               decoration: InputDecoration(
                                 labelText: lang.lastName,
@@ -200,6 +214,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             padding:
                                 const EdgeInsets.only(bottom: kDefaultPadding),
                             child: FormBuilderTextField(
+                              key: const Key('registerMailField'),
                               name: 'mail',
                               decoration: InputDecoration(
                                 labelText: lang.mail,
@@ -219,6 +234,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             padding:
                                 const EdgeInsets.only(bottom: kDefaultPadding),
                             child: FormBuilderTextField(
+                              key: const Key('registerPasswordField'),
                               name: 'password',
                               decoration: InputDecoration(
                                 labelText: lang.password,
@@ -252,6 +268,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             padding:
                                 const EdgeInsets.only(bottom: kDefaultPadding),
                             child: FormBuilderTextField(
+                              key: const Key('registerRetypePasswordField'),
                               name: 'retypePassword',
                               decoration: InputDecoration(
                                 labelText: lang.retypePassword,
@@ -294,6 +311,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               height: 40.0,
                               width: double.infinity,
                               child: ElevatedButton(
+                                key: const Key('registerSubmitButton'),
                                 style: themeData
                                     .extension<AppButtonTheme>()!
                                     .primaryElevated,

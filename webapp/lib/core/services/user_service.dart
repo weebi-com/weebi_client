@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:protos_weebi/data_dummy.dart';
-import 'package:protos_weebi/grpc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_admin/environment.dart';
 import 'package:web_admin/grpc/server.dart';

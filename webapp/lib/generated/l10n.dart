@@ -54,9 +54,9 @@ class Lang {
     return Localizations.of<Lang>(context, Lang);
   }
 
-  /// `About`
+  /// `À propos`
   String get about {
-    return Intl.message('About', name: 'about', desc: '', args: []);
+    return Intl.message('À propos', name: 'about', desc: '', args: []);
   }
 
   /// `Blog`
@@ -64,195 +64,300 @@ class Lang {
     return Intl.message('Blog', name: 'aboutBlog', desc: '', args: []);
   }
 
-  /// `Historical Partners`
+  /// `Partenaires historiques`
   String get aboutPartners {
     return Intl.message(
-      'Historical Partners',
+      'Partenaires historiques',
       name: 'aboutPartners',
       desc: '',
       args: [],
     );
   }
 
-  /// `Account`
+  /// `Mon Compte`
   String get account {
-    return Intl.message('Account', name: 'account', desc: '', args: []);
+    return Intl.message('Mon Compte', name: 'account', desc: '', args: []);
   }
 
-  /// `Admin Portal Login`
+  /// `Connexion au Portail Administrateur`
   String get adminPortalLogin {
     return Intl.message(
-      'Admin Portal Login',
+      'Connexion au Portail Administrateur',
       name: 'adminPortalLogin',
       desc: '',
       args: [],
     );
   }
 
-  /// `Back to Login`
+  /// `Retour à la Connexion`
   String get backToLogin {
     return Intl.message(
-      'Back to Login',
+      'Retour à la Connexion',
       name: 'backToLogin',
       desc: '',
       args: [],
     );
   }
 
-  /// `I have read and accept the Terms and Conditions of Sale for the cash report.`
+  /// `J'ai lu et j'accepte les Conditions Générales de Vente applicables à l'achat d'un rapport de trésorerie.`
   String get billingAcceptAccountingReportTerms {
     return Intl.message(
-      'I have read and accept the Terms and Conditions of Sale for the cash report.',
+      'J\'ai lu et j\'accepte les Conditions Générales de Vente applicables à l\'achat d\'un rapport de trésorerie.',
       name: 'billingAcceptAccountingReportTerms',
       desc: '',
       args: [],
     );
   }
 
-  /// `I have read and accept the Terms and Conditions of Sale for the Enterprise license.`
+  /// `J'ai lu et j'accepte les Conditions Générales de Vente applicables à l'achat d'une licence Entreprise.`
   String get billingAcceptEnterpriseTerms {
     return Intl.message(
-      'I have read and accept the Terms and Conditions of Sale for the Enterprise license.',
+      'J\'ai lu et j\'accepte les Conditions Générales de Vente applicables à l\'achat d\'une licence Entreprise.',
       name: 'billingAcceptEnterpriseTerms',
       desc: '',
       args: [],
     );
   }
 
-  /// `Please accept the terms and conditions to continue.`
+  /// `Veuillez accepter les conditions générales pour continuer.`
   String get billingAcceptTermsToContinue {
     return Intl.message(
-      'Please accept the terms and conditions to continue.',
+      'Veuillez accepter les conditions générales pour continuer.',
       name: 'billingAcceptTermsToContinue',
       desc: '',
       args: [],
     );
   }
 
-  /// `All users already have a license assigned.`
+  /// `Vous n'avez pas l'autorisation d'effectuer cette action.`
+  String get billingActionNotPermitted {
+    return Intl.message(
+      'Vous n\'avez pas l\'autorisation d\'effectuer cette action.',
+      name: 'billingActionNotPermitted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Parrainage`
+  String get billingReferralTitle {
+    return Intl.message(
+      'Parrainage',
+      name: 'billingReferralTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Votre code de parrainage`
+  String get billingReferralYourCode {
+    return Intl.message(
+      'Votre code de parrainage',
+      name: 'billingReferralYourCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Solde de crédit de parrainage`
+  String get billingReferralCreditBalance {
+    return Intl.message(
+      'Solde de crédit de parrainage',
+      name: 'billingReferralCreditBalance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ID entreprise du parrain (optionnel)`
+  String get billingReferralCodeHint {
+    return Intl.message(
+      'ID entreprise du parrain (optionnel)',
+      name: 'billingReferralCodeHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `10 % de réduction avec un code de parrain valide`
+  String get billingReferralDiscountHint {
+    return Intl.message(
+      '10 % de réduction avec un code de parrain valide',
+      name: 'billingReferralDiscountHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vous ne pouvez pas utiliser votre propre code`
+  String get billingReferralSelfError {
+    return Intl.message(
+      'Vous ne pouvez pas utiliser votre propre code',
+      name: 'billingReferralSelfError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Avec parrainage : {price}`
+  String billingReferralDiscountedPrice(String price) {
+    return Intl.message(
+      'Avec parrainage : $price',
+      name: 'billingReferralDiscountedPrice',
+      desc: '',
+      args: [price],
+    );
+  }
+
+  /// `Copier le code`
+  String get billingReferralCopyCode {
+    return Intl.message(
+      'Copier le code',
+      name: 'billingReferralCopyCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tous les utilisateurs ont déjà une licence attribuée.`
   String get billingAllUsersAlreadyAssigned {
     return Intl.message(
-      'All users already have a license assigned.',
+      'Tous les utilisateurs ont déjà une licence attribuée.',
       name: 'billingAllUsersAlreadyAssigned',
       desc: '',
       args: [],
     );
   }
 
-  /// `Assign the license to a user`
+  /// `Attribuer la licence à un utilisateur`
   String get billingAssignSeatDialogTitle {
     return Intl.message(
-      'Assign the license to a user',
+      'Attribuer la licence à un utilisateur',
       name: 'billingAssignSeatDialogTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Assign the license to a user`
+  /// `Attribuer la licence à un utilisateur`
   String get billingAssignSeats {
     return Intl.message(
-      'Assign the license to a user',
+      'Attribuer la licence à un utilisateur',
       name: 'billingAssignSeats',
       desc: '',
       args: [],
     );
   }
 
-  /// `Assign your new licenses to users below.`
+  /// `Attribuez vos nouvelles licences aux utilisateurs ci‑dessous.`
   String get billingAssignSeatsCta {
     return Intl.message(
-      'Assign your new licenses to users below.',
+      'Attribuez vos nouvelles licences aux utilisateurs ci‑dessous.',
       name: 'billingAssignSeatsCta',
       desc: '',
       args: [],
     );
   }
 
-  /// `Attributed to`
+  /// `Attribué à`
   String get billingAttributedTo {
     return Intl.message(
-      'Attributed to',
+      'Attribué à',
       name: 'billingAttributedTo',
       desc: '',
       args: [],
     );
   }
 
-  /// `License(s)`
+  /// `Comment souhaitez-vous payer ?`
+  String get billingChoosePaymentMethod {
+    return Intl.message(
+      'Comment souhaitez-vous payer ?',
+      name: 'billingChoosePaymentMethod',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Licence(s)`
   String get billingLicenses {
     return Intl.message(
-      'License(s)',
+      'Licence(s)',
       name: 'billingLicenses',
       desc: '',
       args: [],
     );
   }
 
-  /// `Lifetime`
+  /// `À vie`
   String get billingLifetime {
-    return Intl.message(
-      'Lifetime',
-      name: 'billingLifetime',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('À vie', name: 'billingLifetime', desc: '', args: []);
   }
 
-  /// `My Premium licenses`
+  /// `Mes licences Premium`
   String get billingMyLicenses {
     return Intl.message(
-      'My Premium licenses',
+      'Mes licences Premium',
       name: 'billingMyLicenses',
       desc: '',
       args: [],
     );
   }
 
-  /// `Not yet attributed`
+  /// `Vous n'avez pas l'autorisation de gérer les licences. Demandez à l'administrateur de votre entreprise de vous accorder l'accès.`
+  String get billingNoAccess {
+    return Intl.message(
+      'Vous n\'avez pas l\'autorisation de gérer les licences. Demandez à l\'administrateur de votre entreprise de vous accorder l\'accès.',
+      name: 'billingNoAccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pas encore attribuée(s)`
   String get billingNotYetAttributed {
     return Intl.message(
-      'Not yet attributed',
+      'Pas encore attribuée(s)',
       name: 'billingNotYetAttributed',
       desc: '',
       args: [],
     );
   }
 
-  /// `No users to assign. Add users in Users first.`
+  /// `Aucun utilisateur à attribuer. Ajoutez des utilisateurs dans Utilisateurs d'abord.`
   String get billingNoUsersAvailable {
     return Intl.message(
-      'No users to assign. Add users in Users first.',
+      'Aucun utilisateur à attribuer. Ajoutez des utilisateurs dans Utilisateurs d\'abord.',
       name: 'billingNoUsersAvailable',
       desc: '',
       args: [],
     );
   }
 
-  /// `Payment received. We're confirming it — your license(s) will appear shortly; you can then assign seats to users.`
+  /// `Paiement reçu. Confirmation en cours — votre ou vos licences apparaîtront sous peu ; vous pourrez ensuite les attribuer aux utilisateurs.`
   String get billingPaymentProcessing {
     return Intl.message(
-      'Payment received. We\'re confirming it — your license(s) will appear shortly; you can then assign seats to users.',
+      'Paiement reçu. Confirmation en cours — votre ou vos licences apparaîtront sous peu ; vous pourrez ensuite les attribuer aux utilisateurs.',
       name: 'billingPaymentProcessing',
       desc: '',
       args: [],
     );
   }
 
-  /// `Payment accepted. One or more licenses were purchased successfully: you can assign seats to the relevant users.`
+  /// `Paiement accepté. Une ou plusieurs licences ont bien été achetées : vous pouvez les attribuer aux utilisateurs concernés.`
   String get billingPaymentSuccess {
     return Intl.message(
-      'Payment accepted. One or more licenses were purchased successfully: you can assign seats to the relevant users.',
+      'Paiement accepté. Une ou plusieurs licences ont bien été achetées : vous pouvez les attribuer aux utilisateurs concernés.',
       name: 'billingPaymentSuccess',
       desc: '',
       args: [],
     );
   }
 
-  /// `Card/Bank`
+  /// `Carte/Banque`
   String get billingPayWithCard {
     return Intl.message(
-      'Card/Bank',
+      'Carte/Banque',
       name: 'billingPayWithCard',
       desc: '',
       args: [],
@@ -269,236 +374,11 @@ class Lang {
     );
   }
 
-  /// `How do you want to pay?`
-  String get billingChoosePaymentMethod {
+  /// `par utilisateur`
+  String get billingPerUser {
     return Intl.message(
-      'How do you want to pay?',
-      name: 'billingChoosePaymentMethod',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Purchase`
-  String get billingPurchase {
-    return Intl.message(
-      'Purchase',
-      name: 'billingPurchase',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Purchase Premium`
-  String get billingPurchaseLicense {
-    return Intl.message(
-      'Purchase Premium',
-      name: 'billingPurchaseLicense',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `The Premium license unlocks remote tracking, multi-store management and the advanced dashboard. One-time purchase per user: no subscription, no expiry.`
-  String get billingPurchaseLicenseDescription {
-    return Intl.message(
-      'The Premium license unlocks remote tracking, multi-store management and the advanced dashboard. One-time purchase per user: no subscription, no expiry.',
-      name: 'billingPurchaseLicenseDescription',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No Premium licenses purchased yet.`
-  String get billingHistoryNoLicenses {
-    return Intl.message(
-      'No Premium licenses purchased yet.',
-      name: 'billingHistoryNoLicenses',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No fiscal years paid yet.`
-  String get billingHistoryNoSyscohadaYears {
-    return Intl.message(
-      'No fiscal years paid yet.',
-      name: 'billingHistoryNoSyscohadaYears',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Purchases / License assignment`
-  String get billingTabHistory {
-    return Intl.message(
-      'Purchases / License assignment',
-      name: 'billingTabHistory',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Offers`
-  String get billingTabOffers {
-    return Intl.message('Offers', name: 'billingTabOffers', desc: '', args: []);
-  }
-
-  /// `SYSCOHADA financial statements`
-  String get billingSyscohadaTitle {
-    return Intl.message(
-      'SYSCOHADA financial statements',
-      name: 'billingSyscohadaTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Minimum Cash System — one-time purchase per fiscal year (not a subscription)`
-  String get billingSyscohadaSubtitle {
-    return Intl.message(
-      'Minimum Cash System — one-time purchase per fiscal year (not a subscription)',
-      name: 'billingSyscohadaSubtitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `1,900 XOF / 2.90 EUR`
-  String get billingSyscohadaPrice {
-    return Intl.message(
-      '1,900 XOF / 2.90 EUR',
-      name: 'billingSyscohadaPrice',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `per fiscal year`
-  String get billingSyscohadaPerReport {
-    return Intl.message(
-      'per fiscal year',
-      name: 'billingSyscohadaPerReport',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Fiscal year`
-  String get billingSyscohadaSelectYear {
-    return Intl.message(
-      'Fiscal year',
-      name: 'billingSyscohadaSelectYear',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Pay for this year`
-  String get billingSyscohadaPurchase {
-    return Intl.message(
-      'Pay for this year',
-      name: 'billingSyscohadaPurchase',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Years already paid`
-  String get billingSyscohadaPurchasedYears {
-    return Intl.message(
-      'Years already paid',
-      name: 'billingSyscohadaPurchasedYears',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Purchase from this screen coming soon.`
-  String get billingSyscohadaComingSoon {
-    return Intl.message(
-      'Purchase from this screen coming soon.',
-      name: 'billingSyscohadaComingSoon',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `This report cannot be generated until the fiscal year is over.`
-  String get billingSyscohadaCurrentYearDisclaimer {
-    return Intl.message(
-      'This report cannot be generated until the fiscal year is over.',
-      name: 'billingSyscohadaCurrentYearDisclaimer',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No other user can receive this seat. Add a user or free a license seat elsewhere first.`
-  String get billingReassignNoOtherUser {
-    return Intl.message(
-      'No other user can receive this seat. Add a user or free a license seat elsewhere first.',
-      name: 'billingReassignNoOtherUser',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Reassign`
-  String get billingReassignSeat {
-    return Intl.message(
-      'Reassign',
-      name: 'billingReassignSeat',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Reassign this license seat to another user`
-  String get billingReassignSeatDialogTitle {
-    return Intl.message(
-      'Reassign this license seat to another user',
-      name: 'billingReassignSeatDialogTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Retry`
-  String get billingRetry {
-    return Intl.message('Retry', name: 'billingRetry', desc: '', args: []);
-  }
-
-  /// `license(s) attributed`
-  String get billingSeatsAttributed {
-    return Intl.message(
-      'license(s) attributed',
-      name: 'billingSeatsAttributed',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `users`
-  String get billingUsers {
-    return Intl.message('users', name: 'billingUsers', desc: '', args: []);
-  }
-
-  /// `Valid until`
-  String get billingValidUntil {
-    return Intl.message(
-      'Valid until',
-      name: 'billingValidUntil',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Terms and Conditions of Sale`
-  String get billingViewFullTerms {
-    return Intl.message(
-      'Terms and Conditions of Sale',
-      name: 'billingViewFullTerms',
+      'par utilisateur',
+      name: 'billingPerUser',
       desc: '',
       args: [],
     );
@@ -524,239 +404,547 @@ class Lang {
     );
   }
 
-  /// `per user`
-  String get billingPerUser {
-    return Intl.message('per user', name: 'billingPerUser', desc: '', args: []);
+  /// `Acheter`
+  String get billingPurchase {
+    return Intl.message('Acheter', name: 'billingPurchase', desc: '', args: []);
   }
 
-  /// `You don't have permission to manage licenses. Ask your enterprise administrator to grant you billing access.`
-  String get billingNoAccess {
+  /// `Acheter Premium`
+  String get billingPurchaseLicense {
     return Intl.message(
-      'You don\'t have permission to manage licenses. Ask your enterprise administrator to grant you billing access.',
-      name: 'billingNoAccess',
+      'Acheter Premium',
+      name: 'billingPurchaseLicense',
       desc: '',
       args: [],
     );
   }
 
-  /// `You don't have permission to view statistics. Ask your enterprise administrator to grant you access.`
-  String get statsNoAccess {
+  /// `La licence Premium débloque le suivi à distance, le multi-boutiques et le tableau de bord avancé. Achat unique par utilisateur : pas d'abonnement, pas de date limite.`
+  String get billingPurchaseLicenseDescription {
     return Intl.message(
-      'You don\'t have permission to view statistics. Ask your enterprise administrator to grant you access.',
-      name: 'statsNoAccess',
+      'La licence Premium débloque le suivi à distance, le multi-boutiques et le tableau de bord avancé. Achat unique par utilisateur : pas d\'abonnement, pas de date limite.',
+      name: 'billingPurchaseLicenseDescription',
       desc: '',
       args: [],
     );
   }
 
-  /// `You don't have permission for this action.`
-  String get billingActionNotPermitted {
+  /// `Aucun autre utilisateur ne peut recevoir cette license. Ajoutez un utilisateur ou libérez une license ailleurs d’abord.`
+  String get billingReassignNoOtherUser {
     return Intl.message(
-      'You don\'t have permission for this action.',
-      name: 'billingActionNotPermitted',
+      'Aucun autre utilisateur ne peut recevoir cette license. Ajoutez un utilisateur ou libérez une license ailleurs d’abord.',
+      name: 'billingReassignNoOtherUser',
       desc: '',
       args: [],
     );
   }
 
-  /// `Button Emphasis`
+  /// `Réattribuer`
+  String get billingReassignSeat {
+    return Intl.message(
+      'Réattribuer',
+      name: 'billingReassignSeat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Réattribuer cette license à un autre utilisateur`
+  String get billingReassignSeatDialogTitle {
+    return Intl.message(
+      'Réattribuer cette license à un autre utilisateur',
+      name: 'billingReassignSeatDialogTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Réessayer`
+  String get billingRetry {
+    return Intl.message('Réessayer', name: 'billingRetry', desc: '', args: []);
+  }
+
+  /// `licence(s) attribuée(s)`
+  String get billingSeatsAttributed {
+    return Intl.message(
+      'licence(s) attribuée(s)',
+      name: 'billingSeatsAttributed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Aucune licence Premium achetée pour le moment.`
+  String get billingHistoryNoLicenses {
+    return Intl.message(
+      'Aucune licence Premium achetée pour le moment.',
+      name: 'billingHistoryNoLicenses',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Aucune année fiscale payée pour le moment.`
+  String get billingHistoryNoSyscohadaYears {
+    return Intl.message(
+      'Aucune année fiscale payée pour le moment.',
+      name: 'billingHistoryNoSyscohadaYears',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Achats / Attribution licence`
+  String get billingTabHistory {
+    return Intl.message(
+      'Achats / Attribution licence',
+      name: 'billingTabHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Offres`
+  String get billingTabOffers {
+    return Intl.message('Offres', name: 'billingTabOffers', desc: '', args: []);
+  }
+
+  /// `Ce rapport ne peut être généré avant la fin de l'exercice fiscal.`
+  String get billingSyscohadaCurrentYearDisclaimer {
+    return Intl.message(
+      'Ce rapport ne peut être généré avant la fin de l\'exercice fiscal.',
+      name: 'billingSyscohadaCurrentYearDisclaimer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `par année fiscale`
+  String get billingSyscohadaPerReport {
+    return Intl.message(
+      'par année fiscale',
+      name: 'billingSyscohadaPerReport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `1 900 CFA / 2.90 EUR`
+  String get billingSyscohadaPrice {
+    return Intl.message(
+      '1 900 CFA / 2.90 EUR',
+      name: 'billingSyscohadaPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payer cette année`
+  String get billingSyscohadaPurchase {
+    return Intl.message(
+      'Payer cette année',
+      name: 'billingSyscohadaPurchase',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Années déjà payées`
+  String get billingSyscohadaPurchasedYears {
+    return Intl.message(
+      'Années déjà payées',
+      name: 'billingSyscohadaPurchasedYears',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Année fiscale`
+  String get billingSyscohadaSelectYear {
+    return Intl.message(
+      'Année fiscale',
+      name: 'billingSyscohadaSelectYear',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Système Minimal de Trésorerie`
+  String get billingSyscohadaSubtitle {
+    return Intl.message(
+      'Système Minimal de Trésorerie',
+      name: 'billingSyscohadaSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `États financiers SYSCOHADA`
+  String get billingSyscohadaTitle {
+    return Intl.message(
+      'États financiers SYSCOHADA',
+      name: 'billingSyscohadaTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `utilisateur(s)`
+  String get billingUsers {
+    return Intl.message(
+      'utilisateur(s)',
+      name: 'billingUsers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Valide jusqu'au`
+  String get billingValidUntil {
+    return Intl.message(
+      'Valide jusqu\'au',
+      name: 'billingValidUntil',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Conditions Générales de Vente`
+  String get billingViewFullTerms {
+    return Intl.message(
+      'Conditions Générales de Vente',
+      name: 'billingViewFullTerms',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Accentuation du Bouton`
   String get buttonEmphasis {
     return Intl.message(
-      'Button Emphasis',
+      'Accentuation du Bouton',
       name: 'buttonEmphasis',
       desc: '',
       args: [],
     );
   }
 
-  /// `{count, plural, one{Button} other{Buttons}}`
+  /// `{count, plural, one{Bouton} other{Boutons}}`
   String buttons(num count) {
     return Intl.plural(
       count,
-      one: 'Button',
-      other: 'Buttons',
+      one: 'Bouton',
+      other: 'Boutons',
       name: 'buttons',
       desc: '',
       args: [count],
     );
   }
 
-  /// `Cancel`
+  /// `Annuler`
   String get cancel {
-    return Intl.message('Cancel', name: 'cancel', desc: '', args: []);
+    return Intl.message('Annuler', name: 'cancel', desc: '', args: []);
   }
 
-  /// `Change photo`
+  /// `Ajouter au catalogue`
+  String get catalogAddToCatalog {
+    return Intl.message(
+      'Ajouter au catalogue',
+      name: 'catalogAddToCatalog',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tous`
+  String get catalogAllCategories {
+    return Intl.message(
+      'Tous',
+      name: 'catalogAllCategories',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Déjà au catalogue`
+  String get catalogAlreadyInCatalog {
+    return Intl.message(
+      'Déjà au catalogue',
+      name: 'catalogAlreadyInCatalog',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vider`
+  String get catalogClearSelection {
+    return Intl.message(
+      'Vider',
+      name: 'catalogClearSelection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Coût d'achat`
+  String get catalogCost {
+    return Intl.message(
+      'Coût d\'achat',
+      name: 'catalogCost',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sélectionnez les produits FMCG que vous vendez, ajustez le prix et le coût, puis ajoutez-les au catalogue de votre chaîne.`
+  String get catalogDiscoverySubtitle {
+    return Intl.message(
+      'Sélectionnez les produits FMCG que vous vendez, ajustez le prix et le coût, puis ajoutez-les au catalogue de votre chaîne.',
+      name: 'catalogDiscoverySubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Aucun produit ne correspond à votre recherche.`
+  String get catalogNoProductsMatch {
+    return Intl.message(
+      'Aucun produit ne correspond à votre recherche.',
+      name: 'catalogNoProductsMatch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choisir`
+  String get catalogPick {
+    return Intl.message('Choisir', name: 'catalogPick', desc: '', args: []);
+  }
+
+  /// `Choisi`
+  String get catalogPicked {
+    return Intl.message('Choisi', name: 'catalogPicked', desc: '', args: []);
+  }
+
+  /// `Prix`
+  String get catalogPrice {
+    return Intl.message('Prix', name: 'catalogPrice', desc: '', args: []);
+  }
+
+  /// `Retirer`
+  String get catalogRemove {
+    return Intl.message('Retirer', name: 'catalogRemove', desc: '', args: []);
+  }
+
+  /// `Chaîne`
+  String get catalogSelectChain {
+    return Intl.message(
+      'Chaîne',
+      name: 'catalogSelectChain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choisissez des produits dans la grille pour constituer votre catalogue.`
+  String get catalogSelectionEmpty {
+    return Intl.message(
+      'Choisissez des produits dans la grille pour constituer votre catalogue.',
+      name: 'catalogSelectionEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count, plural, =0{Sélection} one{Sélection (1)} other{Sélection ({count})}}`
+  String catalogSelectionTitle(int count) {
+    return Intl.plural(
+      count,
+      zero: 'Sélection',
+      one: 'Sélection (1)',
+      other: 'Sélection ($count)',
+      name: 'catalogSelectionTitle',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Changer la photo`
   String get changeProfilePhoto {
     return Intl.message(
-      'Change photo',
+      'Changer la photo',
       name: 'changeProfilePhoto',
       desc: '',
       args: [],
     );
   }
 
-  /// `Close Navigation Menu`
+  /// `Fermer le Menu de Navigation`
   String get closeNavigationMenu {
     return Intl.message(
-      'Close Navigation Menu',
+      'Fermer le Menu de Navigation',
       name: 'closeNavigationMenu',
       desc: '',
       args: [],
     );
   }
 
-  /// `Color Palette`
+  /// `Palette de Couleurs`
   String get colorPalette {
     return Intl.message(
-      'Color Palette',
+      'Palette de Couleurs',
       name: 'colorPalette',
       desc: '',
       args: [],
     );
   }
 
-  /// `{count, plural, one{Color} other{Colors}}`
+  /// `{count, plural, one{Couleur} other{Couleurs}}`
   String colors(num count) {
     return Intl.plural(
       count,
-      one: 'Color',
-      other: 'Colors',
+      one: 'Couleur',
+      other: 'Couleurs',
       name: 'colors',
       desc: '',
       args: [count],
     );
   }
 
-  /// `Color Scheme`
+  /// `Schéma de Couleurs`
   String get colorScheme {
     return Intl.message(
-      'Color Scheme',
+      'Schéma de Couleurs',
       name: 'colorScheme',
       desc: '',
       args: [],
     );
   }
 
-  /// `Confirm delete this record?`
+  /// `Confirmer la suppression de cet enregistrement?`
   String get confirmDeleteRecord {
     return Intl.message(
-      'Confirm delete this record?',
+      'Confirmer la suppression de cet enregistrement?',
       name: 'confirmDeleteRecord',
       desc: '',
       args: [],
     );
   }
 
-  /// `Confirm submit this record?`
+  /// `Confirmer la soumission de cet enregistrement?`
   String get confirmSubmitRecord {
     return Intl.message(
-      'Confirm submit this record?',
+      'Confirmer la soumission de cet enregistrement?',
       name: 'confirmSubmitRecord',
       desc: '',
       args: [],
     );
   }
 
-  /// `Copy`
+  /// `Copier`
   String get copy {
-    return Intl.message('Copy', name: 'copy', desc: '', args: []);
+    return Intl.message('Copier', name: 'copy', desc: '', args: []);
   }
 
-  /// `Error while creating the enterprise: `
+  /// `Erreur lors de la création de l'entreprise : `
   String get createEnterpriseErrorPrefix {
     return Intl.message(
-      'Error while creating the enterprise: ',
+      'Erreur lors de la création de l\'entreprise : ',
       name: 'createEnterpriseErrorPrefix',
       desc: '',
       args: [],
     );
   }
 
-  /// `Create an enterprise`
+  /// `Créer une entreprise`
   String get createEnterprisePageTitle {
     return Intl.message(
-      'Create an enterprise',
+      'Créer une entreprise',
       name: 'createEnterprisePageTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `The enterprise "{name}" was created successfully.`
+  /// `L'entreprise « {name} » a bien été créée.`
   String createEnterpriseSuccessTitle(String name) {
     return Intl.message(
-      'The enterprise "$name" was created successfully.',
+      'L\'entreprise « $name » a bien été créée.',
       name: 'createEnterpriseSuccessTitle',
       desc: '',
       args: [name],
     );
   }
 
-  /// `This field requires a valid credit card number.`
+  /// `Ce champ nécessite un numéro de carte de crédit valide.`
   String get creditCardErrorText {
     return Intl.message(
-      'This field requires a valid credit card number.',
+      'Ce champ nécessite un numéro de carte de crédit valide.',
       name: 'creditCardErrorText',
       desc: '',
       args: [],
     );
   }
 
-  /// `Back`
+  /// `Retour`
   String get crudBack {
-    return Intl.message('Back', name: 'crudBack', desc: '', args: []);
+    return Intl.message('Retour', name: 'crudBack', desc: '', args: []);
   }
 
-  /// `Delete`
+  /// `Supprimer`
   String get crudDelete {
-    return Intl.message('Delete', name: 'crudDelete', desc: '', args: []);
+    return Intl.message('Supprimer', name: 'crudDelete', desc: '', args: []);
   }
 
-  /// `Detail`
+  /// `Détail`
   String get crudDetail {
-    return Intl.message('Detail', name: 'crudDetail', desc: '', args: []);
+    return Intl.message('Détail', name: 'crudDetail', desc: '', args: []);
   }
 
-  /// `New`
+  /// `Nouveau`
   String get crudNew {
-    return Intl.message('New', name: 'crudNew', desc: '', args: []);
+    return Intl.message('Nouveau', name: 'crudNew', desc: '', args: []);
   }
 
-  /// `Dark Theme`
+  /// `Thème Sombre`
   String get darkTheme {
-    return Intl.message('Dark Theme', name: 'darkTheme', desc: '', args: []);
+    return Intl.message('Thème Sombre', name: 'darkTheme', desc: '', args: []);
   }
 
-  /// `Dashboard`
+  /// `Tableau de Bord`
   String get dashboard {
-    return Intl.message('Dashboard', name: 'dashboard', desc: '', args: []);
+    return Intl.message(
+      'Tableau de Bord',
+      name: 'dashboard',
+      desc: '',
+      args: [],
+    );
   }
 
-  /// `My stores`
+  /// `Mes boutiques`
   String get dashboardCardBoutiquesValue {
     return Intl.message(
-      'My stores',
+      'Mes boutiques',
       name: 'dashboardCardBoutiquesValue',
       desc: '',
       args: [],
     );
   }
 
-  /// `Devices`
+  /// `Appareils`
   String get dashboardCardDevicesValue {
     return Intl.message(
-      'Devices',
+      'Appareils',
       name: 'dashboardCardDevicesValue',
       desc: '',
       args: [],
     );
   }
 
-  /// `My enterprise`
+  /// `Mon entreprise`
   String get dashboardCardMyFirmValue {
     return Intl.message(
-      'My enterprise',
+      'Mon entreprise',
       name: 'dashboardCardMyFirmValue',
       desc: '',
       args: [],
@@ -773,141 +961,141 @@ class Lang {
     );
   }
 
-  /// `Today's tickets`
+  /// `Tickets du jour`
   String get dashboardCardTicketsToday {
     return Intl.message(
-      'Today\'s tickets',
+      'Tickets du jour',
       name: 'dashboardCardTicketsToday',
       desc: '',
       args: [],
     );
   }
 
-  /// `User access`
+  /// `Accès utilisateurs`
   String get dashboardCardUserAccess {
     return Intl.message(
-      'User access',
+      'Accès utilisateurs',
       name: 'dashboardCardUserAccess',
       desc: '',
       args: [],
     );
   }
 
-  /// `Users`
+  /// `Utilisateurs`
   String get dashboardCardUsersValue {
     return Intl.message(
-      'Users',
+      'Utilisateurs',
       name: 'dashboardCardUsersValue',
       desc: '',
       args: [],
     );
   }
 
-  /// `This field requires a valid date string.`
+  /// `Ce champ nécessite une chaîne de date valide.`
   String get dateStringErrorText {
     return Intl.message(
-      'This field requires a valid date string.',
+      'Ce champ nécessite une chaîne de date valide.',
       name: 'dateStringErrorText',
       desc: '',
       args: [],
     );
   }
 
-  /// `{count, plural, one{Dialog} other{Dialogs}}`
+  /// `{count, plural, one{Dialogue} other{Dialogues}}`
   String dialogs(num count) {
     return Intl.plural(
       count,
-      one: 'Dialog',
-      other: 'Dialogs',
+      one: 'Dialogue',
+      other: 'Dialogues',
       name: 'dialogs',
       desc: '',
       args: [count],
     );
   }
 
-  /// `Don't have an account?`
+  /// `Vous n'avez pas de compte ?`
   String get dontHaveAnAccount {
     return Intl.message(
-      'Don\'t have an account?',
+      'Vous n\'avez pas de compte ?',
       name: 'dontHaveAnAccount',
       desc: '',
       args: [],
     );
   }
 
-  /// `Email`
+  /// `E-mail`
   String get email {
-    return Intl.message('Email', name: 'email', desc: '', args: []);
+    return Intl.message('E-mail', name: 'email', desc: '', args: []);
   }
 
-  /// `This field requires a valid email address.`
+  /// `Ce champ nécessite une adresse e-mail valide.`
   String get emailErrorText {
     return Intl.message(
-      'This field requires a valid email address.',
+      'Ce champ nécessite une adresse e-mail valide.',
       name: 'emailErrorText',
       desc: '',
       args: [],
     );
   }
 
-  /// `Enterprise name`
+  /// `Nom de l'entreprise`
   String get enterpriseNameFieldHint {
     return Intl.message(
-      'Enterprise name',
+      'Nom de l\'entreprise',
       name: 'enterpriseNameFieldHint',
       desc: '',
       args: [],
     );
   }
 
-  /// `Enterprise`
+  /// `Entreprise`
   String get enterpriseNameFieldLabel {
     return Intl.message(
-      'Enterprise',
+      'Entreprise',
       name: 'enterpriseNameFieldLabel',
       desc: '',
       args: [],
     );
   }
 
-  /// `This field value must be equal to {value}.`
+  /// `La valeur de ce champ doit être égale à {value}.`
   String equalErrorText(Object value) {
     return Intl.message(
-      'This field value must be equal to $value.',
+      'La valeur de ce champ doit être égale à $value.',
       name: 'equalErrorText',
       desc: '',
       args: [value],
     );
   }
 
-  /// `Error 404`
+  /// `Erreur 404`
   String get error404 {
-    return Intl.message('Error 404', name: 'error404', desc: '', args: []);
+    return Intl.message('Erreur 404', name: 'error404', desc: '', args: []);
   }
 
-  /// `Sorry, the page you are looking for has been removed or not exists.`
+  /// `Désolé, la page que vous recherchez a été supprimée ou n'existe pas.`
   String get error404Message {
     return Intl.message(
-      'Sorry, the page you are looking for has been removed or not exists.',
+      'Désolé, la page que vous recherchez a été supprimée ou n\'existe pas.',
       name: 'error404Message',
       desc: '',
       args: [],
     );
   }
 
-  /// `Page not found`
+  /// `Page non trouvée`
   String get error404Title {
     return Intl.message(
-      'Page not found',
+      'Page non trouvée',
       name: 'error404Title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Example`
+  /// `Exemple`
   String get example {
-    return Intl.message('Example', name: 'example', desc: '', args: []);
+    return Intl.message('Exemple', name: 'example', desc: '', args: []);
   }
 
   /// `{count, plural, one{Extension} other{Extensions}}`
@@ -922,307 +1110,292 @@ class Lang {
     );
   }
 
-  /// `Your enterprise groups your users and your store chains.`
+  /// `Votre entreprise regroupe vos utilisateurs et vos chaînes ou boutiques.`
   String get firmCardDescription {
     return Intl.message(
-      'Your enterprise groups your users and your store chains.',
+      'Votre entreprise regroupe vos utilisateurs et vos chaînes ou boutiques.',
       name: 'firmCardDescription',
       desc: '',
       args: [],
     );
   }
 
-  /// `Created on`
+  /// `Créée le`
   String get firmCreatedAtLabel {
     return Intl.message(
-      'Created on',
+      'Créée le',
       name: 'firmCreatedAtLabel',
       desc: '',
       args: [],
     );
   }
 
-  /// `Default currency`
+  /// `Devise par défaut`
   String get firmCurrencyLabel {
     return Intl.message(
-      'Default currency',
+      'Devise par défaut',
       name: 'firmCurrencyLabel',
       desc: '',
       args: [],
     );
   }
 
-  /// `Dual currency`
+  /// `Double devise`
   String get firmDualCurrencyLabel {
     return Intl.message(
-      'Dual currency',
+      'Double devise',
       name: 'firmDualCurrencyLabel',
       desc: '',
       args: [],
     );
   }
 
-  /// `Email verified`
+  /// `E-mail vérifié`
   String get firmEmailVerifiedLabel {
     return Intl.message(
-      'Email verified',
+      'E-mail vérifié',
       name: 'firmEmailVerifiedLabel',
       desc: '',
       args: [],
     );
   }
 
-  /// `Please create a new enterprise by clicking the "Add an enterprise" button.`
+  /// `Veuillez créer une nouvelle entreprise en cliquant sur le bouton « Ajouter une entreprise ».`
   String get firmErrorCreateHint {
     return Intl.message(
-      'Please create a new enterprise by clicking the "Add an enterprise" button.',
+      'Veuillez créer une nouvelle entreprise en cliquant sur le bouton « Ajouter une entreprise ».',
       name: 'firmErrorCreateHint',
       desc: '',
       args: [],
     );
   }
 
-  /// `An unexpected error occurred.`
+  /// `Une erreur inattendue est survenue.`
   String get firmErrorUnexpected {
     return Intl.message(
-      'An unexpected error occurred.',
+      'Une erreur inattendue est survenue.',
       name: 'firmErrorUnexpected',
       desc: '',
       args: [],
     );
   }
 
-  /// `Enterprise ID`
+  /// `ID entreprise`
   String get firmIdLabel {
     return Intl.message(
-      'Enterprise ID',
+      'ID entreprise',
       name: 'firmIdLabel',
       desc: '',
       args: [],
     );
   }
 
-  /// `Name`
+  /// `Nom`
   String get firmNameLabel {
-    return Intl.message('Name', name: 'firmNameLabel', desc: '', args: []);
+    return Intl.message('Nom', name: 'firmNameLabel', desc: '', args: []);
   }
 
-  /// `My enterprise`
+  /// `Mon entreprise`
   String get firmPageTitle {
     return Intl.message(
-      'My enterprise',
+      'Mon entreprise',
       name: 'firmPageTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Secondary currency`
+  /// `Devise secondaire`
   String get firmSecondaryCurrencyLabel {
     return Intl.message(
-      'Secondary currency',
+      'Devise secondaire',
       name: 'firmSecondaryCurrencyLabel',
       desc: '',
       args: [],
     );
   }
 
-  /// `Active`
+  /// `Actif`
   String get firmStatusActive {
-    return Intl.message('Active', name: 'firmStatusActive', desc: '', args: []);
+    return Intl.message('Actif', name: 'firmStatusActive', desc: '', args: []);
   }
 
-  /// `Inactive`
+  /// `Inactif`
   String get firmStatusInactive {
     return Intl.message(
-      'Inactive',
+      'Inactif',
       name: 'firmStatusInactive',
       desc: '',
       args: [],
     );
   }
 
-  /// `Status`
+  /// `Statut`
   String get firmStatusLabel {
-    return Intl.message('Status', name: 'firmStatusLabel', desc: '', args: []);
+    return Intl.message('Statut', name: 'firmStatusLabel', desc: '', args: []);
   }
 
-  /// `First Name`
+  /// `Prénom`
   String get firstName {
-    return Intl.message('First Name', name: 'firstName', desc: '', args: []);
+    return Intl.message('Prénom', name: 'firstName', desc: '', args: []);
   }
 
-  /// `Forgot password?`
+  /// `Mot de passe oublié ?`
   String get forgotPassword {
     return Intl.message(
-      'Forgot password?',
+      'Mot de passe oublié ?',
       name: 'forgotPassword',
       desc: '',
       args: [],
     );
   }
 
-  /// `Enter your email address to reset your password.`
+  /// `Saisissez votre adresse e-mail pour réinitialiser votre mot de passe.`
   String get forgotPasswordMessage {
     return Intl.message(
-      'Enter your email address to reset your password.',
+      'Saisissez votre adresse e-mail pour réinitialiser votre mot de passe.',
       name: 'forgotPasswordMessage',
       desc: '',
       args: [],
     );
   }
 
-  /// `Forgot password`
+  /// `Mot de passe oublié`
   String get forgotPasswordTitle {
     return Intl.message(
-      'Forgot password',
+      'Mot de passe oublié',
       name: 'forgotPasswordTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Password reset email sent.`
-  String get passwordResetEmailSent {
-    return Intl.message(
-      'Password reset email sent.',
-      name: 'passwordResetEmailSent',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `{count, plural, one{Form} other{Forms}}`
+  /// `{count, plural, one{Formulaire} other{Formulaires}}`
   String forms(num count) {
     return Intl.plural(
       count,
-      one: 'Form',
-      other: 'Forms',
+      one: 'Formulaire',
+      other: 'Formulaires',
       name: 'forms',
       desc: '',
       args: [count],
     );
   }
 
-  /// `General UI`
+  /// `UI Générale`
   String get generalUi {
-    return Intl.message('General UI', name: 'generalUi', desc: '', args: []);
+    return Intl.message('UI Générale', name: 'generalUi', desc: '', args: []);
   }
 
-  /// `Help`
+  /// `Aide`
   String get help {
-    return Intl.message('Help', name: 'help', desc: '', args: []);
+    return Intl.message('Aide', name: 'help', desc: '', args: []);
   }
 
-  /// `Read the FAQ`
+  /// `Lire la FAQ`
   String get helpReadFaq {
-    return Intl.message(
-      'Read the FAQ',
-      name: 'helpReadFaq',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Lire la FAQ', name: 'helpReadFaq', desc: '', args: []);
   }
 
-  /// `Resources`
+  /// `Ressources`
   String get helpResourcesTitle {
     return Intl.message(
-      'Resources',
+      'Ressources',
       name: 'helpResourcesTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `The web console lets you manage tickets (view, filter, search). Articles, contacts and operations (sales, purchases, stock movements, etc.) are available in the mobile app for now.`
+  /// `La console web permet de gérer les tickets (consultation, filtres, recherche). Les articles, contacts et opérations (ventes, achats, mouvements de stock, etc.) sont uniquement disponibles sur l'application de caisse pour l'instant.`
   String get helpScopeBody {
     return Intl.message(
-      'The web console lets you manage tickets (view, filter, search). Articles, contacts and operations (sales, purchases, stock movements, etc.) are available in the mobile app for now.',
+      'La console web permet de gérer les tickets (consultation, filtres, recherche). Les articles, contacts et opérations (ventes, achats, mouvements de stock, etc.) sont uniquement disponibles sur l\'application de caisse pour l\'instant.',
       name: 'helpScopeBody',
       desc: '',
       args: [],
     );
   }
 
-  /// `The web console lets you manage tickets (view, filter, search) and discover prepared catalog products to set up your POS. Contacts and operations (sales, purchases, stock movements, etc.) remain available in the mobile app for now.`
+  /// `La console web permet de gérer les tickets (consultation, filtres, recherche) et de découvrir des produits préparés pour configurer votre caisse. Les contacts et opérations (ventes, achats, mouvements de stock, etc.) restent disponibles sur l'application de caisse pour l'instant.`
   String get helpScopeBodyDev {
     return Intl.message(
-      'The web console lets you manage tickets (view, filter, search) and discover prepared catalog products to set up your POS. Contacts and operations (sales, purchases, stock movements, etc.) remain available in the mobile app for now.',
+      'La console web permet de gérer les tickets (consultation, filtres, recherche) et de découvrir des produits préparés pour configurer votre caisse. Les contacts et opérations (ventes, achats, mouvements de stock, etc.) restent disponibles sur l\'application de caisse pour l\'instant.',
       name: 'helpScopeBodyDev',
       desc: '',
       args: [],
     );
   }
 
-  /// `What can I do from the web console?`
+  /// `Que puis-je faire depuis la console web ?`
   String get helpScopeTitle {
     return Intl.message(
-      'What can I do from the web console?',
+      'Que puis-je faire depuis la console web ?',
       name: 'helpScopeTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Watch video demos`
+  /// `Voir les démos vidéo`
   String get helpWatchDemos {
     return Intl.message(
-      'Watch video demos',
+      'Voir les démos vidéo',
       name: 'helpWatchDemos',
       desc: '',
       args: [],
     );
   }
 
-  /// `Hi`
+  /// `Salut`
   String get hi {
-    return Intl.message('Hi', name: 'hi', desc: '', args: []);
+    return Intl.message('Salut', name: 'hi', desc: '', args: []);
   }
 
-  /// `Home`
+  /// `Accueil`
   String get homePage {
-    return Intl.message('Home', name: 'homePage', desc: '', args: []);
+    return Intl.message('Accueil', name: 'homePage', desc: '', args: []);
   }
 
-  /// `IFrame Demo`
+  /// `Démo IFrame`
   String get iframeDemo {
-    return Intl.message('IFrame Demo', name: 'iframeDemo', desc: '', args: []);
+    return Intl.message('Démo IFrame', name: 'iframeDemo', desc: '', args: []);
   }
 
-  /// `This field requires a valid integer.`
+  /// `Ce champ nécessite un entier valide.`
   String get integerErrorText {
     return Intl.message(
-      'This field requires a valid integer.',
+      'Ce champ nécessite un entier valide.',
       name: 'integerErrorText',
       desc: '',
       args: [],
     );
   }
 
-  /// `This field requires a valid IP.`
+  /// `Ce champ nécessite une IP valide.`
   String get ipErrorText {
     return Intl.message(
-      'This field requires a valid IP.',
+      'Ce champ nécessite une IP valide.',
       name: 'ipErrorText',
       desc: '',
       args: [],
     );
   }
 
-  /// `Language`
+  /// `Langue`
   String get language {
-    return Intl.message('Language', name: 'language', desc: '', args: []);
+    return Intl.message('Langue', name: 'language', desc: '', args: []);
   }
 
-  /// `Last Name`
+  /// `Nom`
   String get lastName {
-    return Intl.message('Last Name', name: 'lastName', desc: '', args: []);
+    return Intl.message('Nom', name: 'lastName', desc: '', args: []);
   }
 
-  /// `Terms and Conditions of Sale - Cash Report`
+  /// `Conditions Générales de Vente - Rapport de trésorerie`
   String get legalDocTitleCgvAccountingReportFr {
     return Intl.message(
-      'Terms and Conditions of Sale - Cash Report',
+      'Conditions Générales de Vente - Rapport de trésorerie',
       name: 'legalDocTitleCgvAccountingReportFr',
       desc: '',
       args: [],
@@ -1249,34 +1422,44 @@ class Lang {
     );
   }
 
-  /// `Document version ID`
+  /// `Référence du document`
   String get legalDocumentVersionId {
     return Intl.message(
-      'Document version ID',
+      'Référence du document',
       name: 'legalDocumentVersionId',
       desc: '',
       args: [],
     );
   }
 
-  /// `Light Theme`
+  /// `Thème Clair`
   String get lightTheme {
-    return Intl.message('Light Theme', name: 'lightTheme', desc: '', args: []);
+    return Intl.message('Thème Clair', name: 'lightTheme', desc: '', args: []);
   }
 
-  /// `Login`
+  /// `Connexion`
   String get login {
-    return Intl.message('Login', name: 'login', desc: '', args: []);
+    return Intl.message('Connexion', name: 'login', desc: '', args: []);
   }
 
-  /// `Login now!`
+  /// `Connectez-vous`
   String get loginNow {
-    return Intl.message('Login now!', name: 'loginNow', desc: '', args: []);
+    return Intl.message('Connectez-vous', name: 'loginNow', desc: '', args: []);
   }
 
-  /// `Logout`
+  /// `Déconnexion`
   String get logout {
-    return Intl.message('Logout', name: 'logout', desc: '', args: []);
+    return Intl.message('Déconnexion', name: 'logout', desc: '', args: []);
+  }
+
+  /// `Rester connecté`
+  String get stayConnected {
+    return Intl.message(
+      'Rester connecté',
+      name: 'stayConnected',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Lorem ipsum dolor sit amet, consectetur adipiscing elit`
@@ -1294,94 +1477,479 @@ class Lang {
     return Intl.message('E-mail', name: 'mail', desc: '', args: []);
   }
 
-  /// `Value does not match pattern.`
+  /// `La valeur ne correspond pas au motif.`
   String get matchErrorText {
     return Intl.message(
-      'Value does not match pattern.',
+      'La valeur ne correspond pas au motif.',
       name: 'matchErrorText',
       desc: '',
       args: [],
     );
   }
 
-  /// `Value must be less than or equal to {max}`
+  /// `La valeur doit être inférieure ou égale à {max}.`
   String maxErrorText(Object max) {
     return Intl.message(
-      'Value must be less than or equal to $max',
+      'La valeur doit être inférieure ou égale à $max.',
       name: 'maxErrorText',
       desc: '',
       args: [max],
     );
   }
 
-  /// `Value must have a length less than or equal to {maxLength}`
+  /// `La longueur doit être inférieure ou égale à {maxLength}.`
   String maxLengthErrorText(Object maxLength) {
     return Intl.message(
-      'Value must have a length less than or equal to $maxLength',
+      'La longueur doit être inférieure ou égale à $maxLength.',
       name: 'maxLengthErrorText',
       desc: '',
       args: [maxLength],
     );
   }
 
-  /// `Accesses`
+  /// `Accès`
   String get menuAccesses {
-    return Intl.message('Accesses', name: 'menuAccesses', desc: '', args: []);
+    return Intl.message('Accès', name: 'menuAccesses', desc: '', args: []);
   }
 
-  /// `Weebi offers`
+  /// `Offres Weebi`
   String get menuBilling {
     return Intl.message(
-      'Weebi offers',
+      'Offres Weebi',
       name: 'menuBilling',
       desc: '',
       args: [],
     );
   }
 
-  /// `My Boutiques`
+  /// `Mes Boutiques`
   String get menuBoutiques {
     return Intl.message(
-      'My Boutiques',
+      'Mes Boutiques',
       name: 'menuBoutiques',
       desc: '',
       args: [],
     );
   }
 
-  /// `Devices`
+  /// `Articles`
+  String get menuCatalog {
+    return Intl.message('Articles', name: 'menuCatalog', desc: '', args: []);
+  }
+
+  /// `Contacts`
+  String get menuContacts {
+    return Intl.message('Contacts', name: 'menuContacts', desc: '', args: []);
+  }
+
+  /// `Cliquez sur + pour créer un enregistrement.`
+  String get entityEmptyHint {
+    return Intl.message(
+      'Cliquez sur + pour créer un enregistrement.',
+      name: 'entityEmptyHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Créer`
+  String get entityCreate {
+    return Intl.message('Créer', name: 'entityCreate', desc: '', args: []);
+  }
+
+  /// `Modifier`
+  String get entityEdit {
+    return Intl.message('Modifier', name: 'entityEdit', desc: '', args: []);
+  }
+
+  /// `Supprimer`
+  String get entityDelete {
+    return Intl.message('Supprimer', name: 'entityDelete', desc: '', args: []);
+  }
+
+  /// `Ajouter un sous-article`
+  String get entityAddSku {
+    return Intl.message(
+      'Ajouter un sous-article',
+      name: 'entityAddSku',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Supprimer cet enregistrement ?`
+  String get entityConfirmDelete {
+    return Intl.message(
+      'Supprimer cet enregistrement ?',
+      name: 'entityConfirmDelete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tous`
+  String get statusAll {
+    return Intl.message('Tous', name: 'statusAll', desc: '', args: []);
+  }
+
+  /// `Actif`
+  String get statusActive {
+    return Intl.message('Actif', name: 'statusActive', desc: '', args: []);
+  }
+
+  /// `Inactif`
+  String get statusInactive {
+    return Intl.message('Inactif', name: 'statusInactive', desc: '', args: []);
+  }
+
+  /// `Créer un article`
+  String get catalogNewProduct {
+    return Intl.message(
+      'Créer un article',
+      name: 'catalogNewProduct',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Modifier l'article`
+  String get catalogEditProduct {
+    return Intl.message(
+      'Modifier l\'article',
+      name: 'catalogEditProduct',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saisir le libellé`
+  String get catalogEnterTitle {
+    return Intl.message(
+      'Saisir le libellé',
+      name: 'catalogEnterTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Un article avec ce libellé existe déjà`
+  String get catalogTitleTaken {
+    return Intl.message(
+      'Un article avec ce libellé existe déjà',
+      name: 'catalogTitleTaken',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saisir le prix de vente`
+  String get catalogEnterPrice {
+    return Intl.message(
+      'Saisir le prix de vente',
+      name: 'catalogEnterPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `erreur`
+  String get catalogInvalidNumber {
+    return Intl.message(
+      'erreur',
+      name: 'catalogInvalidNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `exemple : 1.5 et non pas 1,5`
+  String get catalogInvalidUnits {
+    return Intl.message(
+      'exemple : 1.5 et non pas 1,5',
+      name: 'catalogInvalidUnits',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Libellé`
+  String get catalogColumnTitle {
+    return Intl.message(
+      'Libellé',
+      name: 'catalogColumnTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Désignation`
+  String get catalogColumnDesignation {
+    return Intl.message(
+      'Désignation',
+      name: 'catalogColumnDesignation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Prix de vente`
+  String get catalogColumnPrice {
+    return Intl.message(
+      'Prix de vente',
+      name: 'catalogColumnPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Code barre`
+  String get catalogColumnBarcode {
+    return Intl.message(
+      'Code barre',
+      name: 'catalogColumnBarcode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type`
+  String get catalogColumnKind {
+    return Intl.message('Type', name: 'catalogColumnKind', desc: '', args: []);
+  }
+
+  /// `Statut`
+  String get catalogColumnStatus {
+    return Intl.message(
+      'Statut',
+      name: 'catalogColumnStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Caractéristiques`
+  String get catalogIdentity {
+    return Intl.message(
+      'Caractéristiques',
+      name: 'catalogIdentity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vente`
+  String get catalogSelling {
+    return Intl.message('Vente', name: 'catalogSelling', desc: '', args: []);
+  }
+
+  /// `Sous-articles`
+  String get catalogVariants {
+    return Intl.message(
+      'Sous-articles',
+      name: 'catalogVariants',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unité de compte`
+  String get catalogStockUnit {
+    return Intl.message(
+      'Unité de compte',
+      name: 'catalogStockUnit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unités/article`
+  String get catalogUnitsInOnePiece {
+    return Intl.message(
+      'Unités/article',
+      name: 'catalogUnitsInOnePiece',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Créer un contact`
+  String get contactNew {
+    return Intl.message(
+      'Créer un contact',
+      name: 'contactNew',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Modifier le contact`
+  String get contactEdit {
+    return Intl.message(
+      'Modifier le contact',
+      name: 'contactEdit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Détails`
+  String get contactDetails {
+    return Intl.message('Détails', name: 'contactDetails', desc: '', args: []);
+  }
+
+  /// `Adresse`
+  String get contactAddress {
+    return Intl.message('Adresse', name: 'contactAddress', desc: '', args: []);
+  }
+
+  /// `Prénom`
+  String get contactFirstName {
+    return Intl.message('Prénom', name: 'contactFirstName', desc: '', args: []);
+  }
+
+  /// `Nom de famille`
+  String get contactLastName {
+    return Intl.message(
+      'Nom de famille',
+      name: 'contactLastName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saisir le prénom`
+  String get contactEnterFirstName {
+    return Intl.message(
+      'Saisir le prénom',
+      name: 'contactEnterFirstName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saisir le nom de famille`
+  String get contactEnterLastName {
+    return Intl.message(
+      'Saisir le nom de famille',
+      name: 'contactEnterLastName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Le numéro doit comporter au moins 8 chiffres`
+  String get contactPhoneTooShort {
+    return Intl.message(
+      'Le numéro doit comporter au moins 8 chiffres',
+      name: 'contactPhoneTooShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `L'adresse mail n'est pas correcte`
+  String get contactEmailInvalid {
+    return Intl.message(
+      'L\'adresse mail n\'est pas correcte',
+      name: 'contactEmailInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mail`
+  String get contactMail {
+    return Intl.message('Mail', name: 'contactMail', desc: '', args: []);
+  }
+
+  /// `Téléphone`
+  String get contactPhone {
+    return Intl.message('Téléphone', name: 'contactPhone', desc: '', args: []);
+  }
+
+  /// `Crédit maximum`
+  String get contactOverdraft {
+    return Intl.message(
+      'Crédit maximum',
+      name: 'contactOverdraft',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Client`
+  String get contactIsClient {
+    return Intl.message('Client', name: 'contactIsClient', desc: '', args: []);
+  }
+
+  /// `Fournisseur`
+  String get contactIsSupplier {
+    return Intl.message(
+      'Fournisseur',
+      name: 'contactIsSupplier',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rue`
+  String get contactStreet {
+    return Intl.message('Rue', name: 'contactStreet', desc: '', args: []);
+  }
+
+  /// `Code postal`
+  String get contactPostCode {
+    return Intl.message(
+      'Code postal',
+      name: 'contactPostCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ville`
+  String get contactCity {
+    return Intl.message('Ville', name: 'contactCity', desc: '', args: []);
+  }
+
+  /// `Pays`
+  String get contactCountry {
+    return Intl.message('Pays', name: 'contactCountry', desc: '', args: []);
+  }
+
+  /// `Appareils`
   String get menuDevices {
-    return Intl.message('Devices', name: 'menuDevices', desc: '', args: []);
+    return Intl.message('Appareils', name: 'menuDevices', desc: '', args: []);
   }
 
-  /// `My enterprise`
+  /// `Mon entreprise`
   String get menuFirm {
-    return Intl.message('My enterprise', name: 'menuFirm', desc: '', args: []);
+    return Intl.message('Mon entreprise', name: 'menuFirm', desc: '', args: []);
   }
 
-  /// `Articles, contacts and operations (sales, purchases, stock movements, etc.) are available in the mobile app for now.`
+  /// `Les articles, contacts et opérations (ventes, achats, mouvements de stock, etc.) sont uniquement disponibles sur l'application de caisse pour l'instant.`
   String get menuScopeDisclaimer {
     return Intl.message(
-      'Articles, contacts and operations (sales, purchases, stock movements, etc.) are available in the mobile app for now.',
+      'Les articles, contacts et opérations (ventes, achats, mouvements de stock, etc.) sont uniquement disponibles sur l\'application de caisse pour l\'instant.',
       name: 'menuScopeDisclaimer',
       desc: '',
       args: [],
     );
   }
 
-  /// `Contacts and operations (sales, purchases, stock movements, etc.) are available in the mobile app for now. Catalog discovery and tickets are available here.`
+  /// `Les contacts et opérations (ventes, achats, mouvements de stock, etc.) sont uniquement disponibles sur l'application de caisse pour l'instant. La découverte de catalogue et les tickets sont disponibles ici.`
   String get menuScopeDisclaimerDev {
     return Intl.message(
-      'Contacts and operations (sales, purchases, stock movements, etc.) are available in the mobile app for now. Catalog discovery and tickets are available here.',
+      'Les contacts et opérations (ventes, achats, mouvements de stock, etc.) sont uniquement disponibles sur l\'application de caisse pour l\'instant. La découverte de catalogue et les tickets sont disponibles ici.',
       name: 'menuScopeDisclaimerDev',
       desc: '',
       args: [],
     );
   }
 
-  /// `Statistics`
+  /// `Statistiques`
   String get menuStats {
-    return Intl.message('Statistics', name: 'menuStats', desc: '', args: []);
+    return Intl.message('Statistiques', name: 'menuStats', desc: '', args: []);
   }
 
   /// `Tickets`
@@ -1389,247 +1957,124 @@ class Lang {
     return Intl.message('Tickets', name: 'menuTickets', desc: '', args: []);
   }
 
-  /// `Users`
+  /// `Utilisateurs`
   String get menuUsers {
-    return Intl.message('Users', name: 'menuUsers', desc: '', args: []);
+    return Intl.message('Utilisateurs', name: 'menuUsers', desc: '', args: []);
   }
 
-  /// `Catalog`
-  String get menuCatalog {
-    return Intl.message('Catalog', name: 'menuCatalog', desc: '', args: []);
-  }
-
-  /// `Pick the FMCG products you sell, adjust price and cost, then add them to your chain catalog.`
-  String get catalogDiscoverySubtitle {
-    return Intl.message(
-      'Pick the FMCG products you sell, adjust price and cost, then add them to your chain catalog.',
-      name: 'catalogDiscoverySubtitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Chain`
-  String get catalogSelectChain {
-    return Intl.message(
-      'Chain',
-      name: 'catalogSelectChain',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `All`
-  String get catalogAllCategories {
-    return Intl.message(
-      'All',
-      name: 'catalogAllCategories',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No products match your search.`
-  String get catalogNoProductsMatch {
-    return Intl.message(
-      'No products match your search.',
-      name: 'catalogNoProductsMatch',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Pick`
-  String get catalogPick {
-    return Intl.message('Pick', name: 'catalogPick', desc: '', args: []);
-  }
-
-  /// `Picked`
-  String get catalogPicked {
-    return Intl.message('Picked', name: 'catalogPicked', desc: '', args: []);
-  }
-
-  /// `Already in catalog`
-  String get catalogAlreadyInCatalog {
-    return Intl.message(
-      'Already in catalog',
-      name: 'catalogAlreadyInCatalog',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `{count, plural, =0{Selection} one{Selection (1)} other{Selection ({count})}}`
-  String catalogSelectionTitle(int count) {
-    return Intl.plural(
-      count,
-      zero: 'Selection',
-      one: 'Selection (1)',
-      other: 'Selection ($count)',
-      name: 'catalogSelectionTitle',
-      desc: '',
-      args: [count],
-    );
-  }
-
-  /// `Pick products from the grid to build your catalog.`
-  String get catalogSelectionEmpty {
-    return Intl.message(
-      'Pick products from the grid to build your catalog.',
-      name: 'catalogSelectionEmpty',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Clear`
-  String get catalogClearSelection {
-    return Intl.message(
-      'Clear',
-      name: 'catalogClearSelection',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Add to catalog`
-  String get catalogAddToCatalog {
-    return Intl.message(
-      'Add to catalog',
-      name: 'catalogAddToCatalog',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Remove`
-  String get catalogRemove {
-    return Intl.message('Remove', name: 'catalogRemove', desc: '', args: []);
-  }
-
-  /// `Price`
-  String get catalogPrice {
-    return Intl.message('Price', name: 'catalogPrice', desc: '', args: []);
-  }
-
-  /// `Cost`
-  String get catalogCost {
-    return Intl.message('Cost', name: 'catalogCost', desc: '', args: []);
-  }
-
-  /// `Value must be greater than or equal to {min}.`
+  /// `La valeur doit être supérieure ou égale à {min}.`
   String minErrorText(Object min) {
     return Intl.message(
-      'Value must be greater than or equal to $min.',
+      'La valeur doit être supérieure ou égale à $min.',
       name: 'minErrorText',
       desc: '',
       args: [min],
     );
   }
 
-  /// `Value must have a length greater than or equal to {minLength}`
+  /// `La longueur doit être supérieure ou égale à {minLength}.`
   String minLengthErrorText(Object minLength) {
     return Intl.message(
-      'Value must have a length greater than or equal to $minLength',
+      'La longueur doit être supérieure ou égale à $minLength.',
       name: 'minLengthErrorText',
       desc: '',
       args: [minLength],
     );
   }
 
-  /// `My Profile`
+  /// `Mon Profil`
   String get myProfile {
-    return Intl.message('My Profile', name: 'myProfile', desc: '', args: []);
+    return Intl.message('Mon Profil', name: 'myProfile', desc: '', args: []);
   }
 
-  /// `{count, plural, one{New Order} other{New Orders}}`
+  /// `{count, plural, one{Nouvelle Commande} other{Nouvelles Commandes}}`
   String newOrders(num count) {
     return Intl.plural(
       count,
-      one: 'New Order',
-      other: 'New Orders',
+      one: 'Nouvelle Commande',
+      other: 'Nouvelles Commandes',
       name: 'newOrders',
       desc: '',
       args: [count],
     );
   }
 
-  /// `{count, plural, one{New User} other{New Users}}`
+  /// `{count, plural, one{Nouvel Utilisateur} other{Nouveaux Utilisateurs}}`
   String newUsers(num count) {
     return Intl.plural(
       count,
-      one: 'New User',
-      other: 'New Users',
+      one: 'Nouvel Utilisateur',
+      other: 'Nouveaux Utilisateurs',
       name: 'newUsers',
       desc: '',
       args: [count],
     );
   }
 
-  /// `This field value must not be equal to {value}.`
+  /// `La valeur de ce champ ne doit pas être égale à {value}.`
   String notEqualErrorText(Object value) {
     return Intl.message(
-      'This field value must not be equal to $value.',
+      'La valeur de ce champ ne doit pas être égale à $value.',
       name: 'notEqualErrorText',
       desc: '',
       args: [value],
     );
   }
 
-  /// `Value must be numeric.`
+  /// `La valeur doit être numérique.`
   String get numericErrorText {
     return Intl.message(
-      'Value must be numeric.',
+      'La valeur doit être numérique.',
       name: 'numericErrorText',
       desc: '',
       args: [],
     );
   }
 
-  /// `Open in new tab`
+  /// `Ouvrir dans un nouvel onglet`
   String get openInNewTab {
     return Intl.message(
-      'Open in new tab',
+      'Ouvrir dans un nouvel onglet',
       name: 'openInNewTab',
       desc: '',
       args: [],
     );
   }
 
-  /// `Your enterprise administrator must assign you an active license seat, or you need to sign in as the user who created the enterprise, before you can use tickets, articles, or contacts. Open Billing if you manage licenses.`
+  /// `L'administrateur de votre entreprise doit vous attribuer une license active, ou vous devez vous connecter avec le compte créateur de l'entreprise, avant d'accéder aux tickets, articles et contacts. Ouvrez Facturation si vous gérez les licences.`
   String get operationalLicenseBlockedBody {
     return Intl.message(
-      'Your enterprise administrator must assign you an active license seat, or you need to sign in as the user who created the enterprise, before you can use tickets, articles, or contacts. Open Billing if you manage licenses.',
+      'L\'administrateur de votre entreprise doit vous attribuer une license active, ou vous devez vous connecter avec le compte créateur de l\'entreprise, avant d\'accéder aux tickets, articles et contacts. Ouvrez Facturation si vous gérez les licences.',
       name: 'operationalLicenseBlockedBody',
       desc: '',
       args: [],
     );
   }
 
-  /// `Active license required`
+  /// `Licence active requise`
   String get operationalLicenseBlockedTitle {
     return Intl.message(
-      'Active license required',
+      'Licence active requise',
       name: 'operationalLicenseBlockedTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Billing`
+  /// `Facturation`
   String get operationalLicenseOpenBilling {
     return Intl.message(
-      'Billing',
+      'Facturation',
       name: 'operationalLicenseOpenBilling',
       desc: '',
       args: [],
     );
   }
 
-  /// `Try again`
+  /// `Réessayer`
   String get operationalLicenseRetry {
     return Intl.message(
-      'Try again',
+      'Réessayer',
       name: 'operationalLicenseRetry',
       desc: '',
       args: [],
@@ -1648,138 +2093,253 @@ class Lang {
     );
   }
 
-  /// `Password`
+  /// `Mot de Passe`
   String get password {
-    return Intl.message('Password', name: 'password', desc: '', args: []);
+    return Intl.message('Mot de Passe', name: 'password', desc: '', args: []);
   }
 
-  /// `Password not match.`
+  /// `Les mots de passe ne correspondent pas.`
   String get passwordNotMatch {
     return Intl.message(
-      'Password not match.',
+      'Les mots de passe ne correspondent pas.',
       name: 'passwordNotMatch',
       desc: '',
       args: [],
     );
   }
 
-  /// `{count, plural, one{Pending Issue} other{Pending Issues}}`
+  /// `L'e-mail de réinitialisation du mot de passe a été envoyé.`
+  String get passwordResetEmailSent {
+    return Intl.message(
+      'L\'e-mail de réinitialisation du mot de passe a été envoyé.',
+      name: 'passwordResetEmailSent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count, plural, one{Problème en Attente} other{Problèmes en Attente}}`
   String pendingIssues(num count) {
     return Intl.plural(
       count,
-      one: 'Pending Issue',
-      other: 'Pending Issues',
+      one: 'Problème en Attente',
+      other: 'Problèmes en Attente',
       name: 'pendingIssues',
       desc: '',
       args: [count],
     );
   }
 
-  /// `{count, plural, one{Recent Order} other{Recent Orders}}`
+  /// `{count, plural, one{Commande Récente} other{Commandes Récentes}}`
   String recentOrders(num count) {
     return Intl.plural(
       count,
-      one: 'Recent Order',
-      other: 'Recent Orders',
+      one: 'Commande Récente',
+      other: 'Commandes Récentes',
       name: 'recentOrders',
       desc: '',
       args: [count],
     );
   }
 
-  /// `Record deleted successfully.`
+  /// `Enregistrement supprimé avec succès.`
   String get recordDeletedSuccessfully {
     return Intl.message(
-      'Record deleted successfully.',
+      'Enregistrement supprimé avec succès.',
       name: 'recordDeletedSuccessfully',
       desc: '',
       args: [],
     );
   }
 
-  /// `Record saved successfully.`
+  /// `Enregistrement sauvegardé avec succès.`
   String get recordSavedSuccessfully {
     return Intl.message(
-      'Record saved successfully.',
+      'Enregistrement sauvegardé avec succès.',
       name: 'recordSavedSuccessfully',
       desc: '',
       args: [],
     );
   }
 
-  /// `Record submitted successfully.`
+  /// `Enregistrement soumis avec succès.`
   String get recordSubmittedSuccessfully {
     return Intl.message(
-      'Record submitted successfully.',
+      'Enregistrement soumis avec succès.',
       name: 'recordSubmittedSuccessfully',
       desc: '',
       args: [],
     );
   }
 
-  /// `Refresh`
+  /// `Actualiser`
   String get refreshAction {
-    return Intl.message('Refresh', name: 'refreshAction', desc: '', args: []);
+    return Intl.message(
+      'Actualiser',
+      name: 'refreshAction',
+      desc: '',
+      args: [],
+    );
   }
 
-  /// `Register`
+  /// `S'inscrire`
   String get register {
-    return Intl.message('Register', name: 'register', desc: '', args: []);
+    return Intl.message('S\'inscrire', name: 'register', desc: '', args: []);
   }
 
-  /// `Register a new account`
+  /// `Créer un nouveau compte`
   String get registerANewAccount {
     return Intl.message(
-      'Register a new account',
+      'Créer un nouveau compte',
       name: 'registerANewAccount',
       desc: '',
       args: [],
     );
   }
 
-  /// `Register now!`
+  /// `Inscrivez-vous`
   String get registerNow {
     return Intl.message(
-      'Register now!',
+      'Inscrivez-vous',
       name: 'registerNow',
       desc: '',
       args: [],
     );
   }
 
-  /// `This field cannot be empty.`
+  /// `Ce champ ne peut pas être vide.`
   String get requiredErrorText {
     return Intl.message(
-      'This field cannot be empty.',
+      'Ce champ ne peut pas être vide.',
       name: 'requiredErrorText',
       desc: '',
       args: [],
     );
   }
 
-  /// `Retype Password`
+  /// `Retaper le Mot de Passe`
   String get retypePassword {
     return Intl.message(
-      'Retype Password',
+      'Retaper le Mot de Passe',
       name: 'retypePassword',
       desc: '',
       args: [],
     );
   }
 
-  /// `Save`
+  /// `Sauvegarder`
   String get save {
-    return Intl.message('Save', name: 'save', desc: '', args: []);
+    return Intl.message('Sauvegarder', name: 'save', desc: '', args: []);
   }
 
-  /// `Search`
+  /// `Rechercher`
   String get search {
-    return Intl.message('Search', name: 'search', desc: '', args: []);
+    return Intl.message('Rechercher', name: 'search', desc: '', args: []);
   }
 
-  /// `Submit`
+  /// `Toutes`
+  String get statsAll {
+    return Intl.message('Toutes', name: 'statsAll', desc: '', args: []);
+  }
+
+  /// `Recettes (toutes)`
+  String get statsMetricAllIncome {
+    return Intl.message(
+      'Recettes (toutes)',
+      name: 'statsMetricAllIncome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dépenses (toutes)`
+  String get statsMetricAllSpending {
+    return Intl.message(
+      'Dépenses (toutes)',
+      name: 'statsMetricAllSpending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Encaissements`
+  String get statsMetricCashflowIncome {
+    return Intl.message(
+      'Encaissements',
+      name: 'statsMetricCashflowIncome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Décaissements`
+  String get statsMetricCashflowSpending {
+    return Intl.message(
+      'Décaissements',
+      name: 'statsMetricCashflowSpending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vous n'avez pas l'autorisation de consulter les statistiques. Demandez à l'administrateur de votre entreprise de vous accorder l'accès.`
+  String get statsNoAccess {
+    return Intl.message(
+      'Vous n\'avez pas l\'autorisation de consulter les statistiques. Demandez à l\'administrateur de votre entreprise de vous accorder l\'accès.',
+      name: 'statsNoAccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Aucune donnée disponible`
+  String get statsNoDataAvailable {
+    return Intl.message(
+      'Aucune donnée disponible',
+      name: 'statsNoDataAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Jour`
+  String get statsPeriodDay {
+    return Intl.message('Jour', name: 'statsPeriodDay', desc: '', args: []);
+  }
+
+  /// `Mois`
+  String get statsPeriodMonth {
+    return Intl.message('Mois', name: 'statsPeriodMonth', desc: '', args: []);
+  }
+
+  /// `Semaine`
+  String get statsPeriodWeek {
+    return Intl.message('Semaine', name: 'statsPeriodWeek', desc: '', args: []);
+  }
+
+  /// `Sélectionner les Boutiques :`
+  String get statsSelectBoutiques {
+    return Intl.message(
+      'Sélectionner les Boutiques :',
+      name: 'statsSelectBoutiques',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Empilé par Boutique`
+  String get statsStackedByBoutique {
+    return Intl.message(
+      'Empilé par Boutique',
+      name: 'statsStackedByBoutique',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Soumettre`
   String get submit {
-    return Intl.message('Submit', name: 'submit', desc: '', args: []);
+    return Intl.message('Soumettre', name: 'submit', desc: '', args: []);
   }
 
   /// `Support`
@@ -1787,210 +2347,125 @@ class Lang {
     return Intl.message('Support', name: 'support', desc: '', args: []);
   }
 
-  /// `Chat with Weebi support`
+  /// `Discuter avec le support Weebi`
   String get supportChatWhatsApp {
     return Intl.message(
-      'Chat with Weebi support',
+      'Discuter avec le support Weebi',
       name: 'supportChatWhatsApp',
       desc: '',
       args: [],
     );
   }
 
-  /// `Send us an email`
+  /// `Nous envoyer un e-mail`
   String get supportEmailUs {
     return Intl.message(
-      'Send us an email',
+      'Nous envoyer un e-mail',
       name: 'supportEmailUs',
       desc: '',
       args: [],
     );
   }
 
-  /// `Stacked by Boutique`
-  String get statsStackedByBoutique {
-    return Intl.message(
-      'Stacked by Boutique',
-      name: 'statsStackedByBoutique',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Select Boutiques:`
-  String get statsSelectBoutiques {
-    return Intl.message(
-      'Select Boutiques:',
-      name: 'statsSelectBoutiques',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `All`
-  String get statsAll {
-    return Intl.message('All', name: 'statsAll', desc: '', args: []);
-  }
-
-  /// `No data available`
-  String get statsNoDataAvailable {
-    return Intl.message(
-      'No data available',
-      name: 'statsNoDataAvailable',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Cashflow Income`
-  String get statsMetricCashflowIncome {
-    return Intl.message(
-      'Cashflow Income',
-      name: 'statsMetricCashflowIncome',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Cashflow Spending`
-  String get statsMetricCashflowSpending {
-    return Intl.message(
-      'Cashflow Spending',
-      name: 'statsMetricCashflowSpending',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `All Income`
-  String get statsMetricAllIncome {
-    return Intl.message(
-      'All Income',
-      name: 'statsMetricAllIncome',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `All Spending`
-  String get statsMetricAllSpending {
-    return Intl.message(
-      'All Spending',
-      name: 'statsMetricAllSpending',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Day`
-  String get statsPeriodDay {
-    return Intl.message('Day', name: 'statsPeriodDay', desc: '', args: []);
-  }
-
-  /// `Week`
-  String get statsPeriodWeek {
-    return Intl.message('Week', name: 'statsPeriodWeek', desc: '', args: []);
-  }
-
-  /// `Month`
-  String get statsPeriodMonth {
-    return Intl.message('Month', name: 'statsPeriodMonth', desc: '', args: []);
-  }
-
-  /// `Text`
+  /// `Texte`
   String get text {
-    return Intl.message('Text', name: 'text', desc: '', args: []);
+    return Intl.message('Texte', name: 'text', desc: '', args: []);
   }
 
-  /// `Text Emphasis`
+  /// `Accentuation du Texte`
   String get textEmphasis {
     return Intl.message(
-      'Text Emphasis',
+      'Accentuation du Texte',
       name: 'textEmphasis',
       desc: '',
       args: [],
     );
   }
 
-  /// `Text Theme`
+  /// `Thème du Texte`
   String get textTheme {
-    return Intl.message('Text Theme', name: 'textTheme', desc: '', args: []);
+    return Intl.message(
+      'Thème du Texte',
+      name: 'textTheme',
+      desc: '',
+      args: [],
+    );
   }
 
-  /// `Ticket detail #{ticketId}`
+  /// `Détail du ticket n°{ticketId}`
   String ticketDetailTitle(String ticketId) {
     return Intl.message(
-      'Ticket detail #$ticketId',
+      'Détail du ticket n°$ticketId',
       name: 'ticketDetailTitle',
       desc: '',
       args: [ticketId],
     );
   }
 
-  /// `{count} items`
+  /// `{count} art.`
   String ticketItemsShort(num count) {
     return Intl.message(
-      '$count items',
+      '$count art.',
       name: 'ticketItemsShort',
       desc: '',
       args: [count],
     );
   }
 
-  /// `No ticket provided`
+  /// `Ticket non fourni`
   String get ticketNotProvided {
     return Intl.message(
-      'No ticket provided',
+      'Ticket non fourni',
       name: 'ticketNotProvided',
       desc: '',
       args: [],
     );
   }
 
-  /// `All stores`
+  /// `Toutes les boutiques`
   String get ticketsBoutiqueAll {
     return Intl.message(
-      'All stores',
+      'Toutes les boutiques',
       name: 'ticketsBoutiqueAll',
       desc: '',
       args: [],
     );
   }
 
-  /// `Store`
+  /// `Boutique`
   String get ticketsBoutiqueFallback {
     return Intl.message(
-      'Store',
+      'Boutique',
       name: 'ticketsBoutiqueFallback',
       desc: '',
       args: [],
     );
   }
 
-  /// `Chain unavailable`
+  /// `Chaîne non disponible`
   String get ticketsChainUnavailable {
     return Intl.message(
-      'Chain unavailable',
+      'Chaîne non disponible',
       name: 'ticketsChainUnavailable',
       desc: '',
       args: [],
     );
   }
 
-  /// `Amount`
+  /// `Montant`
   String get ticketsColumnAmount {
     return Intl.message(
-      'Amount',
+      'Montant',
       name: 'ticketsColumnAmount',
       desc: '',
       args: [],
     );
   }
 
-  /// `Store`
+  /// `Boutique`
   String get ticketsColumnBoutique {
     return Intl.message(
-      'Store',
+      'Boutique',
       name: 'ticketsColumnBoutique',
       desc: '',
       args: [],
@@ -2007,10 +2482,10 @@ class Lang {
     );
   }
 
-  /// `Date · no.`
+  /// `Date · n°`
   String get ticketsColumnDateAndNumber {
     return Intl.message(
-      'Date · no.',
+      'Date · n°',
       name: 'ticketsColumnDateAndNumber',
       desc: '',
       args: [],
@@ -2034,145 +2509,130 @@ class Lang {
     );
   }
 
-  /// `All dates`
+  /// `Toutes les dates`
   String get ticketsDateAll {
     return Intl.message(
-      'All dates',
+      'Toutes les dates',
       name: 'ticketsDateAll',
       desc: '',
       args: [],
     );
   }
 
-  /// `Deleted`
+  /// `Supprimés`
   String get ticketsDeletedChip {
     return Intl.message(
-      'Deleted',
+      'Supprimés',
       name: 'ticketsDeletedChip',
       desc: '',
       args: [],
     );
   }
 
-  /// `Not deleted`
+  /// `Non supprimés`
   String get ticketsDeletedExclude {
     return Intl.message(
-      'Not deleted',
+      'Non supprimés',
       name: 'ticketsDeletedExclude',
       desc: '',
       args: [],
     );
   }
 
-  /// `Deleted only`
+  /// `Supprimés uniquement`
   String get ticketsDeletedOnly {
     return Intl.message(
-      'Deleted only',
+      'Supprimés uniquement',
       name: 'ticketsDeletedOnly',
       desc: '',
       args: [],
     );
   }
 
-  /// `No tickets`
+  /// `Aucun ticket`
   String get ticketsEmpty {
-    return Intl.message('No tickets', name: 'ticketsEmpty', desc: '', args: []);
+    return Intl.message(
+      'Aucun ticket',
+      name: 'ticketsEmpty',
+      desc: '',
+      args: [],
+    );
   }
 
-  /// `Filters`
+  /// `Filtres`
   String get ticketsFiltersTitle {
     return Intl.message(
-      'Filters',
+      'Filtres',
       name: 'ticketsFiltersTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Group by store`
+  /// `Grouper par boutique`
   String get ticketsGroupByBoutique {
     return Intl.message(
-      'Group by store',
+      'Grouper par boutique',
       name: 'ticketsGroupByBoutique',
       desc: '',
       args: [],
     );
   }
 
-  /// `Store filter and grouping require an active license seat. The firm creator can use core sync without a seat; these views are for seated team members. Open Billing or ask your administrator to assign you a seat.`
-  String get ticketsSeatGatedBoutiqueViewsDetail {
-    return Intl.message(
-      'Store filter and grouping require an active license seat. The firm creator can use core sync without a seat; these views are for seated team members. Open Billing or ask your administrator to assign you a seat.',
-      name: 'ticketsSeatGatedBoutiqueViewsDetail',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Store filter & grouping`
-  String get ticketsSeatGatedBoutiqueViewsTitle {
-    return Intl.message(
-      'Store filter & grouping',
-      name: 'ticketsSeatGatedBoutiqueViewsTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Active license seat required`
-  String get ticketsSeatEntitlementSubtitle {
-    return Intl.message(
-      'Active license seat required',
-      name: 'ticketsSeatEntitlementSubtitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Card`
+  /// `Carte`
   String get ticketsPaymentCard {
-    return Intl.message('Card', name: 'ticketsPaymentCard', desc: '', args: []);
+    return Intl.message(
+      'Carte',
+      name: 'ticketsPaymentCard',
+      desc: '',
+      args: [],
+    );
   }
 
-  /// `Cash`
+  /// `Espèces`
   String get ticketsPaymentCash {
-    return Intl.message('Cash', name: 'ticketsPaymentCash', desc: '', args: []);
+    return Intl.message(
+      'Espèces',
+      name: 'ticketsPaymentCash',
+      desc: '',
+      args: [],
+    );
   }
 
-  /// `Check`
+  /// `Chèque`
   String get ticketsPaymentCheque {
     return Intl.message(
-      'Check',
+      'Chèque',
       name: 'ticketsPaymentCheque',
       desc: '',
       args: [],
     );
   }
 
-  /// `Credit`
+  /// `Crédit`
   String get ticketsPaymentCredit {
     return Intl.message(
-      'Credit',
+      'Crédit',
       name: 'ticketsPaymentCredit',
       desc: '',
       args: [],
     );
   }
 
-  /// `Goods`
+  /// `Marchandises`
   String get ticketsPaymentGoods {
     return Intl.message(
-      'Goods',
+      'Marchandises',
       name: 'ticketsPaymentGoods',
       desc: '',
       args: [],
     );
   }
 
-  /// `Mobile money`
+  /// `Mobile Money`
   String get ticketsPaymentMobileMoney {
     return Intl.message(
-      'Mobile money',
+      'Mobile Money',
       name: 'ticketsPaymentMobileMoney',
       desc: '',
       args: [],
@@ -2184,85 +2644,115 @@ class Lang {
     return Intl.message('—', name: 'ticketsPaymentUnknown', desc: '', args: []);
   }
 
-  /// `Chronological order`
+  /// `Licence active requise`
+  String get ticketsSeatEntitlementSubtitle {
+    return Intl.message(
+      'Licence active requise',
+      name: 'ticketsSeatEntitlementSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Le filtre et le groupement par boutique exigent une licence.`
+  String get ticketsSeatGatedBoutiqueViewsDetail {
+    return Intl.message(
+      'Le filtre et le groupement par boutique exigent une licence.',
+      name: 'ticketsSeatGatedBoutiqueViewsDetail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filtre et groupement par boutique`
+  String get ticketsSeatGatedBoutiqueViewsTitle {
+    return Intl.message(
+      'Filtre et groupement par boutique',
+      name: 'ticketsSeatGatedBoutiqueViewsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ordre chronologique`
   String get ticketsSortChronological {
     return Intl.message(
-      'Chronological order',
+      'Ordre chronologique',
       name: 'ticketsSortChronological',
       desc: '',
       args: [],
     );
   }
 
-  /// `Active`
+  /// `Actifs`
   String get ticketsStatusActive {
     return Intl.message(
-      'Active',
+      'Actifs',
       name: 'ticketsStatusActive',
       desc: '',
       args: [],
     );
   }
 
-  /// `All`
+  /// `Tous`
   String get ticketsStatusAll {
-    return Intl.message('All', name: 'ticketsStatusAll', desc: '', args: []);
+    return Intl.message('Tous', name: 'ticketsStatusAll', desc: '', args: []);
   }
 
-  /// `Inactive`
+  /// `Inactifs`
   String get ticketsStatusInactive {
     return Intl.message(
-      'Inactive',
+      'Inactifs',
       name: 'ticketsStatusInactive',
       desc: '',
       args: [],
     );
   }
 
-  /// `All dates`
+  /// `Toutes les dates`
   String get ticketsTooltipClearDates {
     return Intl.message(
-      'All dates',
+      'Toutes les dates',
       name: 'ticketsTooltipClearDates',
       desc: '',
       args: [],
     );
   }
 
-  /// `Filter by store`
+  /// `Filtrer par boutique`
   String get ticketsTooltipFilterBoutique {
     return Intl.message(
-      'Filter by store',
+      'Filtrer par boutique',
       name: 'ticketsTooltipFilterBoutique',
       desc: '',
       args: [],
     );
   }
 
-  /// `Filter by status`
+  /// `Filtrer par statut`
   String get ticketsTooltipFilterByStatus {
     return Intl.message(
-      'Filter by status',
+      'Filtrer par statut',
       name: 'ticketsTooltipFilterByStatus',
       desc: '',
       args: [],
     );
   }
 
-  /// `Filter by deleted tickets`
+  /// `Filtrer par tickets supprimés`
   String get ticketsTooltipFilterDeleted {
     return Intl.message(
-      'Filter by deleted tickets',
+      'Filtrer par tickets supprimés',
       name: 'ticketsTooltipFilterDeleted',
       desc: '',
       args: [],
     );
   }
 
-  /// `Refresh`
+  /// `Actualiser`
   String get ticketsTooltipRefresh {
     return Intl.message(
-      'Refresh',
+      'Actualiser',
       name: 'ticketsTooltipRefresh',
       desc: '',
       args: [],
@@ -2279,46 +2769,56 @@ class Lang {
     );
   }
 
-  /// `Today Sales`
+  /// `Ventes d'Aujourd'hui`
   String get todaySales {
-    return Intl.message('Today Sales', name: 'todaySales', desc: '', args: []);
+    return Intl.message(
+      'Ventes d\'Aujourd\'hui',
+      name: 'todaySales',
+      desc: '',
+      args: [],
+    );
   }
 
-  /// `Typography`
+  /// `Typographie`
   String get typography {
-    return Intl.message('Typography', name: 'typography', desc: '', args: []);
+    return Intl.message('Typographie', name: 'typography', desc: '', args: []);
   }
 
-  /// `{count, plural, one{UI Element} other{UI Elements}}`
+  /// `{count, plural, one{Élément UI} other{Éléments UI}}`
   String uiElements(num count) {
     return Intl.plural(
       count,
-      one: 'UI Element',
-      other: 'UI Elements',
+      one: 'Élément UI',
+      other: 'Éléments UI',
       name: 'uiElements',
       desc: '',
       args: [count],
     );
   }
 
-  /// `This field requires a valid URL address.`
+  /// `Ce champ nécessite une adresse URL valide.`
   String get urlErrorText {
     return Intl.message(
-      'This field requires a valid URL address.',
+      'Ce champ nécessite une adresse URL valide.',
       name: 'urlErrorText',
       desc: '',
       args: [],
     );
   }
 
-  /// `Username`
+  /// `Nom d'Utilisateur`
   String get username {
-    return Intl.message('Username', name: 'username', desc: '', args: []);
+    return Intl.message(
+      'Nom d\'Utilisateur',
+      name: 'username',
+      desc: '',
+      args: [],
+    );
   }
 
-  /// `Yes`
+  /// `Oui`
   String get yes {
-    return Intl.message('Yes', name: 'yes', desc: '', args: []);
+    return Intl.message('Oui', name: 'yes', desc: '', args: []);
   }
 }
 
@@ -2327,8 +2827,8 @@ class AppLocalizationDelegate extends LocalizationsDelegate<Lang> {
 
   List<Locale> get supportedLocales {
     return const <Locale>[
-      Locale.fromSubtags(languageCode: 'en'),
       Locale.fromSubtags(languageCode: 'fr'),
+      Locale.fromSubtags(languageCode: 'en'),
       Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
     ];
   }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:protos_weebi/grpc.dart';
-import 'package:web_admin/app_router.dart';
 import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/core/billing/billing_bridge_destination.dart';
 import 'package:web_admin/core/services/auth_service.dart';
@@ -57,6 +56,8 @@ class _BridgeScreenState extends State<BridgeScreen> {
       // navigation so refreshListenable cannot bounce us to /login mid-bridge.
       await context.read<UserDataProvider>().setUserDataAsync(
             mail: 'bridge@weebi',
+            bffSessionId: tokens.sessionId,
+            stayConnected: true,
             userProfileImageUrl:
                 'https://www.weebi.com/images/Weebi_Logo_Full.png',
             bffSessionLive: true,

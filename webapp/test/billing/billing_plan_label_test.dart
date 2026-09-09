@@ -122,6 +122,82 @@ void main() {
         '99.00 EUR',
       );
     });
+
+    test('shows CDF first then EUR for premium in DRC', () {
+      expect(
+        formatBillingOfferPrice(
+          amountCents: 1400,
+          currency: 'eur',
+          productId: 'premium',
+          pawapayCurrency: 'CDF',
+        ),
+        '39\u00A0900 CDF / 14.00 EUR',
+      );
+    });
+
+    test('shows CDF first then EUR for syscohada in DRC', () {
+      expect(
+        formatBillingOfferPrice(
+          amountCents: 290,
+          currency: 'eur',
+          productId: 'syscohada',
+          languageCode: 'fr',
+          pawapayCurrency: 'CDF',
+        ),
+        '7\u00A0900 CDF / 2.90 EUR',
+      );
+    });
+
+    test('prefers BillingProduct.pawapayAmounts over hardcoded fallback', () {
+      final product = BillingProduct(
+        productId: 'premium',
+        amountCents: 1400,
+        currency: 'eur',
+        pawapayAmounts: {'XOF': 8800, 'CDF': 35000}.entries,
+      );
+      expect(
+        formatBillingOfferPrice(
+          amountCents: 1400,
+          currency: 'eur',
+          productId: 'premium',
+          product: product,
+        ),
+        '8\u00A0800 XOF / 14.00 EUR',
+      );
+    });
+  });
+
+  group('pawapayOfferCurrency', () {
+    test('defaults to XOF', () {
+      expect(
+        pawapayOfferCurrency(countryAlpha2s: const [], currencies: const []),
+        'XOF',
+      );
+    });
+
+    test('uses CDF when country is CD', () {
+      expect(
+        pawapayOfferCurrency(countryAlpha2s: const ['cd'], currencies: const []),
+        'CDF',
+      );
+    });
+
+    test('uses CDF when currency is CDF or CD', () {
+      expect(
+        pawapayOfferCurrency(
+          countryAlpha2s: const [],
+          currencies: const ['CDF'],
+        ),
+        'CDF',
+      );
+      expect(
+        pawapayOfferCurrency(
+          countryAlpha2s: const [],
+          currencies: const ['cd'],
+        ),
+        'CDF',
+      );
+    });
   });
 
   group('isBillingCatalogLicense', () {

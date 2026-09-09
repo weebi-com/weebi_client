@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:protos_weebi/grpc.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
+import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/core/services/firm_service.dart';
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/views/screens/firm/firm_overview_body.dart';
@@ -8,6 +10,7 @@ import 'package:web_admin/views/widgets/card_elements.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
 
 import '../../../core/constants/dimens.dart';
+import '../../../core/theme/theme_extensions/app_button_theme.dart';
 import '../../../core/theme/theme_extensions/app_color_scheme.dart';
 
 class FirmListScreen extends StatefulWidget {
@@ -67,6 +70,7 @@ class _FirmListScreenState extends State<FirmListScreen> {
 
     return PortalMasterLayout(
       body: ListView(
+        key: const Key('firmScreen'),
         padding: const EdgeInsets.all(kDefaultPadding),
         children: [
           Text(
@@ -95,18 +99,34 @@ class _FirmListScreenState extends State<FirmListScreen> {
                             child: Center(child: CircularProgressIndicator()),
                           )
                         else if (errorMessage != null)
-                          Chip(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 4.0,
-                              vertical: 6.0,
-                            ),
-                            backgroundColor: appColorScheme.error,
-                            label: Text(
-                              errorMessage!,
-                              style: TextStyle(
-                                color: themeData.colorScheme.onPrimary,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Chip(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 4.0,
+                                  vertical: 6.0,
+                                ),
+                                backgroundColor: appColorScheme.error,
+                                label: Text(
+                                  errorMessage!,
+                                  style: TextStyle(
+                                    color: themeData.colorScheme.onPrimary,
+                                  ),
+                                ),
                               ),
-                            ),
+                              const SizedBox(height: kDefaultPadding),
+                              ElevatedButton.icon(
+                                key: const Key('createFirmCtaButton'),
+                                style: themeData
+                                    .extension<AppButtonTheme>()!
+                                    .successElevated,
+                                onPressed: () => GoRouter.of(context)
+                                    .go(RouteUri.createFirm),
+                                icon: const Icon(Icons.add_business_outlined),
+                                label: Text(lang.createEnterprisePageTitle),
+                              ),
+                            ],
                           )
                         else if (currentFirm != null)
                           FirmOverviewBody(firm: currentFirm!),

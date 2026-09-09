@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:protos_weebi/protos_weebi_io.dart' show FenceServiceClient, UserId;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_admin/core/services/auth_service.dart';
+import 'package:web_admin/core/session/session_bootstrap.dart';
 import 'package:web_admin/environment.dart';
 import 'package:web_admin/app_router.dart';
 import 'package:web_admin/generated/l10n.dart';
@@ -16,6 +18,7 @@ import 'package:web_admin/providers/app_preferences_provider.dart';
 import 'package:web_admin/providers/current_user_provider.dart';
 import 'package:web_admin/providers/shared_prefs_auth_service.dart';
 import 'package:web_admin/providers/server.dart';
+import 'package:web_admin/providers/freemium_dump_quota_gate.dart';
 import 'package:web_admin/providers/operational_license_gate.dart';
 import 'package:web_admin/providers/session_recovery.dart';
 import 'package:web_admin/providers/tickets_boutique_cache.dart';
@@ -64,16 +67,23 @@ class _RootAppState extends State<RootApp> {
       UserDataProvider userDataProvider,
       SharedPreferences sharedPrefs,
       FenceServiceClient fenceClient) async {
-    appPreferencesProvider.loadAsync(sharedPrefs);
+    await appPreferencesProvider.loadAsync(sharedPrefs);
     await userDataProvider.loadAsync();
-    if (userDataProvider.isBffSessionCheckPending) {
-      await userDataProvider.verifyLiveBffSession(
-        () async {
-          await fenceClient.readOneUser(UserId(), options: callOptions);
-        },
-        isDeadSession: SessionRecoveryBinding.instance.isUnauthenticated,
-      );
-    }
+    await SessionBootstrap.restore(
+      userDataProvider: userDataProvider,
+      isBffMode: Config.isBffMode,
+      refreshSession: () async {
+        final tokens = await AuthService().authenticateWithRefreshToken();
+        return SessionRestoreResult(sessionId: tokens.sessionId);
+      },
+      probeLiveSession: () async {
+        await fenceClient.readOneUser(
+          UserId(),
+          options: authenticatedCallOptions(),
+        );
+      },
+      isDeadSession: SessionRecoveryBinding.instance.isUnauthenticated,
+    );
 
     return true;
   }
@@ -88,6 +98,13 @@ class _RootAppState extends State<RootApp> {
           create: (_) {
             final gate = OperationalLicenseGateNotifier();
             OperationalLicenseGateBinding.instance.attach(gate);
+            return gate;
+          },
+        ),
+        ChangeNotifierProvider(
+          create: (_) {
+            final gate = FreemiumDumpQuotaNotifier();
+            FreemiumDumpQuotaBinding.instance.attach(gate);
             return gate;
           },
         ),

@@ -19,18 +19,21 @@ class FirmOverviewBody extends StatelessWidget {
         .add_Hm();
 
     return Column(
+      key: const Key('firmOverviewBody'),
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _InfoRow(
           icon: Icons.business,
           label: lang.firmNameLabel,
           value: firm.name,
+          valueKey: const Key('firmNameValue'),
         ),
         _InfoRow(
           icon: Icons.fingerprint,
           label: lang.firmIdLabel,
           value: firm.firmId,
           selectable: true,
+          valueKey: const Key('firmIdValue'),
         ),
         if (firm.hasCurrency() && firm.currency.trim().isNotEmpty)
           _InfoRow(
@@ -82,6 +85,7 @@ class _InfoRow extends StatelessWidget {
   final String value;
   final Color? iconColor;
   final bool selectable;
+  final Key? valueKey;
 
   const _InfoRow({
     required this.icon,
@@ -89,6 +93,7 @@ class _InfoRow extends StatelessWidget {
     required this.value,
     this.iconColor,
     this.selectable = false,
+    this.valueKey,
   });
 
   @override
@@ -97,7 +102,9 @@ class _InfoRow extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       leading: Icon(icon, color: iconColor),
       title: Text(label),
-      subtitle: selectable ? SelectableText(value) : Text(value),
+      subtitle: selectable
+          ? SelectableText(value, key: valueKey)
+          : Text(value, key: valueKey),
     );
   }
 }

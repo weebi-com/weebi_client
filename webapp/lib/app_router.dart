@@ -1,11 +1,9 @@
 import 'package:auth_weebi/auth_weebi.dart' show PermissionProvider;
 import 'package:flutter/foundation.dart' show Listenable;
 import 'package:go_router/go_router.dart';
-import 'package:web_admin/contacts/view/contacts_page.dart';
-import 'package:protos_weebi/protos_weebi_io.dart' show TicketPb;
+import 'package:protos_weebi/protos_weebi_io.dart' show TicketPb, UserPublic;
 import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/core/routing/bridge_auth_redirect.dart';
-import 'package:web_admin/environment.dart';
 import 'package:web_admin/providers/user_data_provider.dart';
 import 'package:web_admin/views/screens/buttons_screen.dart';
 import 'package:web_admin/views/screens/boutiques/boutiques_package_screen.dart';
@@ -35,7 +33,12 @@ import 'package:web_admin/views/screens/help/help_screen.dart';
 import 'package:web_admin/views/screens/support/support_screen.dart';
 import 'package:web_admin/views/screens/about/about_screen.dart';
 import 'package:web_admin/views/screens/billing/billing_screen.dart';
-import 'package:web_admin/views/screens/catalog/catalog_discovery_screen.dart';
+import 'package:web_admin/views/screens/catalog/catalog_edit_screen.dart';
+import 'package:web_admin/views/screens/catalog/catalog_list_screen.dart';
+import 'package:web_admin/views/screens/catalog/catalog_view_screen.dart';
+import 'package:web_admin/views/screens/contacts/contact_edit_screen.dart';
+import 'package:web_admin/views/screens/contacts/contact_view_screen.dart';
+import 'package:web_admin/views/screens/contacts/contacts_list_screen.dart';
 import 'package:web_admin/views/screens/stats_screen.dart';
 import 'package:web_admin/views/screens/legal/legal_document_screen.dart';
 
@@ -231,9 +234,18 @@ GoRouter appRouter(
       GoRoute(
         path: RouteUri.listAccess,
         pageBuilder: (context, state) {
+          final extra = state.extra;
+          final args = extra is AccessesOpenArgs
+              ? extra
+              : extra is UserPublic
+                  ? AccessesOpenArgs(user: extra)
+                  : const AccessesOpenArgs();
           return NoTransitionPage<void>(
             key: state.pageKey,
-            child: const AccessesPackageScreen(),
+            child: AccessesPackageScreen(
+              initialUser: args.user,
+              returnToUsersOnSave: args.returnToUsersOnSave,
+            ),
           );
         },
       ),
@@ -250,14 +262,43 @@ GoRouter appRouter(
         },
       ),
 
-      // =========================== CATALOG DISCOVERY ===========================
+      // =========================== CATALOG ===========================
 
       GoRoute(
         path: RouteUri.catalog,
         pageBuilder: (context, state) {
           return NoTransitionPage<void>(
             key: state.pageKey,
-            child: const CatalogDiscoveryScreen(),
+            child: const CatalogListScreen(),
+          );
+        },
+      ),
+      GoRoute(
+        path: RouteUri.catalogNew,
+        pageBuilder: (context, state) {
+          return NoTransitionPage<void>(
+            key: state.pageKey,
+            child: const CatalogEditScreen(),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/catalog/:id/edit',
+        pageBuilder: (context, state) {
+          final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
+          return NoTransitionPage<void>(
+            key: state.pageKey,
+            child: CatalogEditScreen(calibreId: id),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/catalog/:id',
+        pageBuilder: (context, state) {
+          final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
+          return NoTransitionPage<void>(
+            key: state.pageKey,
+            child: CatalogViewScreen(calibreId: id),
           );
         },
       ),
@@ -370,27 +411,55 @@ GoRouter appRouter(
       GoRoute(
         path: RouteUri.contacts,
         pageBuilder: (context, state) {
-          // TODO: this needs to be flexible depending on the chain selected
-          final chainId = state.extra as String;
           return NoTransitionPage<void>(
             key: state.pageKey,
-            child: ContactsPage(chainId),
+            child: const ContactsListScreen(),
+          );
+        },
+      ),
+      GoRoute(
+        path: RouteUri.contactsNew,
+        pageBuilder: (context, state) {
+          return NoTransitionPage<void>(
+            key: state.pageKey,
+            child: const ContactEditScreen(),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/contacts/:id/edit',
+        pageBuilder: (context, state) {
+          final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
+          return NoTransitionPage<void>(
+            key: state.pageKey,
+            child: ContactEditScreen(contactId: id),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/contacts/:id',
+        pageBuilder: (context, state) {
+          final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
+          return NoTransitionPage<void>(
+            key: state.pageKey,
+            child: ContactViewScreen(contactId: id),
           );
         },
       ),
     ],
     redirect: (context, state) {
-      if (state.matchedLocation == RouteUri.catalog && !Config.isDev) {
-        return RouteUri.dashboard;
-      }
-
       return resolveAuthRedirect(
         matchedLocation: state.matchedLocation,
         isLoggedIn: userDataProvider.isUserLoggedIn(),
+        hasFirm: permissionProvider.firmId.isNotEmpty,
+        isServiceAccount: permissionProvider.isServiceAccount,
         isAuthCheckPending: userDataProvider.isBffSessionCheckPending,
         documentQuery: Uri.base.queryParameters,
         unrestrictedRoutes: unrestrictedRoutes,
         publicRoutes: publicRoutes,
+        createFirmRoute: RouteUri.createFirm,
+        firmId: permissionProvider.firmId,
+        canCreateFirm: permissionProvider.canCreateFirm,
       );
     },
   );

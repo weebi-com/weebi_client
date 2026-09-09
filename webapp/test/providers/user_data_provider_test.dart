@@ -29,7 +29,7 @@ void main() {
     expect(provider.isBffSessionCheckPending, isFalse);
   });
 
-  test('BFF: dead session probe clears mail so UI is logged out', () async {
+  test('BFF: dead session probe logs out but keeps remembered mail', () async {
     SharedPreferences.setMockInitialValues({
       SharePrefKeys.mail: 'a@b.c',
       SharePrefKeys.bffSessionId: 'stale',
@@ -43,7 +43,7 @@ void main() {
     );
 
     expect(provider.isUserLoggedIn(), isFalse);
-    expect(provider.mail, isEmpty);
+    expect(provider.mail, 'a@b.c');
     expect(provider.isBffSessionCheckPending, isFalse);
   });
 

@@ -20,65 +20,67 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'fr';
 
-  static String m0(count) =>
-      "${Intl.plural(count, one: 'Bouton', other: 'Boutons')}";
+  static String m0(price) => "Avec parrainage : ${price}";
 
   static String m1(count) =>
-      "${Intl.plural(count, zero: 'Sélection', one: 'Sélection (1)', other: 'Sélection (${count})')}";
+      "${Intl.plural(count, one: 'Bouton', other: 'Boutons')}";
 
   static String m2(count) =>
+      "${Intl.plural(count, zero: 'Sélection', one: 'Sélection (1)', other: 'Sélection (${count})')}";
+
+  static String m3(count) =>
       "${Intl.plural(count, one: 'Couleur', other: 'Couleurs')}";
 
-  static String m3(name) => "L\'entreprise « ${name} » a bien été créée.";
+  static String m4(name) => "L\'entreprise « ${name} » a bien été créée.";
 
-  static String m4(count) =>
+  static String m5(count) =>
       "${Intl.plural(count, one: 'Dialogue', other: 'Dialogues')}";
 
-  static String m5(value) =>
+  static String m6(value) =>
       "La valeur de ce champ doit être égale à ${value}.";
 
-  static String m6(count) =>
+  static String m7(count) =>
       "${Intl.plural(count, one: 'Extension', other: 'Extensions')}";
 
-  static String m7(count) =>
+  static String m8(count) =>
       "${Intl.plural(count, one: 'Formulaire', other: 'Formulaires')}";
 
-  static String m8(max) => "La valeur doit être inférieure ou égale à ${max}.";
+  static String m9(max) => "La valeur doit être inférieure ou égale à ${max}.";
 
-  static String m9(maxLength) =>
+  static String m10(maxLength) =>
       "La longueur doit être inférieure ou égale à ${maxLength}.";
 
-  static String m10(min) => "La valeur doit être supérieure ou égale à ${min}.";
+  static String m11(min) => "La valeur doit être supérieure ou égale à ${min}.";
 
-  static String m11(minLength) =>
+  static String m12(minLength) =>
       "La longueur doit être supérieure ou égale à ${minLength}.";
 
-  static String m12(count) =>
+  static String m13(count) =>
       "${Intl.plural(count, one: 'Nouvelle Commande', other: 'Nouvelles Commandes')}";
 
-  static String m13(count) =>
+  static String m14(count) =>
       "${Intl.plural(count, one: 'Nouvel Utilisateur', other: 'Nouveaux Utilisateurs')}";
 
-  static String m14(value) =>
+  static String m15(value) =>
       "La valeur de ce champ ne doit pas être égale à ${value}.";
 
-  static String m15(count) =>
+  static String m16(count) =>
       "${Intl.plural(count, one: 'Page', other: 'Pages')}";
 
-  static String m16(count) =>
+  static String m17(count) =>
       "${Intl.plural(count, one: 'Problème en Attente', other: 'Problèmes en Attente')}";
 
-  static String m17(count) =>
+  static String m18(count) =>
       "${Intl.plural(count, one: 'Commande Récente', other: 'Commandes Récentes')}";
 
-  static String m18(ticketId) => "Détail du ticket n°${ticketId}";
+  static String m19(ticketId) => "Détail du ticket n°${ticketId}";
 
-  static String m19(count) => "${count} art.";
-
-  static String m20(count) =>
-      "${Intl.plural(count, one: '# ticket', other: '# tickets')}";
+  static String m20(count) => "${count} art.";
 
   static String m21(count) =>
+      "${Intl.plural(count, one: '# ticket', other: '# tickets')}";
+
+  static String m22(count) =>
       "${Intl.plural(count, one: 'Élément UI', other: 'Éléments UI')}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -172,6 +174,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingReassignSeatDialogTitle": MessageLookupByLibrary.simpleMessage(
       "Réattribuer cette license à un autre utilisateur",
     ),
+    "billingReferralCodeHint": MessageLookupByLibrary.simpleMessage(
+      "ID entreprise du parrain (optionnel)",
+    ),
+    "billingReferralCopyCode": MessageLookupByLibrary.simpleMessage(
+      "Copier le code",
+    ),
+    "billingReferralCreditBalance": MessageLookupByLibrary.simpleMessage(
+      "Solde de crédit de parrainage",
+    ),
+    "billingReferralDiscountHint": MessageLookupByLibrary.simpleMessage(
+      "10 % de réduction avec un code de parrain valide",
+    ),
+    "billingReferralDiscountedPrice": m0,
+    "billingReferralSelfError": MessageLookupByLibrary.simpleMessage(
+      "Vous ne pouvez pas utiliser votre propre code",
+    ),
+    "billingReferralTitle": MessageLookupByLibrary.simpleMessage("Parrainage"),
+    "billingReferralYourCode": MessageLookupByLibrary.simpleMessage(
+      "Votre code de parrainage",
+    ),
     "billingRetry": MessageLookupByLibrary.simpleMessage("Réessayer"),
     "billingSeatsAttributed": MessageLookupByLibrary.simpleMessage(
       "licence(s) attribuée(s)",
@@ -215,7 +237,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "buttonEmphasis": MessageLookupByLibrary.simpleMessage(
       "Accentuation du Bouton",
     ),
-    "buttons": m0,
+    "buttons": m1,
     "cancel": MessageLookupByLibrary.simpleMessage("Annuler"),
     "catalogAddToCatalog": MessageLookupByLibrary.simpleMessage(
       "Ajouter au catalogue",
@@ -225,9 +247,34 @@ class MessageLookup extends MessageLookupByLibrary {
       "Déjà au catalogue",
     ),
     "catalogClearSelection": MessageLookupByLibrary.simpleMessage("Vider"),
-    "catalogCost": MessageLookupByLibrary.simpleMessage("Coût"),
+    "catalogColumnBarcode": MessageLookupByLibrary.simpleMessage("Code barre"),
+    "catalogColumnDesignation": MessageLookupByLibrary.simpleMessage(
+      "Désignation",
+    ),
+    "catalogColumnKind": MessageLookupByLibrary.simpleMessage("Type"),
+    "catalogColumnPrice": MessageLookupByLibrary.simpleMessage("Prix de vente"),
+    "catalogColumnStatus": MessageLookupByLibrary.simpleMessage("Statut"),
+    "catalogColumnTitle": MessageLookupByLibrary.simpleMessage("Libellé"),
+    "catalogCost": MessageLookupByLibrary.simpleMessage("Coût d\'achat"),
     "catalogDiscoverySubtitle": MessageLookupByLibrary.simpleMessage(
       "Sélectionnez les produits FMCG que vous vendez, ajustez le prix et le coût, puis ajoutez-les au catalogue de votre chaîne.",
+    ),
+    "catalogEditProduct": MessageLookupByLibrary.simpleMessage(
+      "Modifier l\'article",
+    ),
+    "catalogEnterPrice": MessageLookupByLibrary.simpleMessage(
+      "Saisir le prix de vente",
+    ),
+    "catalogEnterTitle": MessageLookupByLibrary.simpleMessage(
+      "Saisir le libellé",
+    ),
+    "catalogIdentity": MessageLookupByLibrary.simpleMessage("Caractéristiques"),
+    "catalogInvalidNumber": MessageLookupByLibrary.simpleMessage("erreur"),
+    "catalogInvalidUnits": MessageLookupByLibrary.simpleMessage(
+      "exemple : 1.5 et non pas 1,5",
+    ),
+    "catalogNewProduct": MessageLookupByLibrary.simpleMessage(
+      "Créer un article",
     ),
     "catalogNoProductsMatch": MessageLookupByLibrary.simpleMessage(
       "Aucun produit ne correspond à votre recherche.",
@@ -240,7 +287,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "catalogSelectionEmpty": MessageLookupByLibrary.simpleMessage(
       "Choisissez des produits dans la grille pour constituer votre catalogue.",
     ),
-    "catalogSelectionTitle": m1,
+    "catalogSelectionTitle": m2,
+    "catalogSelling": MessageLookupByLibrary.simpleMessage("Vente"),
+    "catalogStockUnit": MessageLookupByLibrary.simpleMessage("Unité de compte"),
+    "catalogTitleTaken": MessageLookupByLibrary.simpleMessage(
+      "Un article avec ce libellé existe déjà",
+    ),
+    "catalogUnitsInOnePiece": MessageLookupByLibrary.simpleMessage(
+      "Unités/article",
+    ),
+    "catalogVariants": MessageLookupByLibrary.simpleMessage("Sous-articles"),
     "changeProfilePhoto": MessageLookupByLibrary.simpleMessage(
       "Changer la photo",
     ),
@@ -249,13 +305,40 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "colorPalette": MessageLookupByLibrary.simpleMessage("Palette de Couleurs"),
     "colorScheme": MessageLookupByLibrary.simpleMessage("Schéma de Couleurs"),
-    "colors": m2,
+    "colors": m3,
     "confirmDeleteRecord": MessageLookupByLibrary.simpleMessage(
       "Confirmer la suppression de cet enregistrement?",
     ),
     "confirmSubmitRecord": MessageLookupByLibrary.simpleMessage(
       "Confirmer la soumission de cet enregistrement?",
     ),
+    "contactAddress": MessageLookupByLibrary.simpleMessage("Adresse"),
+    "contactCity": MessageLookupByLibrary.simpleMessage("Ville"),
+    "contactCountry": MessageLookupByLibrary.simpleMessage("Pays"),
+    "contactDetails": MessageLookupByLibrary.simpleMessage("Détails"),
+    "contactEdit": MessageLookupByLibrary.simpleMessage("Modifier le contact"),
+    "contactEmailInvalid": MessageLookupByLibrary.simpleMessage(
+      "L\'adresse mail n\'est pas correcte",
+    ),
+    "contactEnterFirstName": MessageLookupByLibrary.simpleMessage(
+      "Saisir le prénom",
+    ),
+    "contactEnterLastName": MessageLookupByLibrary.simpleMessage(
+      "Saisir le nom de famille",
+    ),
+    "contactFirstName": MessageLookupByLibrary.simpleMessage("Prénom"),
+    "contactIsClient": MessageLookupByLibrary.simpleMessage("Client"),
+    "contactIsSupplier": MessageLookupByLibrary.simpleMessage("Fournisseur"),
+    "contactLastName": MessageLookupByLibrary.simpleMessage("Nom de famille"),
+    "contactMail": MessageLookupByLibrary.simpleMessage("Mail"),
+    "contactNew": MessageLookupByLibrary.simpleMessage("Créer un contact"),
+    "contactOverdraft": MessageLookupByLibrary.simpleMessage("Crédit maximum"),
+    "contactPhone": MessageLookupByLibrary.simpleMessage("Téléphone"),
+    "contactPhoneTooShort": MessageLookupByLibrary.simpleMessage(
+      "Le numéro doit comporter au moins 8 chiffres",
+    ),
+    "contactPostCode": MessageLookupByLibrary.simpleMessage("Code postal"),
+    "contactStreet": MessageLookupByLibrary.simpleMessage("Rue"),
     "copy": MessageLookupByLibrary.simpleMessage("Copier"),
     "createEnterpriseErrorPrefix": MessageLookupByLibrary.simpleMessage(
       "Erreur lors de la création de l\'entreprise : ",
@@ -263,7 +346,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "createEnterprisePageTitle": MessageLookupByLibrary.simpleMessage(
       "Créer une entreprise",
     ),
-    "createEnterpriseSuccessTitle": m3,
+    "createEnterpriseSuccessTitle": m4,
     "creditCardErrorText": MessageLookupByLibrary.simpleMessage(
       "Ce champ nécessite un numéro de carte de crédit valide.",
     ),
@@ -297,7 +380,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "dateStringErrorText": MessageLookupByLibrary.simpleMessage(
       "Ce champ nécessite une chaîne de date valide.",
     ),
-    "dialogs": m4,
+    "dialogs": m5,
     "dontHaveAnAccount": MessageLookupByLibrary.simpleMessage(
       "Vous n\'avez pas de compte ?",
     ),
@@ -311,14 +394,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "enterpriseNameFieldLabel": MessageLookupByLibrary.simpleMessage(
       "Entreprise",
     ),
-    "equalErrorText": m5,
+    "entityAddSku": MessageLookupByLibrary.simpleMessage(
+      "Ajouter un sous-article",
+    ),
+    "entityConfirmDelete": MessageLookupByLibrary.simpleMessage(
+      "Supprimer cet enregistrement ?",
+    ),
+    "entityCreate": MessageLookupByLibrary.simpleMessage("Créer"),
+    "entityDelete": MessageLookupByLibrary.simpleMessage("Supprimer"),
+    "entityEdit": MessageLookupByLibrary.simpleMessage("Modifier"),
+    "entityEmptyHint": MessageLookupByLibrary.simpleMessage(
+      "Cliquez sur + pour créer un enregistrement.",
+    ),
+    "equalErrorText": m6,
     "error404": MessageLookupByLibrary.simpleMessage("Erreur 404"),
     "error404Message": MessageLookupByLibrary.simpleMessage(
       "Désolé, la page que vous recherchez a été supprimée ou n\'existe pas.",
     ),
     "error404Title": MessageLookupByLibrary.simpleMessage("Page non trouvée"),
     "example": MessageLookupByLibrary.simpleMessage("Exemple"),
-    "extensions": m6,
+    "extensions": m7,
     "firmCardDescription": MessageLookupByLibrary.simpleMessage(
       "Votre entreprise regroupe vos utilisateurs et vos chaînes ou boutiques.",
     ),
@@ -357,7 +452,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "forgotPasswordTitle": MessageLookupByLibrary.simpleMessage(
       "Mot de passe oublié",
     ),
-    "forms": m7,
+    "forms": m8,
     "generalUi": MessageLookupByLibrary.simpleMessage("UI Générale"),
     "help": MessageLookupByLibrary.simpleMessage("Aide"),
     "helpReadFaq": MessageLookupByLibrary.simpleMessage("Lire la FAQ"),
@@ -408,12 +503,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "matchErrorText": MessageLookupByLibrary.simpleMessage(
       "La valeur ne correspond pas au motif.",
     ),
-    "maxErrorText": m8,
-    "maxLengthErrorText": m9,
+    "maxErrorText": m9,
+    "maxLengthErrorText": m10,
     "menuAccesses": MessageLookupByLibrary.simpleMessage("Accès"),
     "menuBilling": MessageLookupByLibrary.simpleMessage("Offres Weebi"),
     "menuBoutiques": MessageLookupByLibrary.simpleMessage("Mes Boutiques"),
-    "menuCatalog": MessageLookupByLibrary.simpleMessage("Catalogue"),
+    "menuCatalog": MessageLookupByLibrary.simpleMessage("Articles"),
+    "menuContacts": MessageLookupByLibrary.simpleMessage("Contacts"),
     "menuDevices": MessageLookupByLibrary.simpleMessage("Appareils"),
     "menuFirm": MessageLookupByLibrary.simpleMessage("Mon entreprise"),
     "menuScopeDisclaimer": MessageLookupByLibrary.simpleMessage(
@@ -425,12 +521,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "menuStats": MessageLookupByLibrary.simpleMessage("Statistiques"),
     "menuTickets": MessageLookupByLibrary.simpleMessage("Tickets"),
     "menuUsers": MessageLookupByLibrary.simpleMessage("Utilisateurs"),
-    "minErrorText": m10,
-    "minLengthErrorText": m11,
+    "minErrorText": m11,
+    "minLengthErrorText": m12,
     "myProfile": MessageLookupByLibrary.simpleMessage("Mon Profil"),
-    "newOrders": m12,
-    "newUsers": m13,
-    "notEqualErrorText": m14,
+    "newOrders": m13,
+    "newUsers": m14,
+    "notEqualErrorText": m15,
     "numericErrorText": MessageLookupByLibrary.simpleMessage(
       "La valeur doit être numérique.",
     ),
@@ -449,7 +545,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "operationalLicenseRetry": MessageLookupByLibrary.simpleMessage(
       "Réessayer",
     ),
-    "pages": m15,
+    "pages": m16,
     "password": MessageLookupByLibrary.simpleMessage("Mot de Passe"),
     "passwordNotMatch": MessageLookupByLibrary.simpleMessage(
       "Les mots de passe ne correspondent pas.",
@@ -457,8 +553,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "passwordResetEmailSent": MessageLookupByLibrary.simpleMessage(
       "L\'e-mail de réinitialisation du mot de passe a été envoyé.",
     ),
-    "pendingIssues": m16,
-    "recentOrders": m17,
+    "pendingIssues": m17,
+    "recentOrders": m18,
     "recordDeletedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Enregistrement supprimé avec succès.",
     ),
@@ -510,6 +606,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "statsStackedByBoutique": MessageLookupByLibrary.simpleMessage(
       "Empilé par Boutique",
     ),
+    "statusActive": MessageLookupByLibrary.simpleMessage("Actif"),
+    "statusAll": MessageLookupByLibrary.simpleMessage("Tous"),
+    "statusInactive": MessageLookupByLibrary.simpleMessage("Inactif"),
+    "stayConnected": MessageLookupByLibrary.simpleMessage("Rester connecté"),
     "submit": MessageLookupByLibrary.simpleMessage("Soumettre"),
     "support": MessageLookupByLibrary.simpleMessage("Support"),
     "supportChatWhatsApp": MessageLookupByLibrary.simpleMessage(
@@ -523,8 +623,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "Accentuation du Texte",
     ),
     "textTheme": MessageLookupByLibrary.simpleMessage("Thème du Texte"),
-    "ticketDetailTitle": m18,
-    "ticketItemsShort": m19,
+    "ticketDetailTitle": m19,
+    "ticketItemsShort": m20,
     "ticketNotProvided": MessageLookupByLibrary.simpleMessage(
       "Ticket non fourni",
     ),
@@ -543,7 +643,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Date · n°",
     ),
     "ticketsColumnType": MessageLookupByLibrary.simpleMessage("Type"),
-    "ticketsCount": m20,
+    "ticketsCount": m21,
     "ticketsDateAll": MessageLookupByLibrary.simpleMessage("Toutes les dates"),
     "ticketsDeletedChip": MessageLookupByLibrary.simpleMessage("Supprimés"),
     "ticketsDeletedExclude": MessageLookupByLibrary.simpleMessage(
@@ -598,7 +698,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Ventes d\'Aujourd\'hui",
     ),
     "typography": MessageLookupByLibrary.simpleMessage("Typographie"),
-    "uiElements": m21,
+    "uiElements": m22,
     "urlErrorText": MessageLookupByLibrary.simpleMessage(
       "Ce champ nécessite une adresse URL valide.",
     ),

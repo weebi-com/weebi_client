@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:web_admin/core/routing/routes.dart';
+import 'package:web_admin/core/services/auth_service.dart';
 import 'package:web_admin/generated/l10n.dart';
+import 'package:web_admin/providers/current_user_provider.dart';
 import 'package:web_admin/utils/app_dialogs.dart';
 import 'package:web_admin/utils/app_focus_helper.dart';
 import 'package:web_admin/views/widgets/card_elements.dart';
@@ -27,6 +30,7 @@ class _CreateFirmScreenState extends State<CreateFirmScreen> {
   bool _isLoading = false;
 
   final FirmService _firmService = FirmService();
+  final AuthService _authService = AuthService();
 
   void _doSubmit(BuildContext context) async {
     AppFocusHelper.instance.requestUnfocus();
@@ -42,6 +46,11 @@ class _CreateFirmScreenState extends State<CreateFirmScreen> {
           name: _formData.name,
           defaultCurrency: _formData.defaultCurrency,
         );
+        await _authService.authenticateWithRefreshToken();
+        if (context.mounted) {
+          context.read<CurrentUserProvider>().clear();
+          await context.read<CurrentUserProvider>().load(force: true);
+        }
         if (!context.mounted) return;
         final lang = Lang.of(context);
         setState(() {
@@ -82,6 +91,7 @@ class _CreateFirmScreenState extends State<CreateFirmScreen> {
     return PortalMasterLayout(
       selectedMenuUri: RouteUri.crud,
       body: ListView(
+        key: const Key('createFirmScreen'),
         padding: const EdgeInsets.all(kDefaultPadding),
         children: [
           Text(
@@ -122,6 +132,7 @@ class _CreateFirmScreenState extends State<CreateFirmScreen> {
           Padding(
             padding: const EdgeInsets.only(bottom: kDefaultPadding * 1.5),
             child: FormBuilderTextField(
+              key: const Key('createFirmNameField'),
               name: 'name',
               decoration: const InputDecoration(
                 labelText: 'Nom',
@@ -200,6 +211,7 @@ class _CreateFirmScreenState extends State<CreateFirmScreen> {
     return SizedBox(
       height: 40.0,
       child: ElevatedButton(
+        key: const Key('createFirmSubmitButton'),
         style: themeData.extension<AppButtonTheme>()!.successElevated,
         onPressed: _isLoading ? null : () => _doSubmit(context),
         child: Row(

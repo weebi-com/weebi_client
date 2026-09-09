@@ -1,14 +1,25 @@
 // ignore_for_file: unused_field
 
 import 'package:flutter/material.dart';
+import 'package:grpc/grpc.dart' show ClientInterceptor;
 import 'package:grpc/grpc_web.dart';
 import 'package:protos_weebi/protos_weebi_io.dart';
+import 'package:web_admin/core/billing/billing_rpc.dart';
 import 'package:web_admin/environment.dart';
 import 'package:web_admin/grpc/auth_interceptor.dart';
+import 'package:web_admin/grpc/freemium_dump_quota_grpc_interceptor.dart';
 import 'package:web_admin/grpc/log_interceptor.dart';
 import 'package:web_admin/grpc/operational_license_grpc_interceptor.dart';
 import 'package:web_admin/grpc/server.dart';
 import 'package:web_admin/grpc/unauthenticated_interceptor.dart';
+
+List<ClientInterceptor> _dataServiceInterceptors(String accessToken) => [
+      AuthInterceptor(accessToken, isBffMode: Config.isBffMode),
+      UnauthenticatedInterceptor(),
+      OperationalLicenseGrpcInterceptor(),
+      FreemiumDumpQuotaGrpcInterceptor(),
+      RequestLogInterceptor(),
+    ];
 
 class ArticleServiceClientProvider extends ChangeNotifier {
   final String accessToken;
@@ -17,12 +28,7 @@ class ArticleServiceClientProvider extends ChangeNotifier {
       : _articleServiceClient = ArticleServiceClient(
           clientChannel,
           options: callOptions,
-          interceptors: [
-            AuthInterceptor(accessToken, isBffMode: Config.isBffMode),
-            UnauthenticatedInterceptor(),
-            OperationalLicenseGrpcInterceptor(),
-            RequestLogInterceptor(),
-          ],
+          interceptors: _dataServiceInterceptors(accessToken),
         );
   ArticleServiceClient _articleServiceClient;
   ArticleServiceClient get articleServiceClient => _articleServiceClient;
@@ -31,12 +37,7 @@ class ArticleServiceClientProvider extends ChangeNotifier {
     _articleServiceClient = ArticleServiceClient(
       clientChannel,
       options: callOptions,
-      interceptors: [
-        AuthInterceptor(value, isBffMode: Config.isBffMode),
-        UnauthenticatedInterceptor(),
-        OperationalLicenseGrpcInterceptor(),
-        RequestLogInterceptor(),
-      ],
+      interceptors: _dataServiceInterceptors(value),
     );
     notifyListeners();
     return;
@@ -55,24 +56,14 @@ class ContactServiceClientProvider extends ChangeNotifier {
       : _contactServiceClient = ContactServiceClient(
           clientChannel,
           options: callOptions,
-          interceptors: [
-            AuthInterceptor(_accessToken, isBffMode: Config.isBffMode),
-            UnauthenticatedInterceptor(),
-            OperationalLicenseGrpcInterceptor(),
-            RequestLogInterceptor(),
-          ],
+          interceptors: _dataServiceInterceptors(_accessToken),
         );
 
   set serviceClient(String value) {
     _contactServiceClient = ContactServiceClient(
       clientChannel,
       options: callOptions,
-      interceptors: [
-        AuthInterceptor(value, isBffMode: Config.isBffMode),
-        UnauthenticatedInterceptor(),
-        OperationalLicenseGrpcInterceptor(),
-        RequestLogInterceptor(),
-      ],
+      interceptors: _dataServiceInterceptors(value),
     );
     notifyListeners();
     return;
@@ -88,24 +79,14 @@ class TicketServiceClientProvider extends ChangeNotifier {
       : _ticketServiceClient = TicketServiceClient(
           clientChannel,
           options: callOptions,
-          interceptors: [
-            AuthInterceptor(_accessToken, isBffMode: Config.isBffMode),
-            UnauthenticatedInterceptor(),
-            OperationalLicenseGrpcInterceptor(),
-            RequestLogInterceptor(),
-          ],
+          interceptors: _dataServiceInterceptors(_accessToken),
         );
 
   set serviceClient(String accessToken) {
     _ticketServiceClient = TicketServiceClient(
       clientChannel,
       options: callOptions,
-      interceptors: [
-        AuthInterceptor(accessToken, isBffMode: Config.isBffMode),
-        UnauthenticatedInterceptor(),
-        OperationalLicenseGrpcInterceptor(),
-        RequestLogInterceptor(),
-      ],
+      interceptors: _dataServiceInterceptors(accessToken),
     );
     notifyListeners();
     return;
@@ -114,25 +95,51 @@ class TicketServiceClientProvider extends ChangeNotifier {
 
 class BillingServiceClientProvider extends ChangeNotifier {
   final String _accessToken;
-  final GrpcWebClientChannel clientChannel;
-  BillingServiceClient _billingServiceClient;
+  final GrpcWebClientChannel? clientChannel;
+  BillingServiceClient? _billingServiceClient;
+  late BillingRpc _billingRpc;
 
-  BillingServiceClient get billingServiceClient => _billingServiceClient;
+  BillingServiceClient get billingServiceClient {
+    final client = _billingServiceClient;
+    if (client == null) {
+      throw StateError(
+        'BillingServiceClient is unavailable (test BillingRpc-only provider)',
+      );
+    }
+    return client;
+  }
 
-  BillingServiceClientProvider(this.clientChannel, this._accessToken)
-      : _billingServiceClient = BillingServiceClient(
-          clientChannel,
+  /// Prefer this in UI code so widget tests can inject a [FakeBillingRpc].
+  BillingRpc get billingRpc => _billingRpc;
+
+  BillingServiceClientProvider(GrpcWebClientChannel channel, this._accessToken)
+      : clientChannel = channel,
+        _billingServiceClient = BillingServiceClient(
+          channel,
           options: callOptions,
           interceptors: [
             AuthInterceptor(_accessToken, isBffMode: Config.isBffMode),
             UnauthenticatedInterceptor(),
             RequestLogInterceptor(),
           ],
-        );
+        ) {
+    _billingRpc = GrpcBillingRpc(_billingServiceClient!);
+  }
+
+  /// Test / harness constructor: no live gRPC channel.
+  BillingServiceClientProvider.forTest(BillingRpc rpc)
+      : clientChannel = null,
+        _accessToken = '',
+        _billingServiceClient = null,
+        _billingRpc = rpc;
 
   set serviceClient(String value) {
+    final channel = clientChannel;
+    if (channel == null) {
+      throw StateError('Cannot refresh gRPC client on forTest provider');
+    }
     _billingServiceClient = BillingServiceClient(
-      clientChannel,
+      channel,
       options: callOptions,
       interceptors: [
         AuthInterceptor(value, isBffMode: Config.isBffMode),
@@ -140,6 +147,7 @@ class BillingServiceClientProvider extends ChangeNotifier {
         RequestLogInterceptor(),
       ],
     );
+    _billingRpc = GrpcBillingRpc(_billingServiceClient!);
     notifyListeners();
   }
 }
@@ -155,24 +163,14 @@ class StatsServiceClientProvider extends ChangeNotifier {
       : _statsServiceClient = StatsServiceClient(
           clientChannel,
           options: callOptions,
-          interceptors: [
-            AuthInterceptor(_accessToken, isBffMode: Config.isBffMode),
-            UnauthenticatedInterceptor(),
-            OperationalLicenseGrpcInterceptor(),
-            RequestLogInterceptor(),
-          ],
+          interceptors: _dataServiceInterceptors(_accessToken),
         );
 
   set serviceClient(String value) {
     _statsServiceClient = StatsServiceClient(
       clientChannel,
       options: callOptions,
-      interceptors: [
-        AuthInterceptor(value, isBffMode: Config.isBffMode),
-        UnauthenticatedInterceptor(),
-        OperationalLicenseGrpcInterceptor(),
-        RequestLogInterceptor(),
-      ],
+      interceptors: _dataServiceInterceptors(value),
     );
     notifyListeners();
   }

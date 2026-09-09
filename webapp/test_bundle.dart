@@ -9,7 +9,7 @@ import 'package:patrol/src/platform/contracts/contracts.dart';
 import 'package:test_api/src/backend/invoker.dart';
 
 // START: GENERATED TEST IMPORTS
-import 'patrol_test/first_login_tile_test.dart' as first_login_tile_test;
+import 'patrol_test/stay_connected_reload_test.dart' as stay_connected_reload_test;
 // END: GENERATED TEST IMPORTS
 
 Future<void> main() async {
@@ -72,7 +72,7 @@ Future<void> main() async {
   });
 
 // START: GENERATED TEST GROUPS
-  group('first_login_tile_test', first_login_tile_test.main);
+  group('stay_connected_reload_test', stay_connected_reload_test.main);
 // END: GENERATED TEST GROUPS
 
   final dartTestGroup = await testExplorationCompleter.future;

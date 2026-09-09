@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_admin/environment.dart';
 
@@ -12,7 +13,7 @@ class AppPreferencesProvider extends ChangeNotifier {
 
   ThemeMode get themeMode => _themeMode;
 
-  void loadAsync(SharedPreferences sharedPref) {
+  Future<void> loadAsync(SharedPreferences sharedPref) async {
     final langCode = (sharedPref.getString(SharePrefKeys.appLanguageCode) ??
             Config.locale)
         .trim();
@@ -30,6 +31,11 @@ class AppPreferencesProvider extends ChangeNotifier {
     _themeMode = ThemeMode.values.byName(
         sharedPref.getString(SharePrefKeys.appThemeMode) ?? ThemeMode.light.name);
 
+    await initializeDateFormatting(_locale.toString());
+    if (_locale.languageCode != _locale.toString()) {
+      await initializeDateFormatting(_locale.languageCode);
+    }
+
     // Defer to avoid "setState during build" - loadAsync can be called from a
     // Future that completes during the build phase (e.g. in RootApp)
     WidgetsBinding.instance.addPostFrameCallback((_) => notifyListeners());
@@ -41,6 +47,11 @@ class AppPreferencesProvider extends ChangeNotifier {
   }) async {
     if (locale != _locale) {
       _locale = locale;
+
+      await initializeDateFormatting(_locale.toString());
+    if (_locale.languageCode != _locale.toString()) {
+      await initializeDateFormatting(_locale.languageCode);
+    }
 
       if (save) {
         final sharedPref = await SharedPreferences.getInstance();
