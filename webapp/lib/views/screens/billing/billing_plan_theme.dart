@@ -53,3 +53,36 @@ class BillingPlanVisual {
     return entreprise;
   }
 }
+
+/// Opaque count pill for plan headers. Avoids [Chip]: its Material canvas is
+/// the theme surface, so translucent gold/white ink reads as yellow-on-white.
+class BillingPlanCountBadge extends StatelessWidget {
+  const BillingPlanCountBadge({
+    super.key,
+    required this.label,
+    required this.style,
+  });
+
+  final String label;
+  final BillingPlanVisual style;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: style.buttonBackground,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        child: Text(
+          label,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: style.buttonForeground,
+                fontWeight: FontWeight.w600,
+              ),
+        ),
+      ),
+    );
+  }
+}

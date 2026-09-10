@@ -174,20 +174,48 @@ class MessageLookup extends MessageLookupByLibrary {
       "Reassign this license seat to another user",
     ),
     "billingReferralCodeHint": MessageLookupByLibrary.simpleMessage(
-      "Referrer firm ID (optional)",
+      "Referrer code",
+    ),
+    "billingReferralCopied": MessageLookupByLibrary.simpleMessage(
+      "Code copied",
     ),
     "billingReferralCopyCode": MessageLookupByLibrary.simpleMessage(
       "Copy code",
     ),
     "billingReferralCreditBalance": MessageLookupByLibrary.simpleMessage(
-      "Referral credit balance",
+      "Weebi credit",
     ),
+    "billingReferralCreditHint": MessageLookupByLibrary.simpleMessage(
+      "Use it on your next Weebi purchases.",
+    ),
+    "billingReferralDialogClose": MessageLookupByLibrary.simpleMessage("Close"),
     "billingReferralDiscountHint": MessageLookupByLibrary.simpleMessage(
-      "10% off when you enter a valid referrer code",
+      "10% off your purchase",
     ),
     "billingReferralDiscountedPrice": m0,
+    "billingReferralHaveCodeTitle": MessageLookupByLibrary.simpleMessage(
+      "Were you referred?",
+    ),
+    "billingReferralHowTitle": MessageLookupByLibrary.simpleMessage(
+      "How it works",
+    ),
+    "billingReferralIntro": MessageLookupByLibrary.simpleMessage(
+      "Refer a merchant. They pay 10% less, you earn 20% as Weebi credit — applied to your next Weebi purchases.",
+    ),
     "billingReferralSelfError": MessageLookupByLibrary.simpleMessage(
       "You cannot use your own referral code",
+    ),
+    "billingReferralStepCredit": MessageLookupByLibrary.simpleMessage(
+      "You receive 20% as Weebi credit, for your licenses and reports.",
+    ),
+    "billingReferralStepDiscount": MessageLookupByLibrary.simpleMessage(
+      "When they buy, they get 10% off.",
+    ),
+    "billingReferralStepShare": MessageLookupByLibrary.simpleMessage(
+      "Share your code with another merchant.",
+    ),
+    "billingReferralTease": MessageLookupByLibrary.simpleMessage(
+      "Share your code: 10% off for them, 20% Weebi credit for you.",
     ),
     "billingReferralTitle": MessageLookupByLibrary.simpleMessage("Referral"),
     "billingReferralYourCode": MessageLookupByLibrary.simpleMessage(
@@ -243,6 +271,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "catalogClearSelection": MessageLookupByLibrary.simpleMessage("Clear"),
     "catalogColumnBarcode": MessageLookupByLibrary.simpleMessage("Code barre"),
+    "catalogColumnCategory": MessageLookupByLibrary.simpleMessage("Catégorie"),
     "catalogColumnDesignation": MessageLookupByLibrary.simpleMessage(
       "Désignation",
     ),

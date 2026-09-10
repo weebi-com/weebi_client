@@ -105,6 +105,65 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Cola 33cl'), findsOneWidget);
     expect(find.text('123456'), findsOneWidget);
+    expect(find.text('Kind'), findsNothing);
+    expect(find.text('retail'), findsNothing);
+  });
+
+  testWidgets('shows basket kind and hides retail kind', (tester) async {
+    final calibre = CalibrePb.create()
+      ..id = 8
+      ..title = 'Pack'
+      ..kind = ArticleKindPb.basket;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: ProtobufDynamicBody(pbObject: calibre),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Kind'), findsOneWidget);
+    expect(find.text('basket'), findsOneWidget);
+    expect(find.text('retail'), findsNothing);
+  });
+
+  testWidgets('technical fields render below id title and price',
+      (tester) async {
+    final calibre = CalibrePb.create()
+      ..id = 7
+      ..title = 'Cola'
+      ..creationDate = '2020-01-01T00:00:00Z'
+      ..status = true
+      ..articlesRetail.add(
+        ArticleRetailPb.create()
+          ..id = 1
+          ..designation = 'Cola 33cl'
+          ..price = 500,
+      );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: ProtobufDynamicBody(
+              pbObject: calibre,
+              leadingFieldNames: const ['id', 'title', 'price'],
+              trailingFieldNames: const ['creationDate', 'status'],
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final titleTop = tester.getTopLeft(find.text('Title')).dy;
+    final priceTop = tester.getTopLeft(find.text('Price')).dy;
+    final createdTop = tester.getTopLeft(find.text('Creation Date')).dy;
+    expect(titleTop, lessThan(createdTop));
+    expect(priceTop, lessThan(createdTop));
   });
 
   testWidgets('renders Phone without a dedicated Contact widget', (tester) async {

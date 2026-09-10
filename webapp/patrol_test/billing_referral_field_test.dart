@@ -37,11 +37,7 @@ void main() {
       final ownFinder = find.byKey(const Key('billingOwnReferralCode'));
       if (ownFinder.evaluate().isNotEmpty) {
         final selectable = $.tester.widget<SelectableText>(ownFinder);
-        final text = selectable.data ?? '';
-        final parts = text.split(':');
-        if (parts.length > 1) {
-          ownCode = parts.last.trim();
-        }
+        ownCode = (selectable.data ?? '').trim();
       }
       if (ownCode.isEmpty) {
         // Fallback: Dummy/dev firm may still expose code after getReferralInfo.

@@ -17,6 +17,14 @@ const Color kTextColor = Color(0xFF2A2B2D);
 
 const Color kScreenBackgroundColor = Color(0xFFF4F6F9);
 
+const Color kDarkScaffoldColor = Color(0xFF121418);
+const Color kDarkSurfaceColor = Color(0xFF1E2228);
+const Color kDarkOnSurfaceColor = Color(0xFFF2F4F7);
+const Color kDarkOnSurfaceVariantColor = Color(0xFFC2C7D0);
+const Color kDarkOutlineColor = Color(0xFF6C757D);
+const Color kDarkPrimaryContainerColor = Color(0xFF1E4A8A);
+const Color kDarkSurfaceContainerHighestColor = Color(0xFF32383F);
+
 class AppThemeData {
   AppThemeData._();
 
@@ -43,7 +51,14 @@ class AppThemeData {
         error: kErrorColor,
         onError: Colors.white,
         surface: Colors.white,
-        onSurface: Colors.black,
+        onSurface: kTextColor,
+        onSurfaceVariant: Color(0xFF5C6570),
+        outline: Color(0xFFCED4DA),
+        primaryContainer: Color(0xFFD6E6FA),
+        onPrimaryContainer: Color(0xFF0D3B73),
+        secondaryContainer: Color(0xFFE9ECEF),
+        onSecondaryContainer: kTextColor,
+        surfaceContainerHighest: Color(0xFFE9ECEF),
       ),
       cardTheme: const CardThemeData(
         margin: EdgeInsets.zero,
@@ -105,7 +120,34 @@ class AppThemeData {
   }
 
   ThemeData dark() {
-    final themeData = ThemeData.dark(useMaterial3: false).copyWith(
+    const colorScheme = ColorScheme(
+      brightness: Brightness.dark,
+      primary: kPrimaryColor,
+      onPrimary: Colors.white,
+      secondary: Color(0xFFADB5BD),
+      onSecondary: kDarkScaffoldColor,
+      error: kErrorColor,
+      onError: Colors.white,
+      surface: kDarkSurfaceColor,
+      onSurface: kDarkOnSurfaceColor,
+      onSurfaceVariant: kDarkOnSurfaceVariantColor,
+      outline: kDarkOutlineColor,
+      primaryContainer: kDarkPrimaryContainerColor,
+      onPrimaryContainer: Colors.white,
+      secondaryContainer: kDarkSurfaceContainerHighestColor,
+      onSecondaryContainer: kDarkOnSurfaceColor,
+      surfaceContainerHighest: kDarkSurfaceContainerHighestColor,
+    );
+
+    final themeData = ThemeData(
+      useMaterial3: false,
+      brightness: Brightness.dark,
+      colorScheme: colorScheme,
+      scaffoldBackgroundColor: kDarkScaffoldColor,
+      canvasColor: kDarkSurfaceColor,
+      cardColor: kDarkSurfaceColor,
+      dividerColor: kDarkOutlineColor.withOpacity(0.45),
+      dialogBackgroundColor: kDarkSurfaceColor,
       drawerTheme: const DrawerThemeData(backgroundColor: Color(0xFF343A40)),
       appBarTheme: const AppBarTheme(
         iconTheme: IconThemeData(color: Colors.white),
@@ -114,6 +156,7 @@ class AppThemeData {
       ),
       cardTheme: const CardThemeData(
         margin: EdgeInsets.zero,
+        color: kDarkSurfaceColor,
       ),
     );
 
@@ -158,6 +201,10 @@ class AppThemeData {
     );
 
     return themeData.copyWith(
+      textTheme: themeData.textTheme.apply(
+        bodyColor: kDarkOnSurfaceColor,
+        displayColor: kDarkOnSurfaceColor,
+      ),
       extensions: [
         AppButtonTheme.fromAppColorScheme(appColorScheme),
         appColorScheme,

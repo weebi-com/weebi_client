@@ -711,7 +711,7 @@ class _BillingScreenState extends State<BillingScreen>
     return ListView(
       padding: const EdgeInsets.all(kDefaultPadding),
       children: [
-        _buildReferralSection(themeData: themeData, lang: lang),
+        _buildReferralSection(),
         const SizedBox(height: kDefaultPadding * 1.5),
         _SyscohadaAddonCard(
           product: _syscohadaProduct,
@@ -749,6 +749,9 @@ class _BillingScreenState extends State<BillingScreen>
                           _bridgeHighlightProductId == p.productId.toLowerCase(),
                       pawapayCurrency: pawapayCurrency,
                       showReferralDiscount: _referralDiscountPreviewActive,
+                      referrerCodeController: _referralCodeController,
+                      referrerCodeError: _referralFieldError,
+                      onReferrerCodeChanged: _onReferrerCodeChanged,
                     ))
                 .toList(),
           ),
@@ -757,26 +760,23 @@ class _BillingScreenState extends State<BillingScreen>
     );
   }
 
-  Widget _buildReferralSection({
-    required ThemeData themeData,
-    required Lang lang,
-  }) {
+  Widget _buildReferralSection() {
     return BillingReferralSection(
-      controller: _referralCodeController,
       ownReferralCode: _ownReferralCode,
       creditBalanceCents: _referralCreditBalanceCents,
-      errorText: _referralFieldError,
-      onChanged: (value) {
-        setState(() {
-          _referralFieldError = isSelfReferralCode(
-            entered: value,
-            ownReferralCode: _ownReferralCode,
-          )
-              ? lang.billingReferralSelfError
-              : null;
-        });
-      },
     );
+  }
+
+  void _onReferrerCodeChanged(String value) {
+    final lang = Lang.of(context);
+    setState(() {
+      _referralFieldError = isSelfReferralCode(
+        entered: value,
+        ownReferralCode: _ownReferralCode,
+      )
+          ? lang.billingReferralSelfError
+          : null;
+    });
   }
 
   Widget _buildHistoryTab({
@@ -1024,7 +1024,7 @@ class _BillingScreenState extends State<BillingScreen>
                 ),
                 child: TabBar(
                   controller: _tabController,
-                  labelColor: themeData.colorScheme.onSurface,
+                  labelColor: themeData.colorScheme.onPrimaryContainer,
                   unselectedLabelColor: themeData.colorScheme.onSurfaceVariant,
                   labelStyle: themeData.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
@@ -1063,16 +1063,22 @@ class _BillingScreenState extends State<BillingScreen>
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Chip(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 4.0,
-                                      vertical: 6.0,
+                                  DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      color: appColorScheme.error,
+                                      borderRadius: BorderRadius.circular(8),
                                     ),
-                                    backgroundColor: appColorScheme.error,
-                                    label: Text(
-                                      _errorMessage!,
-                                      style: TextStyle(
-                                        color: themeData.colorScheme.onPrimary,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12.0,
+                                        vertical: 8.0,
+                                      ),
+                                      child: Text(
+                                        _errorMessage!,
+                                        style: themeData.textTheme.bodyMedium
+                                            ?.copyWith(
+                                          color: themeData.colorScheme.onError,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -1177,8 +1183,7 @@ class _SyscohadaAddonCard extends StatelessWidget {
               : themeData.dividerColor.withValues(alpha: 0.6),
           width: highlighted ? 2 : 1,
         ),
-        color: themeData.colorScheme.surfaceContainerHighest
-            .withValues(alpha: 0.35),
+        color: themeData.colorScheme.surfaceContainerHighest,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1354,6 +1359,9 @@ class _ProductOfferCard extends StatelessWidget {
   final VoidCallback onViewTerms;
   final String pawapayCurrency;
   final bool showReferralDiscount;
+  final TextEditingController? referrerCodeController;
+  final String? referrerCodeError;
+  final ValueChanged<String>? onReferrerCodeChanged;
 
   const _ProductOfferCard({
     required this.product,
@@ -1366,6 +1374,9 @@ class _ProductOfferCard extends StatelessWidget {
     this.highlighted = false,
     this.pawapayCurrency = 'XOF',
     this.showReferralDiscount = false,
+    this.referrerCodeController,
+    this.referrerCodeError,
+    this.onReferrerCodeChanged,
   });
 
   @override
@@ -1432,7 +1443,7 @@ class _ProductOfferCard extends StatelessWidget {
                 Text(
                   lang.billingReferralDiscountedPrice(discountedLabel),
                   style: themeData.textTheme.titleMedium?.copyWith(
-                    color: themeData.colorScheme.primary,
+                    color: style.onBackground,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -1451,6 +1462,21 @@ class _ProductOfferCard extends StatelessWidget {
                     color: style.onBackground.withValues(alpha: 0.85),
                   ),
                 ),
+                if (referrerCodeController != null &&
+                    onReferrerCodeChanged != null) ...[
+                  const SizedBox(height: kDefaultPadding),
+                  BillingReferrerCodeField(
+                    controller: referrerCodeController!,
+                    errorText: referrerCodeError,
+                    onChanged: onReferrerCodeChanged!,
+                    style: BillingReferrerFieldStyle(
+                      labelColor: style.mutedOnBackground,
+                      textColor: style.onBackground,
+                      borderColor: style.mutedOnBackground,
+                      fillColor: Colors.white.withValues(alpha: 0.06),
+                    ),
+                  ),
+                ],
               ],
               const SizedBox(height: kDefaultPadding),
               // CGV Block
@@ -1596,19 +1622,9 @@ class _LicenseCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Chip(
-                  backgroundColor:
-                      style.onBackground.withValues(alpha: 0.18),
-                  side: BorderSide(
-                    color: style.onBackground.withValues(alpha: 0.35),
-                  ),
-                  label: Text(
-                    '${license.maxUsers} ${lang.billingLicenses}',
-                    style: themeData.textTheme.bodyMedium!.copyWith(
-                      color: style.onBackground,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                BillingPlanCountBadge(
+                  label: '${license.maxUsers} ${lang.billingLicenses}',
+                  style: style,
                 ),
               ],
             ),

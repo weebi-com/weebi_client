@@ -190,6 +190,15 @@ String _mobileMoneyDisplayCode(String currency, String languageCode) {
   return currency;
 }
 
+/// Unitless Weebi credit for display: whole number, no currency code.
+///
+/// Stored as cents; shown as whole units. Internally backed on XOF, but the
+/// UI never names a currency so the credit is not presented as cash.
+String formatWeebiCredit(int creditBalanceCents) {
+  final units = (creditBalanceCents / 100).round();
+  return _formatThousandsSpaces(units);
+}
+
 String _formatThousandsSpaces(int value) {
   final digits = value.abs().toString();
   final buf = StringBuffer();

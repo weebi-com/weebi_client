@@ -175,20 +175,48 @@ class MessageLookup extends MessageLookupByLibrary {
       "Réattribuer cette license à un autre utilisateur",
     ),
     "billingReferralCodeHint": MessageLookupByLibrary.simpleMessage(
-      "ID entreprise du parrain (optionnel)",
+      "Code du parrain",
     ),
+    "billingReferralCopied": MessageLookupByLibrary.simpleMessage("Code copié"),
     "billingReferralCopyCode": MessageLookupByLibrary.simpleMessage(
       "Copier le code",
     ),
     "billingReferralCreditBalance": MessageLookupByLibrary.simpleMessage(
-      "Solde de crédit de parrainage",
+      "Crédit weebi",
+    ),
+    "billingReferralCreditHint": MessageLookupByLibrary.simpleMessage(
+      "Utilisable sur vos prochains achats Weebi.",
+    ),
+    "billingReferralDialogClose": MessageLookupByLibrary.simpleMessage(
+      "Fermer",
     ),
     "billingReferralDiscountHint": MessageLookupByLibrary.simpleMessage(
-      "10 % de réduction avec un code de parrain valide",
+      "10 % de réduction sur votre achat",
     ),
     "billingReferralDiscountedPrice": m0,
+    "billingReferralHaveCodeTitle": MessageLookupByLibrary.simpleMessage(
+      "On vous a parrainé ?",
+    ),
+    "billingReferralHowTitle": MessageLookupByLibrary.simpleMessage(
+      "Comment ça marche",
+    ),
+    "billingReferralIntro": MessageLookupByLibrary.simpleMessage(
+      "Parrainez un commerçant. Il paie 10 % de moins, vous gagnez 20 % en Crédit weebi — à déduire de vos prochains achats Weebi.",
+    ),
     "billingReferralSelfError": MessageLookupByLibrary.simpleMessage(
       "Vous ne pouvez pas utiliser votre propre code",
+    ),
+    "billingReferralStepCredit": MessageLookupByLibrary.simpleMessage(
+      "Vous recevez 20 % en Crédit weebi, utilisable sur vos licences et rapports.",
+    ),
+    "billingReferralStepDiscount": MessageLookupByLibrary.simpleMessage(
+      "À l\'achat, il bénéficie de 10 % de réduction.",
+    ),
+    "billingReferralStepShare": MessageLookupByLibrary.simpleMessage(
+      "Partagez votre code avec un autre commerçant.",
+    ),
+    "billingReferralTease": MessageLookupByLibrary.simpleMessage(
+      "Partagez votre code : 10 % pour eux, 20 % de Crédit weebi pour vous.",
     ),
     "billingReferralTitle": MessageLookupByLibrary.simpleMessage("Parrainage"),
     "billingReferralYourCode": MessageLookupByLibrary.simpleMessage(
@@ -248,6 +276,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "catalogClearSelection": MessageLookupByLibrary.simpleMessage("Vider"),
     "catalogColumnBarcode": MessageLookupByLibrary.simpleMessage("Code barre"),
+    "catalogColumnCategory": MessageLookupByLibrary.simpleMessage("Catégorie"),
     "catalogColumnDesignation": MessageLookupByLibrary.simpleMessage(
       "Désignation",
     ),

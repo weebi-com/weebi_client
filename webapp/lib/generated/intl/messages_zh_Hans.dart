@@ -145,19 +145,41 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingReassignSeatDialogTitle": MessageLookupByLibrary.simpleMessage(
       "将此许可证席位重新分配给其他用户",
     ),
-    "billingReferralCodeHint": MessageLookupByLibrary.simpleMessage(
-      "推荐人企业 ID（可选）",
-    ),
+    "billingReferralCodeHint": MessageLookupByLibrary.simpleMessage("推荐人代码"),
+    "billingReferralCopied": MessageLookupByLibrary.simpleMessage("已复制推荐码"),
     "billingReferralCopyCode": MessageLookupByLibrary.simpleMessage("复制推荐码"),
     "billingReferralCreditBalance": MessageLookupByLibrary.simpleMessage(
-      "推荐积分余额",
+      "Weebi 积分",
     ),
+    "billingReferralCreditHint": MessageLookupByLibrary.simpleMessage(
+      "可用于您的下次 Weebi 购买。",
+    ),
+    "billingReferralDialogClose": MessageLookupByLibrary.simpleMessage("关闭"),
     "billingReferralDiscountHint": MessageLookupByLibrary.simpleMessage(
-      "输入有效推荐码可享 10% 折扣",
+      "购买可享 10% 折扣",
     ),
     "billingReferralDiscountedPrice": m0,
+    "billingReferralHaveCodeTitle": MessageLookupByLibrary.simpleMessage(
+      "有人推荐了您？",
+    ),
+    "billingReferralHowTitle": MessageLookupByLibrary.simpleMessage("如何运作"),
+    "billingReferralIntro": MessageLookupByLibrary.simpleMessage(
+      "推荐其他商家使用 Weebi。对方享 10% 折扣，您获得 20% Weebi 积分，可用于下次购买。",
+    ),
     "billingReferralSelfError": MessageLookupByLibrary.simpleMessage(
       "不能使用自己的推荐码",
+    ),
+    "billingReferralStepCredit": MessageLookupByLibrary.simpleMessage(
+      "您获得 20% Weebi 积分，可用于许可证和报表。",
+    ),
+    "billingReferralStepDiscount": MessageLookupByLibrary.simpleMessage(
+      "对方购买时可享 10% 折扣。",
+    ),
+    "billingReferralStepShare": MessageLookupByLibrary.simpleMessage(
+      "把您的推荐码分享给其他商家。",
+    ),
+    "billingReferralTease": MessageLookupByLibrary.simpleMessage(
+      "分享推荐码：对方享 10% 折扣，您获得 20% Weebi 积分。",
     ),
     "billingReferralTitle": MessageLookupByLibrary.simpleMessage("推荐"),
     "billingReferralYourCode": MessageLookupByLibrary.simpleMessage("您的推荐码"),
@@ -191,6 +213,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "catalogAlreadyInCatalog": MessageLookupByLibrary.simpleMessage("已在目录中"),
     "catalogClearSelection": MessageLookupByLibrary.simpleMessage("清空"),
     "catalogColumnBarcode": MessageLookupByLibrary.simpleMessage("条码"),
+    "catalogColumnCategory": MessageLookupByLibrary.simpleMessage("分类"),
     "catalogColumnDesignation": MessageLookupByLibrary.simpleMessage("名称"),
     "catalogColumnKind": MessageLookupByLibrary.simpleMessage("类型"),
     "catalogColumnPrice": MessageLookupByLibrary.simpleMessage("售价"),

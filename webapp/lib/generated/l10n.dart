@@ -149,6 +149,76 @@ class Lang {
     );
   }
 
+  /// `Partagez votre code : 10 % pour eux, 20 % de Crédit weebi pour vous.`
+  String get billingReferralTease {
+    return Intl.message(
+      'Partagez votre code : 10 % pour eux, 20 % de Crédit weebi pour vous.',
+      name: 'billingReferralTease',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Parrainez un commerçant. Il paie 10 % de moins, vous gagnez 20 % en Crédit weebi — à déduire de vos prochains achats Weebi.`
+  String get billingReferralIntro {
+    return Intl.message(
+      'Parrainez un commerçant. Il paie 10 % de moins, vous gagnez 20 % en Crédit weebi — à déduire de vos prochains achats Weebi.',
+      name: 'billingReferralIntro',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Comment ça marche`
+  String get billingReferralHowTitle {
+    return Intl.message(
+      'Comment ça marche',
+      name: 'billingReferralHowTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fermer`
+  String get billingReferralDialogClose {
+    return Intl.message(
+      'Fermer',
+      name: 'billingReferralDialogClose',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Partagez votre code avec un autre commerçant.`
+  String get billingReferralStepShare {
+    return Intl.message(
+      'Partagez votre code avec un autre commerçant.',
+      name: 'billingReferralStepShare',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `À l'achat, il bénéficie de 10 % de réduction.`
+  String get billingReferralStepDiscount {
+    return Intl.message(
+      'À l\'achat, il bénéficie de 10 % de réduction.',
+      name: 'billingReferralStepDiscount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vous recevez 20 % en Crédit weebi, utilisable sur vos licences et rapports.`
+  String get billingReferralStepCredit {
+    return Intl.message(
+      'Vous recevez 20 % en Crédit weebi, utilisable sur vos licences et rapports.',
+      name: 'billingReferralStepCredit',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Votre code de parrainage`
   String get billingReferralYourCode {
     return Intl.message(
@@ -159,30 +229,50 @@ class Lang {
     );
   }
 
-  /// `Solde de crédit de parrainage`
+  /// `Crédit weebi`
   String get billingReferralCreditBalance {
     return Intl.message(
-      'Solde de crédit de parrainage',
+      'Crédit weebi',
       name: 'billingReferralCreditBalance',
       desc: '',
       args: [],
     );
   }
 
-  /// `ID entreprise du parrain (optionnel)`
+  /// `Utilisable sur vos prochains achats Weebi.`
+  String get billingReferralCreditHint {
+    return Intl.message(
+      'Utilisable sur vos prochains achats Weebi.',
+      name: 'billingReferralCreditHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `On vous a parrainé ?`
+  String get billingReferralHaveCodeTitle {
+    return Intl.message(
+      'On vous a parrainé ?',
+      name: 'billingReferralHaveCodeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Code du parrain`
   String get billingReferralCodeHint {
     return Intl.message(
-      'ID entreprise du parrain (optionnel)',
+      'Code du parrain',
       name: 'billingReferralCodeHint',
       desc: '',
       args: [],
     );
   }
 
-  /// `10 % de réduction avec un code de parrain valide`
+  /// `10 % de réduction sur votre achat`
   String get billingReferralDiscountHint {
     return Intl.message(
-      '10 % de réduction avec un code de parrain valide',
+      '10 % de réduction sur votre achat',
       name: 'billingReferralDiscountHint',
       desc: '',
       args: [],
@@ -214,6 +304,16 @@ class Lang {
     return Intl.message(
       'Copier le code',
       name: 'billingReferralCopyCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Code copié`
+  String get billingReferralCopied {
+    return Intl.message(
+      'Code copié',
+      name: 'billingReferralCopied',
       desc: '',
       args: [],
     );
@@ -1677,6 +1777,16 @@ class Lang {
     return Intl.message(
       'Libellé',
       name: 'catalogColumnTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Catégorie`
+  String get catalogColumnCategory {
+    return Intl.message(
+      'Catégorie',
+      name: 'catalogColumnCategory',
       desc: '',
       args: [],
     );

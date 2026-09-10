@@ -187,8 +187,22 @@ class _CatalogEditScreenState extends State<CatalogEditScreen> {
       ..updateDate = DateTime.now().toUtc().toIso8601String();
     final saved = await _notifier.save(draft, isNew: widget.isNew);
     if (!mounted) return;
-    if (saved) {
-      context.go(RouteUri.catalogViewFor(draft.id));
+    if (!saved) return;
+    final viewPath = RouteUri.catalogViewFor(draft.id);
+    if (widget.isNew) {
+      context.pushReplacement(viewPath);
+    } else if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go(viewPath);
+    }
+  }
+
+  void _goBack() {
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go(RouteUri.catalog);
     }
   }
 
@@ -253,7 +267,7 @@ class _CatalogEditScreenState extends State<CatalogEditScreen> {
                               skus: [...?_draft?.articlesRetail],
                               onAddSubArticle: _addSubArticle,
                               onSave: _save,
-                              onCancel: () => context.go(RouteUri.catalog),
+                              onCancel: _goBack,
                               isSaving: _notifier.isLoading,
                               error: _notifier.error,
                               currencyCode: _currencyCode,

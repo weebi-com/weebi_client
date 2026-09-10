@@ -41,8 +41,7 @@ void main() {
         find.byKey(const Key('billingOwnReferralCode')),
       );
       final text = selectable.data ?? '';
-      expect(text, isNotEmpty);
-      expect(text.toLowerCase(), contains('code'));
+      expect(text.trim(), isNotEmpty);
     },
   );
 }

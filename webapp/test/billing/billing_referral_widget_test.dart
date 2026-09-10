@@ -82,44 +82,49 @@ class _ReferralCheckoutHarnessState extends State<_ReferralCheckoutHarness> {
 
     return Scaffold(
       key: const Key('billingScreen'),
-      body: ListView(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        children: [
-          BillingReferralSection(
-            controller: _controller,
-            ownReferralCode: widget.ownReferralCode,
-            creditBalanceCents: 250,
-            errorText: _error,
-            onChanged: (value) {
-              final lang = Lang.of(context);
-              setState(() {
-                _error = isSelfReferralCode(
-                  entered: value,
-                  ownReferralCode: widget.ownReferralCode,
-                )
-                    ? lang.billingReferralSelfError
-                    : null;
-              });
-            },
-          ),
-          if (showDiscount)
-            Text(
-              Lang.of(context).billingReferralDiscountedPrice(
-                '€${(referralBuyerChargeCents(widget.product.amountCents) / 100).toStringAsFixed(2)}',
-              ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            BillingReferralSection(
+              ownReferralCode: widget.ownReferralCode,
+              creditBalanceCents: 250,
             ),
-          const SizedBox(height: 16),
-          FilledButton(
-            key: const Key('billingPayStripe'),
-            onPressed: () => _pay(true),
-            child: Text(Lang.of(context).billingPayWithCard),
-          ),
-          FilledButton(
-            key: const Key('billingPayPawapay'),
-            onPressed: () => _pay(false),
-            child: Text(Lang.of(context).billingPayWithMobileMoney),
-          ),
-        ],
+            BillingReferrerCodeField(
+              controller: _controller,
+              errorText: _error,
+              onChanged: (value) {
+                final lang = Lang.of(context);
+                setState(() {
+                  _error = isSelfReferralCode(
+                    entered: value,
+                    ownReferralCode: widget.ownReferralCode,
+                  )
+                      ? lang.billingReferralSelfError
+                      : null;
+                });
+              },
+            ),
+            if (showDiscount)
+              Text(
+                Lang.of(context).billingReferralDiscountedPrice(
+                  '€${(referralBuyerChargeCents(widget.product.amountCents) / 100).toStringAsFixed(2)}',
+                ),
+              ),
+            const SizedBox(height: 16),
+            FilledButton(
+              key: const Key('billingPayStripe'),
+              onPressed: () => _pay(true),
+              child: Text(Lang.of(context).billingPayWithCard),
+            ),
+            FilledButton(
+              key: const Key('billingPayPawapay'),
+              onPressed: () => _pay(false),
+              child: Text(Lang.of(context).billingPayWithMobileMoney),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -138,29 +143,44 @@ void main() {
   const ownFirmId = 'firm-buyer-001';
   const referrerFirmId = 'referrer-firm-999';
 
-  testWidgets('referral section shows own code and copy control', (tester) async {
-    final controller = TextEditingController();
-    addTearDown(controller.dispose);
-
+  testWidgets('referral section shows own code, credit, and learn-more dialog',
+      (tester) async {
     await tester.pumpWidget(
       l10nApp(
         home: Scaffold(
           body: BillingReferralSection(
-            controller: controller,
             ownReferralCode: ownFirmId,
-            creditBalanceCents: 250,
-            errorText: null,
-            onChanged: (_) {},
+            creditBalanceCents: 0,
           ),
         ),
       ),
     );
 
-    expect(find.byKey(const Key('billingReferralTextField')), findsOneWidget);
+    expect(find.byKey(const Key('billingReferralTextField')), findsNothing);
     expect(find.byKey(const Key('billingOwnReferralCode')), findsOneWidget);
     expect(find.byKey(const Key('billingCopyReferralCode')), findsOneWidget);
     expect(find.textContaining(ownFirmId), findsOneWidget);
-    expect(find.textContaining('2.50'), findsOneWidget);
+    expect(find.text('Parrainage'), findsOneWidget);
+    expect(find.text('Crédit weebi'), findsOneWidget);
+    expect(find.textContaining('10 %'), findsWidgets);
+    expect(find.textContaining('20 %'), findsWidgets);
+    expect(find.byKey(const Key('billingWeebiCreditAmount')), findsOneWidget);
+    expect(
+      tester.widget<Text>(find.byKey(const Key('billingWeebiCreditAmount'))).data,
+      '0',
+    );
+    expect(find.textContaining('€'), findsNothing);
+    expect(find.textContaining('EUR'), findsNothing);
+    expect(find.text(Lang.current.billingReferralStepShare), findsNothing);
+
+    await tester.tap(find.byKey(const Key('billingReferralLearnMore')));
+    await tester.pumpAndSettle();
+    expect(find.text(Lang.current.billingReferralStepShare), findsOneWidget);
+    expect(find.text(Lang.current.billingReferralStepCredit), findsOneWidget);
+
+    await tester.tap(find.text(Lang.current.billingReferralDialogClose));
+    await tester.pumpAndSettle();
+    expect(find.text(Lang.current.billingReferralStepShare), findsNothing);
   });
 
   testWidgets('self-referral blocks checkout; valid code is sent to Stripe/Pawapay',
@@ -186,6 +206,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text(Lang.current.billingReferralSelfError), findsOneWidget);
 
+    await tester.ensureVisible(find.byKey(const Key('billingPayStripe')));
     await tester.tap(find.byKey(const Key('billingPayStripe')));
     await tester.pumpAndSettle();
     expect(rpc.createCheckoutCalls, isEmpty);
@@ -198,12 +219,14 @@ void main() {
     expect(find.text(Lang.current.billingReferralSelfError), findsNothing);
     expect(find.textContaining('Avec parrainage :'), findsOneWidget);
 
+    await tester.ensureVisible(find.byKey(const Key('billingPayStripe')));
     await tester.tap(find.byKey(const Key('billingPayStripe')));
     await tester.pumpAndSettle();
     expect(rpc.createCheckoutCalls, hasLength(1));
     expect(rpc.createCheckoutCalls.single.referralCode, referrerFirmId);
     expect(rpc.createCheckoutCalls.single.priceId, 'price_premium');
 
+    await tester.ensureVisible(find.byKey(const Key('billingPayPawapay')));
     await tester.tap(find.byKey(const Key('billingPayPawapay')));
     await tester.pumpAndSettle();
     expect(rpc.createPawapayCalls, hasLength(1));
