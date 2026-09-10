@@ -161,7 +161,7 @@ void main() {
     expect(find.byKey(const Key('billingCopyReferralCode')), findsOneWidget);
     expect(find.textContaining(ownFirmId), findsOneWidget);
     expect(find.text('Parrainage'), findsOneWidget);
-    expect(find.text('Crédit weebi'), findsOneWidget);
+    expect(find.text('crédits weebi'), findsOneWidget);
     expect(find.textContaining('10 %'), findsWidgets);
     expect(find.textContaining('20 %'), findsWidgets);
     expect(find.byKey(const Key('billingWeebiCreditAmount')), findsOneWidget);

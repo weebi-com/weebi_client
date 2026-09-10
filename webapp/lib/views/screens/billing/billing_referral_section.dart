@@ -91,7 +91,7 @@ Future<void> showReferralProgramDialog(BuildContext context) {
   );
 }
 
-/// Compact distributor card: own code + Crédit weebi, details on demand.
+/// Compact distributor card: own code + crédits weebi, details on demand.
 class BillingReferralSection extends StatelessWidget {
   const BillingReferralSection({
     super.key,

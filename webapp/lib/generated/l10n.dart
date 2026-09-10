@@ -149,20 +149,20 @@ class Lang {
     );
   }
 
-  /// `Partagez votre code : 10 % pour eux, 20 % de Crédit weebi pour vous.`
+  /// `Partagez votre code : - 10 % pour eux, + 20 % en crédits weebi pour vous.`
   String get billingReferralTease {
     return Intl.message(
-      'Partagez votre code : 10 % pour eux, 20 % de Crédit weebi pour vous.',
+      'Partagez votre code : 10 % de réduction pour eux, + 20 % en crédits weebi pour vous.',
       name: 'billingReferralTease',
       desc: '',
       args: [],
     );
   }
 
-  /// `Parrainez un commerçant. Il paie 10 % de moins, vous gagnez 20 % en Crédit weebi — à déduire de vos prochains achats Weebi.`
+  /// `Parrainez un commerçant. Il paie 10 % de moins, vous gagnez 20 % en crédits weebi — à déduire de vos prochains achats Weebi.`
   String get billingReferralIntro {
     return Intl.message(
-      'Parrainez un commerçant. Il paie 10 % de moins, vous gagnez 20 % en Crédit weebi — à déduire de vos prochains achats Weebi.',
+      'Parrainez un commerçant. 10 % de réduction pour lui et + 20 % en crédits weebi pour vous — utilisables sur vos prochains achats.',
       name: 'billingReferralIntro',
       desc: '',
       args: [],
@@ -209,10 +209,10 @@ class Lang {
     );
   }
 
-  /// `Vous recevez 20 % en Crédit weebi, utilisable sur vos licences et rapports.`
+  /// `Vous recevez 20 % en crédits weebi, utilisables sur vos prochains achats.`
   String get billingReferralStepCredit {
     return Intl.message(
-      'Vous recevez 20 % en Crédit weebi, utilisable sur vos licences et rapports.',
+      'Vous recevez 20 % en crédits weebi, utilisable sur vos prochains achats.',
       name: 'billingReferralStepCredit',
       desc: '',
       args: [],
@@ -229,10 +229,10 @@ class Lang {
     );
   }
 
-  /// `Crédit weebi`
+  /// `Crédits weebi`
   String get billingReferralCreditBalance {
     return Intl.message(
-      'Crédit weebi',
+      'Crédits weebi',
       name: 'billingReferralCreditBalance',
       desc: '',
       args: [],
