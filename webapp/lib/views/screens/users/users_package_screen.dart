@@ -59,6 +59,9 @@ class _UsersPackageScreenState extends State<UsersPackageScreen> {
               drawer: null,
               endDrawer: null,
               firmLicenses: firmLicenses,
+              onOpenBillingPortal: (ctx) async {
+                GoRouter.of(ctx).go(RouteUri.billing);
+              },
               onUserCreated: (ctx, createdUser) {
                 GoRouter.of(ctx).go(
                   RouteUri.listAccess,

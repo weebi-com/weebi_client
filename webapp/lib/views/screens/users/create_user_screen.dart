@@ -35,6 +35,10 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
       body: UserCreateView(
         showFloatingActionButton: false,
         firmLicenses: _firmLicenses,
+        popOnSuccess: false,
+        onOpenBillingPortal: (ctx) async {
+          GoRouter.of(ctx).go(RouteUri.billing);
+        },
         onUserCreated: (ctx, createdUser) {
           GoRouter.of(ctx).go(
             RouteUri.listAccess,

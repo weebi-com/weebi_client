@@ -1,7 +1,7 @@
 name: weebi_client
 
 packages:
-  - packages/*
+  - packages/* # design_weebi only; auth/boutiques/devices/users/accesses/entitlements live in ../weebi/packages
   - webapp
 # The packages list should contain paths to the individual packages within your project. 
 

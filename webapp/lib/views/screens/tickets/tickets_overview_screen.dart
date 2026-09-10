@@ -33,7 +33,8 @@ class _TicketWithMeta {
 }
 
 /// Displays tickets with filters: date range, status (active/inactive), soft-deleted.
-/// Fetches all tickets for the user's chain, then filters client-side.
+/// Loads a full dump (`limit == 0`) then filters date/boutique client-side.
+/// [statusFilter] is applied server-side.
 class TicketsOverviewScreen extends StatefulWidget {
   const TicketsOverviewScreen({super.key});
 
@@ -198,13 +199,17 @@ class _TicketsOverviewScreenState extends State<TicketsOverviewScreen> {
           context.read<TicketServiceClientProvider>().ticketServiceClient;
 
       final List<_TicketWithMeta> all = [];
+      final statusFilter = _filter.statusActive == null
+          ? 0
+          : (_filter.statusActive! ? 1 : 2);
 
       switch (_filter.deletedFilter) {
         case DeletedFilter.exclude:
           final res = await stub.readAll(
             ReadAllTicketsRequest()
               ..chainId = chainId
-              ..isDeleted = false,
+              ..isDeleted = false
+              ..statusFilter = statusFilter,
           );
           all.addAll(res.tickets.map((t) => _TicketWithMeta(t, false)));
           break;
@@ -212,7 +217,8 @@ class _TicketsOverviewScreenState extends State<TicketsOverviewScreen> {
           final res = await stub.readAll(
             ReadAllTicketsRequest()
               ..chainId = chainId
-              ..isDeleted = true,
+              ..isDeleted = true
+              ..statusFilter = statusFilter,
           );
           all.addAll(res.tickets.map((t) => _TicketWithMeta(t, true)));
           break;
@@ -460,11 +466,12 @@ class _TicketsOverviewScreenState extends State<TicketsOverviewScreen> {
 
   void _onFilterChanged(TicketsFilterState filter) {
     final prevDeleted = _filter.deletedFilter;
+    final prevStatus = _filter.statusActive;
     final next = _ticketBoutiqueViewsUnlocked
         ? filter
         : _withoutBoutiqueViewFilters(filter);
     setState(() => _filter = next);
-    if (next.deletedFilter != prevDeleted) {
+    if (next.deletedFilter != prevDeleted || next.statusActive != prevStatus) {
       _loadTickets();
     }
   }

@@ -47,6 +47,13 @@ jobs:
 
       #- name: Check formatting
       #  run: melos run format
-
+      - name: Debug Overrides
+        run: |
+          echo "Checking for overrides in webapp:"
+          if [ -f webapp/pubspec_overrides.yaml ]; then
+            cat webapp/pubspec_overrides.yaml
+          else
+            echo "No overrides file found in webapp."
+          fi
       - name: Run tests
         run: melos run test

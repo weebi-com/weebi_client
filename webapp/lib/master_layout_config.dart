@@ -1,7 +1,6 @@
 import 'package:design_weebi/design_weebi.dart' show IconsWeebi;
 import 'package:flutter/material.dart';
 import 'package:web_admin/core/routing/routes.dart';
-import 'package:web_admin/environment.dart';
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/sidebar.dart';
@@ -39,12 +38,16 @@ List<SidebarMenuConfig> get sidebarMenuConfigs => [
     icon: Icons.devices_rounded,
     title: (context) => Lang.of(context).menuDevices,
   ),
-  if (Config.isDev)
-    SidebarMenuConfig(
-      uri: RouteUri.catalog,
-      icon: Icons.shopping_basket_rounded,
-      title: (context) => Lang.of(context).menuCatalog,
-    ),
+  SidebarMenuConfig(
+    uri: RouteUri.catalog,
+    icon: IconsWeebi.articlesIconData,
+    title: (context) => Lang.of(context).menuCatalog,
+  ),
+  SidebarMenuConfig(
+    uri: RouteUri.contacts,
+    icon: IconsWeebi.contactsIconData,
+    title: (context) => Lang.of(context).menuContacts,
+  ),
   SidebarMenuConfig(
     uri: RouteUri.billing,
     icon: Icons.workspace_premium_rounded,

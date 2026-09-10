@@ -1,3 +1,3 @@
+export 'contact_form_validator.dart';
 export 'provider/provider.dart';
-export 'view/contacts_page.dart';
-export 'widgets/widgets.dart';
+export 'package:web_admin/views/screens/contacts/contacts_list_screen.dart';

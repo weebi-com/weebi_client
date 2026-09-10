@@ -18,6 +18,7 @@ import 'package:web_admin/providers/app_preferences_provider.dart';
 import 'package:web_admin/providers/current_user_provider.dart';
 import 'package:web_admin/providers/shared_prefs_auth_service.dart';
 import 'package:web_admin/providers/server.dart';
+import 'package:web_admin/providers/freemium_dump_quota_gate.dart';
 import 'package:web_admin/providers/operational_license_gate.dart';
 import 'package:web_admin/providers/session_recovery.dart';
 import 'package:web_admin/providers/tickets_boutique_cache.dart';
@@ -97,6 +98,13 @@ class _RootAppState extends State<RootApp> {
           create: (_) {
             final gate = OperationalLicenseGateNotifier();
             OperationalLicenseGateBinding.instance.attach(gate);
+            return gate;
+          },
+        ),
+        ChangeNotifierProvider(
+          create: (_) {
+            final gate = FreemiumDumpQuotaNotifier();
+            FreemiumDumpQuotaBinding.instance.attach(gate);
             return gate;
           },
         ),

@@ -65,6 +65,18 @@ void main() {
     });
   });
 
+  group('formatWeebiCredit', () {
+    test('shows a unitless whole number, never a currency', () {
+      expect(formatWeebiCredit(0), '0');
+      expect(formatWeebiCredit(1400), '14');
+      expect(formatWeebiCredit(990000), '9\u00A0900');
+      expect(formatWeebiCredit(1400), isNot(contains('€')));
+      expect(formatWeebiCredit(1400), isNot(contains('EUR')));
+      expect(formatWeebiCredit(1400), isNot(contains('XOF')));
+      expect(formatWeebiCredit(1400), isNot(contains('CFA')));
+    });
+  });
+
   group('formatBillingOfferPrice', () {
     test('shows XOF first then EUR for premium', () {
       expect(
@@ -145,6 +157,24 @@ void main() {
           pawapayCurrency: 'CDF',
         ),
         '7\u00A0900 CDF / 2.90 EUR',
+      );
+    });
+
+    test('prefers BillingProduct.pawapayAmounts over hardcoded fallback', () {
+      final product = BillingProduct(
+        productId: 'premium',
+        amountCents: 1400,
+        currency: 'eur',
+        pawapayAmounts: {'XOF': 8800, 'CDF': 35000}.entries,
+      );
+      expect(
+        formatBillingOfferPrice(
+          amountCents: 1400,
+          currency: 'eur',
+          productId: 'premium',
+          product: product,
+        ),
+        '8\u00A0800 XOF / 14.00 EUR',
       );
     });
   });
