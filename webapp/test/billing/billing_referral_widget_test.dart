@@ -250,5 +250,13 @@ void main() {
       referrerFirmId,
     );
     expect(referralBuyerChargeCents(1400), 1260);
+    final stacked = offerCheckoutPricing(
+      catalogCents: 1400,
+      applyReferralDiscount: true,
+      spendCredit: true,
+      availableCreditCents: 5000,
+    );
+    expect(stacked.chargeCents, 0);
+    expect(stacked.creditAppliedCents, 1260);
   });
 }

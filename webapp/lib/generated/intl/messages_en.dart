@@ -124,6 +124,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingChoosePaymentMethod": MessageLookupByLibrary.simpleMessage(
       "How do you want to pay?",
     ),
+    "billingGalleryLearnMore": MessageLookupByLibrary.simpleMessage(
+      "Learn more",
+    ),
+    "billingGalleryOpen": MessageLookupByLibrary.simpleMessage("View"),
+    "billingGalleryPremiumLead": MessageLookupByLibrary.simpleMessage(
+      "Remote tracking, multi-store, dashboard.",
+    ),
+    "billingGalleryReferralLead": MessageLookupByLibrary.simpleMessage(
+      "Share your code, earn Weebi credit.",
+    ),
+    "billingGallerySyscohadaLead": MessageLookupByLibrary.simpleMessage(
+      "Accounting report, one fiscal year at a time.",
+    ),
     "billingHistoryNoLicenses": MessageLookupByLibrary.simpleMessage(
       "No Premium licenses purchased yet.",
     ),
@@ -144,6 +157,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingNotYetAttributed": MessageLookupByLibrary.simpleMessage(
       "Not yet attributed",
     ),
+    "billingOffersBack": MessageLookupByLibrary.simpleMessage("Back to offers"),
     "billingPayWithCard": MessageLookupByLibrary.simpleMessage("Card/Bank"),
     "billingPayWithMobileMoney": MessageLookupByLibrary.simpleMessage(
       "Mobile Money",
@@ -254,6 +268,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Purchases / License assignment",
     ),
     "billingTabOffers": MessageLookupByLibrary.simpleMessage("Offers"),
+    "billingUseWeebiCredit": MessageLookupByLibrary.simpleMessage(
+      "Use my Weebi credit",
+    ),
     "billingUsers": MessageLookupByLibrary.simpleMessage("users"),
     "billingValidUntil": MessageLookupByLibrary.simpleMessage("Valid until"),
     "billingViewFullTerms": MessageLookupByLibrary.simpleMessage(

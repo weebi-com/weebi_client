@@ -39,6 +39,44 @@ int referralBuyerChargeCents(int catalogAmountCents) {
   return charge < 0 ? 0 : charge;
 }
 
+/// Matches server [checkoutPricing]: 10% referral, then Weebi credit.
+class OfferCheckoutPricing {
+  const OfferCheckoutPricing({
+    required this.afterReferralCents,
+    required this.creditAppliedCents,
+    required this.chargeCents,
+  });
+
+  final int afterReferralCents;
+  final int creditAppliedCents;
+  final int chargeCents;
+}
+
+OfferCheckoutPricing offerCheckoutPricing({
+  required int catalogCents,
+  required bool applyReferralDiscount,
+  required bool spendCredit,
+  required int availableCreditCents,
+}) {
+  final catalog = catalogCents < 0 ? 0 : catalogCents;
+  final afterReferral =
+      applyReferralDiscount ? referralBuyerChargeCents(catalog) : catalog;
+  if (!spendCredit) {
+    return OfferCheckoutPricing(
+      afterReferralCents: afterReferral,
+      creditAppliedCents: 0,
+      chargeCents: afterReferral,
+    );
+  }
+  final available = availableCreditCents < 0 ? 0 : availableCreditCents;
+  final credit = available < afterReferral ? available : afterReferral;
+  return OfferCheckoutPricing(
+    afterReferralCents: afterReferral,
+    creditAppliedCents: credit,
+    chargeCents: afterReferral - credit,
+  );
+}
+
 Future<void> showReferralProgramDialog(BuildContext context) {
   final lang = Lang.of(context);
   final themeData = Theme.of(context);
@@ -161,36 +199,9 @@ class BillingReferralSection extends StatelessWidget {
                   label: lang.billingReferralYourCode,
                   child: SizedBox(
                     height: valueRowHeight,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: SelectableText(
-                              ownReferralCode!,
-                              key: const Key('billingOwnReferralCode'),
-                              style: valueStyle,
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          key: const Key('billingCopyReferralCode'),
-                          tooltip: lang.billingReferralCopyCode,
-                          visualDensity: VisualDensity.compact,
-                          onPressed: () async {
-                            await Clipboard.setData(
-                              ClipboardData(text: ownReferralCode!),
-                            );
-                            if (!context.mounted) return;
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(lang.billingReferralCopied),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.copy, size: 20),
-                        ),
-                      ],
+                    child: BillingOwnReferralCodeCopy(
+                      code: ownReferralCode!,
+                      textStyle: valueStyle,
                     ),
                   ),
                 );
@@ -233,6 +244,59 @@ class BillingReferralSection extends StatelessWidget {
           ],
         ],
       ),
+    );
+  }
+}
+
+/// Own referral code with one-tap copy (gallery teaser and Parrainage detail).
+class BillingOwnReferralCodeCopy extends StatelessWidget {
+  const BillingOwnReferralCodeCopy({
+    super.key,
+    required this.code,
+    this.textStyle,
+    this.iconColor,
+  });
+
+  final String code;
+  final TextStyle? textStyle;
+  final Color? iconColor;
+
+  Future<void> _copy(BuildContext context) async {
+    await Clipboard.setData(ClipboardData(text: code));
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(Lang.of(context).billingReferralCopied)),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    final lang = Lang.of(context);
+    return Row(
+      children: [
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: SelectableText(
+              code,
+              key: const Key('billingOwnReferralCode'),
+              style: textStyle ??
+                  themeData.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+            ),
+          ),
+        ),
+        IconButton(
+          key: const Key('billingCopyReferralCode'),
+          tooltip: lang.billingReferralCopyCode,
+          visualDensity: VisualDensity.compact,
+          color: iconColor,
+          onPressed: () => _copy(context),
+          icon: const Icon(Icons.copy, size: 20),
+        ),
+      ],
     );
   }
 }

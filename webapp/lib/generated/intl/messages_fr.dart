@@ -125,6 +125,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingChoosePaymentMethod": MessageLookupByLibrary.simpleMessage(
       "Comment souhaitez-vous payer ?",
     ),
+    "billingGalleryLearnMore": MessageLookupByLibrary.simpleMessage(
+      "En savoir plus",
+    ),
+    "billingGalleryOpen": MessageLookupByLibrary.simpleMessage("Voir"),
+    "billingGalleryPremiumLead": MessageLookupByLibrary.simpleMessage(
+      "Suivi à distance, multi-boutiques, tableau de bord.",
+    ),
+    "billingGalleryReferralLead": MessageLookupByLibrary.simpleMessage(
+      "Partagez votre code, gagnez du Crédit weebi.",
+    ),
+    "billingGallerySyscohadaLead": MessageLookupByLibrary.simpleMessage(
+      "Rapport comptable, une année fiscale à la fois.",
+    ),
     "billingHistoryNoLicenses": MessageLookupByLibrary.simpleMessage(
       "Aucune licence Premium achetée pour le moment.",
     ),
@@ -144,6 +157,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "billingNotYetAttributed": MessageLookupByLibrary.simpleMessage(
       "Pas encore attribuée(s)",
+    ),
+    "billingOffersBack": MessageLookupByLibrary.simpleMessage(
+      "Retour aux offres",
     ),
     "billingPayWithCard": MessageLookupByLibrary.simpleMessage("Carte/Banque"),
     "billingPayWithMobileMoney": MessageLookupByLibrary.simpleMessage(
@@ -201,13 +217,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Comment ça marche",
     ),
     "billingReferralIntro": MessageLookupByLibrary.simpleMessage(
-      "Parrainez un commerçant. Il paie 10 % de moins, vous gagnez 20 % en Crédits weebi — utilisables sur vos prochains achats.",
+      "Parrainez un commerçant. 10 % de réduction pour lui et vous gagnez 20 % en crédits weebi — utilisables sur vos prochains achats.",
     ),
     "billingReferralSelfError": MessageLookupByLibrary.simpleMessage(
       "Vous ne pouvez pas utiliser votre propre code",
     ),
     "billingReferralStepCredit": MessageLookupByLibrary.simpleMessage(
-      "Vous recevez 20 % en crédits weebi, utilisable sur vos prochains achats.",
+      "Vous recevez 20 % en crédits weebi, utilisables sur vos licences et rapports.",
     ),
     "billingReferralStepDiscount": MessageLookupByLibrary.simpleMessage(
       "À l\'achat, il bénéficie de 10 % de réduction.",
@@ -216,7 +232,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Partagez votre code avec un autre commerçant.",
     ),
     "billingReferralTease": MessageLookupByLibrary.simpleMessage(
-      "Partagez votre code : -10 % pour eux, +20 % de crédits weebi pour vous.",
+      "Partagez votre code : 10 % de réduction pour eux, + 20 % en crédits weebi pour vous.",
     ),
     "billingReferralTitle": MessageLookupByLibrary.simpleMessage("Parrainage"),
     "billingReferralYourCode": MessageLookupByLibrary.simpleMessage(
@@ -255,6 +271,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Achats / Attribution licence",
     ),
     "billingTabOffers": MessageLookupByLibrary.simpleMessage("Offres"),
+    "billingUseWeebiCredit": MessageLookupByLibrary.simpleMessage(
+      "Utiliser mon Crédit weebi",
+    ),
     "billingUsers": MessageLookupByLibrary.simpleMessage("utilisateur(s)"),
     "billingValidUntil": MessageLookupByLibrary.simpleMessage(
       "Valide jusqu\'au",

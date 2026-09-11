@@ -139,186 +139,6 @@ class Lang {
     );
   }
 
-  /// `Parrainage`
-  String get billingReferralTitle {
-    return Intl.message(
-      'Parrainage',
-      name: 'billingReferralTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Partagez votre code : - 10 % pour eux, + 20 % en crédits weebi pour vous.`
-  String get billingReferralTease {
-    return Intl.message(
-      'Partagez votre code : 10 % de réduction pour eux, + 20 % en crédits weebi pour vous.',
-      name: 'billingReferralTease',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Parrainez un commerçant. Il paie 10 % de moins, vous gagnez 20 % en crédits weebi — à déduire de vos prochains achats Weebi.`
-  String get billingReferralIntro {
-    return Intl.message(
-      'Parrainez un commerçant. 10 % de réduction pour lui et + 20 % en crédits weebi pour vous — utilisables sur vos prochains achats.',
-      name: 'billingReferralIntro',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Comment ça marche`
-  String get billingReferralHowTitle {
-    return Intl.message(
-      'Comment ça marche',
-      name: 'billingReferralHowTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Fermer`
-  String get billingReferralDialogClose {
-    return Intl.message(
-      'Fermer',
-      name: 'billingReferralDialogClose',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Partagez votre code avec un autre commerçant.`
-  String get billingReferralStepShare {
-    return Intl.message(
-      'Partagez votre code avec un autre commerçant.',
-      name: 'billingReferralStepShare',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `À l'achat, il bénéficie de 10 % de réduction.`
-  String get billingReferralStepDiscount {
-    return Intl.message(
-      'À l\'achat, il bénéficie de 10 % de réduction.',
-      name: 'billingReferralStepDiscount',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Vous recevez 20 % en crédits weebi, utilisables sur vos prochains achats.`
-  String get billingReferralStepCredit {
-    return Intl.message(
-      'Vous recevez 20 % en crédits weebi, utilisable sur vos prochains achats.',
-      name: 'billingReferralStepCredit',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Votre code de parrainage`
-  String get billingReferralYourCode {
-    return Intl.message(
-      'Votre code de parrainage',
-      name: 'billingReferralYourCode',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Crédits weebi`
-  String get billingReferralCreditBalance {
-    return Intl.message(
-      'Crédits weebi',
-      name: 'billingReferralCreditBalance',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Utilisable sur vos prochains achats Weebi.`
-  String get billingReferralCreditHint {
-    return Intl.message(
-      'Utilisable sur vos prochains achats Weebi.',
-      name: 'billingReferralCreditHint',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `On vous a parrainé ?`
-  String get billingReferralHaveCodeTitle {
-    return Intl.message(
-      'On vous a parrainé ?',
-      name: 'billingReferralHaveCodeTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Code du parrain`
-  String get billingReferralCodeHint {
-    return Intl.message(
-      'Code du parrain',
-      name: 'billingReferralCodeHint',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `10 % de réduction sur votre achat`
-  String get billingReferralDiscountHint {
-    return Intl.message(
-      '10 % de réduction sur votre achat',
-      name: 'billingReferralDiscountHint',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Vous ne pouvez pas utiliser votre propre code`
-  String get billingReferralSelfError {
-    return Intl.message(
-      'Vous ne pouvez pas utiliser votre propre code',
-      name: 'billingReferralSelfError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Avec parrainage : {price}`
-  String billingReferralDiscountedPrice(String price) {
-    return Intl.message(
-      'Avec parrainage : $price',
-      name: 'billingReferralDiscountedPrice',
-      desc: '',
-      args: [price],
-    );
-  }
-
-  /// `Copier le code`
-  String get billingReferralCopyCode {
-    return Intl.message(
-      'Copier le code',
-      name: 'billingReferralCopyCode',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Code copié`
-  String get billingReferralCopied {
-    return Intl.message(
-      'Code copié',
-      name: 'billingReferralCopied',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Tous les utilisateurs ont déjà une licence attribuée.`
   String get billingAllUsersAlreadyAssigned {
     return Intl.message(
@@ -374,6 +194,26 @@ class Lang {
     return Intl.message(
       'Comment souhaitez-vous payer ?',
       name: 'billingChoosePaymentMethod',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Aucune licence Premium achetée pour le moment.`
+  String get billingHistoryNoLicenses {
+    return Intl.message(
+      'Aucune licence Premium achetée pour le moment.',
+      name: 'billingHistoryNoLicenses',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Aucune année fiscale payée pour le moment.`
+  String get billingHistoryNoSyscohadaYears {
+    return Intl.message(
+      'Aucune année fiscale payée pour le moment.',
+      name: 'billingHistoryNoSyscohadaYears',
       desc: '',
       args: [],
     );
@@ -559,6 +399,251 @@ class Lang {
     );
   }
 
+  /// `Code du parrain`
+  String get billingReferralCodeHint {
+    return Intl.message(
+      'Code du parrain',
+      name: 'billingReferralCodeHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Code copié`
+  String get billingReferralCopied {
+    return Intl.message(
+      'Code copié',
+      name: 'billingReferralCopied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retour aux offres`
+  String get billingOffersBack {
+    return Intl.message(
+      'Retour aux offres',
+      name: 'billingOffersBack',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Utiliser mon Crédit weebi`
+  String get billingUseWeebiCredit {
+    return Intl.message(
+      'Utiliser mon Crédit weebi',
+      name: 'billingUseWeebiCredit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Voir`
+  String get billingGalleryOpen {
+    return Intl.message('Voir', name: 'billingGalleryOpen', desc: '', args: []);
+  }
+
+  /// `En savoir plus`
+  String get billingGalleryLearnMore {
+    return Intl.message(
+      'En savoir plus',
+      name: 'billingGalleryLearnMore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Partagez votre code, gagnez du Crédit weebi.`
+  String get billingGalleryReferralLead {
+    return Intl.message(
+      'Partagez votre code, gagnez du Crédit weebi.',
+      name: 'billingGalleryReferralLead',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rapport comptable, une année fiscale à la fois.`
+  String get billingGallerySyscohadaLead {
+    return Intl.message(
+      'Rapport comptable, une année fiscale à la fois.',
+      name: 'billingGallerySyscohadaLead',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Suivi à distance, multi-boutiques, tableau de bord.`
+  String get billingGalleryPremiumLead {
+    return Intl.message(
+      'Suivi à distance, multi-boutiques, tableau de bord.',
+      name: 'billingGalleryPremiumLead',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copier le code`
+  String get billingReferralCopyCode {
+    return Intl.message(
+      'Copier le code',
+      name: 'billingReferralCopyCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `crédits weebi`
+  String get billingReferralCreditBalance {
+    return Intl.message(
+      'crédits weebi',
+      name: 'billingReferralCreditBalance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Utilisable sur vos prochains achats Weebi.`
+  String get billingReferralCreditHint {
+    return Intl.message(
+      'Utilisable sur vos prochains achats Weebi.',
+      name: 'billingReferralCreditHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fermer`
+  String get billingReferralDialogClose {
+    return Intl.message(
+      'Fermer',
+      name: 'billingReferralDialogClose',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Avec parrainage : {price}`
+  String billingReferralDiscountedPrice(String price) {
+    return Intl.message(
+      'Avec parrainage : $price',
+      name: 'billingReferralDiscountedPrice',
+      desc: '',
+      args: [price],
+    );
+  }
+
+  /// `10 % de réduction sur votre achat`
+  String get billingReferralDiscountHint {
+    return Intl.message(
+      '10 % de réduction sur votre achat',
+      name: 'billingReferralDiscountHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `On vous a parrainé ?`
+  String get billingReferralHaveCodeTitle {
+    return Intl.message(
+      'On vous a parrainé ?',
+      name: 'billingReferralHaveCodeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Comment ça marche`
+  String get billingReferralHowTitle {
+    return Intl.message(
+      'Comment ça marche',
+      name: 'billingReferralHowTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Parrainez un commerçant. 10 % de réduction pour lui et vous gagnez 20 % en crédits weebi — utilisables sur vos prochains achats.`
+  String get billingReferralIntro {
+    return Intl.message(
+      'Parrainez un commerçant. 10 % de réduction pour lui et vous gagnez 20 % en crédits weebi — utilisables sur vos prochains achats.',
+      name: 'billingReferralIntro',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vous ne pouvez pas utiliser votre propre code`
+  String get billingReferralSelfError {
+    return Intl.message(
+      'Vous ne pouvez pas utiliser votre propre code',
+      name: 'billingReferralSelfError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vous recevez 20 % en crédits weebi, utilisables sur vos licences et rapports.`
+  String get billingReferralStepCredit {
+    return Intl.message(
+      'Vous recevez 20 % en crédits weebi, utilisables sur vos licences et rapports.',
+      name: 'billingReferralStepCredit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `À l'achat, il bénéficie de 10 % de réduction.`
+  String get billingReferralStepDiscount {
+    return Intl.message(
+      'À l\'achat, il bénéficie de 10 % de réduction.',
+      name: 'billingReferralStepDiscount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Partagez votre code avec un autre commerçant.`
+  String get billingReferralStepShare {
+    return Intl.message(
+      'Partagez votre code avec un autre commerçant.',
+      name: 'billingReferralStepShare',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Partagez votre code : 10 % de réduction pour eux, + 20 % en crédits weebi pour vous.`
+  String get billingReferralTease {
+    return Intl.message(
+      'Partagez votre code : 10 % de réduction pour eux, + 20 % en crédits weebi pour vous.',
+      name: 'billingReferralTease',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Parrainage`
+  String get billingReferralTitle {
+    return Intl.message(
+      'Parrainage',
+      name: 'billingReferralTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Votre code de parrainage`
+  String get billingReferralYourCode {
+    return Intl.message(
+      'Votre code de parrainage',
+      name: 'billingReferralYourCode',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Réessayer`
   String get billingRetry {
     return Intl.message('Réessayer', name: 'billingRetry', desc: '', args: []);
@@ -572,41 +657,6 @@ class Lang {
       desc: '',
       args: [],
     );
-  }
-
-  /// `Aucune licence Premium achetée pour le moment.`
-  String get billingHistoryNoLicenses {
-    return Intl.message(
-      'Aucune licence Premium achetée pour le moment.',
-      name: 'billingHistoryNoLicenses',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Aucune année fiscale payée pour le moment.`
-  String get billingHistoryNoSyscohadaYears {
-    return Intl.message(
-      'Aucune année fiscale payée pour le moment.',
-      name: 'billingHistoryNoSyscohadaYears',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Achats / Attribution licence`
-  String get billingTabHistory {
-    return Intl.message(
-      'Achats / Attribution licence',
-      name: 'billingTabHistory',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Offres`
-  String get billingTabOffers {
-    return Intl.message('Offres', name: 'billingTabOffers', desc: '', args: []);
   }
 
   /// `Ce rapport ne peut être généré avant la fin de l'exercice fiscal.`
@@ -687,6 +737,21 @@ class Lang {
       desc: '',
       args: [],
     );
+  }
+
+  /// `Achats / Attribution licence`
+  String get billingTabHistory {
+    return Intl.message(
+      'Achats / Attribution licence',
+      name: 'billingTabHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Offres`
+  String get billingTabOffers {
+    return Intl.message('Offres', name: 'billingTabOffers', desc: '', args: []);
   }
 
   /// `utilisateur(s)`
@@ -786,6 +851,71 @@ class Lang {
     );
   }
 
+  /// `Code barre`
+  String get catalogColumnBarcode {
+    return Intl.message(
+      'Code barre',
+      name: 'catalogColumnBarcode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Catégorie`
+  String get catalogColumnCategory {
+    return Intl.message(
+      'Catégorie',
+      name: 'catalogColumnCategory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Désignation`
+  String get catalogColumnDesignation {
+    return Intl.message(
+      'Désignation',
+      name: 'catalogColumnDesignation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type`
+  String get catalogColumnKind {
+    return Intl.message('Type', name: 'catalogColumnKind', desc: '', args: []);
+  }
+
+  /// `Prix de vente`
+  String get catalogColumnPrice {
+    return Intl.message(
+      'Prix de vente',
+      name: 'catalogColumnPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Statut`
+  String get catalogColumnStatus {
+    return Intl.message(
+      'Statut',
+      name: 'catalogColumnStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Libellé`
+  String get catalogColumnTitle {
+    return Intl.message(
+      'Libellé',
+      name: 'catalogColumnTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Coût d'achat`
   String get catalogCost {
     return Intl.message(
@@ -801,6 +931,76 @@ class Lang {
     return Intl.message(
       'Sélectionnez les produits FMCG que vous vendez, ajustez le prix et le coût, puis ajoutez-les au catalogue de votre chaîne.',
       name: 'catalogDiscoverySubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Modifier l'article`
+  String get catalogEditProduct {
+    return Intl.message(
+      'Modifier l\'article',
+      name: 'catalogEditProduct',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saisir le prix de vente`
+  String get catalogEnterPrice {
+    return Intl.message(
+      'Saisir le prix de vente',
+      name: 'catalogEnterPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saisir le libellé`
+  String get catalogEnterTitle {
+    return Intl.message(
+      'Saisir le libellé',
+      name: 'catalogEnterTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Caractéristiques`
+  String get catalogIdentity {
+    return Intl.message(
+      'Caractéristiques',
+      name: 'catalogIdentity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `erreur`
+  String get catalogInvalidNumber {
+    return Intl.message(
+      'erreur',
+      name: 'catalogInvalidNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `exemple : 1.5 et non pas 1,5`
+  String get catalogInvalidUnits {
+    return Intl.message(
+      'exemple : 1.5 et non pas 1,5',
+      name: 'catalogInvalidUnits',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Créer un article`
+  String get catalogNewProduct {
+    return Intl.message(
+      'Créer un article',
+      name: 'catalogNewProduct',
       desc: '',
       args: [],
     );
@@ -866,6 +1066,51 @@ class Lang {
       name: 'catalogSelectionTitle',
       desc: '',
       args: [count],
+    );
+  }
+
+  /// `Vente`
+  String get catalogSelling {
+    return Intl.message('Vente', name: 'catalogSelling', desc: '', args: []);
+  }
+
+  /// `Unité de compte`
+  String get catalogStockUnit {
+    return Intl.message(
+      'Unité de compte',
+      name: 'catalogStockUnit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Un article avec ce libellé existe déjà`
+  String get catalogTitleTaken {
+    return Intl.message(
+      'Un article avec ce libellé existe déjà',
+      name: 'catalogTitleTaken',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unités/article`
+  String get catalogUnitsInOnePiece {
+    return Intl.message(
+      'Unités/article',
+      name: 'catalogUnitsInOnePiece',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sous-articles`
+  String get catalogVariants {
+    return Intl.message(
+      'Sous-articles',
+      name: 'catalogVariants',
+      desc: '',
+      args: [],
     );
   }
 
@@ -939,6 +1184,151 @@ class Lang {
       desc: '',
       args: [],
     );
+  }
+
+  /// `Adresse`
+  String get contactAddress {
+    return Intl.message('Adresse', name: 'contactAddress', desc: '', args: []);
+  }
+
+  /// `Ville`
+  String get contactCity {
+    return Intl.message('Ville', name: 'contactCity', desc: '', args: []);
+  }
+
+  /// `Pays`
+  String get contactCountry {
+    return Intl.message('Pays', name: 'contactCountry', desc: '', args: []);
+  }
+
+  /// `Détails`
+  String get contactDetails {
+    return Intl.message('Détails', name: 'contactDetails', desc: '', args: []);
+  }
+
+  /// `Modifier le contact`
+  String get contactEdit {
+    return Intl.message(
+      'Modifier le contact',
+      name: 'contactEdit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `L'adresse mail n'est pas correcte`
+  String get contactEmailInvalid {
+    return Intl.message(
+      'L\'adresse mail n\'est pas correcte',
+      name: 'contactEmailInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saisir le prénom`
+  String get contactEnterFirstName {
+    return Intl.message(
+      'Saisir le prénom',
+      name: 'contactEnterFirstName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saisir le nom de famille`
+  String get contactEnterLastName {
+    return Intl.message(
+      'Saisir le nom de famille',
+      name: 'contactEnterLastName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Prénom`
+  String get contactFirstName {
+    return Intl.message('Prénom', name: 'contactFirstName', desc: '', args: []);
+  }
+
+  /// `Client`
+  String get contactIsClient {
+    return Intl.message('Client', name: 'contactIsClient', desc: '', args: []);
+  }
+
+  /// `Fournisseur`
+  String get contactIsSupplier {
+    return Intl.message(
+      'Fournisseur',
+      name: 'contactIsSupplier',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nom de famille`
+  String get contactLastName {
+    return Intl.message(
+      'Nom de famille',
+      name: 'contactLastName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mail`
+  String get contactMail {
+    return Intl.message('Mail', name: 'contactMail', desc: '', args: []);
+  }
+
+  /// `Créer un contact`
+  String get contactNew {
+    return Intl.message(
+      'Créer un contact',
+      name: 'contactNew',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Crédit maximum`
+  String get contactOverdraft {
+    return Intl.message(
+      'Crédit maximum',
+      name: 'contactOverdraft',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Téléphone`
+  String get contactPhone {
+    return Intl.message('Téléphone', name: 'contactPhone', desc: '', args: []);
+  }
+
+  /// `Le numéro doit comporter au moins 8 chiffres`
+  String get contactPhoneTooShort {
+    return Intl.message(
+      'Le numéro doit comporter au moins 8 chiffres',
+      name: 'contactPhoneTooShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Code postal`
+  String get contactPostCode {
+    return Intl.message(
+      'Code postal',
+      name: 'contactPostCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rue`
+  String get contactStreet {
+    return Intl.message('Rue', name: 'contactStreet', desc: '', args: []);
   }
 
   /// `Copier`
@@ -1153,6 +1543,51 @@ class Lang {
     return Intl.message(
       'Entreprise',
       name: 'enterpriseNameFieldLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ajouter un sous-article`
+  String get entityAddSku {
+    return Intl.message(
+      'Ajouter un sous-article',
+      name: 'entityAddSku',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Supprimer cet enregistrement ?`
+  String get entityConfirmDelete {
+    return Intl.message(
+      'Supprimer cet enregistrement ?',
+      name: 'entityConfirmDelete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Créer`
+  String get entityCreate {
+    return Intl.message('Créer', name: 'entityCreate', desc: '', args: []);
+  }
+
+  /// `Supprimer`
+  String get entityDelete {
+    return Intl.message('Supprimer', name: 'entityDelete', desc: '', args: []);
+  }
+
+  /// `Modifier`
+  String get entityEdit {
+    return Intl.message('Modifier', name: 'entityEdit', desc: '', args: []);
+  }
+
+  /// `Cliquez sur + pour créer un enregistrement.`
+  String get entityEmptyHint {
+    return Intl.message(
+      'Cliquez sur + pour créer un enregistrement.',
+      name: 'entityEmptyHint',
       desc: '',
       args: [],
     );
@@ -1552,16 +1987,6 @@ class Lang {
     return Intl.message('Déconnexion', name: 'logout', desc: '', args: []);
   }
 
-  /// `Rester connecté`
-  String get stayConnected {
-    return Intl.message(
-      'Rester connecté',
-      name: 'stayConnected',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Lorem ipsum dolor sit amet, consectetur adipiscing elit`
   String get loremIpsum {
     return Intl.message(
@@ -1640,391 +2065,6 @@ class Lang {
   /// `Contacts`
   String get menuContacts {
     return Intl.message('Contacts', name: 'menuContacts', desc: '', args: []);
-  }
-
-  /// `Cliquez sur + pour créer un enregistrement.`
-  String get entityEmptyHint {
-    return Intl.message(
-      'Cliquez sur + pour créer un enregistrement.',
-      name: 'entityEmptyHint',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Créer`
-  String get entityCreate {
-    return Intl.message('Créer', name: 'entityCreate', desc: '', args: []);
-  }
-
-  /// `Modifier`
-  String get entityEdit {
-    return Intl.message('Modifier', name: 'entityEdit', desc: '', args: []);
-  }
-
-  /// `Supprimer`
-  String get entityDelete {
-    return Intl.message('Supprimer', name: 'entityDelete', desc: '', args: []);
-  }
-
-  /// `Ajouter un sous-article`
-  String get entityAddSku {
-    return Intl.message(
-      'Ajouter un sous-article',
-      name: 'entityAddSku',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Supprimer cet enregistrement ?`
-  String get entityConfirmDelete {
-    return Intl.message(
-      'Supprimer cet enregistrement ?',
-      name: 'entityConfirmDelete',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Tous`
-  String get statusAll {
-    return Intl.message('Tous', name: 'statusAll', desc: '', args: []);
-  }
-
-  /// `Actif`
-  String get statusActive {
-    return Intl.message('Actif', name: 'statusActive', desc: '', args: []);
-  }
-
-  /// `Inactif`
-  String get statusInactive {
-    return Intl.message('Inactif', name: 'statusInactive', desc: '', args: []);
-  }
-
-  /// `Créer un article`
-  String get catalogNewProduct {
-    return Intl.message(
-      'Créer un article',
-      name: 'catalogNewProduct',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Modifier l'article`
-  String get catalogEditProduct {
-    return Intl.message(
-      'Modifier l\'article',
-      name: 'catalogEditProduct',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Saisir le libellé`
-  String get catalogEnterTitle {
-    return Intl.message(
-      'Saisir le libellé',
-      name: 'catalogEnterTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Un article avec ce libellé existe déjà`
-  String get catalogTitleTaken {
-    return Intl.message(
-      'Un article avec ce libellé existe déjà',
-      name: 'catalogTitleTaken',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Saisir le prix de vente`
-  String get catalogEnterPrice {
-    return Intl.message(
-      'Saisir le prix de vente',
-      name: 'catalogEnterPrice',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `erreur`
-  String get catalogInvalidNumber {
-    return Intl.message(
-      'erreur',
-      name: 'catalogInvalidNumber',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `exemple : 1.5 et non pas 1,5`
-  String get catalogInvalidUnits {
-    return Intl.message(
-      'exemple : 1.5 et non pas 1,5',
-      name: 'catalogInvalidUnits',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Libellé`
-  String get catalogColumnTitle {
-    return Intl.message(
-      'Libellé',
-      name: 'catalogColumnTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Catégorie`
-  String get catalogColumnCategory {
-    return Intl.message(
-      'Catégorie',
-      name: 'catalogColumnCategory',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Désignation`
-  String get catalogColumnDesignation {
-    return Intl.message(
-      'Désignation',
-      name: 'catalogColumnDesignation',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Prix de vente`
-  String get catalogColumnPrice {
-    return Intl.message(
-      'Prix de vente',
-      name: 'catalogColumnPrice',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Code barre`
-  String get catalogColumnBarcode {
-    return Intl.message(
-      'Code barre',
-      name: 'catalogColumnBarcode',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Type`
-  String get catalogColumnKind {
-    return Intl.message('Type', name: 'catalogColumnKind', desc: '', args: []);
-  }
-
-  /// `Statut`
-  String get catalogColumnStatus {
-    return Intl.message(
-      'Statut',
-      name: 'catalogColumnStatus',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Caractéristiques`
-  String get catalogIdentity {
-    return Intl.message(
-      'Caractéristiques',
-      name: 'catalogIdentity',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Vente`
-  String get catalogSelling {
-    return Intl.message('Vente', name: 'catalogSelling', desc: '', args: []);
-  }
-
-  /// `Sous-articles`
-  String get catalogVariants {
-    return Intl.message(
-      'Sous-articles',
-      name: 'catalogVariants',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Unité de compte`
-  String get catalogStockUnit {
-    return Intl.message(
-      'Unité de compte',
-      name: 'catalogStockUnit',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Unités/article`
-  String get catalogUnitsInOnePiece {
-    return Intl.message(
-      'Unités/article',
-      name: 'catalogUnitsInOnePiece',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Créer un contact`
-  String get contactNew {
-    return Intl.message(
-      'Créer un contact',
-      name: 'contactNew',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Modifier le contact`
-  String get contactEdit {
-    return Intl.message(
-      'Modifier le contact',
-      name: 'contactEdit',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Détails`
-  String get contactDetails {
-    return Intl.message('Détails', name: 'contactDetails', desc: '', args: []);
-  }
-
-  /// `Adresse`
-  String get contactAddress {
-    return Intl.message('Adresse', name: 'contactAddress', desc: '', args: []);
-  }
-
-  /// `Prénom`
-  String get contactFirstName {
-    return Intl.message('Prénom', name: 'contactFirstName', desc: '', args: []);
-  }
-
-  /// `Nom de famille`
-  String get contactLastName {
-    return Intl.message(
-      'Nom de famille',
-      name: 'contactLastName',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Saisir le prénom`
-  String get contactEnterFirstName {
-    return Intl.message(
-      'Saisir le prénom',
-      name: 'contactEnterFirstName',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Saisir le nom de famille`
-  String get contactEnterLastName {
-    return Intl.message(
-      'Saisir le nom de famille',
-      name: 'contactEnterLastName',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Le numéro doit comporter au moins 8 chiffres`
-  String get contactPhoneTooShort {
-    return Intl.message(
-      'Le numéro doit comporter au moins 8 chiffres',
-      name: 'contactPhoneTooShort',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `L'adresse mail n'est pas correcte`
-  String get contactEmailInvalid {
-    return Intl.message(
-      'L\'adresse mail n\'est pas correcte',
-      name: 'contactEmailInvalid',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Mail`
-  String get contactMail {
-    return Intl.message('Mail', name: 'contactMail', desc: '', args: []);
-  }
-
-  /// `Téléphone`
-  String get contactPhone {
-    return Intl.message('Téléphone', name: 'contactPhone', desc: '', args: []);
-  }
-
-  /// `Crédit maximum`
-  String get contactOverdraft {
-    return Intl.message(
-      'Crédit maximum',
-      name: 'contactOverdraft',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Client`
-  String get contactIsClient {
-    return Intl.message('Client', name: 'contactIsClient', desc: '', args: []);
-  }
-
-  /// `Fournisseur`
-  String get contactIsSupplier {
-    return Intl.message(
-      'Fournisseur',
-      name: 'contactIsSupplier',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Rue`
-  String get contactStreet {
-    return Intl.message('Rue', name: 'contactStreet', desc: '', args: []);
-  }
-
-  /// `Code postal`
-  String get contactPostCode {
-    return Intl.message(
-      'Code postal',
-      name: 'contactPostCode',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Ville`
-  String get contactCity {
-    return Intl.message('Ville', name: 'contactCity', desc: '', args: []);
-  }
-
-  /// `Pays`
-  String get contactCountry {
-    return Intl.message('Pays', name: 'contactCountry', desc: '', args: []);
   }
 
   /// `Appareils`
@@ -2442,6 +2482,31 @@ class Lang {
     return Intl.message(
       'Empilé par Boutique',
       name: 'statsStackedByBoutique',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Actif`
+  String get statusActive {
+    return Intl.message('Actif', name: 'statusActive', desc: '', args: []);
+  }
+
+  /// `Tous`
+  String get statusAll {
+    return Intl.message('Tous', name: 'statusAll', desc: '', args: []);
+  }
+
+  /// `Inactif`
+  String get statusInactive {
+    return Intl.message('Inactif', name: 'statusInactive', desc: '', args: []);
+  }
+
+  /// `Rester connecté`
+  String get stayConnected {
+    return Intl.message(
+      'Rester connecté',
+      name: 'stayConnected',
       desc: '',
       args: [],
     );
