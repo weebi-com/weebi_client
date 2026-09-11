@@ -104,6 +104,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingChoosePaymentMethod": MessageLookupByLibrary.simpleMessage(
       "您想如何付款？",
     ),
+    "billingGalleryLearnMore": MessageLookupByLibrary.simpleMessage("了解更多"),
+    "billingGalleryOpen": MessageLookupByLibrary.simpleMessage("查看"),
+    "billingGalleryPremiumLead": MessageLookupByLibrary.simpleMessage(
+      "远程跟踪、多店铺、仪表盘。",
+    ),
+    "billingGalleryReferralLead": MessageLookupByLibrary.simpleMessage(
+      "分享推荐码，赚取 Weebi 积分。",
+    ),
+    "billingGallerySyscohadaLead": MessageLookupByLibrary.simpleMessage(
+      "会计报表，按财年一次购买。",
+    ),
     "billingHistoryNoLicenses": MessageLookupByLibrary.simpleMessage(
       "尚无已购买的 Premium 许可证。",
     ),
@@ -120,6 +131,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "没有可分配的用户。请先在「用户」中添加用户。",
     ),
     "billingNotYetAttributed": MessageLookupByLibrary.simpleMessage("尚未分配"),
+    "billingOffersBack": MessageLookupByLibrary.simpleMessage("返回优惠"),
     "billingPayWithCard": MessageLookupByLibrary.simpleMessage("银行卡/银行"),
     "billingPayWithMobileMoney": MessageLookupByLibrary.simpleMessage("移动支付"),
     "billingPaymentProcessing": MessageLookupByLibrary.simpleMessage(
@@ -202,6 +214,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "billingTabHistory": MessageLookupByLibrary.simpleMessage("购买 / 许可证分配"),
     "billingTabOffers": MessageLookupByLibrary.simpleMessage("套餐"),
+    "billingUseWeebiCredit": MessageLookupByLibrary.simpleMessage(
+      "使用我的 Weebi 积分",
+    ),
     "billingUsers": MessageLookupByLibrary.simpleMessage("用户"),
     "billingValidUntil": MessageLookupByLibrary.simpleMessage("有效期至"),
     "billingViewFullTerms": MessageLookupByLibrary.simpleMessage("在新标签页查看完整文档"),

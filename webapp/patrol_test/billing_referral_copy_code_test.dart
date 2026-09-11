@@ -28,9 +28,11 @@ void main() {
       await $.pumpAndSettle(timeout: const Duration(seconds: 60));
       await $(#billingScreen).waitUntilVisible(timeout: const Duration(seconds: 45));
 
-      await $(#billingReferralTextField).waitUntilVisible(
+      await $(#billingOfferTeaserReferral).waitUntilVisible(
         timeout: const Duration(seconds: 30),
       );
+      await $(#billingOfferTeaserReferral).tap();
+      await $.pumpAndSettle();
 
       await $(#billingOwnReferralCode).waitUntilVisible(
         timeout: const Duration(seconds: 30),
