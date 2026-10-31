@@ -40,6 +40,7 @@ import 'package:web_admin/views/screens/contacts/contact_edit_screen.dart';
 import 'package:web_admin/views/screens/contacts/contact_view_screen.dart';
 import 'package:web_admin/views/screens/contacts/contacts_list_screen.dart';
 import 'package:web_admin/views/screens/stats_screen.dart';
+import 'package:web_admin/views/screens/map/boutiques_map_screen.dart';
 import 'package:web_admin/views/screens/legal/legal_document_screen.dart';
 
 GoRouter appRouter(
@@ -402,6 +403,15 @@ GoRouter appRouter(
           return NoTransitionPage<void>(
             key: state.pageKey,
             child: const StatsScreen(),
+          );
+        },
+      ),
+      GoRoute(
+        path: RouteUri.map,
+        pageBuilder: (context, state) {
+          return NoTransitionPage<void>(
+            key: state.pageKey,
+            child: const BoutiquesMapScreen(),
           );
         },
       ),

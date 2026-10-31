@@ -42,9 +42,12 @@ class _CreateFirmScreenState extends State<CreateFirmScreen> {
       });
 
       try {
+        final userMail =
+            context.read<CurrentUserProvider>().user?.mail.trim() ?? '';
         final response = await _firmService.createFirm(
           name: _formData.name,
           defaultCurrency: _formData.defaultCurrency,
+          boutiqueMail: userMail.isEmpty ? null : userMail,
         );
         await _authService.authenticateWithRefreshToken();
         if (context.mounted) {

@@ -32,6 +32,41 @@
 
   <title>Weebi</title>
   <link rel="manifest" href="manifest.json">
+
+  <!-- Leaflet + markercluster for the boutiques map screen -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script>
+    window.customClusterIcon = function(cluster) {
+      if (typeof window.dartPieClusterIcon !== 'function') {
+        return new L.DivIcon({
+          html: '<div>' + cluster.getChildCount() + '</div>',
+          className: 'pie-cluster-icon',
+          iconSize: [48, 48]
+        });
+      }
+      return new L.DivIcon({
+        html: window.dartPieClusterIcon(cluster),
+        className: '',
+        iconSize: [48, 48]
+      });
+    };
+  </script>
+  <style>
+    .pie-cluster-icon {
+      width: clamp(32px, 7vw, 56px);
+      height: clamp(32px, 7vw, 56px);
+      border-radius: 50%;
+      box-shadow: 0 4px 16px rgba(50, 80, 160, 0.18), 0 0 0 3px #fff;
+      border: 2px solid #fff;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #weebi-boutiques-map { width: 100%; height: 100%; }
+  </style>
 </head>
 <body>
   <script src="flutter_bootstrap.js" defer></script>

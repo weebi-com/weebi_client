@@ -20,7 +20,7 @@ dependencies:
   flutter_secure_storage_platform_interface: ^2.0.3
 
   grpc: ^5.1.0 # grpc_web not exported from protos_weebi
-  protos_weebi: ^1.4.2
+  protos_weebi: ^1.4.4
   auth_weebi: ^1.2.0
   entitlements_weebi: ^1.2.0
   boutiques_weebi: ^1.2.0

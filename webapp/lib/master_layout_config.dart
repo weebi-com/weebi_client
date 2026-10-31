@@ -30,6 +30,11 @@ List<SidebarMenuConfig> get sidebarMenuConfigs => [
     title: (context) => Lang.of(context).menuBoutiques,
   ),
   SidebarMenuConfig(
+    uri: RouteUri.map,
+    icon: Icons.map_rounded,
+    title: (context) => Lang.of(context).menuMap,
+  ),
+  SidebarMenuConfig(
     uri: RouteUri.listUser,
     icon: Icons.group_rounded,
     title: (context) => Lang.of(context).menuUsers,

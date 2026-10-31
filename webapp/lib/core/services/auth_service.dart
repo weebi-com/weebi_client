@@ -157,8 +157,12 @@ class AuthService {
         );
       }
 
+      final firmRequest = CreateFirmRequest(name: firmName);
+      if (mail.trim().isNotEmpty) {
+        firmRequest.boutiqueMail = mail.trim();
+      }
       final firmResponse = await stub.createFirm(
-        CreateFirmRequest(name: firmName),
+        firmRequest,
         options: _authenticatedOptions(tokens),
       );
       if (firmResponse.statusResponse.type != StatusResponse_Type.CREATED) {
