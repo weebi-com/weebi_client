@@ -65,6 +65,18 @@ void main() {
     });
   });
 
+  group('formatWeebiCredit', () {
+    test('shows a unitless whole number, never a currency', () {
+      expect(formatWeebiCredit(0), '0');
+      expect(formatWeebiCredit(1400), '14');
+      expect(formatWeebiCredit(990000), '9\u00A0900');
+      expect(formatWeebiCredit(1400), isNot(contains('€')));
+      expect(formatWeebiCredit(1400), isNot(contains('EUR')));
+      expect(formatWeebiCredit(1400), isNot(contains('XOF')));
+      expect(formatWeebiCredit(1400), isNot(contains('CFA')));
+    });
+  });
+
   group('formatBillingOfferPrice', () {
     test('shows XOF first then EUR for premium', () {
       expect(

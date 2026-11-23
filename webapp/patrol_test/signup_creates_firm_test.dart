@@ -46,6 +46,7 @@ void main() {
       await $(#registerFirmNameField).enterText(firmName);
       await $(#registerFirstNameField).enterText('Patrol');
       await $(#registerLastNameField).enterText('Signup');
+      await $(#registerPhoneField).enterText('771234567');
       await $(#registerMailField).enterText(mail);
       await $(#registerPasswordField).enterText(password);
       await $(#registerRetypePasswordField).enterText(password);

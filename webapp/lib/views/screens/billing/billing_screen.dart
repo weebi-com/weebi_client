@@ -25,6 +25,7 @@ import '../../../core/constants/dimens.dart';
 import '../../../core/theme/theme_extensions/app_color_scheme.dart';
 import 'package:web_admin/core/billing/billing_bridge_destination.dart';
 
+import 'billing_offers_gallery.dart';
 import 'billing_plan_label.dart';
 import 'billing_plan_theme.dart';
 import 'billing_referral_section.dart';
@@ -59,6 +60,7 @@ class _BillingScreenState extends State<BillingScreen>
   List<BillingProduct> _products = [];
   BillingProduct? _syscohadaProduct;
   List<AccountingYearPurchase> _accountingPurchases = [];
+  bool _accountingPurchasesLoaded = false;
   late int _syscohadaFiscalYear;
   late final TabController _tabController;
   /// User info by userId, loaded when we have licenses (to show attributed users).
@@ -75,15 +77,26 @@ class _BillingScreenState extends State<BillingScreen>
   bool _dataLoaded = false;
   bool _checkoutReturnHandled = false;
   bool _bootstrapStarted = false;
-  final TextEditingController _referralCodeController = TextEditingController();
+  String? _offerDetail;
+  final TextEditingController _premiumReferralController =
+      TextEditingController();
+  final TextEditingController _syscohadaReferralController =
+      TextEditingController();
   String? _ownReferralCode;
   int _referralCreditBalanceCents = 0;
   String? _referralFieldError;
+  bool _spendWeebiCreditPremium = false;
+  bool _spendWeebiCreditSyscohada = false;
 
   void _applyBridgeDeepLink(Map<String, String> params) {
     final dest = parseBillingBridgeDestination(query: params);
     if (dest == null) return;
     _bridgeHighlightProductId = dest.productId;
+    if (dest.productId == kSyscohadaProductId) {
+      _offerDetail = 'syscohada';
+    } else if (dest.productId == 'premium') {
+      _offerDetail = 'premium';
+    }
     if (dest.fiscalYear != null) {
       _syscohadaFiscalYear = dest.fiscalYear!;
     }
@@ -150,14 +163,17 @@ class _BillingScreenState extends State<BillingScreen>
       _applyBridgeDeepLink(params);
       if (!_hasReadBillingPermission(context)) return;
 
-      Aptabase.instance.trackEvent('billing_screen_opened', {});
+      try {
+        Aptabase.instance.trackEvent('billing_screen_opened', {});
+      } catch (_) {}
       _bootstrapBilling(params);
     });
   }
 
   @override
   void dispose() {
-    _referralCodeController.dispose();
+    _premiumReferralController.dispose();
+    _syscohadaReferralController.dispose();
     _tabController.dispose();
     super.dispose();
   }
@@ -252,10 +268,12 @@ class _BillingScreenState extends State<BillingScreen>
       }
 
       List<AccountingYearPurchase> accountingPurchases = const [];
+      var accountingPurchasesLoaded = false;
       try {
         final accountingResponse =
             await provider.billingRpc.readAccountingYearPurchases(Empty());
         accountingPurchases = accountingResponse.purchases;
+        accountingPurchasesLoaded = true;
       } catch (_) {
         // Older servers may not expose this RPC yet.
       }
@@ -297,6 +315,7 @@ class _BillingScreenState extends State<BillingScreen>
               products.where((p) => isBillingCatalogProduct(p.productId)).toList();
           _syscohadaProduct = syscohada;
           _accountingPurchases = accountingPurchases;
+          _accountingPurchasesLoaded = accountingPurchasesLoaded;
           _usersById = usersById;
           _ownReferralCode = ownReferralCode;
           _referralCreditBalanceCents = referralBalance;
@@ -356,7 +375,12 @@ class _BillingScreenState extends State<BillingScreen>
     Aptabase.instance.trackEvent('billing_license_purchase_clicked', {
       'product_id': product.productId,
     });
-    _startPurchase(product, accepted: _acceptedEnterpriseTerms);
+    _startPurchase(
+      product,
+      accepted: _acceptedEnterpriseTerms,
+      referralEntered: _premiumReferralController.text,
+      applyWeebiCredit: _spendWeebiCreditPremium,
+    );
   }
 
   void _onSyscohadaPurchaseTapped() {
@@ -366,8 +390,42 @@ class _BillingScreenState extends State<BillingScreen>
       'product_id': product.productId,
       'fiscal_year': _syscohadaFiscalYear,
     });
-    _startPurchase(product,
-        fiscalYear: _syscohadaFiscalYear, accepted: _acceptedSyscohadaTerms);
+    if (_firstSyscohadaReportFree) {
+      _claimFirstSyscohadaReport(product);
+      return;
+    }
+    _startPurchase(
+      product,
+      fiscalYear: _syscohadaFiscalYear,
+      accepted: _acceptedSyscohadaTerms,
+      referralEntered: _syscohadaReferralController.text,
+      applyWeebiCredit: _spendWeebiCreditSyscohada,
+    );
+  }
+
+  bool get _firstSyscohadaReportFree =>
+      _accountingPurchasesLoaded && _accountingPurchases.isEmpty;
+
+  Future<void> _claimFirstSyscohadaReport(BillingProduct product) async {
+    if (!mounted) return;
+    if (!_hasCreateBillingPermission(context)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(Lang.of(context).billingActionNotPermitted)),
+      );
+      return;
+    }
+    if (!_acceptedSyscohadaTerms) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(Lang.of(context).billingAcceptTermsToContinue)),
+      );
+      return;
+    }
+    await _purchaseWithPawapay(
+      product,
+      fiscalYear: _syscohadaFiscalYear,
+      referralCode: '',
+      creditAppliedCents: 0,
+    );
   }
 
   Future<void> _syncFulfillAfterCheckoutReturn(Map<String, String> params) async {
@@ -441,6 +499,8 @@ class _BillingScreenState extends State<BillingScreen>
     BillingProduct product, {
     int? fiscalYear,
     required bool accepted,
+    required String referralEntered,
+    required bool applyWeebiCredit,
   }) async {
     if (!mounted) return;
     if (!_hasCreateBillingPermission(context)) {
@@ -449,7 +509,7 @@ class _BillingScreenState extends State<BillingScreen>
       );
       return;
     }
-    final referralCode = _referralCodeController.text.trim();
+    final referralCode = referralEntered.trim();
     if (isSelfReferralCode(
       entered: referralCode,
       ownReferralCode: _ownReferralCode,
@@ -468,33 +528,65 @@ class _BillingScreenState extends State<BillingScreen>
       );
       return;
     }
+    final spendCredit = applyWeebiCredit && _referralCreditBalanceCents > 0;
+    final pricing = offerCheckoutPricing(
+      catalogCents: product.amountCents,
+      applyReferralDiscount: referralCodeForCheckout(
+            entered: referralCode,
+            ownReferralCode: _ownReferralCode,
+          ) !=
+          null,
+      spendCredit: spendCredit,
+      availableCreditCents: _referralCreditBalanceCents,
+    );
+    if (pricing.chargeCents <= 0 && spendCredit) {
+      await _purchaseWithStripe(
+        product,
+        fiscalYear: fiscalYear,
+        referralCode: referralCode,
+        creditAppliedCents: pricing.creditAppliedCents,
+      );
+      return;
+    }
     final method = await _askPaymentMethod();
     if (method == null || !mounted) return;
     if (method == _BillingPaymentMethod.stripe) {
-      await _purchaseWithStripe(product, fiscalYear: fiscalYear);
+      await _purchaseWithStripe(
+        product,
+        fiscalYear: fiscalYear,
+        referralCode: referralCode,
+        creditAppliedCents: pricing.creditAppliedCents,
+      );
     } else {
-      await _purchaseWithPawapay(product, fiscalYear: fiscalYear);
+      await _purchaseWithPawapay(
+        product,
+        fiscalYear: fiscalYear,
+        referralCode: referralCode,
+        creditAppliedCents: pricing.creditAppliedCents,
+      );
     }
   }
 
-  String? _referralCodeForCheckout() {
-    return referralCodeForCheckout(
-      entered: _referralCodeController.text,
-      ownReferralCode: _ownReferralCode,
-    );
+  /// Credit fulfillment and the complimentary first report return our billing
+  /// URL instead of a Stripe Checkout page.
+  bool _checkoutStaysOnBilling(String checkoutUrl) {
+    if (checkoutUrl.contains('{CHECKOUT_SESSION_ID}')) return false;
+    if (checkoutUrl.contains('checkout.stripe.com')) return false;
+    return checkoutUrl.contains(RouteUri.billing);
   }
 
-  bool get _referralDiscountPreviewActive {
+  String? _referralCodeForCheckout(String entered) {
     return referralCodeForCheckout(
-          entered: _referralCodeController.text,
-          ownReferralCode: _ownReferralCode,
-        ) !=
-        null;
+      entered: entered,
+      ownReferralCode: _ownReferralCode,
+    );
   }
 
   Future<void> _purchaseWithStripe(
     BillingProduct product, {
     int? fiscalYear,
+    required String referralCode,
+    required int creditAppliedCents,
   }) async {
     final provider = context.read<BillingServiceClientProvider>();
     final stripePriceId = product.stripePriceId;
@@ -514,7 +606,8 @@ class _BillingScreenState extends State<BillingScreen>
         cancelUrl: cancelUrl,
         legalTermsVersionDate: kEnterpriseTermsVersionId,
         fiscalYear: fiscalYear,
-        referralCode: _referralCodeForCheckout() ?? '',
+        referralCode: _referralCodeForCheckout(referralCode) ?? '',
+        creditAppliedCents: creditAppliedCents,
       );
 
       final response =
@@ -531,6 +624,15 @@ class _BillingScreenState extends State<BillingScreen>
           _checkoutProductId = null;
           _errorMessage = 'Checkout failed';
         });
+        return;
+      }
+      if (_checkoutStaysOnBilling(response.checkoutUrl)) {
+        setState(() {
+          _checkoutProductId = null;
+          _checkoutReturnHandled = true;
+        });
+        await _loadData();
+        if (mounted) _closeOfferDetail();
         return;
       }
       web.navigateTo(response.checkoutUrl);
@@ -567,6 +669,8 @@ class _BillingScreenState extends State<BillingScreen>
   Future<void> _purchaseWithPawapay(
     BillingProduct product, {
     int? fiscalYear,
+    required String referralCode,
+    required int creditAppliedCents,
   }) async {
     final provider = context.read<BillingServiceClientProvider>();
     setState(() => _checkoutProductId = product.productId);
@@ -581,7 +685,8 @@ class _BillingScreenState extends State<BillingScreen>
         returnUrl: returnUrl,
         legalTermsVersionDate: kEnterpriseTermsVersionId,
         fiscalYear: fiscalYear,
-        referralCode: _referralCodeForCheckout() ?? '',
+        referralCode: _referralCodeForCheckout(referralCode) ?? '',
+        creditAppliedCents: creditAppliedCents,
       );
 
       final response =
@@ -598,6 +703,15 @@ class _BillingScreenState extends State<BillingScreen>
           _checkoutProductId = null;
           _errorMessage = 'Checkout failed';
         });
+        return;
+      }
+      if (response.checkoutId.isEmpty) {
+        setState(() {
+          _checkoutProductId = null;
+          _checkoutReturnHandled = true;
+        });
+        await _loadData();
+        if (mounted) _closeOfferDetail();
         return;
       }
       if (response.checkoutId.isNotEmpty) {
@@ -708,12 +822,19 @@ class _BillingScreenState extends State<BillingScreen>
     final pawapayCurrency = pawapayOfferCurrencyFromChains(
       context.watch<BoutiqueProvider>().chains,
     );
-    return ListView(
-      padding: const EdgeInsets.all(kDefaultPadding),
-      children: [
-        _buildReferralSection(themeData: themeData, lang: lang),
-        const SizedBox(height: kDefaultPadding * 1.5),
-        _SyscohadaAddonCard(
+    if (_offerDetail == 'referral') {
+      return _buildOfferDetailScaffold(
+        lang: lang,
+        child: BillingReferralSection(
+          ownReferralCode: _ownReferralCode,
+          creditBalanceCents: _referralCreditBalanceCents,
+        ),
+      );
+    }
+    if (_offerDetail == 'syscohada') {
+      return _buildOfferDetailScaffold(
+        lang: lang,
+        child: _SyscohadaAddonCard(
           product: _syscohadaProduct,
           purchasedYears: _accountingPurchases,
           selectedYear: _syscohadaFiscalYear,
@@ -727,56 +848,131 @@ class _BillingScreenState extends State<BillingScreen>
           onViewTerms: _openSyscohadaTermsInNewTab,
           highlighted: _bridgeHighlightProductId == kSyscohadaProductId,
           showPurchasedYearsSummary: false,
+          firstReportFree: _firstSyscohadaReportFree,
           pawapayCurrency: pawapayCurrency,
-          showReferralDiscount: _referralDiscountPreviewActive,
+          showReferralDiscount: _referralCodeForCheckout(
+                _syscohadaReferralController.text,
+              ) !=
+              null,
+          referrerCodeController: _syscohadaReferralController,
+          referrerCodeError: _referralFieldError,
+          onReferrerCodeChanged: _onReferrerCodeChanged,
+          spendWeebiCredit: _spendWeebiCreditSyscohada,
+          weebiCreditBalanceCents: _referralCreditBalanceCents,
+          onSpendWeebiCreditChanged: (v) =>
+              setState(() => _spendWeebiCreditSyscohada = v ?? false),
         ),
-        if (_products.isNotEmpty) ...[
-          const SizedBox(height: kDefaultPadding * 2),
-          Wrap(
-            spacing: kDefaultPadding,
-            runSpacing: kDefaultPadding,
-            children: _products
-                .map((p) => _ProductOfferCard(
-                      product: p,
-                      onPurchase: () => _onLicensePurchaseTapped(p),
-                      isLoading: _checkoutProductId == p.productId,
-                      purchaseEnabled: canPurchase,
-                      accepted: _acceptedEnterpriseTerms,
-                      onAcceptedChanged: (v) =>
-                          _setEnterpriseTermsAccepted(v ?? false),
-                      onViewTerms: _openLegalDocumentInNewTab,
-                      highlighted:
-                          _bridgeHighlightProductId == p.productId.toLowerCase(),
-                      pawapayCurrency: pawapayCurrency,
-                      showReferralDiscount: _referralDiscountPreviewActive,
-                    ))
-                .toList(),
+      );
+    }
+    if (_offerDetail == 'premium') {
+      BillingProduct? premiumProduct;
+      for (final p in _products) {
+        if (p.productId.toLowerCase() == 'premium') {
+          premiumProduct = p;
+          break;
+        }
+      }
+      if (premiumProduct == null) {
+        return _buildOffersGallery(themeData: themeData, lang: lang);
+      }
+      return _buildOfferDetailScaffold(
+        lang: lang,
+        child: _ProductOfferCard(
+          product: premiumProduct,
+          onPurchase: () => _onLicensePurchaseTapped(premiumProduct!),
+          isLoading: _checkoutProductId == premiumProduct.productId,
+          purchaseEnabled: canPurchase,
+          accepted: _acceptedEnterpriseTerms,
+          onAcceptedChanged: (v) => _setEnterpriseTermsAccepted(v ?? false),
+          onViewTerms: _openLegalDocumentInNewTab,
+          highlighted:
+              _bridgeHighlightProductId == premiumProduct.productId.toLowerCase(),
+          pawapayCurrency: pawapayCurrency,
+          showReferralDiscount: _referralCodeForCheckout(
+                _premiumReferralController.text,
+              ) !=
+              null,
+          referrerCodeController: _premiumReferralController,
+          referrerCodeError: _referralFieldError,
+          onReferrerCodeChanged: _onReferrerCodeChanged,
+          spendWeebiCredit: _spendWeebiCreditPremium,
+          weebiCreditBalanceCents: _referralCreditBalanceCents,
+          onSpendWeebiCreditChanged: (v) =>
+              setState(() => _spendWeebiCreditPremium = v ?? false),
+        ),
+      );
+    }
+    return _buildOffersGallery(themeData: themeData, lang: lang);
+  }
+
+  Widget _buildOfferDetailScaffold({
+    required Lang lang,
+    required Widget child,
+  }) {
+    return ListView(
+      padding: const EdgeInsets.all(kDefaultPadding),
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton.icon(
+            key: const Key('billingOffersBack'),
+            onPressed: _closeOfferDetail,
+            icon: const Icon(Icons.arrow_back),
+            label: Text(lang.billingOffersBack),
           ),
-        ],
+        ),
+        const SizedBox(height: 8),
+        child,
       ],
     );
   }
 
-  Widget _buildReferralSection({
+  void _closeOfferDetail() {
+    setState(() {
+      _offerDetail = null;
+      _premiumReferralController.clear();
+      _syscohadaReferralController.clear();
+      _spendWeebiCreditPremium = false;
+      _spendWeebiCreditSyscohada = false;
+      _referralFieldError = null;
+    });
+  }
+
+  Widget _buildOffersGallery({
     required ThemeData themeData,
     required Lang lang,
   }) {
-    return BillingReferralSection(
-      controller: _referralCodeController,
+    BillingProduct? premium;
+    for (final p in _products) {
+      if (p.productId.toLowerCase() == 'premium') {
+        premium = p;
+        break;
+      }
+    }
+    return BillingOffersGallery(
       ownReferralCode: _ownReferralCode,
-      creditBalanceCents: _referralCreditBalanceCents,
-      errorText: _referralFieldError,
-      onChanged: (value) {
-        setState(() {
-          _referralFieldError = isSelfReferralCode(
-            entered: value,
-            ownReferralCode: _ownReferralCode,
-          )
-              ? lang.billingReferralSelfError
-              : null;
-        });
-      },
+      syscohadaProduct: _syscohadaProduct,
+      premiumProduct: premium,
+      pawapayCurrency: pawapayOfferCurrencyFromChains(
+        context.watch<BoutiqueProvider>().chains,
+      ),
+      onOpenReferral: () => setState(() => _offerDetail = 'referral'),
+      firstReportFree: _firstSyscohadaReportFree,
+      onOpenSyscohada: () => setState(() => _offerDetail = 'syscohada'),
+      onOpenPremium: () => setState(() => _offerDetail = 'premium'),
     );
+  }
+
+  void _onReferrerCodeChanged(String value) {
+    final lang = Lang.of(context);
+    setState(() {
+      _referralFieldError = isSelfReferralCode(
+        entered: value,
+        ownReferralCode: _ownReferralCode,
+      )
+          ? lang.billingReferralSelfError
+          : null;
+    });
   }
 
   Widget _buildHistoryTab({
@@ -1024,7 +1220,7 @@ class _BillingScreenState extends State<BillingScreen>
                 ),
                 child: TabBar(
                   controller: _tabController,
-                  labelColor: themeData.colorScheme.onSurface,
+                  labelColor: themeData.colorScheme.onPrimaryContainer,
                   unselectedLabelColor: themeData.colorScheme.onSurfaceVariant,
                   labelStyle: themeData.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
@@ -1063,16 +1259,22 @@ class _BillingScreenState extends State<BillingScreen>
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Chip(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 4.0,
-                                      vertical: 6.0,
+                                  DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      color: appColorScheme.error,
+                                      borderRadius: BorderRadius.circular(8),
                                     ),
-                                    backgroundColor: appColorScheme.error,
-                                    label: Text(
-                                      _errorMessage!,
-                                      style: TextStyle(
-                                        color: themeData.colorScheme.onPrimary,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12.0,
+                                        vertical: 8.0,
+                                      ),
+                                      child: Text(
+                                        _errorMessage!,
+                                        style: themeData.textTheme.bodyMedium
+                                            ?.copyWith(
+                                          color: themeData.colorScheme.onError,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -1128,8 +1330,15 @@ class _SyscohadaAddonCard extends StatelessWidget {
     required this.onViewTerms,
     this.highlighted = false,
     this.showPurchasedYearsSummary = true,
+    this.firstReportFree = false,
     this.pawapayCurrency = 'XOF',
     this.showReferralDiscount = false,
+    this.referrerCodeController,
+    this.referrerCodeError,
+    this.onReferrerCodeChanged,
+    this.spendWeebiCredit = false,
+    this.weebiCreditBalanceCents = 0,
+    this.onSpendWeebiCreditChanged,
   });
 
   final BillingProduct? product;
@@ -1144,8 +1353,15 @@ class _SyscohadaAddonCard extends StatelessWidget {
   final ValueChanged<bool?> onAcceptedChanged;
   final VoidCallback onViewTerms;
   final bool showPurchasedYearsSummary;
+  final bool firstReportFree;
   final String pawapayCurrency;
   final bool showReferralDiscount;
+  final TextEditingController? referrerCodeController;
+  final String? referrerCodeError;
+  final ValueChanged<String>? onReferrerCodeChanged;
+  final bool spendWeebiCredit;
+  final int weebiCreditBalanceCents;
+  final ValueChanged<bool?>? onSpendWeebiCreditChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -1155,16 +1371,18 @@ class _SyscohadaAddonCard extends StatelessWidget {
     final yearOptions =
         List<int>.generate(nowYear - 2020 + 1, (i) => 2020 + i);
     final paidYears = purchasedYears.map((p) => p.year).toSet();
-    final priceLabel = product == null
-        ? lang.billingSyscohadaPrice
-        : formatBillingOfferPrice(
-            amountCents: product!.amountCents,
-            currency: product!.currency,
-            productId: product!.productId,
-            languageCode: Localizations.localeOf(context).languageCode,
-            pawapayCurrency: pawapayCurrency,
-            product: product,
-          );
+    final priceLabel = firstReportFree
+        ? lang.billingSyscohadaFirstFreePrice
+        : (product == null
+            ? lang.billingSyscohadaPrice
+            : formatBillingOfferPrice(
+                amountCents: product!.amountCents,
+                currency: product!.currency,
+                productId: product!.productId,
+                languageCode: Localizations.localeOf(context).languageCode,
+                pawapayCurrency: pawapayCurrency,
+                product: product,
+              ));
 
     return Container(
       width: double.infinity,
@@ -1177,8 +1395,7 @@ class _SyscohadaAddonCard extends StatelessWidget {
               : themeData.dividerColor.withValues(alpha: 0.6),
           width: highlighted ? 2 : 1,
         ),
-        color: themeData.colorScheme.surfaceContainerHighest
-            .withValues(alpha: 0.35),
+        color: themeData.colorScheme.surfaceContainerHighest,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1203,7 +1420,16 @@ class _SyscohadaAddonCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          if (showReferralDiscount && product != null) ...[
+          if (firstReportFree) ...[
+            const SizedBox(height: 4),
+            Text(
+              lang.billingSyscohadaFirstFreeDetail,
+              style: themeData.textTheme.bodyMedium?.copyWith(
+                color: themeData.colorScheme.primary,
+              ),
+            ),
+          ],
+          if (!firstReportFree && showReferralDiscount && product != null) ...[
             const SizedBox(height: 4),
             Text(
               lang.billingReferralDiscountedPrice(
@@ -1272,6 +1498,29 @@ class _SyscohadaAddonCard extends StatelessWidget {
               ),
             ],
             const SizedBox(height: kDefaultPadding * 1.5),
+            if (!firstReportFree &&
+                referrerCodeController != null &&
+                onReferrerCodeChanged != null) ...[
+              BillingReferrerCodeField(
+                controller: referrerCodeController!,
+                errorText: referrerCodeError,
+                onChanged: onReferrerCodeChanged!,
+              ),
+              const SizedBox(height: kDefaultPadding),
+            ],
+            if (!firstReportFree &&
+                onSpendWeebiCreditChanged != null &&
+                weebiCreditBalanceCents > 0) ...[
+              CheckboxListTile(
+                contentPadding: EdgeInsets.zero,
+                value: spendWeebiCredit,
+                onChanged: onSpendWeebiCreditChanged,
+                title: Text(lang.billingUseWeebiCredit),
+                subtitle: Text(formatWeebiCredit(weebiCreditBalanceCents)),
+                controlAffinity: ListTileControlAffinity.leading,
+              ),
+              const SizedBox(height: kDefaultPadding),
+            ],
             // CGV Block for SYSCOHADA
             TextButton(
               onPressed: onViewTerms,
@@ -1333,7 +1582,11 @@ class _SyscohadaAddonCard extends StatelessWidget {
                         width: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : Text(lang.billingSyscohadaPurchase),
+                    : Text(
+                        firstReportFree
+                            ? lang.billingSyscohadaClaim
+                            : lang.billingSyscohadaPurchase,
+                      ),
               ),
             ),
           ],
@@ -1354,6 +1607,13 @@ class _ProductOfferCard extends StatelessWidget {
   final VoidCallback onViewTerms;
   final String pawapayCurrency;
   final bool showReferralDiscount;
+  final TextEditingController? referrerCodeController;
+  final String? referrerCodeError;
+  final ValueChanged<String>? onReferrerCodeChanged;
+
+  final bool spendWeebiCredit;
+  final int weebiCreditBalanceCents;
+  final ValueChanged<bool?>? onSpendWeebiCreditChanged;
 
   const _ProductOfferCard({
     required this.product,
@@ -1366,6 +1626,12 @@ class _ProductOfferCard extends StatelessWidget {
     this.highlighted = false,
     this.pawapayCurrency = 'XOF',
     this.showReferralDiscount = false,
+    this.referrerCodeController,
+    this.referrerCodeError,
+    this.onReferrerCodeChanged,
+    this.spendWeebiCredit = false,
+    this.weebiCreditBalanceCents = 0,
+    this.onSpendWeebiCreditChanged,
   });
 
   @override
@@ -1432,7 +1698,7 @@ class _ProductOfferCard extends StatelessWidget {
                 Text(
                   lang.billingReferralDiscountedPrice(discountedLabel),
                   style: themeData.textTheme.titleMedium?.copyWith(
-                    color: themeData.colorScheme.primary,
+                    color: style.onBackground,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -1451,6 +1717,46 @@ class _ProductOfferCard extends StatelessWidget {
                     color: style.onBackground.withValues(alpha: 0.85),
                   ),
                 ),
+                if (referrerCodeController != null &&
+                    onReferrerCodeChanged != null) ...[
+                  const SizedBox(height: kDefaultPadding),
+                  BillingReferrerCodeField(
+                    controller: referrerCodeController!,
+                    errorText: referrerCodeError,
+                    onChanged: onReferrerCodeChanged!,
+                    style: BillingReferrerFieldStyle(
+                      labelColor: style.mutedOnBackground,
+                      textColor: style.onBackground,
+                      borderColor: style.mutedOnBackground,
+                      fillColor: Colors.white.withValues(alpha: 0.06),
+                    ),
+                  ),
+                ],
+                if (onSpendWeebiCreditChanged != null &&
+                    weebiCreditBalanceCents > 0) ...[
+                  const SizedBox(height: 8),
+                  CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    value: spendWeebiCredit,
+                    onChanged: onSpendWeebiCreditChanged,
+                    title: Text(
+                      lang.billingUseWeebiCredit,
+                      style: themeData.textTheme.bodyMedium?.copyWith(
+                        color: style.onBackground,
+                      ),
+                    ),
+                    subtitle: Text(
+                      formatWeebiCredit(weebiCreditBalanceCents),
+                      style: themeData.textTheme.bodySmall?.copyWith(
+                        color: style.mutedOnBackground,
+                      ),
+                    ),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    side: BorderSide(color: style.onBackground),
+                    checkColor: style.background,
+                    activeColor: style.onBackground,
+                  ),
+                ],
               ],
               const SizedBox(height: kDefaultPadding),
               // CGV Block
@@ -1596,19 +1902,9 @@ class _LicenseCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Chip(
-                  backgroundColor:
-                      style.onBackground.withValues(alpha: 0.18),
-                  side: BorderSide(
-                    color: style.onBackground.withValues(alpha: 0.35),
-                  ),
-                  label: Text(
-                    '${license.maxUsers} ${lang.billingLicenses}',
-                    style: themeData.textTheme.bodyMedium!.copyWith(
-                      color: style.onBackground,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                BillingPlanCountBadge(
+                  label: '${license.maxUsers} ${lang.billingLicenses}',
+                  style: style,
                 ),
               ],
             ),

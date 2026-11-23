@@ -14,6 +14,7 @@ import 'package:web_admin/views/widgets/card_elements.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
 
 import '../../../core/constants/dimens.dart';
+import '../../../core/phone/boutique_phone_display.dart';
 import '../../../core/services/firm_service.dart';
 import '../../../core/theme/theme_extensions/app_button_theme.dart';
 
@@ -42,9 +43,19 @@ class _CreateFirmScreenState extends State<CreateFirmScreen> {
       });
 
       try {
+        final currentUser = context.read<CurrentUserProvider>();
+        final user = currentUser.user ?? await currentUser.load();
+        if (!context.mounted) return;
+        final userMail = user?.mail.trim() ?? '';
+        final userPhone = formatBoutiquePhone(
+          countryCode: user?.phone.countryCode ?? 0,
+          number: user?.phone.number ?? '',
+        );
         final response = await _firmService.createFirm(
           name: _formData.name,
           defaultCurrency: _formData.defaultCurrency,
+          boutiqueMail: userMail.isEmpty ? null : userMail,
+          boutiquePhone: userPhone.isEmpty ? null : userPhone,
         );
         await _authService.authenticateWithRefreshToken();
         if (context.mounted) {

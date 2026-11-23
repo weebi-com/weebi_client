@@ -8,6 +8,7 @@ abstract class CatalogApi {
   Future<StatusResponse> createOne(CalibreRequest request);
   Future<StatusResponse> updateOne(CalibreRequest request);
   Future<StatusResponse> deleteOne(CalibreRequest request);
+  Future<CategoriesResponse> readAllCategories(ReadCategoriesRequest request);
 }
 
 class GrpcCatalogApi implements CatalogApi {
@@ -38,4 +39,9 @@ class GrpcCatalogApi implements CatalogApi {
   @override
   Future<StatusResponse> deleteOne(CalibreRequest request) =>
       _client.deleteOne(request);
+
+  @override
+  Future<CategoriesResponse> readAllCategories(ReadCategoriesRequest request) =>
+      _client.readAllCategories(request);
 }
+

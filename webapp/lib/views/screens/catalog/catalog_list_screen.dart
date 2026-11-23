@@ -45,9 +45,16 @@ class CatalogListScreen extends StatelessWidget {
             body: Padding(
               padding: const EdgeInsets.all(kDefaultPadding),
               child: CatalogListContent(
-                onCreate: () => context.push(RouteUri.catalogNew),
-                onOpen: (calibre) =>
-                    context.push(RouteUri.catalogViewFor(calibre.id)),
+                onCreate: () async {
+                  await context.push(RouteUri.catalogNew);
+                  if (!context.mounted) return;
+                  await context.read<CatalogNotifier>().load();
+                },
+                onOpen: (calibre) async {
+                  await context.push(RouteUri.catalogViewFor(calibre.id));
+                  if (!context.mounted) return;
+                  await context.read<CatalogNotifier>().load();
+                },
               ),
             ),
           );

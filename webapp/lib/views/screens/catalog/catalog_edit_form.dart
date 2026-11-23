@@ -78,6 +78,7 @@ class CatalogEditForm extends StatelessWidget {
             saveLabel: lang.save,
             cancelLabel: lang.cancel,
             isSaving: isSaving,
+            onBack: onCancel,
             onCancel: onCancel,
             onSave: _canSave(validator) ? onSave : null,
           ),

@@ -19,6 +19,7 @@ class CatalogNotifier extends ChangeNotifier {
   final int pageSize;
 
   List<CalibrePb> _items = [];
+  List<CategoryPb> _categories = [];
   int _total = 0;
   int _offset = 0;
   String _query = '';
@@ -28,6 +29,7 @@ class CatalogNotifier extends ChangeNotifier {
 
   String get chainId => _chainId;
   List<CalibrePb> get items => _items;
+  List<CategoryPb> get categories => _categories;
   int get total => _total;
   int get offset => _offset;
   int get pageSizeUsed => pageSize;
@@ -36,6 +38,14 @@ class CatalogNotifier extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
   bool get hasMore => (_offset + _items.length) < _total;
+
+  String categoriesLabelFor(int calibreId) {
+    return _categories
+        .where((c) => c.calibresIds.contains(calibreId))
+        .map((c) => c.title)
+        .where((title) => title.trim().isNotEmpty)
+        .join(', ');
+  }
 
   Future<void> setChainId(String chainId) async {
     if (_chainId == chainId) return;
@@ -85,6 +95,14 @@ class CatalogNotifier extends ChangeNotifier {
       );
       _items = List<CalibrePb>.from(response.calibres);
       _total = response.total > 0 ? response.total : _items.length;
+      try {
+        final cats = await _api.readAllCategories(
+          ReadCategoriesRequest(chainId: _chainId),
+        );
+        _categories = List<CategoryPb>.from(cats.categories);
+      } catch (_) {
+        _categories = [];
+      }
     } on GrpcError catch (e) {
       _error = e.message ?? e.codeName;
       _items = [];
@@ -198,6 +216,9 @@ class CatalogNotifier extends ChangeNotifier {
     notifyListeners();
     try {
       await _api.deleteOne(CalibreRequest(chainId: _chainId, calibre: calibre));
+      _items = _items.where((item) => item.id != calibre.id).toList();
+      _total = _total > 0 ? _total - 1 : 0;
+      notifyListeners();
       await load();
       return true;
     } on GrpcError catch (e) {

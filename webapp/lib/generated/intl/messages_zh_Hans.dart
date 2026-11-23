@@ -104,6 +104,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingChoosePaymentMethod": MessageLookupByLibrary.simpleMessage(
       "您想如何付款？",
     ),
+    "billingGalleryLearnMore": MessageLookupByLibrary.simpleMessage("了解更多"),
+    "billingGalleryOpen": MessageLookupByLibrary.simpleMessage("查看"),
+    "billingGalleryPremiumLead": MessageLookupByLibrary.simpleMessage(
+      "远程跟踪、多店铺、仪表盘。",
+    ),
+    "billingGalleryReferralLead": MessageLookupByLibrary.simpleMessage(
+      "分享推荐码，赚取 Weebi 积分。",
+    ),
+    "billingGallerySyscohadaLead": MessageLookupByLibrary.simpleMessage(
+      "会计报表，按财年一次购买。",
+    ),
     "billingHistoryNoLicenses": MessageLookupByLibrary.simpleMessage(
       "尚无已购买的 Premium 许可证。",
     ),
@@ -120,6 +131,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "没有可分配的用户。请先在「用户」中添加用户。",
     ),
     "billingNotYetAttributed": MessageLookupByLibrary.simpleMessage("尚未分配"),
+    "billingOffersBack": MessageLookupByLibrary.simpleMessage("返回优惠"),
     "billingPayWithCard": MessageLookupByLibrary.simpleMessage("银行卡/银行"),
     "billingPayWithMobileMoney": MessageLookupByLibrary.simpleMessage("移动支付"),
     "billingPaymentProcessing": MessageLookupByLibrary.simpleMessage(
@@ -145,31 +157,58 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingReassignSeatDialogTitle": MessageLookupByLibrary.simpleMessage(
       "将此许可证席位重新分配给其他用户",
     ),
-    "billingReferralCodeHint": MessageLookupByLibrary.simpleMessage(
-      "推荐人企业 ID（可选）",
-    ),
+    "billingReferralCodeHint": MessageLookupByLibrary.simpleMessage("推荐人代码"),
+    "billingReferralCopied": MessageLookupByLibrary.simpleMessage("已复制推荐码"),
     "billingReferralCopyCode": MessageLookupByLibrary.simpleMessage("复制推荐码"),
     "billingReferralCreditBalance": MessageLookupByLibrary.simpleMessage(
-      "推荐积分余额",
+      "Weebi 积分",
     ),
+    "billingReferralCreditHint": MessageLookupByLibrary.simpleMessage(
+      "可用于您的下次 Weebi 购买。",
+    ),
+    "billingReferralDialogClose": MessageLookupByLibrary.simpleMessage("关闭"),
     "billingReferralDiscountHint": MessageLookupByLibrary.simpleMessage(
-      "输入有效推荐码可享 10% 折扣",
+      "购买可享 10% 折扣",
     ),
     "billingReferralDiscountedPrice": m0,
+    "billingReferralHaveCodeTitle": MessageLookupByLibrary.simpleMessage(
+      "有人推荐了您？",
+    ),
+    "billingReferralHowTitle": MessageLookupByLibrary.simpleMessage("如何运作"),
+    "billingReferralIntro": MessageLookupByLibrary.simpleMessage(
+      "推荐其他商家使用 Weebi。对方享 10% 折扣，您获得 20% Weebi 积分，可用于下次购买。",
+    ),
     "billingReferralSelfError": MessageLookupByLibrary.simpleMessage(
       "不能使用自己的推荐码",
+    ),
+    "billingReferralStepCredit": MessageLookupByLibrary.simpleMessage(
+      "您获得 20% Weebi 积分，可用于许可证和报表。",
+    ),
+    "billingReferralStepDiscount": MessageLookupByLibrary.simpleMessage(
+      "对方购买时可享 10% 折扣。",
+    ),
+    "billingReferralStepShare": MessageLookupByLibrary.simpleMessage(
+      "把您的推荐码分享给其他商家。",
+    ),
+    "billingReferralTease": MessageLookupByLibrary.simpleMessage(
+      "分享推荐码：对方享 10% 折扣，您获得 20% Weebi 积分。",
     ),
     "billingReferralTitle": MessageLookupByLibrary.simpleMessage("推荐"),
     "billingReferralYourCode": MessageLookupByLibrary.simpleMessage("您的推荐码"),
     "billingRetry": MessageLookupByLibrary.simpleMessage("重试"),
     "billingSeatsAttributed": MessageLookupByLibrary.simpleMessage("许可证已分配"),
+    "billingSyscohadaClaim": MessageLookupByLibrary.simpleMessage("获取此报告"),
+    "billingSyscohadaFirstFreeDetail": MessageLookupByLibrary.simpleMessage(
+      "首份报告免费。之后每个会计年度均需付费。",
+    ),
+    "billingSyscohadaFirstFreePrice": MessageLookupByLibrary.simpleMessage("免费"),
     "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage("每个财政年度"),
     "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage(
       "1 900 XOF / 2.90 EUR",
     ),
     "billingSyscohadaPurchase": MessageLookupByLibrary.simpleMessage("支付该年度"),
     "billingSyscohadaPurchasedYears": MessageLookupByLibrary.simpleMessage(
-      "已支付年份",
+      "已获得年度",
     ),
     "billingSyscohadaSelectYear": MessageLookupByLibrary.simpleMessage("财政年度"),
     "billingSyscohadaSubtitle": MessageLookupByLibrary.simpleMessage(
@@ -180,6 +219,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "billingTabHistory": MessageLookupByLibrary.simpleMessage("购买 / 许可证分配"),
     "billingTabOffers": MessageLookupByLibrary.simpleMessage("套餐"),
+    "billingUseWeebiCredit": MessageLookupByLibrary.simpleMessage(
+      "使用我的 Weebi 积分",
+    ),
     "billingUsers": MessageLookupByLibrary.simpleMessage("用户"),
     "billingValidUntil": MessageLookupByLibrary.simpleMessage("有效期至"),
     "billingViewFullTerms": MessageLookupByLibrary.simpleMessage("在新标签页查看完整文档"),
@@ -191,6 +233,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "catalogAlreadyInCatalog": MessageLookupByLibrary.simpleMessage("已在目录中"),
     "catalogClearSelection": MessageLookupByLibrary.simpleMessage("清空"),
     "catalogColumnBarcode": MessageLookupByLibrary.simpleMessage("条码"),
+    "catalogColumnCategory": MessageLookupByLibrary.simpleMessage("分类"),
     "catalogColumnDesignation": MessageLookupByLibrary.simpleMessage("名称"),
     "catalogColumnKind": MessageLookupByLibrary.simpleMessage("类型"),
     "catalogColumnPrice": MessageLookupByLibrary.simpleMessage("售价"),
@@ -356,6 +399,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "loremIpsum": MessageLookupByLibrary.simpleMessage(
       "这时候风雨也停止进行曲的合奏，四方云集，由何处开始",
     ),
+    "mapEmpty": MessageLookupByLibrary.simpleMessage("地图上暂无店铺"),
+    "mapGoToBilling": MessageLookupByLibrary.simpleMessage("打开计费"),
+    "mapGroupByChain": MessageLookupByLibrary.simpleMessage("连锁"),
+    "mapGroupByCountry": MessageLookupByLibrary.simpleMessage("国家"),
+    "mapLockedDetail": MessageLookupByLibrary.simpleMessage(
+      "店铺地图需要为您的用户分配 Premium 许可证。打开计费以购买或分配许可证。",
+    ),
+    "mapLockedTitle": MessageLookupByLibrary.simpleMessage("地图需要有效许可证"),
+    "mapSearchHint": MessageLookupByLibrary.simpleMessage("按店铺或连锁搜索"),
+    "mapSearchNoResult": MessageLookupByLibrary.simpleMessage("没有匹配的店铺"),
+    "mapUnplacedHeading": MessageLookupByLibrary.simpleMessage("无位置"),
     "matchErrorText": MessageLookupByLibrary.simpleMessage("此字段与格式不匹配。"),
     "maxErrorText": m9,
     "maxLengthErrorText": m10,
@@ -366,6 +420,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "menuContacts": MessageLookupByLibrary.simpleMessage("联系人"),
     "menuDevices": MessageLookupByLibrary.simpleMessage("设备"),
     "menuFirm": MessageLookupByLibrary.simpleMessage("我的企业"),
+    "menuMap": MessageLookupByLibrary.simpleMessage("地图"),
     "menuScopeDisclaimer": MessageLookupByLibrary.simpleMessage(
       "文章、联系人和操作（销售、采购、库存移动等）目前仅在移动应用中可用。",
     ),

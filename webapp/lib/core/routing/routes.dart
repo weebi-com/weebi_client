@@ -30,6 +30,7 @@ class RouteUri {
   static const String createUser = '/create-user';
 
   static const String listBoutique = '/boutiques';
+  static const String map = '/map';
 
   static const String listAccess = '/accesses';
   static const String listDevice = '/devices';

@@ -5,9 +5,10 @@ import 'package:web_admin/catalog/catalog_ids.dart';
 import 'package:web_admin/catalog/catalog_notifier.dart';
 
 class _FakeCatalogApi implements CatalogApi {
-  _FakeCatalogApi(this.store);
+  _FakeCatalogApi(this.store, {this.categories = const []});
 
   final List<CalibrePb> store;
+  final List<CategoryPb> categories;
   ReadAllRequest? lastReadAll;
 
   @override
@@ -71,6 +72,12 @@ class _FakeCatalogApi implements CatalogApi {
     store.removeWhere((c) => c.id == request.calibre.id);
     return StatusResponse(type: StatusResponse_Type.DELETED);
   }
+
+  @override
+  Future<CategoriesResponse> readAllCategories(
+    ReadCategoriesRequest request,
+  ) async =>
+      CategoriesResponse(categories: categories);
 }
 
 /// Mimics a deployed server that dumps all calibres and never sets [CalibresResponse.total].
@@ -102,6 +109,12 @@ class _LegacyDumpCatalogApi implements CatalogApi {
   @override
   Future<StatusResponse> deleteOne(CalibreRequest request) async =>
       StatusResponse();
+
+  @override
+  Future<CategoriesResponse> readAllCategories(
+    ReadCategoriesRequest request,
+  ) async =>
+      CategoriesResponse();
 }
 
 CalibrePb _calibre(int id, String title, {bool status = true}) {
@@ -213,5 +226,20 @@ void main() {
     expect(await notifier.isCalibreTitleTaken('Cafe'), isTrue);
     expect(await notifier.isCalibreTitleTaken('Café', excludeId: 1), isFalse);
     expect(await notifier.isCalibreTitleTaken('Tea'), isFalse);
+  });
+
+  test('categoriesLabelFor joins titles that contain the calibre', () async {
+    final api = _FakeCatalogApi(
+      [_calibre(1, 'Cola'), _calibre(2, 'Chips')],
+      categories: [
+        CategoryPb(title: 'Boissons', calibresIds: [1]),
+        CategoryPb(title: 'Snacks', calibresIds: [1, 2]),
+      ],
+    );
+    final notifier = CatalogNotifier(api: api, chainId: 'chain-1');
+    await notifier.load();
+    expect(notifier.categoriesLabelFor(1), 'Boissons, Snacks');
+    expect(notifier.categoriesLabelFor(2), 'Snacks');
+    expect(notifier.categoriesLabelFor(9), '');
   });
 }

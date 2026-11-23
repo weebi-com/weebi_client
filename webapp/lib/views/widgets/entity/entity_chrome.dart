@@ -44,6 +44,7 @@ class EntityEditHeader extends StatelessWidget {
     required this.saveLabel,
     required this.cancelLabel,
     this.isSaving = false,
+    this.onBack,
   });
 
   final String title;
@@ -52,11 +53,17 @@ class EntityEditHeader extends StatelessWidget {
   final String saveLabel;
   final String cancelLabel;
   final bool isSaving;
+  final VoidCallback? onBack;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
+        if (onBack != null)
+          IconButton(
+            onPressed: isSaving ? null : onBack,
+            icon: const Icon(Icons.arrow_back),
+          ),
         Expanded(
           child: Text(title, style: Theme.of(context).textTheme.headlineSmall),
         ),
@@ -85,6 +92,7 @@ class EntityViewHeader extends StatelessWidget {
     required this.editLabel,
     this.onDelete,
     this.deleteLabel,
+    this.onBack,
   });
 
   final String title;
@@ -92,11 +100,17 @@ class EntityViewHeader extends StatelessWidget {
   final String editLabel;
   final VoidCallback? onDelete;
   final String? deleteLabel;
+  final VoidCallback? onBack;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
+        if (onBack != null)
+          IconButton(
+            onPressed: onBack,
+            icon: const Icon(Icons.arrow_back),
+          ),
         Expanded(
           child: Text(title, style: Theme.of(context).textTheme.headlineSmall),
         ),

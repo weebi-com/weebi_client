@@ -8,15 +8,27 @@ class ProtobufDynamicBody<T extends GeneratedMessage> extends StatelessWidget {
     super.key,
     required this.pbObject,
     this.skipFieldNames = const [],
+    this.leadingFieldNames = const [],
+    this.trailingFieldNames = const [],
   });
 
   final T pbObject;
   final List<String> skipFieldNames;
 
+  /// Rendered first, in this order, when present (e.g. id, title, price).
+  final List<String> leadingFieldNames;
+
+  /// Rendered last, in this order (e.g. creationDate, status).
+  final List<String> trailingFieldNames;
+
   @override
   Widget build(BuildContext context) {
     final fields = <Widget>[];
-    for (final fieldInfo in pbObject.info_.fieldInfo.values) {
+    for (final fieldInfo in orderedProtoFields(
+      pbObject,
+      leadingFieldNames: leadingFieldNames,
+      trailingFieldNames: trailingFieldNames,
+    )) {
       final fieldName = fieldInfo.name;
       final fieldValue = pbObject.getField(fieldInfo.tagNumber);
       if (_shouldSkipField(fieldName, fieldValue, skipFieldNames)) {
@@ -26,6 +38,8 @@ class ProtobufDynamicBody<T extends GeneratedMessage> extends StatelessWidget {
         fieldName: fieldName,
         fieldValue: fieldValue,
         skipFieldNames: skipFieldNames,
+        leadingFieldNames: leadingFieldNames,
+        trailingFieldNames: trailingFieldNames,
       ));
     }
     return Column(
@@ -41,16 +55,66 @@ class ProtobufFieldWidget extends StatelessWidget {
     required this.fieldName,
     required this.fieldValue,
     this.skipFieldNames = const [],
+    this.leadingFieldNames = const [],
+    this.trailingFieldNames = const [],
   });
 
   final String fieldName;
   final dynamic fieldValue;
   final List<String> skipFieldNames;
+  final List<String> leadingFieldNames;
+  final List<String> trailingFieldNames;
 
   @override
   Widget build(BuildContext context) {
-    return _buildField(context, fieldName, fieldValue, skipFieldNames);
+    return _buildField(
+      context,
+      fieldName,
+      fieldValue,
+      skipFieldNames,
+      leadingFieldNames,
+      trailingFieldNames,
+    );
   }
+}
+
+/// Proto declaration order, with optional business-first / technical-last.
+List<({String name, int tagNumber})> orderedProtoFields(
+  GeneratedMessage pbObject, {
+  List<String> leadingFieldNames = const [],
+  List<String> trailingFieldNames = const [],
+}) {
+  final all = pbObject.info_.fieldInfo.values.toList();
+  ({String name, int tagNumber})? named(String name) {
+    for (final field in all) {
+      if (field.name == name) {
+        return (name: field.name, tagNumber: field.tagNumber);
+      }
+    }
+    return null;
+  }
+
+  final seen = <int>{};
+  final ordered = <({String name, int tagNumber})>[];
+  for (final name in leadingFieldNames) {
+    final field = named(name);
+    if (field == null || seen.contains(field.tagNumber)) continue;
+    ordered.add(field);
+    seen.add(field.tagNumber);
+  }
+  for (final field in all) {
+    if (seen.contains(field.tagNumber)) continue;
+    if (trailingFieldNames.contains(field.name)) continue;
+    ordered.add((name: field.name, tagNumber: field.tagNumber));
+    seen.add(field.tagNumber);
+  }
+  for (final name in trailingFieldNames) {
+    final field = named(name);
+    if (field == null || seen.contains(field.tagNumber)) continue;
+    ordered.add(field);
+    seen.add(field.tagNumber);
+  }
+  return ordered;
 }
 
 String formatProtoFieldName(String fieldName) {
@@ -72,6 +136,10 @@ bool _shouldSkipField(
   if (skipFieldNames.contains(fieldName)) return true;
   if (fieldValue is String && fieldValue.isEmpty) return true;
   if (fieldValue is PbList && fieldValue.isEmpty) return true;
+  // Retail is the default article kind; only basket is worth showing.
+  if (fieldValue is ArticleKindPb && fieldValue != ArticleKindPb.basket) {
+    return true;
+  }
   return false;
 }
 
@@ -80,6 +148,8 @@ Widget _buildField(
   String fieldName,
   dynamic fieldValue,
   List<String> skipFieldNames,
+  List<String> leadingFieldNames,
+  List<String> trailingFieldNames,
 ) {
   if (fieldValue == null) return const SizedBox.shrink();
 
@@ -150,6 +220,8 @@ Widget _buildField(
         ProtobufDynamicBody(
           pbObject: fieldValue,
           skipFieldNames: skipFieldNames,
+          leadingFieldNames: leadingFieldNames,
+          trailingFieldNames: trailingFieldNames,
         ),
       ],
     );
@@ -168,6 +240,8 @@ Widget _buildField(
               child: ProtobufDynamicBody(
                 pbObject: fieldValue[i] as GeneratedMessage,
                 skipFieldNames: skipFieldNames,
+                leadingFieldNames: leadingFieldNames,
+                trailingFieldNames: trailingFieldNames,
               ),
             )
           else
@@ -175,6 +249,8 @@ Widget _buildField(
               fieldName: '${formatProtoFieldName(fieldName)} ${i + 1}',
               fieldValue: fieldValue[i],
               skipFieldNames: skipFieldNames,
+              leadingFieldNames: leadingFieldNames,
+              trailingFieldNames: trailingFieldNames,
             ),
       ],
     );
@@ -193,6 +269,8 @@ Widget _buildField(
         ProtobufDynamicBody(
           pbObject: fieldValue,
           skipFieldNames: skipFieldNames,
+          leadingFieldNames: leadingFieldNames,
+          trailingFieldNames: trailingFieldNames,
         ),
       ],
     );

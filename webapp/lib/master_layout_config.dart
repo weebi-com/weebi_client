@@ -14,6 +14,12 @@ List<SidebarMenuConfig> get sidebarMenuConfigs => [
     title: (context) => Lang.of(context).homePage,
   ),
   SidebarMenuConfig(
+    uri: RouteUri.billing,
+    icon: Icons.workspace_premium_rounded,
+    title: (context) => Lang.of(context).menuBilling,
+    highlightGold: true,
+  ),
+  SidebarMenuConfig(
     uri: RouteUri.firmDetail,
     icon: Icons.business_rounded,
     title: (context) => Lang.of(context).menuFirm,
@@ -22,6 +28,11 @@ List<SidebarMenuConfig> get sidebarMenuConfigs => [
     uri: RouteUri.listBoutique,
     icon: Icons.store_rounded,
     title: (context) => Lang.of(context).menuBoutiques,
+  ),
+  SidebarMenuConfig(
+    uri: RouteUri.map,
+    icon: Icons.map_rounded,
+    title: (context) => Lang.of(context).menuMap,
   ),
   SidebarMenuConfig(
     uri: RouteUri.listUser,
@@ -48,12 +59,7 @@ List<SidebarMenuConfig> get sidebarMenuConfigs => [
     icon: IconsWeebi.contactsIconData,
     title: (context) => Lang.of(context).menuContacts,
   ),
-  SidebarMenuConfig(
-    uri: RouteUri.billing,
-    icon: Icons.workspace_premium_rounded,
-    title: (context) => Lang.of(context).menuBilling,
-    highlightGold: true,
-  ),
+  
   SidebarMenuConfig(
     uri: RouteUri.ticketsOverview,
     icon: IconsWeebi.ticketsIconData,

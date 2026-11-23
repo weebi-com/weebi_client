@@ -14,6 +14,26 @@ import 'package:web_admin/views/widgets/entity/entity_chrome.dart';
 import 'package:web_admin/views/widgets/portal_master_layout/portal_master_layout.dart';
 import 'package:web_admin/views/widgets/protobuf/protobuf_dynamic_body.dart';
 
+const _catalogBusinessFields = [
+  'id',
+  'title',
+  'designation',
+  'price',
+  'cost',
+  'barcodeEAN',
+  'stockUnit',
+  'unitsInOnePiece',
+  'articlesRetail',
+  'articlesBasket',
+];
+
+const _catalogTechnicalFields = [
+  'creationDate',
+  'updateDate',
+  'statusUpdateDate',
+  'status',
+];
+
 class CatalogViewScreen extends StatefulWidget {
   const CatalogViewScreen({super.key, required this.calibreId});
 
@@ -25,6 +45,7 @@ class CatalogViewScreen extends StatefulWidget {
 
 class _CatalogViewScreenState extends State<CatalogViewScreen> {
   CalibrePb? _calibre;
+  List<CategoryPb> _categories = const [];
   String? _error;
   bool _loading = true;
   String _currencyCode = MoneyFormatting.fallbackIso;
@@ -46,9 +67,21 @@ class _CatalogViewScreenState extends State<CatalogViewScreen> {
       final calibre = await api.readOne(
         ReadCalibreRequest(chainId: chainId ?? '', calibreId: widget.calibreId),
       );
+      var categories = <CategoryPb>[];
+      try {
+        final all = await api.readAllCategories(
+          ReadCategoriesRequest(chainId: chainId ?? ''),
+        );
+        categories = all.categories
+            .where((c) => c.calibresIds.contains(widget.calibreId))
+            .toList();
+      } catch (_) {
+        categories = [];
+      }
       if (!mounted) return;
       setState(() {
         _calibre = calibre;
+        _categories = categories;
         _loading = false;
       });
     } catch (e) {
@@ -57,6 +90,14 @@ class _CatalogViewScreenState extends State<CatalogViewScreen> {
         _error = e.toString();
         _loading = false;
       });
+    }
+  }
+
+  void _goBackToCatalog({Object? result}) {
+    if (context.canPop()) {
+      context.pop(result);
+    } else {
+      context.go(RouteUri.catalog);
     }
   }
 
@@ -88,7 +129,7 @@ class _CatalogViewScreenState extends State<CatalogViewScreen> {
       CalibreRequest(chainId: chainId ?? '', calibre: _calibre),
     );
     if (!mounted) return;
-    context.go(RouteUri.catalog);
+    _goBackToCatalog(result: widget.calibreId);
   }
 
   @override
@@ -114,9 +155,13 @@ class _CatalogViewScreenState extends State<CatalogViewScreen> {
                         title: calibre?.title ?? lang.menuCatalog,
                         editLabel: lang.entityEdit,
                         deleteLabel: lang.entityDelete,
-                        onEdit: () => context.push(
-                          RouteUri.catalogEditFor(widget.calibreId),
-                        ),
+                        onBack: () => _goBackToCatalog(),
+                        onEdit: () async {
+                          await context.push(
+                            RouteUri.catalogEditFor(widget.calibreId),
+                          );
+                          if (mounted) await _load();
+                        },
                         onDelete: _delete,
                       ),
                       if (retail != null) ...[
@@ -126,11 +171,24 @@ class _CatalogViewScreenState extends State<CatalogViewScreen> {
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
+                      if (_categories.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            for (final category in _categories)
+                              Chip(label: Text(category.title)),
+                          ],
+                        ),
+                      ],
                       const SizedBox(height: kDefaultPadding),
                       if (calibre != null)
                         ProtobufDynamicBody(
                           pbObject: calibre,
                           skipFieldNames: const ['codeShortcut'],
+                          leadingFieldNames: _catalogBusinessFields,
+                          trailingFieldNames: _catalogTechnicalFields,
                         ),
                     ],
                   ),

@@ -79,7 +79,7 @@ Toute erreur résultant directement ou indirectement d'informations inexactes, i
 
 # 7. Prix et paiement
 
-Les prestations sont facturées selon le tarif en vigueur au jour de la commande.
+Le premier rapport financier SYSCOHADA d'une entreprise est offert. Les rapports des exercices suivants sont facturés selon le tarif en vigueur au jour de la commande.
 
 Sauf mention contraire :
 

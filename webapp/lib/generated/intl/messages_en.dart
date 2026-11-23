@@ -124,6 +124,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingChoosePaymentMethod": MessageLookupByLibrary.simpleMessage(
       "How do you want to pay?",
     ),
+    "billingGalleryLearnMore": MessageLookupByLibrary.simpleMessage(
+      "Learn more",
+    ),
+    "billingGalleryOpen": MessageLookupByLibrary.simpleMessage("View"),
+    "billingGalleryPremiumLead": MessageLookupByLibrary.simpleMessage(
+      "Remote tracking, multi-store, dashboard.",
+    ),
+    "billingGalleryReferralLead": MessageLookupByLibrary.simpleMessage(
+      "Share your code, earn Weebi credit.",
+    ),
+    "billingGallerySyscohadaLead": MessageLookupByLibrary.simpleMessage(
+      "Accounting report, one fiscal year at a time.",
+    ),
     "billingHistoryNoLicenses": MessageLookupByLibrary.simpleMessage(
       "No Premium licenses purchased yet.",
     ),
@@ -144,6 +157,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingNotYetAttributed": MessageLookupByLibrary.simpleMessage(
       "Not yet attributed",
     ),
+    "billingOffersBack": MessageLookupByLibrary.simpleMessage("Back to offers"),
     "billingPayWithCard": MessageLookupByLibrary.simpleMessage("Card/Bank"),
     "billingPayWithMobileMoney": MessageLookupByLibrary.simpleMessage(
       "Mobile Money",
@@ -174,20 +188,48 @@ class MessageLookup extends MessageLookupByLibrary {
       "Reassign this license seat to another user",
     ),
     "billingReferralCodeHint": MessageLookupByLibrary.simpleMessage(
-      "Referrer firm ID (optional)",
+      "Referrer code",
+    ),
+    "billingReferralCopied": MessageLookupByLibrary.simpleMessage(
+      "Code copied",
     ),
     "billingReferralCopyCode": MessageLookupByLibrary.simpleMessage(
       "Copy code",
     ),
     "billingReferralCreditBalance": MessageLookupByLibrary.simpleMessage(
-      "Referral credit balance",
+      "Weebi credit",
     ),
+    "billingReferralCreditHint": MessageLookupByLibrary.simpleMessage(
+      "Use it on your next Weebi purchases.",
+    ),
+    "billingReferralDialogClose": MessageLookupByLibrary.simpleMessage("Close"),
     "billingReferralDiscountHint": MessageLookupByLibrary.simpleMessage(
-      "10% off when you enter a valid referrer code",
+      "10% off your purchase",
     ),
     "billingReferralDiscountedPrice": m0,
+    "billingReferralHaveCodeTitle": MessageLookupByLibrary.simpleMessage(
+      "Were you referred?",
+    ),
+    "billingReferralHowTitle": MessageLookupByLibrary.simpleMessage(
+      "How it works",
+    ),
+    "billingReferralIntro": MessageLookupByLibrary.simpleMessage(
+      "Refer a merchant. They pay 10% less, you earn 20% as Weebi credit — applied to your next Weebi purchases.",
+    ),
     "billingReferralSelfError": MessageLookupByLibrary.simpleMessage(
       "You cannot use your own referral code",
+    ),
+    "billingReferralStepCredit": MessageLookupByLibrary.simpleMessage(
+      "You receive 20% as Weebi credit, for your licenses and reports.",
+    ),
+    "billingReferralStepDiscount": MessageLookupByLibrary.simpleMessage(
+      "When they buy, they get 10% off.",
+    ),
+    "billingReferralStepShare": MessageLookupByLibrary.simpleMessage(
+      "Share your code with another merchant.",
+    ),
+    "billingReferralTease": MessageLookupByLibrary.simpleMessage(
+      "Share your code: 10% off for them, 20% Weebi credit for you.",
     ),
     "billingReferralTitle": MessageLookupByLibrary.simpleMessage("Referral"),
     "billingReferralYourCode": MessageLookupByLibrary.simpleMessage(
@@ -197,10 +239,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingSeatsAttributed": MessageLookupByLibrary.simpleMessage(
       "license(s) attributed",
     ),
+    "billingSyscohadaClaim": MessageLookupByLibrary.simpleMessage(
+      "Get this report",
+    ),
     "billingSyscohadaCurrentYearDisclaimer":
         MessageLookupByLibrary.simpleMessage(
           "This report cannot be generated until the fiscal year is over.",
         ),
+    "billingSyscohadaFirstFreeDetail": MessageLookupByLibrary.simpleMessage(
+      "The first report is free. Each following fiscal year is paid.",
+    ),
+    "billingSyscohadaFirstFreePrice":
+        MessageLookupByLibrary.simpleMessage("Free"),
     "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage(
       "per fiscal year",
     ),
@@ -211,7 +261,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Pay for this year",
     ),
     "billingSyscohadaPurchasedYears": MessageLookupByLibrary.simpleMessage(
-      "Years already paid",
+      "Years already obtained",
     ),
     "billingSyscohadaSelectYear": MessageLookupByLibrary.simpleMessage(
       "Fiscal year",
@@ -226,6 +276,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Purchases / License assignment",
     ),
     "billingTabOffers": MessageLookupByLibrary.simpleMessage("Offers"),
+    "billingUseWeebiCredit": MessageLookupByLibrary.simpleMessage(
+      "Use my Weebi credit",
+    ),
     "billingUsers": MessageLookupByLibrary.simpleMessage("users"),
     "billingValidUntil": MessageLookupByLibrary.simpleMessage("Valid until"),
     "billingViewFullTerms": MessageLookupByLibrary.simpleMessage(
@@ -243,6 +296,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "catalogClearSelection": MessageLookupByLibrary.simpleMessage("Clear"),
     "catalogColumnBarcode": MessageLookupByLibrary.simpleMessage("Code barre"),
+    "catalogColumnCategory": MessageLookupByLibrary.simpleMessage("Catégorie"),
     "catalogColumnDesignation": MessageLookupByLibrary.simpleMessage(
       "Désignation",
     ),
@@ -487,6 +541,27 @@ class MessageLookup extends MessageLookupByLibrary {
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
     ),
     "mail": MessageLookupByLibrary.simpleMessage("E-mail"),
+    "mapEmpty": MessageLookupByLibrary.simpleMessage(
+      "No boutiques to show on the map yet",
+    ),
+    "mapGoToBilling": MessageLookupByLibrary.simpleMessage("Open Billing"),
+    "mapGroupByChain": MessageLookupByLibrary.simpleMessage("Chain"),
+    "mapGroupByCountry": MessageLookupByLibrary.simpleMessage("Country"),
+    "mapLockedDetail": MessageLookupByLibrary.simpleMessage(
+      "The boutiques map is available with a Premium license attributed to your user. Open Billing to purchase or assign a license.",
+    ),
+    "mapLockedTitle": MessageLookupByLibrary.simpleMessage(
+      "Map requires an active license",
+    ),
+    "mapSearchHint": MessageLookupByLibrary.simpleMessage(
+      "Search by boutique or chain",
+    ),
+    "mapSearchNoResult": MessageLookupByLibrary.simpleMessage(
+      "No boutique matches that search",
+    ),
+    "mapUnplacedHeading": MessageLookupByLibrary.simpleMessage(
+      "Without position",
+    ),
     "matchErrorText": MessageLookupByLibrary.simpleMessage(
       "Value does not match pattern.",
     ),
@@ -499,6 +574,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "menuContacts": MessageLookupByLibrary.simpleMessage("Contacts"),
     "menuDevices": MessageLookupByLibrary.simpleMessage("Devices"),
     "menuFirm": MessageLookupByLibrary.simpleMessage("My enterprise"),
+    "menuMap": MessageLookupByLibrary.simpleMessage("Map"),
     "menuScopeDisclaimer": MessageLookupByLibrary.simpleMessage(
       "Articles, contacts and operations (sales, purchases, stock movements, etc.) are available in the mobile app for now.",
     ),
