@@ -1,7 +1,7 @@
 name: web_admin
 description: Weebi Web Admin
 publish_to: 'none'
-version: 1.0.8
+version: 1.0.9
 
 environment:
   sdk: '>=3.12.2 <4.0.0'
@@ -20,7 +20,7 @@ dependencies:
   flutter_secure_storage_platform_interface: ^2.0.3
 
   grpc: ^5.1.0 # grpc_web not exported from protos_weebi
-  protos_weebi: ^1.4.4
+  protos_weebi: ^1.4.9
   auth_weebi: ^1.2.0
   entitlements_weebi: ^1.2.0
   boutiques_weebi: ^1.2.0

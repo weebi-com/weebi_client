@@ -239,10 +239,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingSeatsAttributed": MessageLookupByLibrary.simpleMessage(
       "license(s) attributed",
     ),
+    "billingSyscohadaClaim": MessageLookupByLibrary.simpleMessage(
+      "Get this report",
+    ),
     "billingSyscohadaCurrentYearDisclaimer":
         MessageLookupByLibrary.simpleMessage(
           "This report cannot be generated until the fiscal year is over.",
         ),
+    "billingSyscohadaFirstFreeDetail": MessageLookupByLibrary.simpleMessage(
+      "The first report is free. Each following fiscal year is paid.",
+    ),
+    "billingSyscohadaFirstFreePrice":
+        MessageLookupByLibrary.simpleMessage("Free"),
     "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage(
       "per fiscal year",
     ),
@@ -253,7 +261,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Pay for this year",
     ),
     "billingSyscohadaPurchasedYears": MessageLookupByLibrary.simpleMessage(
-      "Years already paid",
+      "Years already obtained",
     ),
     "billingSyscohadaSelectYear": MessageLookupByLibrary.simpleMessage(
       "Fiscal year",

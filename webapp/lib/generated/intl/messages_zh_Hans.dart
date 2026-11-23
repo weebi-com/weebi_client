@@ -197,13 +197,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingReferralYourCode": MessageLookupByLibrary.simpleMessage("您的推荐码"),
     "billingRetry": MessageLookupByLibrary.simpleMessage("重试"),
     "billingSeatsAttributed": MessageLookupByLibrary.simpleMessage("许可证已分配"),
+    "billingSyscohadaClaim": MessageLookupByLibrary.simpleMessage("获取此报告"),
+    "billingSyscohadaFirstFreeDetail": MessageLookupByLibrary.simpleMessage(
+      "首份报告免费。之后每个会计年度均需付费。",
+    ),
+    "billingSyscohadaFirstFreePrice": MessageLookupByLibrary.simpleMessage("免费"),
     "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage("每个财政年度"),
     "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage(
       "1 900 XOF / 2.90 EUR",
     ),
     "billingSyscohadaPurchase": MessageLookupByLibrary.simpleMessage("支付该年度"),
     "billingSyscohadaPurchasedYears": MessageLookupByLibrary.simpleMessage(
-      "已支付年份",
+      "已获得年度",
     ),
     "billingSyscohadaSelectYear": MessageLookupByLibrary.simpleMessage("财政年度"),
     "billingSyscohadaSubtitle": MessageLookupByLibrary.simpleMessage(

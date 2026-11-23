@@ -60,6 +60,7 @@ class _BillingScreenState extends State<BillingScreen>
   List<BillingProduct> _products = [];
   BillingProduct? _syscohadaProduct;
   List<AccountingYearPurchase> _accountingPurchases = [];
+  bool _accountingPurchasesLoaded = false;
   late int _syscohadaFiscalYear;
   late final TabController _tabController;
   /// User info by userId, loaded when we have licenses (to show attributed users).
@@ -267,10 +268,12 @@ class _BillingScreenState extends State<BillingScreen>
       }
 
       List<AccountingYearPurchase> accountingPurchases = const [];
+      var accountingPurchasesLoaded = false;
       try {
         final accountingResponse =
             await provider.billingRpc.readAccountingYearPurchases(Empty());
         accountingPurchases = accountingResponse.purchases;
+        accountingPurchasesLoaded = true;
       } catch (_) {
         // Older servers may not expose this RPC yet.
       }
@@ -312,6 +315,7 @@ class _BillingScreenState extends State<BillingScreen>
               products.where((p) => isBillingCatalogProduct(p.productId)).toList();
           _syscohadaProduct = syscohada;
           _accountingPurchases = accountingPurchases;
+          _accountingPurchasesLoaded = accountingPurchasesLoaded;
           _usersById = usersById;
           _ownReferralCode = ownReferralCode;
           _referralCreditBalanceCents = referralBalance;
@@ -386,12 +390,41 @@ class _BillingScreenState extends State<BillingScreen>
       'product_id': product.productId,
       'fiscal_year': _syscohadaFiscalYear,
     });
+    if (_firstSyscohadaReportFree) {
+      _claimFirstSyscohadaReport(product);
+      return;
+    }
     _startPurchase(
       product,
       fiscalYear: _syscohadaFiscalYear,
       accepted: _acceptedSyscohadaTerms,
       referralEntered: _syscohadaReferralController.text,
       applyWeebiCredit: _spendWeebiCreditSyscohada,
+    );
+  }
+
+  bool get _firstSyscohadaReportFree =>
+      _accountingPurchasesLoaded && _accountingPurchases.isEmpty;
+
+  Future<void> _claimFirstSyscohadaReport(BillingProduct product) async {
+    if (!mounted) return;
+    if (!_hasCreateBillingPermission(context)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(Lang.of(context).billingActionNotPermitted)),
+      );
+      return;
+    }
+    if (!_acceptedSyscohadaTerms) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(Lang.of(context).billingAcceptTermsToContinue)),
+      );
+      return;
+    }
+    await _purchaseWithPawapay(
+      product,
+      fiscalYear: _syscohadaFiscalYear,
+      referralCode: '',
+      creditAppliedCents: 0,
     );
   }
 
@@ -534,6 +567,14 @@ class _BillingScreenState extends State<BillingScreen>
     }
   }
 
+  /// Credit fulfillment and the complimentary first report return our billing
+  /// URL instead of a Stripe Checkout page.
+  bool _checkoutStaysOnBilling(String checkoutUrl) {
+    if (checkoutUrl.contains('{CHECKOUT_SESSION_ID}')) return false;
+    if (checkoutUrl.contains('checkout.stripe.com')) return false;
+    return checkoutUrl.contains(RouteUri.billing);
+  }
+
   String? _referralCodeForCheckout(String entered) {
     return referralCodeForCheckout(
       entered: entered,
@@ -585,8 +626,7 @@ class _BillingScreenState extends State<BillingScreen>
         });
         return;
       }
-      if (creditAppliedCents > 0 &&
-          !response.checkoutUrl.contains('{CHECKOUT_SESSION_ID}')) {
+      if (_checkoutStaysOnBilling(response.checkoutUrl)) {
         setState(() {
           _checkoutProductId = null;
           _checkoutReturnHandled = true;
@@ -808,6 +848,7 @@ class _BillingScreenState extends State<BillingScreen>
           onViewTerms: _openSyscohadaTermsInNewTab,
           highlighted: _bridgeHighlightProductId == kSyscohadaProductId,
           showPurchasedYearsSummary: false,
+          firstReportFree: _firstSyscohadaReportFree,
           pawapayCurrency: pawapayCurrency,
           showReferralDiscount: _referralCodeForCheckout(
                 _syscohadaReferralController.text,
@@ -916,6 +957,7 @@ class _BillingScreenState extends State<BillingScreen>
         context.watch<BoutiqueProvider>().chains,
       ),
       onOpenReferral: () => setState(() => _offerDetail = 'referral'),
+      firstReportFree: _firstSyscohadaReportFree,
       onOpenSyscohada: () => setState(() => _offerDetail = 'syscohada'),
       onOpenPremium: () => setState(() => _offerDetail = 'premium'),
     );
@@ -1288,6 +1330,7 @@ class _SyscohadaAddonCard extends StatelessWidget {
     required this.onViewTerms,
     this.highlighted = false,
     this.showPurchasedYearsSummary = true,
+    this.firstReportFree = false,
     this.pawapayCurrency = 'XOF',
     this.showReferralDiscount = false,
     this.referrerCodeController,
@@ -1310,6 +1353,7 @@ class _SyscohadaAddonCard extends StatelessWidget {
   final ValueChanged<bool?> onAcceptedChanged;
   final VoidCallback onViewTerms;
   final bool showPurchasedYearsSummary;
+  final bool firstReportFree;
   final String pawapayCurrency;
   final bool showReferralDiscount;
   final TextEditingController? referrerCodeController;
@@ -1327,16 +1371,18 @@ class _SyscohadaAddonCard extends StatelessWidget {
     final yearOptions =
         List<int>.generate(nowYear - 2020 + 1, (i) => 2020 + i);
     final paidYears = purchasedYears.map((p) => p.year).toSet();
-    final priceLabel = product == null
-        ? lang.billingSyscohadaPrice
-        : formatBillingOfferPrice(
-            amountCents: product!.amountCents,
-            currency: product!.currency,
-            productId: product!.productId,
-            languageCode: Localizations.localeOf(context).languageCode,
-            pawapayCurrency: pawapayCurrency,
-            product: product,
-          );
+    final priceLabel = firstReportFree
+        ? lang.billingSyscohadaFirstFreePrice
+        : (product == null
+            ? lang.billingSyscohadaPrice
+            : formatBillingOfferPrice(
+                amountCents: product!.amountCents,
+                currency: product!.currency,
+                productId: product!.productId,
+                languageCode: Localizations.localeOf(context).languageCode,
+                pawapayCurrency: pawapayCurrency,
+                product: product,
+              ));
 
     return Container(
       width: double.infinity,
@@ -1374,7 +1420,16 @@ class _SyscohadaAddonCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          if (showReferralDiscount && product != null) ...[
+          if (firstReportFree) ...[
+            const SizedBox(height: 4),
+            Text(
+              lang.billingSyscohadaFirstFreeDetail,
+              style: themeData.textTheme.bodyMedium?.copyWith(
+                color: themeData.colorScheme.primary,
+              ),
+            ),
+          ],
+          if (!firstReportFree && showReferralDiscount && product != null) ...[
             const SizedBox(height: 4),
             Text(
               lang.billingReferralDiscountedPrice(
@@ -1443,7 +1498,8 @@ class _SyscohadaAddonCard extends StatelessWidget {
               ),
             ],
             const SizedBox(height: kDefaultPadding * 1.5),
-            if (referrerCodeController != null &&
+            if (!firstReportFree &&
+                referrerCodeController != null &&
                 onReferrerCodeChanged != null) ...[
               BillingReferrerCodeField(
                 controller: referrerCodeController!,
@@ -1452,7 +1508,8 @@ class _SyscohadaAddonCard extends StatelessWidget {
               ),
               const SizedBox(height: kDefaultPadding),
             ],
-            if (onSpendWeebiCreditChanged != null &&
+            if (!firstReportFree &&
+                onSpendWeebiCreditChanged != null &&
                 weebiCreditBalanceCents > 0) ...[
               CheckboxListTile(
                 contentPadding: EdgeInsets.zero,
@@ -1525,7 +1582,11 @@ class _SyscohadaAddonCard extends StatelessWidget {
                         width: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : Text(lang.billingSyscohadaPurchase),
+                    : Text(
+                        firstReportFree
+                            ? lang.billingSyscohadaClaim
+                            : lang.billingSyscohadaPurchase,
+                      ),
               ),
             ),
           ],

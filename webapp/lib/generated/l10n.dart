@@ -659,11 +659,41 @@ class Lang {
     );
   }
 
+  /// `Obtenir ce rapport`
+  String get billingSyscohadaClaim {
+    return Intl.message(
+      'Obtenir ce rapport',
+      name: 'billingSyscohadaClaim',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Ce rapport ne peut être généré avant la fin de l'exercice fiscal.`
   String get billingSyscohadaCurrentYearDisclaimer {
     return Intl.message(
       'Ce rapport ne peut être généré avant la fin de l\'exercice fiscal.',
       name: 'billingSyscohadaCurrentYearDisclaimer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Le premier rapport est offert. Chaque exercice suivant est payant.`
+  String get billingSyscohadaFirstFreeDetail {
+    return Intl.message(
+      'Le premier rapport est offert. Chaque exercice suivant est payant.',
+      name: 'billingSyscohadaFirstFreeDetail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Offert`
+  String get billingSyscohadaFirstFreePrice {
+    return Intl.message(
+      'Offert',
+      name: 'billingSyscohadaFirstFreePrice',
       desc: '',
       args: [],
     );
@@ -699,10 +729,10 @@ class Lang {
     );
   }
 
-  /// `Années déjà payées`
+  /// `Exercices obtenus`
   String get billingSyscohadaPurchasedYears {
     return Intl.message(
-      'Années déjà payées',
+      'Exercices obtenus',
       name: 'billingSyscohadaPurchasedYears',
       desc: '',
       args: [],

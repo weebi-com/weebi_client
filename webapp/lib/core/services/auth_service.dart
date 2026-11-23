@@ -5,6 +5,7 @@ import 'package:web_admin/environment.dart';
 import 'package:web_admin/grpc/server.dart';
 import 'package:web_admin/core/session/bff_session_store.dart';
 import 'package:web_admin/core/auth/signup_session.dart';
+import 'package:web_admin/core/phone/boutique_phone_display.dart';
 import '../models/sign_in_result.dart';
 import '../models/sign_up_result.dart';
 import 'grpc_client_service.dart';
@@ -54,6 +55,12 @@ class AuthService {
     return prefs.getBool(SharePrefKeys.stayConnected) ?? true;
   }
 
+  Phone? _accountPhone({int? countryCode, String nationalNumber = ''}) {
+    final number = nationalNumber.trim();
+    if (countryCode == null || countryCode <= 0 || number.isEmpty) return null;
+    return Phone(countryCode: countryCode, number: number);
+  }
+
   bool _tokensProveAuth(Tokens tokens) => signupAuthSucceeded(
         isBffMode: Config.isBffMode,
         accessToken: tokens.accessToken,
@@ -100,12 +107,17 @@ class AuthService {
 
   /// Boss path: signUp → authent → createFirm → refresh (firmId in session).
   /// Invited path (`UPDATED`): signUp → authent, skip createFirm.
+  ///
+  /// [phoneCountryCode] and [phoneNationalNumber] are the account phone.
+  /// They are stored on the user and stamped on the default boutique.
   Future<SignUpResult> signUp({
     required String firmName,
     required String firstName,
     required String lastName,
     required String mail,
     required String password,
+    int? phoneCountryCode,
+    String phoneNationalNumber = '',
   }) async {
     final stub = FenceServiceClient(
       _grpcClientService.channel,
@@ -119,6 +131,10 @@ class AuthService {
           lastname: lastName,
           mail: mail,
           password: password,
+          phone: _accountPhone(
+            countryCode: phoneCountryCode,
+            nationalNumber: phoneNationalNumber,
+          ),
         ),
       );
 
@@ -160,6 +176,13 @@ class AuthService {
       final firmRequest = CreateFirmRequest(name: firmName);
       if (mail.trim().isNotEmpty) {
         firmRequest.boutiqueMail = mail.trim();
+      }
+      final boutiquePhone = formatBoutiquePhone(
+        countryCode: phoneCountryCode ?? 0,
+        number: phoneNationalNumber,
+      );
+      if (boutiquePhone.isNotEmpty) {
+        firmRequest.boutiquePhone = boutiquePhone;
       }
       final firmResponse = await stub.createFirm(
         firmRequest,

@@ -16,6 +16,7 @@ class BillingOffersGallery extends StatelessWidget {
     required this.syscohadaProduct,
     required this.premiumProduct,
     required this.pawapayCurrency,
+    this.firstReportFree = false,
     required this.onOpenReferral,
     required this.onOpenSyscohada,
     required this.onOpenPremium,
@@ -25,6 +26,7 @@ class BillingOffersGallery extends StatelessWidget {
   final BillingProduct? syscohadaProduct;
   final BillingProduct? premiumProduct;
   final String pawapayCurrency;
+  final bool firstReportFree;
   final VoidCallback onOpenReferral;
   final VoidCallback onOpenSyscohada;
   final VoidCallback onOpenPremium;
@@ -36,16 +38,18 @@ class BillingOffersGallery extends StatelessWidget {
     final languageCode = Localizations.localeOf(context).languageCode;
     final hasOwnCode =
         ownReferralCode != null && ownReferralCode!.isNotEmpty;
-    final syscohadaPrice = syscohadaProduct == null
-        ? lang.billingSyscohadaPrice
-        : formatBillingOfferPrice(
+    final syscohadaPrice = firstReportFree
+        ? lang.billingSyscohadaFirstFreePrice
+        : (syscohadaProduct == null
+            ? lang.billingSyscohadaPrice
+            : formatBillingOfferPrice(
             amountCents: syscohadaProduct!.amountCents,
             currency: syscohadaProduct!.currency,
             productId: syscohadaProduct!.productId,
             languageCode: languageCode,
             pawapayCurrency: pawapayCurrency,
             product: syscohadaProduct,
-          );
+          ));
     final premiumPrice = premiumProduct == null
         ? null
         : formatBillingOfferPrice(
