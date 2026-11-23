@@ -1,9 +1,13 @@
 import 'package:auth_weebi/auth_weebi.dart' show AccessTokenProvider;
+import 'package:fl_country_code_picker_weebi/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:users_weebi/src/widgets/phone_field_prefix_icon.dart';
+import 'package:web_admin/core/phone/boutique_phone_display.dart';
 import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/providers/user_data_provider.dart';
@@ -26,6 +30,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordTextEditingController = TextEditingController();
   final _formKey = GlobalKey<FormBuilderState>();
   final _formData = FormData();
+  CountryCode? _phoneCountry;
 
   var _isFormLoading = false;
   var _obscurePassword = true;
@@ -56,7 +61,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             firstName: _formData.firstName,
             lastName: _formData.lastName,
             mail: _formData.mail,
-            password: _formData.password);
+            password: _formData.password,
+            phoneCountryCode: dialCodeToInt(_phoneCountry?.dialCode),
+            phoneNationalNumber: _formData.phone);
 
         if (result.success) {
           if (!mounted) return;
@@ -100,6 +107,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
       btnOkText: 'OK',
       btnOkOnPress: () {},
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _phoneCountry = CountryCode.fromDialCode('+221');
+  }
+
+  String? _validatePhone(String? value, Lang lang) {
+    final digits = value?.trim() ?? '';
+    if (digits.isEmpty || int.tryParse(digits) == null) {
+      return lang.contactPhone;
+    }
+    final expected = _phoneCountry?.nationalSignificantNumber;
+    if (expected != null && digits.length != expected) {
+      return lang.contactPhoneTooShort;
+    }
+    if (expected == null && digits.length < 8) {
+      return lang.contactPhoneTooShort;
+    }
+    return null;
   }
 
   @override
@@ -208,6 +236,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               validator: FormBuilderValidators.required(),
                               onSaved: (value) =>
                                   (_formData.lastName = value ?? ''),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(bottom: kDefaultPadding),
+                            child: FormBuilderTextField(
+                              key: const Key('registerPhoneField'),
+                              name: 'phone',
+                              decoration: InputDecoration(
+                                labelText: lang.contactPhone,
+                                hintText: lang.contactPhone,
+                                border: const OutlineInputBorder(),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                prefixIcon: PhoneFieldPrefixIcon(
+                                  dialCode: _phoneCountry?.dialCode ?? '+221',
+                                  onPickDialCode: () async {
+                                    final code =
+                                        await const FlCountryCodePicker()
+                                            .showPicker(
+                                      context: context,
+                                      pickerMaxHeight: 800,
+                                    );
+                                    if (code == null || !mounted) return;
+                                    setState(() => _phoneCountry = code);
+                                  },
+                                ),
+                                prefixIconConstraints: const BoxConstraints(
+                                  minHeight: 48,
+                                ),
+                              ),
+                              keyboardType: TextInputType.phone,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              textInputAction: TextInputAction.next,
+                              validator: (value) => _validatePhone(value, lang),
+                              onSaved: (value) =>
+                                  (_formData.phone = value ?? ''),
                             ),
                           ),
                           Padding(
@@ -352,4 +419,5 @@ class FormData {
   String lastName = '';
   String mail = '';
   String password = '';
+  String phone = '';
 }

@@ -197,13 +197,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingReferralYourCode": MessageLookupByLibrary.simpleMessage("您的推荐码"),
     "billingRetry": MessageLookupByLibrary.simpleMessage("重试"),
     "billingSeatsAttributed": MessageLookupByLibrary.simpleMessage("许可证已分配"),
+    "billingSyscohadaClaim": MessageLookupByLibrary.simpleMessage("获取此报告"),
+    "billingSyscohadaFirstFreeDetail": MessageLookupByLibrary.simpleMessage(
+      "首份报告免费。之后每个会计年度均需付费。",
+    ),
+    "billingSyscohadaFirstFreePrice": MessageLookupByLibrary.simpleMessage("免费"),
     "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage("每个财政年度"),
     "billingSyscohadaPrice": MessageLookupByLibrary.simpleMessage(
       "1 900 XOF / 2.90 EUR",
     ),
     "billingSyscohadaPurchase": MessageLookupByLibrary.simpleMessage("支付该年度"),
     "billingSyscohadaPurchasedYears": MessageLookupByLibrary.simpleMessage(
-      "已支付年份",
+      "已获得年度",
     ),
     "billingSyscohadaSelectYear": MessageLookupByLibrary.simpleMessage("财政年度"),
     "billingSyscohadaSubtitle": MessageLookupByLibrary.simpleMessage(
@@ -394,6 +399,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "loremIpsum": MessageLookupByLibrary.simpleMessage(
       "这时候风雨也停止进行曲的合奏，四方云集，由何处开始",
     ),
+    "mapEmpty": MessageLookupByLibrary.simpleMessage("地图上暂无店铺"),
+    "mapGoToBilling": MessageLookupByLibrary.simpleMessage("打开计费"),
+    "mapGroupByChain": MessageLookupByLibrary.simpleMessage("连锁"),
+    "mapGroupByCountry": MessageLookupByLibrary.simpleMessage("国家"),
+    "mapLockedDetail": MessageLookupByLibrary.simpleMessage(
+      "店铺地图需要为您的用户分配 Premium 许可证。打开计费以购买或分配许可证。",
+    ),
+    "mapLockedTitle": MessageLookupByLibrary.simpleMessage("地图需要有效许可证"),
+    "mapSearchHint": MessageLookupByLibrary.simpleMessage("按店铺或连锁搜索"),
+    "mapSearchNoResult": MessageLookupByLibrary.simpleMessage("没有匹配的店铺"),
+    "mapUnplacedHeading": MessageLookupByLibrary.simpleMessage("无位置"),
     "matchErrorText": MessageLookupByLibrary.simpleMessage("此字段与格式不匹配。"),
     "maxErrorText": m9,
     "maxLengthErrorText": m10,
@@ -404,6 +420,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "menuContacts": MessageLookupByLibrary.simpleMessage("联系人"),
     "menuDevices": MessageLookupByLibrary.simpleMessage("设备"),
     "menuFirm": MessageLookupByLibrary.simpleMessage("我的企业"),
+    "menuMap": MessageLookupByLibrary.simpleMessage("地图"),
     "menuScopeDisclaimer": MessageLookupByLibrary.simpleMessage(
       "文章、联系人和操作（销售、采购、库存移动等）目前仅在移动应用中可用。",
     ),

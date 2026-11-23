@@ -1,32 +1,39 @@
 import 'dart:convert';
 
 import 'config/api_url.dart';
+import 'config/resolve_runtime_config.dart';
 import 'config_loader_web.dart' if (dart.library.io) 'config_loader_stub.dart'
     as config_fetcher;
 import 'environment.dart';
 
-/// Loads configuration. Order: hardcoded kApiUrl → config.json. Change lib/config/api_url.dart when merging dev ↔ prod.
+/// Loads configuration.
+///
+/// Order: container `/config.json` (`API_URL`) when that URL is non-empty,
+/// otherwise the compiled [kApiUrl]. Deployed dev and prod set `API_URL` on
+/// the Cloud Run service. [kApiUrl] remains the production fallback so a
+/// container with no `API_URL` still reaches production.
 Future<void> loadConfig() async {
-  // 1) Hardcoded (set per branch; merge triggers build with correct URL)
-  if (kApiUrl.isNotEmpty) {
-    Config.init(apiUrl: kApiUrl, locale: 'fr');
-    return;
-  }
+  final runtime = await _readRuntimeConfig();
+  final resolved = resolveRuntimeConfig(
+    compiledApiUrl: kApiUrl,
+    runtime: runtime,
+  );
+  Config.init(
+    apiUrl: resolved.apiUrl,
+    locale: resolved.locale,
+    isBffMode: resolved.isBffMode,
+    isDev: resolved.isDev,
+  );
+}
 
-  // 2) Runtime fetch (optional)
+Future<Map<String, dynamic>?> _readRuntimeConfig() async {
   try {
     final configJson = await config_fetcher.fetchConfigJson();
-    if (configJson != null && configJson.isNotEmpty) {
-      final map = jsonDecode(configJson) as Map<String, dynamic>;
-      Config.init(
-        apiUrl: (map['API_URL'] as String?) ?? '',
-        locale: (map['LOCALE'] as String?) ?? 'fr',
-        isBffMode: map['IS_BFF_MODE'] == true || map['IS_BFF_MODE'] == 'true',
-        isDev: map['IS_DEV'] == true || map['IS_DEV'] == 'true',
-      );
-      return;
-    }
-  } catch (_) {}
-
-  Config.init(apiUrl: '', locale: 'fr');
+    if (configJson == null || configJson.isEmpty) return null;
+    final decoded = jsonDecode(configJson);
+    if (decoded is! Map) return null;
+    return decoded.map((key, value) => MapEntry(key.toString(), value));
+  } catch (_) {
+    return null;
+  }
 }

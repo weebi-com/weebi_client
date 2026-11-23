@@ -659,11 +659,41 @@ class Lang {
     );
   }
 
+  /// `Obtenir ce rapport`
+  String get billingSyscohadaClaim {
+    return Intl.message(
+      'Obtenir ce rapport',
+      name: 'billingSyscohadaClaim',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Ce rapport ne peut être généré avant la fin de l'exercice fiscal.`
   String get billingSyscohadaCurrentYearDisclaimer {
     return Intl.message(
       'Ce rapport ne peut être généré avant la fin de l\'exercice fiscal.',
       name: 'billingSyscohadaCurrentYearDisclaimer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Le premier rapport est offert. Chaque exercice suivant est payant.`
+  String get billingSyscohadaFirstFreeDetail {
+    return Intl.message(
+      'Le premier rapport est offert. Chaque exercice suivant est payant.',
+      name: 'billingSyscohadaFirstFreeDetail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Offert`
+  String get billingSyscohadaFirstFreePrice {
+    return Intl.message(
+      'Offert',
+      name: 'billingSyscohadaFirstFreePrice',
       desc: '',
       args: [],
     );
@@ -699,10 +729,10 @@ class Lang {
     );
   }
 
-  /// `Années déjà payées`
+  /// `Exercices obtenus`
   String get billingSyscohadaPurchasedYears {
     return Intl.message(
-      'Années déjà payées',
+      'Exercices obtenus',
       name: 'billingSyscohadaPurchasedYears',
       desc: '',
       args: [],
@@ -2052,6 +2082,91 @@ class Lang {
     return Intl.message(
       'Mes Boutiques',
       name: 'menuBoutiques',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Carte`
+  String get menuMap {
+    return Intl.message('Carte', name: 'menuMap', desc: '', args: []);
+  }
+
+  /// `La carte nécessite une licence active`
+  String get mapLockedTitle {
+    return Intl.message(
+      'La carte nécessite une licence active',
+      name: 'mapLockedTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `La carte des boutiques est disponible avec une licence Premium attribuée à votre utilisateur. Ouvrez Facturation pour acheter ou attribuer une licence.`
+  String get mapLockedDetail {
+    return Intl.message(
+      'La carte des boutiques est disponible avec une licence Premium attribuée à votre utilisateur. Ouvrez Facturation pour acheter ou attribuer une licence.',
+      name: 'mapLockedDetail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ouvrir Facturation`
+  String get mapGoToBilling {
+    return Intl.message(
+      'Ouvrir Facturation',
+      name: 'mapGoToBilling',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rechercher une boutique ou une chaîne`
+  String get mapSearchHint {
+    return Intl.message(
+      'Rechercher une boutique ou une chaîne',
+      name: 'mapSearchHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Aucune boutique ne correspond`
+  String get mapSearchNoResult {
+    return Intl.message(
+      'Aucune boutique ne correspond',
+      name: 'mapSearchNoResult',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chaîne`
+  String get mapGroupByChain {
+    return Intl.message('Chaîne', name: 'mapGroupByChain', desc: '', args: []);
+  }
+
+  /// `Pays`
+  String get mapGroupByCountry {
+    return Intl.message('Pays', name: 'mapGroupByCountry', desc: '', args: []);
+  }
+
+  /// `Sans position`
+  String get mapUnplacedHeading {
+    return Intl.message(
+      'Sans position',
+      name: 'mapUnplacedHeading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Aucune boutique à afficher sur la carte`
+  String get mapEmpty {
+    return Intl.message(
+      'Aucune boutique à afficher sur la carte',
+      name: 'mapEmpty',
       desc: '',
       args: [],
     );

@@ -239,10 +239,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingSeatsAttributed": MessageLookupByLibrary.simpleMessage(
       "license(s) attributed",
     ),
+    "billingSyscohadaClaim": MessageLookupByLibrary.simpleMessage(
+      "Get this report",
+    ),
     "billingSyscohadaCurrentYearDisclaimer":
         MessageLookupByLibrary.simpleMessage(
           "This report cannot be generated until the fiscal year is over.",
         ),
+    "billingSyscohadaFirstFreeDetail": MessageLookupByLibrary.simpleMessage(
+      "The first report is free. Each following fiscal year is paid.",
+    ),
+    "billingSyscohadaFirstFreePrice":
+        MessageLookupByLibrary.simpleMessage("Free"),
     "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage(
       "per fiscal year",
     ),
@@ -253,7 +261,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Pay for this year",
     ),
     "billingSyscohadaPurchasedYears": MessageLookupByLibrary.simpleMessage(
-      "Years already paid",
+      "Years already obtained",
     ),
     "billingSyscohadaSelectYear": MessageLookupByLibrary.simpleMessage(
       "Fiscal year",
@@ -533,6 +541,27 @@ class MessageLookup extends MessageLookupByLibrary {
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
     ),
     "mail": MessageLookupByLibrary.simpleMessage("E-mail"),
+    "mapEmpty": MessageLookupByLibrary.simpleMessage(
+      "No boutiques to show on the map yet",
+    ),
+    "mapGoToBilling": MessageLookupByLibrary.simpleMessage("Open Billing"),
+    "mapGroupByChain": MessageLookupByLibrary.simpleMessage("Chain"),
+    "mapGroupByCountry": MessageLookupByLibrary.simpleMessage("Country"),
+    "mapLockedDetail": MessageLookupByLibrary.simpleMessage(
+      "The boutiques map is available with a Premium license attributed to your user. Open Billing to purchase or assign a license.",
+    ),
+    "mapLockedTitle": MessageLookupByLibrary.simpleMessage(
+      "Map requires an active license",
+    ),
+    "mapSearchHint": MessageLookupByLibrary.simpleMessage(
+      "Search by boutique or chain",
+    ),
+    "mapSearchNoResult": MessageLookupByLibrary.simpleMessage(
+      "No boutique matches that search",
+    ),
+    "mapUnplacedHeading": MessageLookupByLibrary.simpleMessage(
+      "Without position",
+    ),
     "matchErrorText": MessageLookupByLibrary.simpleMessage(
       "Value does not match pattern.",
     ),
@@ -545,6 +574,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "menuContacts": MessageLookupByLibrary.simpleMessage("Contacts"),
     "menuDevices": MessageLookupByLibrary.simpleMessage("Devices"),
     "menuFirm": MessageLookupByLibrary.simpleMessage("My enterprise"),
+    "menuMap": MessageLookupByLibrary.simpleMessage("Map"),
     "menuScopeDisclaimer": MessageLookupByLibrary.simpleMessage(
       "Articles, contacts and operations (sales, purchases, stock movements, etc.) are available in the mobile app for now.",
     ),

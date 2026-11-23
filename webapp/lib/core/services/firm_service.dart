@@ -14,6 +14,8 @@ class FirmService {
   Future<CreateFirmResponse> createFirm({
     required String name,
     String? defaultCurrency,
+    String? boutiqueMail,
+    String? boutiquePhone,
   }) async {
     final stub = FenceServiceClient(_grpcClientService.channel);
 
@@ -30,6 +32,14 @@ class FirmService {
           defaultCurrency.trim().isNotEmpty &&
           defaultCurrency.trim().length == 3) {
         req.currency = defaultCurrency.trim().toUpperCase();
+      }
+      final mail = boutiqueMail?.trim() ?? '';
+      if (mail.isNotEmpty) {
+        req.boutiqueMail = mail;
+      }
+      final phone = boutiquePhone?.trim() ?? '';
+      if (phone.isNotEmpty) {
+        req.boutiquePhone = phone;
       }
 
       final response = await stub.createFirm(

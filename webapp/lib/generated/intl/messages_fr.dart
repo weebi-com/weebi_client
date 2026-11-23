@@ -242,10 +242,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "billingSeatsAttributed": MessageLookupByLibrary.simpleMessage(
       "licence(s) attribuée(s)",
     ),
+    "billingSyscohadaClaim": MessageLookupByLibrary.simpleMessage(
+      "Obtenir ce rapport",
+    ),
     "billingSyscohadaCurrentYearDisclaimer":
         MessageLookupByLibrary.simpleMessage(
           "Ce rapport ne peut être généré avant la fin de l\'exercice fiscal.",
         ),
+    "billingSyscohadaFirstFreeDetail": MessageLookupByLibrary.simpleMessage(
+      "Le premier rapport est offert. Chaque exercice suivant est payant.",
+    ),
+    "billingSyscohadaFirstFreePrice": MessageLookupByLibrary.simpleMessage(
+      "Offert",
+    ),
     "billingSyscohadaPerReport": MessageLookupByLibrary.simpleMessage(
       "par année fiscale",
     ),
@@ -256,7 +265,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Payer cette année",
     ),
     "billingSyscohadaPurchasedYears": MessageLookupByLibrary.simpleMessage(
-      "Années déjà payées",
+      "Exercices obtenus",
     ),
     "billingSyscohadaSelectYear": MessageLookupByLibrary.simpleMessage(
       "Année fiscale",
@@ -548,6 +557,27 @@ class MessageLookup extends MessageLookupByLibrary {
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
     ),
     "mail": MessageLookupByLibrary.simpleMessage("E-mail"),
+    "mapEmpty": MessageLookupByLibrary.simpleMessage(
+      "Aucune boutique à afficher sur la carte",
+    ),
+    "mapGoToBilling": MessageLookupByLibrary.simpleMessage(
+      "Ouvrir Facturation",
+    ),
+    "mapGroupByChain": MessageLookupByLibrary.simpleMessage("Chaîne"),
+    "mapGroupByCountry": MessageLookupByLibrary.simpleMessage("Pays"),
+    "mapLockedDetail": MessageLookupByLibrary.simpleMessage(
+      "La carte des boutiques est disponible avec une licence Premium attribuée à votre utilisateur. Ouvrez Facturation pour acheter ou attribuer une licence.",
+    ),
+    "mapLockedTitle": MessageLookupByLibrary.simpleMessage(
+      "La carte nécessite une licence active",
+    ),
+    "mapSearchHint": MessageLookupByLibrary.simpleMessage(
+      "Rechercher une boutique ou une chaîne",
+    ),
+    "mapSearchNoResult": MessageLookupByLibrary.simpleMessage(
+      "Aucune boutique ne correspond",
+    ),
+    "mapUnplacedHeading": MessageLookupByLibrary.simpleMessage("Sans position"),
     "matchErrorText": MessageLookupByLibrary.simpleMessage(
       "La valeur ne correspond pas au motif.",
     ),
@@ -560,6 +590,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "menuContacts": MessageLookupByLibrary.simpleMessage("Contacts"),
     "menuDevices": MessageLookupByLibrary.simpleMessage("Appareils"),
     "menuFirm": MessageLookupByLibrary.simpleMessage("Mon entreprise"),
+    "menuMap": MessageLookupByLibrary.simpleMessage("Carte"),
     "menuScopeDisclaimer": MessageLookupByLibrary.simpleMessage(
       "Les articles, contacts et opérations (ventes, achats, mouvements de stock, etc.) sont uniquement disponibles sur l\'application de caisse pour l\'instant.",
     ),

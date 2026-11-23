@@ -3,14 +3,16 @@
 Billing and licences: lifetime licence purchase (no subscriptions) + pay-as-you-go credits — see [../docs/commercial-model.md](../docs/commercial-model.md).
 
 ``` shell
-# main / main_local: use lib/config/api_url.dart (kApiUrl)
+# local envoy on localhost
 flutter run -t lib/main_local.dart
 flutter run -d web-server -t lib/main_local.dart
-flutter run
 
-# main_dev: always dev Envoy (kApiUrlDev), regardless of kApiUrl
+# local run against the dev Envoy (kApiUrlDev). Does not read config.json.
 flutter run -t lib/main_dev.dart
 flutter run -d web-server -t lib/main_dev.dart
+
+# deployed entrypoint: reads /config.json, then falls back to kApiUrl
+flutter run
 ```
 
 If `flutter run -d edge ...` fails while launching Edge, use the `web-server`
@@ -19,7 +21,7 @@ needed with `--web-hostname=127.0.0.1 --web-port=50858`.
 
 ## Configuration
 
-The webapp calls the **Envoy proxy** (gRPC-Web), which forwards to weebi_server. API_URL is set in `lib/config/api_url.dart` (`kApiUrl`). Change it when merging dev ↔ prod. Use `lib/main_dev.dart` to hit dev while `kApiUrl` is prod (or vice versa). See [SECRETS.md](SECRETS.md).
+The webapp calls the **Envoy proxy** (gRPC-Web), which forwards to weebi_server. Deployed dev and prod use the same image. At container start `entrypoint.sh` writes `/config.json` from `API_URL` and `IS_DEV`. The app uses that URL when it is non-empty. `kApiUrl` in `lib/config/api_url.dart` is only the production fallback when `API_URL` is missing, so do not swap it per branch. `lib/main_dev.dart` is for local runs and does not read `/config.json`. See [SECRETS.md](SECRETS.md).
 
 ## Localization (intl)
 

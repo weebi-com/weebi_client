@@ -1,6 +1,7 @@
 import 'core/web/web_platform.dart' as web;
 
-/// Fetches /config.json from same origin (used when API_URL is not set at build time).
+/// Fetches /config.json from the same origin. The container writes this file
+/// from API_URL at start; a non-empty API_URL overrides the compiled fallback.
 Future<String?> fetchConfigJson() async {
   final uri = Uri.base.resolve('/config.json');
   try {
