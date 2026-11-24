@@ -3,6 +3,7 @@ import 'package:web_admin/map/capital_city_table.dart';
 import 'package:web_admin/map/city_geocoder.dart';
 import 'package:web_admin/map/city_normalize.dart';
 import 'package:web_admin/map/city_point.dart';
+import 'package:web_admin/map/country_centroid.dart';
 
 bool hasStoredCoordinates(Address address) {
   return address.latitude != 0 && address.longitude != 0;
@@ -11,7 +12,8 @@ bool hasStoredCoordinates(Address address) {
 /// Walks [chains] and resolves each boutique to a pin or an unplaced entry.
 ///
 /// Order per boutique: stored lat/lng (non-zero) → [CapitalCityTable] →
-/// [geocoder]. Deleted boutiques are skipped. `(0,0)` is never a pin.
+/// [geocoder] → country centroid from the typed country. Deleted boutiques
+/// are skipped. `(0,0)` is never a pin.
 Future<BoutiqueMapResult> buildBoutiqueMap(
   Iterable<Chain> chains, {
   CityGeocoder geocoder = const NullCityGeocoder(),
@@ -44,7 +46,10 @@ Future<BoutiqueMapResult> buildBoutiqueMap(
       final address = boutique.addressFull;
       final city = address.city;
       final countryCode = address.hasCountry()
-          ? normalizeCountryCode(address.country.code2Letters)
+          ? resolveCountryCode(
+              code2Letters: address.country.code2Letters,
+              name: address.country.namel10n,
+            )
           : '';
 
       if (hasStoredCoordinates(address)) {
@@ -82,38 +87,40 @@ Future<BoutiqueMapResult> buildBoutiqueMap(
         continue;
       }
 
-      final cacheKey =
-          '${normalizeCityName(city)}|${normalizeCountryCode(countryCode)}';
-      if (normalizeCityName(city).isEmpty || countryCode.isEmpty) {
-        unplaced.add(
-          UnplacedBoutique(
-            boutiqueId: boutiqueId,
-            name: name,
-            chainId: chainId,
-            chainName: chainName,
-            city: city,
-            countryCode: countryCode,
-          ),
-        );
-        continue;
+      final cityKey = normalizeCityName(city);
+      final cacheKey = '$cityKey|${normalizeCountryCode(countryCode)}';
+      if (cityKey.isNotEmpty && countryCode.isNotEmpty) {
+        if (!resolveCache.containsKey(cacheKey)) {
+          resolveCache[cacheKey] = await geocoder.locate(city, countryCode);
+        }
+        point = resolveCache[cacheKey];
+        if (point != null) {
+          pins.add(
+            _approximatePin(
+              boutiqueId: boutiqueId,
+              name: name,
+              chainId: chainId,
+              chainName: chainName,
+              city: city,
+              countryCode: countryCode,
+              point: point,
+            ),
+          );
+          continue;
+        }
       }
 
-      if (!resolveCache.containsKey(cacheKey)) {
-        resolveCache[cacheKey] = await geocoder.locate(city, countryCode);
-      }
-      point = resolveCache[cacheKey];
-      if (point != null) {
+      final countryPoint = CountryCentroidTable.lookup(countryCode);
+      if (countryPoint != null) {
         pins.add(
-          BoutiquePin(
+          _approximatePin(
             boutiqueId: boutiqueId,
             name: name,
             chainId: chainId,
             chainName: chainName,
             city: city,
             countryCode: countryCode,
-            latitude: point.latitude,
-            longitude: point.longitude,
-            precision: PinPrecision.approximate,
+            point: countryPoint,
           ),
         );
       } else {
@@ -132,6 +139,28 @@ Future<BoutiqueMapResult> buildBoutiqueMap(
   }
 
   return BoutiqueMapResult(pins: pins, unplaced: unplaced);
+}
+
+BoutiquePin _approximatePin({
+  required String boutiqueId,
+  required String name,
+  required String chainId,
+  required String chainName,
+  required String city,
+  required String countryCode,
+  required CityPoint point,
+}) {
+  return BoutiquePin(
+    boutiqueId: boutiqueId,
+    name: name,
+    chainId: chainId,
+    chainName: chainName,
+    city: city,
+    countryCode: countryCode,
+    latitude: point.latitude,
+    longitude: point.longitude,
+    precision: PinPrecision.approximate,
+  );
 }
 
 /// Bounding box for [pins]. Returns null when [pins] is empty.

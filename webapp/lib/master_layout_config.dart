@@ -31,7 +31,7 @@ List<SidebarMenuConfig> get sidebarMenuConfigs => [
   ),
   SidebarMenuConfig(
     uri: RouteUri.map,
-    icon: Icons.map_rounded,
+    icon: Icons.map,
     title: (context) => Lang.of(context).menuMap,
   ),
   SidebarMenuConfig(

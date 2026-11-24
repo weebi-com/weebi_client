@@ -34,7 +34,8 @@ class LeafletMapHost implements BoutiqueMapHost {
       final mapDiv = web.HTMLDivElement()
         ..id = 'weebi-boutiques-map'
         ..style.width = '100%'
-        ..style.height = '100%';
+        ..style.height = '100%'
+        ..style.backgroundColor = '#d6e4f0';
       // Defer until the div is in the DOM.
       Future<void>.delayed(const Duration(milliseconds: 50), _initMapIfNeeded);
       return mapDiv;
@@ -102,8 +103,23 @@ class LeafletMapHost implements BoutiqueMapHost {
       <String, Object?>{'maxZoom': 19}.jsify(),
     ) as JSObject;
     tileLayer.callMethod('addTo'.toJS, map);
+    _showWorld(map);
+    Future<void>.delayed(const Duration(milliseconds: 300), () {
+      final ready = _map;
+      if (ready == null) return;
+      ready.callMethod('invalidateSize'.toJS);
+    });
 
     _rebuildCluster();
+  }
+
+  void _showWorld(JSObject map) {
+    map.callMethod(
+      'setView'.toJS,
+      <Object?>[20, 0].jsify(),
+      2.toJS,
+    );
+    map.callMethod('invalidateSize'.toJS);
   }
 
   String _groupValue(BoutiquePin pin) {
@@ -221,7 +237,11 @@ class LeafletMapHost implements BoutiqueMapHost {
   void fitBounds(MapBounds? bounds) {
     final map = _map;
     final L = _leafletApi;
-    if (map == null || L == null || bounds == null) return;
+    if (map == null || L == null) return;
+    if (bounds == null) {
+      _showWorld(map);
+      return;
+    }
     final corner1 = L.callMethod(
       'latLng'.toJS,
       bounds.south.toJS,
@@ -233,11 +253,21 @@ class LeafletMapHost implements BoutiqueMapHost {
       bounds.east.toJS,
     );
     final latLngBounds = L.callMethod('latLngBounds'.toJS, corner1, corner2);
+    final spanLat = (bounds.north - bounds.south).abs();
+    final spanLng = (bounds.east - bounds.west).abs();
+    final pointLike = spanLat < 0.05 && spanLng < 0.05;
+    final countryScale = _pins.isNotEmpty &&
+        _pins.every((pin) => pin.precision == PinPrecision.approximate);
+    final maxZoom = pointLike ? (countryScale ? 5 : 13) : 8;
     map.callMethod(
       'fitBounds'.toJS,
       latLngBounds,
-      <String, Object?>{'padding': [24, 24]}.jsify(),
+      <String, Object?>{
+        'padding': [24, 24],
+        'maxZoom': maxZoom,
+      }.jsify(),
     );
+    map.callMethod('invalidateSize'.toJS);
   }
 
   @override
