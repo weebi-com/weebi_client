@@ -1,7 +1,7 @@
 name: web_admin
 description: Weebi Web Admin
 publish_to: 'none'
-version: 1.0.9
+version: 1.1.0
 
 environment:
   sdk: '>=3.12.2 <4.0.0'
