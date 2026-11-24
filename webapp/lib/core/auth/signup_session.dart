@@ -1,8 +1,8 @@
-/// Pure helpers for the signup → createFirm → re-auth journey.
+/// Pure helpers for the signup → createFirm journey.
 ///
 /// Fence `signUp` never creates a firm. After credentials auth, a new boss
-/// (`CREATED`) must call `createFirm`, then refresh so the session/JWT
-/// contains `firmId`. Invited users (`UPDATED`) skip firm creation.
+/// (`CREATED`) must call `createFirm`. That response carries the credential
+/// with `firmId`. Invited users (`UPDATED`) skip firm creation.
 
 /// Whether authenticate* returned enough proof to continue (BFF session vs JWT).
 bool signupAuthSucceeded({

@@ -57,7 +57,7 @@ class _CreateFirmScreenState extends State<CreateFirmScreen> {
           boutiqueMail: userMail.isEmpty ? null : userMail,
           boutiquePhone: userPhone.isEmpty ? null : userPhone,
         );
-        await _authService.authenticateWithRefreshToken();
+        await _authService.installFirmCredential(response);
         if (context.mounted) {
           context.read<CurrentUserProvider>().clear();
           await context.read<CurrentUserProvider>().load(force: true);
