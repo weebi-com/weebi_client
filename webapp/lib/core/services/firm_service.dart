@@ -47,8 +47,7 @@ class FirmService {
         options: options,
       );
 
-      return CreateFirmResponse(
-          firm: response.firm, statusResponse: response.statusResponse);
+      return response;
     } catch (e) {
       debugPrint('Erreur lors de la création de la chaine: $e');
       rethrow;

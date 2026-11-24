@@ -21,6 +21,7 @@ BoutiqueMongo boutiqueFixture({
   required String chainId,
   String city = '',
   String countryCode = '',
+  String countryName = '',
   double latitude = 0,
   double longitude = 0,
   bool isDeleted = false,
@@ -29,8 +30,10 @@ BoutiqueMongo boutiqueFixture({
     ..city = city
     ..latitude = latitude
     ..longitude = longitude;
-  if (countryCode.isNotEmpty) {
-    address.country = Country()..code2Letters = countryCode;
+  if (countryCode.isNotEmpty || countryName.isNotEmpty) {
+    address.country = Country()
+      ..code2Letters = countryCode
+      ..namel10n = countryName;
   }
   final boutique = BoutiquePb()
     ..boutiqueId = boutiqueId

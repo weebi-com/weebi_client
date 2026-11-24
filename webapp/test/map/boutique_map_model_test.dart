@@ -3,6 +3,7 @@ import 'package:web_admin/map/boutique_map_model.dart';
 import 'package:web_admin/map/capital_city_table.dart';
 import 'package:web_admin/map/city_geocoder.dart';
 import 'package:web_admin/map/city_point.dart';
+import 'package:web_admin/map/country_centroid.dart';
 
 import 'chain_fixture.dart';
 
@@ -132,6 +133,78 @@ void main() {
       expect(result.pins[0].longitude, table.longitude);
       expect(result.pins[1].longitude, table.longitude);
       expect(result.pins.map((p) => p.chainName).toSet(), {'Food', 'Beauty'});
+    });
+
+    test('country only zooms to that country centroid', () async {
+      final senegal = CountryCentroidTable.lookup('SN')!;
+      final chains = [
+        chainFixture(
+          chainId: 'c1',
+          name: 'Food',
+          boutiques: [
+            boutiqueFixture(
+              boutiqueId: 'b1',
+              name: 'No city',
+              chainId: 'c1',
+              countryCode: 'sn',
+            ),
+          ],
+        ),
+      ];
+      final result = await buildBoutiqueMap(chains);
+      expect(result.unplaced, isEmpty);
+      expect(result.pins, hasLength(1));
+      expect(result.pins.first.latitude, senegal.latitude);
+      expect(result.pins.first.longitude, senegal.longitude);
+      expect(result.pins.first.precision, PinPrecision.approximate);
+      expect(result.pins.first.countryCode, 'SN');
+    });
+
+    test('typed country name without an ISO code still places a pin', () async {
+      final france = CountryCentroidTable.lookup('FR')!;
+      final chains = [
+        chainFixture(
+          chainId: 'c1',
+          name: 'Food',
+          boutiques: [
+            boutiqueFixture(
+              boutiqueId: 'b1',
+              name: 'Paris shop',
+              chainId: 'c1',
+              countryName: 'France',
+            ),
+          ],
+        ),
+      ];
+      final result = await buildBoutiqueMap(chains);
+      expect(result.unplaced, isEmpty);
+      expect(result.pins.single.latitude, france.latitude);
+      expect(result.pins.single.countryCode, 'FR');
+    });
+
+    test('unknown city falls back to the country after the geocoder misses',
+        () async {
+      final geocoder = RecordingGeocoder(result: null);
+      final senegal = CountryCentroidTable.lookup('SN')!;
+      final chains = [
+        chainFixture(
+          chainId: 'c1',
+          name: 'Food',
+          boutiques: [
+            boutiqueFixture(
+              boutiqueId: 'b1',
+              name: 'Somewhere',
+              chainId: 'c1',
+              city: 'Thiès',
+              countryCode: 'SN',
+            ),
+          ],
+        ),
+      ];
+      final result = await buildBoutiqueMap(chains, geocoder: geocoder);
+      expect(geocoder.calls, ['Thiès|SN']);
+      expect(result.unplaced, isEmpty);
+      expect(result.pins.single.latitude, senegal.latitude);
     });
 
     test('unknown city and null geocoder goes to unplaced', () async {

@@ -198,29 +198,16 @@ class AuthService {
         );
       }
 
-      // createFirm updates user permissions; refresh so the session JWT
-      // contains firmId (BFF must update the existing web session).
-      final refreshed = Config.isBffMode
-          ? await authenticateWithRefreshToken()
-          : await stub.authenticateWithCredentials(
-              Credentials(
-                mail: mail,
-                password: password,
-                isWebApp: false,
-              ),
-            );
-      if (!_tokensProveAuth(refreshed)) {
-        return _handleSignUpError(
-            're-authentication failed after firm creation');
-      }
-      await _persistAuth(refreshed);
+      await installFirmCredential(firmResponse);
 
       return SignUpResult(
         success: true,
         userId: response.userId,
         firmCreated: true,
-        accessToken: refreshed.accessToken,
-        sessionId: refreshed.sessionId,
+        accessToken: firmResponse.accessToken,
+        sessionId: firmResponse.sessionId.isNotEmpty
+            ? firmResponse.sessionId
+            : tokens.sessionId,
       );
     } catch (e) {
       return _handleSignUpError(e);
@@ -246,6 +233,24 @@ class AuthService {
     } catch (e) {
       return (false, e.toString());
     }
+  }
+
+  /// Stores the credential [createFirm] just minted. No second login.
+  /// In BFF mode the server already rewrote the current session.
+  Future<void> installFirmCredential(CreateFirmResponse response) async {
+    if (Config.isBffMode) {
+      if (response.sessionId.isNotEmpty) {
+        await BffSessionStore.setSessionId(
+          response.sessionId,
+          persist: await _shouldPersistBffSession(),
+        );
+      }
+      return;
+    }
+    if (response.accessToken.isEmpty) {
+      throw StateError('firm credential missing');
+    }
+    await _saveTokens(response.accessToken, response.refreshToken);
   }
 
   /// Public RPC: exchanges a one-time App->Web bridge token for a BFF session.
