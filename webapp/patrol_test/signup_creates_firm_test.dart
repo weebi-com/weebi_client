@@ -11,12 +11,15 @@
 /// patrol test -t patrol_test/signup_creates_firm_test.dart -d chrome \
 ///   --web-headless true --web-locale en-US
 /// ```
-import 'package:auth_weebi/auth_weebi.dart' show PermissionProvider;
+import 'package:auth_weebi/auth_weebi.dart'
+    show AccessTokenProvider, PermissionProvider;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:patrol/patrol.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_admin/core/constants/values.dart';
 import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/core/session/bff_session_store.dart';
 import 'package:web_admin/main_patrol.dart' as app;
@@ -46,7 +49,7 @@ void main() {
       await $(#registerFirmNameField).enterText(firmName);
       await $(#registerFirstNameField).enterText('Patrol');
       await $(#registerLastNameField).enterText('Signup');
-      await $(#registerPhoneField).enterText('771234567');
+      // Phone is optional — omit it to verify signup without phone.
       await $(#registerMailField).enterText(mail);
       await $(#registerPasswordField).enterText(password);
       await $(#registerRetypePasswordField).enterText(password);
@@ -73,6 +76,18 @@ void main() {
       );
       expect(sessionId, isNotEmpty);
 
+      final prefs = await SharedPreferences.getInstance();
+      expect(
+        prefs.getString(SharePrefKeys.accessToken) ?? '',
+        isEmpty,
+        reason: 'BFF signup must never store an access JWT in localStorage',
+      );
+      expect(
+        prefs.getString(SharePrefKeys.refreshToken) ?? '',
+        isEmpty,
+        reason: 'BFF signup must never store a refresh JWT in localStorage',
+      );
+
       await $(#dashboardFirmTile).scrollTo().tap();
       await $.pumpAndSettle(timeout: const Duration(seconds: 60));
 
@@ -96,6 +111,11 @@ void main() {
       expect(firmIdText, isNotEmpty, reason: 'firmId must be assigned');
 
       final navContext = $.tester.element(find.byType(Navigator).first);
+      expect(
+        Provider.of<AccessTokenProvider>(navContext, listen: false).accessToken,
+        isEmpty,
+        reason: 'BFF signup must keep AccessTokenProvider empty',
+      );
       final currentUser =
           Provider.of<CurrentUserProvider>(navContext, listen: false);
       expect(

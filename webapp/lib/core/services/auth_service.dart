@@ -37,17 +37,27 @@ class AuthService {
     await prefs.setString(SharePrefKeys.refreshToken, refreshToken);
   }
 
+  Future<void> _clearStoredTokens() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(SharePrefKeys.accessToken);
+    await prefs.remove(SharePrefKeys.refreshToken);
+  }
+
   Future<void> _persistAuth(
     Tokens tokens, {
     bool persistSession = true,
   }) async {
-    await _saveTokens(tokens.accessToken, tokens.refreshToken);
-    if (Config.isBffMode && tokens.sessionId.isNotEmpty) {
-      await BffSessionStore.setSessionId(
-        tokens.sessionId,
-        persist: persistSession,
-      );
+    if (Config.isBffMode) {
+      await _clearStoredTokens();
+      if (tokens.sessionId.isNotEmpty) {
+        await BffSessionStore.setSessionId(
+          tokens.sessionId,
+          persist: persistSession,
+        );
+      }
+      return;
     }
+    await _saveTokens(tokens.accessToken, tokens.refreshToken);
   }
 
   Future<bool> _shouldPersistBffSession() async {
@@ -68,7 +78,14 @@ class AuthService {
       );
 
   CallOptions _authenticatedOptions(Tokens tokens) {
-    if (Config.isBffMode) return securedCallOptions;
+    if (Config.isBffMode) {
+      if (tokens.sessionId.isNotEmpty) {
+        return securedCallOptions.mergedWith(
+          CallOptions(metadata: {'x-session-id': tokens.sessionId}),
+        );
+      }
+      return securedCallOptions;
+    }
     return CallOptions(metadata: {'authorization': tokens.accessToken});
   }
 
@@ -96,7 +113,10 @@ class AuthService {
       return SignInResult(
         success: true,
         message: "",
-        accessToken: response.accessToken,
+        accessToken: clientAccessTokenForMode(
+          isBffMode: Config.isBffMode,
+          accessToken: response.accessToken,
+        ),
         sessionId: response.sessionId,
         mustChangePassword: response.mustChangePassword,
       );
@@ -168,7 +188,10 @@ class AuthService {
           success: true,
           userId: response.userId,
           firmCreated: false,
-          accessToken: tokens.accessToken,
+          accessToken: clientAccessTokenForMode(
+            isBffMode: Config.isBffMode,
+            accessToken: tokens.accessToken,
+          ),
           sessionId: tokens.sessionId,
         );
       }
@@ -198,15 +221,18 @@ class AuthService {
         );
       }
 
-      await installFirmCredential(firmResponse);
+      final installed = await installFirmCredential(firmResponse);
 
       return SignUpResult(
         success: true,
         userId: response.userId,
         firmCreated: true,
-        accessToken: firmResponse.accessToken,
-        sessionId: firmResponse.sessionId.isNotEmpty
-            ? firmResponse.sessionId
+        accessToken: clientAccessTokenForMode(
+          isBffMode: Config.isBffMode,
+          accessToken: installed.accessToken,
+        ),
+        sessionId: installed.sessionId.isNotEmpty
+            ? installed.sessionId
             : tokens.sessionId,
       );
     } catch (e) {
@@ -235,22 +261,33 @@ class AuthService {
     }
   }
 
-  /// Stores the credential [createFirm] just minted. No second login.
-  /// In BFF mode the server already rewrote the current session.
-  Future<void> installFirmCredential(CreateFirmResponse response) async {
+  /// Stores the credential [createFirm] just minted (with refresh-token
+  /// fallback when talking to an older server that has not yet been deployed).
+  Future<({String accessToken, String sessionId})> installFirmCredential(
+    CreateFirmResponse response,
+  ) async {
     if (Config.isBffMode) {
+      await _clearStoredTokens();
       if (response.sessionId.isNotEmpty) {
         await BffSessionStore.setSessionId(
           response.sessionId,
           persist: await _shouldPersistBffSession(),
         );
+        return (accessToken: '', sessionId: response.sessionId);
       }
-      return;
+      final refreshed = await authenticateWithRefreshToken();
+      return (accessToken: '', sessionId: refreshed.sessionId);
     }
-    if (response.accessToken.isEmpty) {
+    if (response.accessToken.isNotEmpty) {
+      await _saveTokens(response.accessToken, response.refreshToken);
+      return (accessToken: response.accessToken, sessionId: '');
+    }
+    final refreshed = await authenticateWithRefreshToken();
+    if (refreshed.accessToken.isEmpty) {
       throw StateError('firm credential missing');
     }
-    await _saveTokens(response.accessToken, response.refreshToken);
+    await _saveTokens(refreshed.accessToken, refreshed.refreshToken);
+    return (accessToken: refreshed.accessToken, sessionId: '');
   }
 
   /// Public RPC: exchanges a one-time App->Web bridge token for a BFF session.
