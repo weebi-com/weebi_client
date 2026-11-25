@@ -1,4 +1,7 @@
+import 'dart:async' show unawaited;
+
 import 'package:auth_weebi/auth_weebi.dart' show AccessTokenProvider;
+import 'package:boutiques_weebi/boutiques_weebi.dart' show BoutiqueProvider;
 import 'package:fl_country_code_picker_weebi/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,9 +10,12 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:users_weebi/src/widgets/phone_field_prefix_icon.dart';
+import 'package:web_admin/core/auth/signup_session.dart';
 import 'package:web_admin/core/phone/boutique_phone_display.dart';
 import 'package:web_admin/core/routing/routes.dart';
+import 'package:web_admin/environment.dart';
 import 'package:web_admin/generated/l10n.dart';
+import 'package:web_admin/providers/current_user_provider.dart';
 import 'package:web_admin/providers/user_data_provider.dart';
 import 'package:web_admin/utils/app_dialogs.dart';
 import 'package:web_admin/utils/app_focus_helper.dart';
@@ -67,19 +73,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
         if (result.success) {
           if (!mounted) return;
-          if (result.accessToken != null && result.accessToken!.isNotEmpty) {
-            context.read<AccessTokenProvider>().accessToken =
-                result.accessToken!;
+          final clientToken = clientAccessTokenForMode(
+            isBffMode: Config.isBffMode,
+            accessToken: result.accessToken,
+          );
+          if (clientToken != null) {
+            context.read<AccessTokenProvider>().accessToken = clientToken;
+          } else {
+            context.read<AccessTokenProvider>().clearAccessToken();
           }
           await context.read<UserDataProvider>().setUserDataAsync(
                 mail: _formData.mail,
-                accessToken: result.accessToken,
+                accessToken: clientToken,
                 bffSessionId: result.sessionId,
                 stayConnected: true,
                 userProfileImageUrl:
                     'https://www.weebi.com/images/Weebi_Logo_Full.png',
-                bffSessionLive: true,
+                bffSessionLive: Config.isBffMode,
               );
+          if (Config.isBffMode && mounted) {
+            final currentUser =
+                Provider.of<CurrentUserProvider?>(context, listen: false);
+            final boutiques =
+                Provider.of<BoutiqueProvider?>(context, listen: false);
+            if (currentUser != null) {
+              try {
+                await currentUser.load(force: true);
+              } catch (_) {}
+            }
+            if (boutiques != null) {
+              unawaited(boutiques.loadChains());
+            }
+          }
           if (!mounted) return;
           onSuccess.call('Your account has been successfully created');
         } else {
@@ -116,18 +141,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   String? _validatePhone(String? value, Lang lang) {
-    final digits = value?.trim() ?? '';
-    if (digits.isEmpty || int.tryParse(digits) == null) {
-      return lang.contactPhone;
+    final res = validateOptionalPhoneDigits(
+      value,
+      expectedLength: _phoneCountry?.nationalSignificantNumber,
+    );
+    switch (res) {
+      case OptionalPhoneValidation.valid:
+        return null;
+      case OptionalPhoneValidation.notDigits:
+        return lang.contactPhone;
+      case OptionalPhoneValidation.wrongLength:
+        return lang.contactPhoneTooShort;
     }
-    final expected = _phoneCountry?.nationalSignificantNumber;
-    if (expected != null && digits.length != expected) {
-      return lang.contactPhoneTooShort;
-    }
-    if (expected == null && digits.length < 8) {
-      return lang.contactPhoneTooShort;
-    }
-    return null;
   }
 
   @override

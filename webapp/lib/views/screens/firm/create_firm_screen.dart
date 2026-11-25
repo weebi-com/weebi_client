@@ -1,13 +1,21 @@
+import 'dart:async' show unawaited;
+
+import 'package:auth_weebi/auth_weebi.dart' show AccessTokenProvider;
+import 'package:boutiques_weebi/boutiques_weebi.dart' show BoutiqueProvider;
 import 'package:boutiques_weebi/currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:web_admin/core/auth/signup_session.dart';
 import 'package:web_admin/core/routing/routes.dart';
 import 'package:web_admin/core/services/auth_service.dart';
+import 'package:web_admin/environment.dart';
 import 'package:web_admin/generated/l10n.dart';
 import 'package:web_admin/providers/current_user_provider.dart';
+import 'package:web_admin/providers/tickets_boutique_cache.dart';
+import 'package:web_admin/providers/user_data_provider.dart';
 import 'package:web_admin/utils/app_dialogs.dart';
 import 'package:web_admin/utils/app_focus_helper.dart';
 import 'package:web_admin/views/widgets/card_elements.dart';
@@ -59,8 +67,39 @@ class _CreateFirmScreenState extends State<CreateFirmScreen> {
         );
         await _authService.installFirmCredential(response);
         if (context.mounted) {
-          context.read<CurrentUserProvider>().clear();
-          await context.read<CurrentUserProvider>().load(force: true);
+          final clientToken = clientAccessTokenForMode(
+            isBffMode: Config.isBffMode,
+            accessToken: response.accessToken,
+          );
+          if (clientToken != null) {
+            Provider.of<AccessTokenProvider?>(context, listen: false)
+                ?.accessToken = clientToken;
+            final userData =
+                Provider.of<UserDataProvider?>(context, listen: false);
+            if (userData != null) {
+              await userData.setUserDataAsync(
+                accessToken: clientToken,
+                refreshToken: response.refreshToken.isNotEmpty
+                    ? response.refreshToken
+                    : null,
+              );
+            }
+          }
+          currentUser.clear();
+          await currentUser.load(force: true);
+          if (context.mounted) {
+            final boutiques =
+                Provider.of<BoutiqueProvider?>(context, listen: false);
+            if (boutiques != null) {
+              unawaited(boutiques.loadChains());
+            }
+            final ticketsCache =
+                Provider.of<TicketsBoutiqueCache?>(context, listen: false);
+            if (ticketsCache != null) {
+              ticketsCache.clear();
+              unawaited(ticketsCache.loadIfNeeded());
+            }
+          }
         }
         if (!context.mounted) return;
         final lang = Lang.of(context);

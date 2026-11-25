@@ -51,4 +51,67 @@ void main() {
       expect(shouldCreateFirmAfterSignup('UPDATED'), isFalse);
     });
   });
+
+  group('clientAccessTokenForMode', () {
+    test('BFF mode always drops leaked JWT access tokens', () {
+      expect(
+        clientAccessTokenForMode(
+          isBffMode: true,
+          accessToken: 'eyJhbGciOiJIUzI1NiJ9.leaked.sig',
+        ),
+        isNull,
+      );
+      expect(
+        clientAccessTokenForMode(isBffMode: true, accessToken: ''),
+        isNull,
+      );
+    });
+
+    test('JWT mode keeps non-empty access tokens only', () {
+      expect(
+        clientAccessTokenForMode(isBffMode: false, accessToken: 'jwt-123'),
+        'jwt-123',
+      );
+      expect(
+        clientAccessTokenForMode(isBffMode: false, accessToken: ''),
+        isNull,
+      );
+      expect(
+        clientAccessTokenForMode(isBffMode: false, accessToken: null),
+        isNull,
+      );
+    });
+  });
+
+  group('validateOptionalPhoneDigits', () {
+    test('empty or whitespace phone is valid (phone is optional)', () {
+      expect(
+        validateOptionalPhoneDigits('', expectedLength: 9),
+        OptionalPhoneValidation.valid,
+      );
+      expect(
+        validateOptionalPhoneDigits('   ', expectedLength: 9),
+        OptionalPhoneValidation.valid,
+      );
+      expect(
+        validateOptionalPhoneDigits(null, expectedLength: 9),
+        OptionalPhoneValidation.valid,
+      );
+    });
+
+    test('non-empty phone still checks digits and expected length', () {
+      expect(
+        validateOptionalPhoneDigits('771234567', expectedLength: 9),
+        OptionalPhoneValidation.valid,
+      );
+      expect(
+        validateOptionalPhoneDigits('7712', expectedLength: 9),
+        OptionalPhoneValidation.wrongLength,
+      );
+      expect(
+        validateOptionalPhoneDigits('abc', expectedLength: 9),
+        OptionalPhoneValidation.notDigits,
+      );
+    });
+  });
 }
